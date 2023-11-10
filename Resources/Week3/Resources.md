@@ -22,8 +22,8 @@
         - Existence of a closed form equation to modify weight matrix in order to substitute knowledge tuples by editing the corresponding key-value vectors to both select the subject and recall the fact.
         - The new key value pair needs to be computed and can be identified by feeding the model with multiple samples encoding the target subject (for the key) and relation+object (for the value) and observing the hidden states.
     - Results
-        - ROME is compared with Fine-Tuning (FT), Constrained Fine-Tuning (FT+L) and hypernetworks (KE, MEND) on a Zero-Shot Relation Extraction (zsRE) task measuring efficacy, paraphrase and specificity and on a custom CounterFact dataset to evaluate counterfactual edits measuring efficacy (Efficacy Score and Magnitude), generalization (Paraphrase Score and Magnitude), specificity (Neighborhood Score and Magnitude), consistency (RS), fluency (GE) and the harmonic mean between ES,PS and NS as Score (S). 
-        - ROME is competitive against other methods on zsRE (even though it falls short against zsRE custom-tuned hypernetworks) and on CounterFact all methods besides ROME present one or both of the following problems while ROME demonstrates bothe generalization and specificity:
+        - ROME is compared with Fine-Tuning (FT), Constrained Fine-Tuning (FT+L) and hypernetworks (KE, MEND) on a Zero-Shot Relation Extraction (zsRE) task measuring efficacy, paraphrase and specificity and on a custom CounterFact dataset to evaluate counterfactual edits measuring efficacy (Efficacy Score and Magnitude), generalization (Paraphrase Score and Magnitude), specificity (Neighborhood Score and Magnitude), consistency (RS), fluency (GE) and the harmonic mean between ES, PS and NS as Score (S). 
+        - ROME is competitive against other methods on zsRE (even though it falls short against zsRE custom-tuned hypernetworks) and on CounterFact all methods besides ROME present one or both of the following problems while ROME demonstrates both generalization and specificity:
             - F1: overfitting on counterfactual statement -> no generalization
             - F2: underfitting and ignoring counterfactual statement
         -  Midlayer MLP modules can store factual associations that generalize beyond specific surface forms, while remaining specific to the subject.
@@ -31,9 +31,15 @@
 
 # Benchmarks
 
+https://deepgram.com/learn/llm-benchmarks-guide-to-evaluating-language-models
 
 ## Question Answering
 > Ability of model to remember facts it was trained with, e.g. in what year was Barack Obama born? How tall is a male giraffe?
+
+### The Stanford Question Answering Dataset (SQuAD)
+- https://paperswithcode.com/dataset/squad
+- Tasks: Question Answering
+
 
 ## Mathematical Reasoning
 > Ability of model to perform basic mathematical reasoning: if I have four bunches of bananas containing an average of 5.5 bananas each, how many bananas do I have?
@@ -41,8 +47,21 @@
 ## Logical Reasoning
 > Ability of model to reason logically: e.g. my dad has two kids, one of them is called John. If my brother's name is Steven, what is my name?
 
-4) ability of the model to be polite/courteous, etc.
+## Positivity
+> Ability of the model to be polite/courteous, etc.
 
-5) ability of the model to be creative
+## Creativity
+> Ability of the model to be creative
 
-6) ability of the model to empathise/understand user emotion
+## Empathy
+> Ability of the model to empathise/understand user emotion
+
+### IMDb Movie Reviews
+- https://paperswithcode.com/dataset/imdb-movie-reviews
+- Tasks: Text Classification, Sentiment Analysis
+
+## Summarization
+
+### Extreme Summarization (XSum)
+- https://paperswithcode.com/dataset/xsum
+- Tasks: Seq2Seq Language Modeling, Summarization, Text Summarization
