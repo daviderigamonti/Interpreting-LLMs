@@ -6,6 +6,34 @@
 - [Annotated Copy](../Week3/PDFs/Annotated/locating_and_editing_factual_associations_in_gpt_annotated.pdf)
 - [Website](https://rome.baulab.info)
 - [Interview](https://www.youtube.com/watch?v=_NMQyOu2HTo)
+    - Overarching research topic: Mechanistic Interpretability Research
+    - Causal Tracing Approach
+        - When throughout an input sentence and the model architecture, does the model realize the answer to the sentence?
+        - Replacing a hidden state of a corrupted run with the same one from the clean run should demonstrate that the specific hidden state is associated with the fact if it is able to restore the correct answer.
+        - Patch of high causal effect in MLPs right after the last token of the subject is read.
+        - Hypothesis: the MLPs are storing factual associations that are not portrayed in the embedding -> linear associative memory.
+        - Idea:[Try repeating their experiment but remove association between object and answer in embedding and see if the MLPs are still able to recover the factual association]
+        - Idea:[Compare the ease of MLPs in retrieving information for (subject, answer) pairs that have related embeddings and unrelated embeddings]
+        - MLP as key-value store memory due to the nice properties of having two matrices (fan-out and fan-in) joined by nonlinear functions.
+    - ROME
+        - Key-value store associates a subject (key) with an information (value) which is not necessarily encoded with the output embedding and is not necessarily the needed information.
+        - Insertion of key-value pairs into the MLP weights:
+            - The desired key is obtained by observing the MLP inputs when the specific subject is mentioned (possibly averaging the results through multiple contexts).
+            - The desired value is obtained solving a constrained optimization problem consisting of trying to make the MLP output the desired relationship.
+            - "Essence drift" problem of changing a subject's fundamental properties when editing a relationship, a specific term in the value optimization problem is dedicated to reduce this effect.
+        - Constrained minimization approach is chosen so that all old key and values that are not of interest "cancel out" and it isn't needed to discover them.
+        - How to choose the MLP to perform ROME on? Infer a range of interested MLPs with Causal Tracing (since it possible that multiple MLP store the same fact redundantly and all collaborate towards retrieving it) and choose the MLP where there is a peak in the Causal Tracing analysis.
+        - Possible scaling issues when inserting multiple facts.
+        - Follow-up paper on [Mass-Editing Memory in a Transformer](#mass-editing-memory-in-a-transformer).
+    - ROME Evaluation
+        - Specificity means that when inserting a new single piece information into the model shouldn't "learn" new information that wasn't specified; e.g.: intended information: the cat barks -> possible unintended information: the monkey also barks.
+        - Generality means that the information is retrained through rephrasing, summarization and can be referenced to by the model in unrelated contexts that ask to recall it.
+        - zsRE (zero-shot Relation Extraction) has been used as a baseline by other model-editing centered papers, but does not entirely fit the specific scenario of this paper: good to measure generalization but not specificity or other possibly related metrics such as fluency.
+        - CounterFact (in form subject, relationship, object) measures specificity (check for semantically neighboring subjects to the fact subject that may also be affected by the fact), fluency (human evaluation).
+    - Problem of asymmetric fact storing is that it may not be possible for the model to infer the inverse relationship from a fact.
+
+## [Mass-Editing Memory in a Transformer](https://arxiv.org/abs/2210.07229)
+- [Local Copy](PDFs/mass_editing_memory_in_a_transformer.pdf)
 
 # Notebooks Ideas
 
