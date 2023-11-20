@@ -60,7 +60,9 @@
     - [Ecco](https://github.com/jalammar/ecco)
 - Results: 
 
-# Previous Meeting Ideas
+# Previous Meetings Ideas
+
+## 14/11/23 w/ Mark, Nicolò, Vincenzo
 
 - Study benchmark usage in literature
 - Experiment 1
@@ -75,3 +77,16 @@
     - Freeze/Unfreeze model layers
     - Repeat fine-tuning
 - Important to evaluate model on benchmarks after experiments, to check if updates have been destructive towards the model baseline on common tasks.
+
+## 20/11/23 w/ Nicolò
+
+- Hallucination survey paper containing multiple interesting papers in the factuality section, explore state-of-the-art.
+    - Study papers focusing on Goal and Experiments (Input + Conditions + Outputs/Findings).
+
+- Search additional explainability libraries focused on gradient tracing on autoregressive models/LLMs.
+
+- Ecco
+    - Explore possibilities and API usage, if the investment is worthwhile, try to run it.
+- Captum
+    - Try saliency evaluation different query baselines (SOS, EOS, ...).
+    - Try saliency evaluation combined with embedding swap
