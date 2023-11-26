@@ -27,7 +27,7 @@
         - Follow-up paper on [Mass-Editing Memory in a Transformer](#mass-editing-memory-in-a-transformer).
     - ROME Evaluation
         - Specificity means that when inserting a new single piece information into the model shouldn't "learn" new information that wasn't specified; e.g.: intended information: the cat barks -> possible unintended information: the monkey also barks.
-        - Generality means that the information is retrained through rephrasing, summarization and can be referenced to by the model in unrelated contexts that ask to recall it.
+        - Generality means that the information is retained through rephrasing, summarization and can be referenced to by the model in unrelated contexts that ask to recall it.
         - zsRE (zero-shot Relation Extraction) has been used as a baseline by other model-editing centered papers, but does not entirely fit the specific scenario of this paper: good to measure generalization but not specificity or other possibly related metrics such as fluency.
         - CounterFact (in form subject, relationship, object) measures specificity (check for semantically neighboring subjects to the fact subject that may also be affected by the fact), fluency (human evaluation).
     - Problem of asymmetric fact storing is that it may not be possible for the model to infer the inverse relationship from a fact.
@@ -199,6 +199,29 @@
     - LPAQA (training dataset from Wikidata with no overlap with <s,o> pairs in LAMA)
     - AUTOPROMPT (statistical model that searches for <s,r,o> triples and creates prompts)
 - Models
+    - LAMA (model for the LAMA benchmark)
+
+# Explainability Libraries
+
+## Captum
+- [-] Not really optimized for autoregressive models.
+- IntegratedGradients is an axiomatic model interpretability algorithm that assigns an importance score to each input feature by approximating the integral of gradients of the model's output w.r.t. the inputs along the path from given baselines/references to input.
+- LayerIntegratedGradients isn't easy to interpret
+- providing different baselines yields very different results.
+
+## Ecco
+- [-] Doesn't work on Kaggle and Google Colab notebooks.
+
+## TruLens
+- [-] Too high level, unrelated to our task.
+
+## Alibi Explain
+- [+] General explainability framework with *Anchors* and *Integrated Gradients* modules that are focused on text.
+- [-] Not really optimized for autoregressive models.
+
+## SHAP
+- [+] Can be used seamlessly with autoregressive models.
+- [-] Explanations are provided through shapley values, does not look at gradient updates.
 
 # Notebooks Ideas
 
