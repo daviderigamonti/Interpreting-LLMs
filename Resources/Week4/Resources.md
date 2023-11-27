@@ -218,15 +218,19 @@
 ## Alibi Explain
 - [+] General explainability framework with *Anchors* and *Integrated Gradients* modules that are focused on text.
 - [-] Not really optimized for autoregressive models.
+- [-] *Integrated Gradients* module works only with TensorFlow models.
+- [-] *Anchor* is a black-box explainability tool and isn't fit for autoregressive models.
 
 ## SHAP
 - [+] Can be used seamlessly with autoregressive models.
-- [-] Explanations are provided through shapley values, does not look at gradient updates.
+- [-] Explanations are provided through Shapley values, does not look at gradient updates.
+- [-] Doesn't seem to work properly with Phi-1.5, it works with GPT2
+- [-] Poor documentation
 
 # Notebooks Ideas
 
 ## String ID Detokenization
-- Idea: Try `tokenizer.deconde(id_string)` to shed light onto BPE for Phi-1.5.
+- Idea: Try `tokenizer.decode(id_string)` to shed light onto BPE for Phi-1.5.
 - Results: Discovered that in phi-1.5 the byte-pair encoding, encoded words like cat and dog including a leading whitespace character, therefore the token for "dog" and " dog" are different. This, however doesn't affect the previous findings.
 
 ## Capitalization Variants for Swapping Experiment
