@@ -45,6 +45,7 @@
     - Conclusions
         - PLMs depend more on the positional close and highly co-occurred associations than the knowledge-dependent association to capture factual knowledge.
     - Process
+        - Dependence is measured by quantifying the difference in letting the PLM generate the missing words based on the original input first, then mask the remaining words in the input and let PLMs generate again.
         - Build a Structural Causal Model (SCM) for the missing words generation process and apply interventions on some input words to estimate their effect quantitatively.
         - Missing words are considered as outcome words, the words that hold a certain association to those as treatment words and the remaining as context words.
         - Obtain the quantitative causal effect of treatment words on outcome words by using *do()* calculus and Average Treatment Effect (ATE).

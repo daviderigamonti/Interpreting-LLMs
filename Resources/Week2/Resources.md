@@ -2,13 +2,13 @@
 
 ## Noise In Hidden Representation For Reducing Overfitting
 
-### [Fine-tuning Pre-trained Language Models with Noise Stability Regularization](https://arxiv.org/pdf/2206.05658.pdf)
+### [Improving Pre-trained Language Model Fine-tuning with Noise Stability Regularization](https://arxiv.org/abs/2206.05658)
 - [Local Copy](PDFs/fine_tuning_pre_trained_language_models_with_noise_stability_regularization.pdf)
 - Add noise to regularize hidden representations of network: Layerwise Noise Stability Regularization
 - Applied to reduce overfitting of a LLM during fine-tuning
 - Layer-wise regularization that explicitly enforces noise stability of middle layers and In-manifold noise stability regularization.
 
-### [HyPe: Better Pre-trained Language Model Fine-tuning with Hidden Representation Perturbation](https://arxiv.org/pdf/2212.08853.pdf)
+### [HyPe: Better Pre-trained Language Model Fine-tuning with Hidden Representation Perturbation](https://arxiv.org/abs/2212.08853)
 - [Local Copy](PDFs/Interest/hype_better_pre_trained_lanuage_model_fine_tuning_with_hidden_representation_perturbation.pdf)
 - [Annotated Copy](PDFs/Interest/Annotated/hype_better_pre_trained_lanuage_model_fine_tuning_with_hidden_representation_perturbation_annotated.pdf)
 - Add noise to hidden representations of a network
@@ -19,13 +19,13 @@
 
 ## Noise In Input Layers For Reducing Overfitting
 
-### [NEFTune: Noisy Embeddings Improve Instruction Finetuning](https://arxiv.org/pdf/2310.05914.pdf)
+### [NEFTune: Noisy Embeddings Improve Instruction Finetuning](https://arxiv.org/abs/2310.05914)
 - [Local Copy](PDFs/neftune_noisy_embeddings_improve_instruction_finetuning.pdf)
 - Add noise to input word embeddings of a network
 - Focus on conversational tasks
 - Applied to reduce overfitting of a LLM during fine-tuning
 
-### [Learning to Perturb Word Embeddings for Out-of-distribution QA](https://arxiv.org/pdf/2105.02692.pdf)
+### [Learning to Perturb Word Embeddings for Out-of-distribution QA](https://arxiv.org/abs/2105.02692)
 - [Local Copy](PDFs/Interest/learning_to_perturb_word_embeddings_for_out_of_distribution_qa.pdf)
 - [Annotated Copy](PDFs/Interest/Annotated/learning_to_perturb_word_embeddings_for_out_of_distribution_qa_annotated.pdf)
 - Learn perturbations by using a feedback process
@@ -34,11 +34,11 @@
 - Demonstration of how this can be considered a particular form of dropout regularization
 - Rich of interesting visualizations of the perturbations on input data
 - Added qualitative/quantitative study of effect of perturbations on words when projected back from embedding
-- [This](https://arxiv.org/pdf/1804.08166.pdf) is a similar paper, less in depth 
+- [This](https://arxiv.org/abs/1804.08166) is a similar paper, less in depth 
     - [Local Copy](PDFs/word_embedding_perturbation_for_sentence_classification.pdf)
     - Present several perturbation methods on word embedding layer, such as Gaussian noise, Bernoulli noise and adversarial training.
 
-### [Incorporating Noisy Length Constraints into Transformer with Length-aware Positional Encodings](https://aclanthology.org/2020.coling-main.319.pdf)
+### [Incorporating Noisy Length Constraints into Transformer with Length-aware Positional Encodings](https://aclanthology.org/2020.coling-main.319/)
 - [Local Copy](PDFs/Interest/incorporating_noisy_length_constraints_into_transformer_with_length_aware_positional_encodings.pdf)
 - [Annotated Copy](PDFs/Interest/Annotated/incorporating_noisy_length_constraints_into_transformer_with_length_aware_positional_encodings_annotated.pdf)
 - Noise added to length constraints of LRPE and LDPE positional encoding
@@ -47,13 +47,13 @@
 
 ## Input Perturbation For Improving Explainability
 
-### [Perturbing Inputs for Fragile Interpretations in Deep Natural Language Processing](https://arxiv.org/pdf/2108.04990.pdf)
+### [Perturbing Inputs for Fragile Interpretations in Deep Natural Language Processing](https://arxiv.org/abs/2108.04990)
 - [Local Copy](PDFs/perturbing_inputs_for_fragile_interpretations_in_deep_natural_language_processing.pdf)
 - Explainability-oriented
 - Focus on manipulating interpretations via manual perturbations
 - Input sentence is perturbed directly, before embedding
 
-### [Sharp Nearby, Fuzzy Far Away: How Neural Language Models Use Context](https://arxiv.org/pdf/1805.04623.pdf)
+### [Sharp Nearby, Fuzzy Far Away: How Neural Language Models Use Context](https://arxiv.org/abs/1805.04623)
 - [Local Copy](PDFs/Interest/sharp_nearby_fuzzy_far_away_how_neural_language_models_use_context.pdf)
 - [Annotated Copy](PDFs/Interest/Annotated/sharp_nearby_fuzzy_far_away_how_neural_language_models_use_context_annotated.pdf)
 - Focuses only on pure LSTM architectures
@@ -64,7 +64,7 @@
 
 ##  Generalized Perturbations for Improving Explainability
 
-### [NLIZE: A Perturbation-Driven Visual Interrogation Tool for Analyzing and Interpreting Natural Language Inference Models](https://www.osti.gov/pages/servlets/purl/1562803)
+### [NLIZE: A Perturbation-Driven Visual Interrogation Tool for Analyzing and Interpreting Natural Language Inference Models](https://ieeexplore.ieee.org/document/8454904)
 - [Local Copy](PDFs/Interest/nlize_a_perturbation_driven_visual_interrogation_tool_for_analyzing_and_interpreting_natural_language_inference_models.pdf)
 - [Annotated Copy](PDFs/Interest/Annotated/nlize_a_perturbation_driven_visual_interrogation_tool_for_analyzing_and_interpreting_natural_language_inference_models_annotated.pdf)
 - Explainability-oriented
@@ -76,7 +76,7 @@
 
 ## Removing Layers For Overfitting
 
-### [On the Effect of Dropping Layers of Pre-trained Transformer Models](https://arxiv.org/pdf/2004.03844.pdf)
+### [On the Effect of Dropping Layers of Pre-trained Transformer Models](https://arxiv.org/abs/2004.03844)
 - [Local Copy](PDFs/Interest/on_the_effect_of_dropping_layers_of_pre_trained_transformer_models.pdf)
 - [Annotated Copy](PDFs/Interest/Annotated/on_the_effect_of_dropping_layers_of_pre_trained_transformer_models_annotated.pdf)
 - Use activation patterns and weights to find layers that contribute less to a prediction
@@ -85,7 +85,7 @@
 - Analyze how different models/tasks perform with fewer layers
 - Focus on retraining performance
 
-### [Reducing Transformer Depth on Demand with Structured Dropout](https://arxiv.org/pdf/1909.11556.pdf)
+### [Reducing Transformer Depth on Demand with Structured Dropout](https://arxiv.org/abs/1909.11556)
 - [Local Copy](PDFs/reducing_transformer_depth_on_demand_with_structured_dropout.pdf)
 - Randomly dropping layers at training time -> Layerdrop
 - Requires additional training 
@@ -112,7 +112,7 @@
 
 ## Other
 
-### [ROBUSTLR: A Diagnostic Benchmark for Evaluating Logical Robustness of Deductive Reasoners](https://arxiv.org/pdf/2205.12598.pdf)
+### [ROBUSTLR: A Diagnostic Benchmark for Evaluating Logical Robustness of Deductive Reasoners](https://arxiv.org/abs/2205.12598)
 - [Local Copy](PDFs/robustlr_a_diagnostic_benchmark_for_evaluating_logical_robustness_of_deductive_reasoners.pdf)
 - Effect of logical perturbations on deductive reasoning benchmarks
 - More oriented towards "making a model learn logic reasoning"
@@ -286,7 +286,7 @@
 
 # Models
 
-### [The RefinedWeb Dataset for Falcon LLM: Outperforming Curated Corpora with Web Data, and Web Data Only](https://arxiv.org/pdf/2306.01116.pdf)
+### [The RefinedWeb Dataset for Falcon LLM: Outperforming Curated Corpora with Web Data, and Web Data Only](https://arxiv.org/abs/2306.01116)
 - [Local Copy](PDFs/Interest/the_refinedweb_dataset_for_falcon_llm_outperforming_curated_corpora_with_web_data_and_web_data_only.pdf.pdf)
 - [Annotated Copy](PDFS/Interest/Annotated/the_refinedweb_dataset_for_falcon_llm_outperforming_curated_corpora_with_web_data_and_web_data_only_annotated.pdf)
 - Main paper topic is the creation of the RefinedWeb dataset for model training, using the MDR (MacroData Refinement) pipeline that makes use of the following design principles:

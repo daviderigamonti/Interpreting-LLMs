@@ -299,7 +299,7 @@ As a result, we may expect that the gain from pre-training of embeddings may be 
 #### Learned in Translation: Contextualized Word Vectors
 
 *Resources:*
-    [Remote](https://proceedings.neurips.cc/paper_files/paper/2017/file/20c86a628232a67e7bd46f76fba7ce12-Paper.pdf) |
+    [Remote](https://arxiv.org/abs/1708.00107) |
     [Local](PDFs/Cited/learned_in_translation_contextualized_word_vectors.pdf)
 
 *Relevance:* ★★★★☆
@@ -331,7 +331,7 @@ The paper concludes by illustrating the differences between the CoVe approach an
 
 *Resources:*
     [Blog](https://nlp.stanford.edu//~johnhew//structural-probe.html?utm_source=quora&utm_medium=referral#the-structural-probe) |
-    [Remote](https://nlp.stanford.edu/pubs/hewitt2019structural.pdf) |
+    [Remote](https://aclanthology.org/N19-1419/) |
     [Local](PDFs/Cited/a_structural_probe_for_finding_syntax_in_word_representations.pdf) |
     [Annotated](PDFs/Cited/Annotated/a_structural_probe_for_finding_syntax_in_word_representations_annotated.pdf)
 
@@ -358,7 +358,7 @@ Additionally, models’ ability to identify the root of the sentence as the leas
 
 *Resources:*
     [Blog](https://pair-code.github.io/interpretability/bert-tree/) |
-    [Remote](https://arxiv.org/pdf/1906.02715.pdf) |
+    [Remote](https://arxiv.org/abs/1906.02715) |
     [Local](PDFs/Cited/visualizing_and_measuring_the_geometry_of_bert.pdf) |
     [Annotated](PDFs/Cited/Annotated/visualizing_and_measuring_the_geometry_of_bert_annotated.pdf)
 
@@ -462,7 +462,6 @@ The accepted answer references an interesting paper regarding word embeddings us
 #### Replacing word embeddings by contextualized word vectors
 
 *Resources:*
-    [Post]() |
     [Local](PDFs/replacing_your_word_embeddings_by_contextualized_word_vectors/index.md)
 
 *Relevance:* ★★★☆☆
