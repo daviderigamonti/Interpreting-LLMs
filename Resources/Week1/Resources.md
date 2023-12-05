@@ -222,7 +222,8 @@ The bidirectional variants of the various models consistently outperform the uni
 
 *Resources:*
     [Remote](https://arxiv.org/abs/1312.6211) |
-    [Local](PDFs/Cited/an_empirical_investigation_of_catastrophic_forgetting_in_gradient-based_neural_networks.pdf)
+    [Local](PDFs/Cited/an_empirical_investigation_of_catastrophic_forgetting_in_gradient-based_neural_networks.pdf) |
+    [Annotated](PDFs/Cited/Annotated/an_empirical_investigation_of_catastrophic_forgetting_in_gradient-based_neural_networks.pdf)
 
 *Relevance:* ★★☆☆☆
 

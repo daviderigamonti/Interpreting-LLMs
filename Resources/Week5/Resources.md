@@ -4,6 +4,15 @@
 
 # Papers
 
+## [Exposing Attention Glitches with Flip-Flop Language Modeling](https://arxiv.org/abs/2306.00946)
+- [Local Copy](PDFs/dola_decoding_by_contrasting_layers_improves_factuality_in_large_language_models.pdf)
+- [Annotated Copy]()
+
+## [DoLa: Decoding by Contrasting Layers Improves Factuality in Large Language Models](https://arxiv.org/abs/2309.03883)
+- [Local Copy](PDFs/dola_decoding_by_contrasting_layers_improves_factuality_in_large_language_models.pdf)
+- [Annotated Copy]()
+- [Github](https://github.com/voidism/DoLa)
+
 # Previous Meeting Ideas
 
 ## 28/11/23 w/ Mark, Nicolò, Vincenzo

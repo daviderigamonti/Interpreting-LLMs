@@ -42,7 +42,7 @@
         - Results
             - Experts were able to identify at least one pattern for every key with an average of 3.6 identified patters and the vast majority of retrieved prefixes were associated with at least one identified pattern.
             - Key vectors in ff layers act as pattern detectors.
-            - Shallow layers identify shallow patterns, while higher layers are more prone to identify demantic patterns since removing the last token has less impact w.r.t shallow layers.
+            - Shallow layers identify shallow patterns, while higher layers are more prone to identify semantic patterns since removing the last token has less impact w.r.t shallow layers.
     - **Each value $v_i^\ell$ can be viewed as a distribution over the output vocabulary** 
         - Approach
             - Convert each value vector $v_i^\ell$ into a probability distribution over the vocabulary under the naive assumption that all model layers operate under the same embedding space: $p_i^\ell = softmax(v_i^\ell \cdot E)$, then find the next token of $k_i^\ell$'s top-1 trigger example and find where it ranks in the value vector's distribution $p_i^\ell$.
