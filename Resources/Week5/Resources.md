@@ -1,4 +1,4 @@
-# Paper Organization
+# New Paper Organization
 
 [Google Sheets Link](https://docs.google.com/spreadsheets/d/13AIEp3gyqf4AO1MgAZmUANgor4021n0Bx-NNuwTvYqM/edit#gid=0)
 
@@ -98,9 +98,59 @@
     - LLaMA (7B, 13B, 33B, 63B)
     - MPT-7B
 
+# Co-occurrence
+
+## How Pre-trained Language Models Capture Factual Knowledge? A Causal-Inspired Analysis
+
+### PLMs prefer the associations founded with positionally close or the highly co-occurred words to the knowledge-base clues
+
+- Sentences are sampled, for each sentence treatment $W_t$, outcome $W_o$ and context $W_c$ words are chosen.
+- The outcome words are the target of the model's prediction (associated to the triplet *object*), treatment words are chosen with different criterions and are obfuscated with \[MASK\] tokens and context words are all the other words in a sentence.
+- The treatment words criterions are:
+    - KD (Knowledge Dependent): Words corresponding to *predicate + object* in triplet. Example: "*Columbus* born between 25 August and 31 October 1451, *died* **20 May 1506** was an Italian explorer", *Columbus* and *died* are KD w.r.t. **20 May 1506**.
+    - PC (Positionally Close): Remaining words close to $W_o$. Example: "Columbus born between 25 August and 31 October 1451, *died* **20 May 1506** *was* an Italian explorer", *died* and *was* are PC w.r.t. **20 May 1506**.
+    - HC (Highly Co-occurred): Remaining words that have high Pointwise Mututal Information (PMI) with $W_o$. Example "*Columbus* born between 25 August and 31 October 1451, died **20 May 1506** was an Italian *explorer*", *Columbus* and *explorer* are HC w.r.t. **20 May 1506**.
+- PMI is calculated over all the Wikipedia sentences using the following equation: $PMI(w_i, \hat w_o) = \frac{P(w_i|\hat w_o)}{P(w_i)}$ where $\hat w_o$ is a span of words and $w_i$ a single word.
+- The Average Treatment Effect is calculated by computing the difference between the expected values of the $W_o$ probabilities given $W_t$ the ground truth value $\hat w_t$ vs. the intervention value $w_m$ : $\mathbb{E}[P(W_o | W_t=\hat w_t)] - \mathbb{E}[P(W_o | W_t=w_m)]$.
+- The PLM output is calculated by using the reciprocal of the rank position of $\hat w_o$ according to the raw generation probability of the model.
+- There is a general trend over all PLMs: the PC association takes the dominant effect on the prediction results, the HC association comes second and least for the KD association.
+The trend doesn't change much with scale, using additional training data or improving the masking strategy. Consequently, accuracy drops most when perturbing the positionally close and highly co-occurred words.
+![img](./Img/how_pre_trained_langauge_models_1.png)
+
+### Impact of Co-occurrence on Factual Knowledge of Large Language Models
+
+- Co-occurrence statistics are necessary but not sufficient to recall facts, therefore, a heavy reliance on co-occurrence may be problematic.
+- The model fails to recall facts by selecting words with higher co-occurrence counts over the correct answers. This implies that co-occurrence statistics may often work as spurious features, leading to hallucinations and biased responses.
+
+![img](./Img/impact_of_co_occurrence_on_1.png)
+
+- It is also measured how often the correct answer is overridden by a word with higher co-occurrence counts.
+- A word with higher co-occurrence counts overrides the correct answer in a total of 38% of the failure cases.
+- The frequency bins indicate the co-occurrence bias is more problematic when recalling rare facts.
+
+![img](./Img/impact_of_co_occurrence_on_2.png)
+
+- The results show that LLMs prefer to generate words that co-occur with the subject frequently enough ($P_{\text{pretrain}}(o \hat b j | \text{subj}) \ge 0.26$).
+- Recalling facts is especially difficult since words with low co-occurrence counts are hardly generated.
+
+![img](./Img/impact_of_co_occurrence_on_3.png)
+
+
 # Previous Meeting Ideas
 
 ## 28/11/23 w/ Mark, Nicolò, Vincenzo
+
+- Experiment ideas
+    - Turn off feed forward layers, only residuals and attention
+    - Turn off attention layers, only residuals and feedforward
+        - Hypothesis: Results in a markov model -> pure prediction of next word without fact association
+    - 1-layer model with cycling information
+        - [Universal Transformer](https://arxiv.org/abs/1807.03819)
+        - Adapt an LLM to act as a Universal Transformer
+
+- Other stuff
+    - Find examples for co-occurrence problem
+    - Test if recent transformer models/LLMs retain original embedding spatial properties
 
 ## 30/11/23 w/ Nicolò, Vincenzo
 
