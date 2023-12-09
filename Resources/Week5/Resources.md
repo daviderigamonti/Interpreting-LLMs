@@ -121,6 +121,11 @@ Normalizing the final embedding from the arithmetic operation always seems to im
 
 The performed normalization is provided by `torch.nn.functional.normalize` and defaults to a $L_2$ normalization of the vectors.
 
+## Notes
+
+- Evaluation method doesn't take into consideration that output embeddings may have multiple tokens
+- It may be that some associations are not influenced by the actual embedding arithmetic equation components but simply output the closest embeddings to the target embedding.
+
 # Co-occurrence
 
 ## How Pre-trained Language Models Capture Factual Knowledge? A Causal-Inspired Analysis
