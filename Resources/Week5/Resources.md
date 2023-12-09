@@ -98,6 +98,29 @@
     - LLaMA (7B, 13B, 33B, 63B)
     - MPT-7B
 
+# Recent transformer models/LLMs retain original embedding spatial properties?
+
+#### GPT-2 vs Phi-1.5
+
+GPT-2 steadily performs better on embedding arithmetic tasks versus Phi-1.5
+
+#### Uppercase and lowercase
+
+Generally words that are usually seen in a certain format perform better on embedding arithmetic tasks if prompted in that format.
+(For example country names and cities are usually capitalized).
+
+#### Multi-word average
+
+There is no clear distinction between using an average of multiple words and a single word, provided that said words aren't too different from one another (averaging a capitalized word and a lowercase word doesn't word).
+
+Averaging the embeddings of multi-token words seems to work, although it is clear that results are slightly worse.
+
+#### Normalization
+
+Normalizing the final embedding from the arithmetic operation always seems to improve the results, for all models and word combinations.
+
+The performed normalization is provided by `torch.nn.functional.normalize` and defaults to a $L_2$ normalization of the vectors.
+
 # Co-occurrence
 
 ## How Pre-trained Language Models Capture Factual Knowledge? A Causal-Inspired Analysis
