@@ -10,14 +10,14 @@
 - Experiment 1
     - Questions
         - Are transformer models able to learn a flip-flop language (FFL)?
-        - Is there any difference in results on FFL tasks between recurrent ad transformer architectures?
+        - Is there any difference in results on FFL tasks between recurrent and transformer architectures?
     - Conclusions
         - Transformers exhibit a long irregular tail of errors, such errors occur on both sparse and dense sequences. Further, a model’s out-of-distribution test error varies significantly between random seeds and even between iterations within the same training run.
         - LSTMs extrapolate perfectly. In stark contrast, with 20 times fewer training samples and iterations, a 1-layer recurrent model achieves 100% accuracy, on 100 out of 100 runs.
         - Larger LMs can correctly process FFLs, but not robustly. Beyond a certain scale, natural language models can learn to process FFLs from in-context demonstrations. However, this emergent capability is not robust: there exist rare read errors, whose probabilities amplify as the sequence length T grows.
     - Process
         - NLMs are trained to generate strings from $FFL(0.8)$ and probe whether the networks robustly learns the language. 
-        - Although every valid flip-flop string is supported in this distribution, some sequences are far rarer than others; we measure tail behavior via probes of extrapolation, defined as out-of-distribution evaluations which amplify the probabilities of the rare sequences by sampling $>3\times10^5$ sequences from $FFL(0.98)$ as well as $FFL(0.1)$.
+        - Although every valid flip-flop string is supported in this distribution, some sequences are far rarer than others; tail behavior is measured via probes of extrapolation, defined as out-of-distribution evaluations which amplify the probabilities of the rare sequences by sampling $>3\times10^5$ sequences from $FFL(0.98)$ as well as $FFL(0.1)$.
     - Observations
         - By construction, language models experience degradation of accuracy with dependency length, however there exist accuracy problems for short and dense sequences.
         - A common drawback of soft attention is the excessive "softness" of the softmax function, however, even hard attention is able to confidently attend the wrong index, suggesting the existence of spurious local optima.
@@ -135,9 +135,9 @@ The performed normalization is provided by `torch.nn.functional.normalize` and d
 - Sentences are sampled, for each sentence treatment $W_t$, outcome $W_o$ and context $W_c$ words are chosen.
 - The outcome words are the target of the model's prediction (associated to the triplet *object*), treatment words are chosen with different criterions and are obfuscated with \[MASK\] tokens and context words are all the other words in a sentence.
 - The treatment words criterions are:
-    - KD (Knowledge Dependent): Words corresponding to *predicate + object* in triplet. Example: "*Columbus* born between 25 August and 31 October 1451, *died* **20 May 1506** was an Italian explorer", *Columbus* and *died* are KD w.r.t. **20 May 1506**.
-    - PC (Positionally Close): Remaining words close to $W_o$. Example: "Columbus born between 25 August and 31 October 1451, *died* **20 May 1506** *was* an Italian explorer", *died* and *was* are PC w.r.t. **20 May 1506**.
-    - HC (Highly Co-occurred): Remaining words that have high Pointwise Mututal Information (PMI) with $W_o$. Example "*Columbus* born between 25 August and 31 October 1451, died **20 May 1506** was an Italian *explorer*", *Columbus* and *explorer* are HC w.r.t. **20 May 1506**.
+    - KD (Knowledge Dependent): Words corresponding to *predicate + object* in triplet. Example: "*Drayton* is a hamlet in England, in the county of Northamptonshire, ..., in the parish and union of Daventry, hundred of Fawsley, ¾ of a mile on the low-lying north western side of the *town* of **Daventry**", *Drayton* and *town* are KD w.r.t. **Daventry**.
+    - PC (Positionally Close): Remaining words close to $W_o$. Example: "Drayton is a hamlet in England, in the county of Northamptonshire, ..., in the parish and union of Daventry, hundred of Fawsley, ¾ of a mile on the low-lying north western side of the town *of* **Daventry**", *of* are PC w.r.t. **Daventry**.
+    - HC (Highly Co-occurred): Remaining words that have high Pointwise Mutual Information (PMI) with $W_o$. Example "Drayton is a hamlet in England, in the county of Northamptonshire, ..., in the parish and union of *Daventry*, hundred of *Fawsley*, ¾ of a mile on the low-lying north western side of the town of **Daventry**", *Daventry* and *Fawsley* are HC w.r.t. **Daventry**.
 - PMI is calculated over all the Wikipedia sentences using the following equation: $PMI(w_i, \hat w_o) = \frac{P(w_i|\hat w_o)}{P(w_i)}$ where $\hat w_o$ is a span of words and $w_i$ a single word.
 - The Average Treatment Effect is calculated by computing the difference between the expected values of the $W_o$ probabilities given $W_t$ the ground truth value $\hat w_t$ vs. the intervention value $w_m$ : $\mathbb{E}[P(W_o | W_t=\hat w_t)] - \mathbb{E}[P(W_o | W_t=w_m)]$.
 - The PLM output is calculated by using the reciprocal of the rank position of $\hat w_o$ according to the raw generation probability of the model.
@@ -145,7 +145,7 @@ The performed normalization is provided by `torch.nn.functional.normalize` and d
 The trend doesn't change much with scale, using additional training data or improving the masking strategy. Consequently, accuracy drops most when perturbing the positionally close and highly co-occurred words.
 ![img](./Img/how_pre_trained_langauge_models_1.png)
 
-### Impact of Co-occurrence on Factual Knowledge of Large Language Models
+## Impact of Co-occurrence on Factual Knowledge of Large Language Models
 
 - Co-occurrence statistics are necessary but not sufficient to recall facts, therefore, a heavy reliance on co-occurrence may be problematic.
 - The model fails to recall facts by selecting words with higher co-occurrence counts over the correct answers. This implies that co-occurrence statistics may often work as spurious features, leading to hallucinations and biased responses.
