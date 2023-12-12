@@ -111,7 +111,7 @@ Generally words that are usually seen in a certain format perform better on embe
 
 #### Multi-word average
 
-There is no clear distinction between using an average of multiple words and a single word, provided that said words aren't too different from one another (averaging a capitalized word and a lowercase word doesn't word).
+There is no clear distinction between using an average of multiple words and a single word, provided that said words aren't too different from one another (averaging a capitalized word and a lowercase word doesn't work).
 
 Averaging the embeddings of multi-token words seems to work, although it is clear that results are slightly worse.
 
