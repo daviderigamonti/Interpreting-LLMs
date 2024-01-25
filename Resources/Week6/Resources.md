@@ -1,5 +1,3 @@
-# Papers
-
 # Previous Meeting Ideas
 
 ## 12/12/23 w/ Nicolò, Vincenzo
@@ -34,4 +32,3 @@
             - D: Weighted average using attention weights
         - Experiment 2 - If experiment 1 doesn't work, is the problem in the model structure (autoregressive) or in the non-linear transformations?
             - A: Try with an encoder model
-
