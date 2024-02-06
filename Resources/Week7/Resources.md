@@ -23,3 +23,19 @@
     - Taking a common sequence/sentence with an obvious token that should have high output probability.
     - Trace the token through the model prediction and find where it starts getting predicted.
     - Task should be easier if input and output embeddings are equal.
+
+## 26/01/24 Nicolò Meeting
+
+- Why do some models use output embeddings on LM heads that are different from the input embeddings of the base model?
+- Analyzing weights and intermediate values inside the basic transformer block would be interesting.
+
+- Interesting visualization tools
+    - plotly 
+    - streamlit
+
+## 01/02/24 Nicolò Meeting
+
+- Try to make the graph more user friendly
+    - Only show the main attention paths for each token and show all the other ones only on hover.
+
+- Perform same experiment on a model that is capable of tokenizing numbers appropriately (e.g. Llama 2)
