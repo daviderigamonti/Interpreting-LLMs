@@ -57,7 +57,7 @@
 - Understanding Multi-head attention:
     - Every head performs attention computation on the input and produces a resulting embedding that gets compressed by the $W_d$ matrix.
     - All resulting compressed embeddings get concatenated into a new vector.
-    - The concatenated vector gets compressed by the $W_o$ matrix-
+    - The concatenated vector gets compressed by the $W_o$ matrix.
     - Image 2 in [Notes 1](13-02-24_Notes_1.png") and Image in [Notes 2](13-02-24_Notes_2.jpg")
     - Look at attention implementations of LLama2 and GPT2.
 
@@ -67,7 +67,7 @@
 
 - Ideas:
     - Cosine distance is a good measure to compare single-head embeddings and final embedding after multiplication with $W_o$.
-    - Calculate $\tilde{E}$ by only considering contributes of a single head and then compute to compare them $1 - |d(E_{out}, \tilde{E}_{out})|$ (or alternatively look at which $\tilde{E}_out$ has higher norm).
+    - Calculate $\tilde{E}$ by only considering contributes of a single head and then compute to compare them $1 - |d(E_{out}, \tilde{E}_{out})|$ (or alternatively look at which $\tilde{E}_{out}$ has higher norm).
 
 - Technically $\sum{\tilde{E}_{out}} = E_{out}$
 
