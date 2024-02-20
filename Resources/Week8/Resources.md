@@ -67,8 +67,8 @@
 
 - Ideas:
     - Cosine distance is a good measure to compare single-head embeddings and final embedding after multiplication with $W_o$.
-    - Calculate $\tilde{E}$ by only considering contributes of a single head and then compute to compare them $1 - |d(E_{out}, \tilde{E}_{out})|$ (or alternatively look at which $\tilde{E}_{out}$ has higher norm).
+    - Calculate $\tilde{E}$ by only considering contributes of a single head and then compute to compare them $1 - |d(E_{out}, \tilde{E}\_{out})|$ (or alternatively look at which $\tilde{E}\_{out}$ has higher norm).
 
-- Technically $\sum{\tilde{E}_{out}} = E_{out}$
+- Technically $\sum{\tilde{E}\_{out}} = E\_{out}$
 
 - Implementation-wise slicing matrices is better than putting 0s in them.
