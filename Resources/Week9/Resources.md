@@ -1,10 +1,26 @@
+# Notes
+
+## Possible encoding of number decimal value
+
+While testing the attention visualization utilizing the option to display multiple representations of hidden states with the Mistral 7B model an interesting pattern of secondary representations was found.
+
+Example produced by running a prompt that asked the model to solve an addition in the form of _"xxxxxx + yyyyyy ="_ and looking at the hidden representations of numeric tokens from the perspective of input embeddings (valid for both hidden representations present in the input and generated tokens).
+
+At a certain number of layers inside the model, hidden states of digits tend to display a secondary representation that directly correlates with their decimal position inside the number e.g. "_hundred", "_thousand", "_million", ...
+
+The secondary representation is not always correct and might correlate with arithmetic errors made by the model.
+
+Interestingly enough, for the decimal position corresponding to "10.000", Mistral 7B seems to use the ideogram 万, which tends to be associated with that particular value in the japanese language.
+
+In addition, for some two-digit or three-digit combinations, Mistral 7B tries to encode the latter digit with the term combining all of the previous ones (e.g. 1,3 -> _thirteen). This happens only for the first two/three digits of a number as the later digits secondary representations are dominated by the previously analyzed terms.
+
 # Previous Meeting Ideas
 
 ## 22/02/24 Group Meeting
 
 ### Ideas + Tasks
 
-- Try using Mistral7B model
+- Try using Mistral7B model [DONE]
 
 #### Head Attention Contribution
 
