@@ -23,16 +23,16 @@ Sankey Diagrams:
 ### Tasks
 
 First Order Markov Model:
-- [ ] Compare KL divergence on softmax results.
-- [ ] Increase number of samples to improve significance.
-- [ ] Possibly quantify the expected KL divergence to have a baseline.
+- [-] Compare KL divergence on softmax results.
+- [-] Increase number of samples to improve significance.
+- [-] Possibly quantify the expected KL divergence to have a baseline.
 
 Sankey:
 - [ ] Investigate re
-- [ ] Add residuals to the visualization (gradual implementation: first assume they contribute 50% and observe the graph, then insert their actual values).
-- [ ] Add node color and fix order.
+- [-] Add residuals to the visualization (gradual implementation: first assume they contribute 50% and observe the graph, then insert their actual values).
+- [-] Add node color and fix order.
 - [ ] Replicate visualization using gradients.
-- [ ] Implement visualization using Dash.
+- [-] Implement visualization using Dash.
 
 Embeddings Analogies:
 - [ ] Try different sizes of the same model
