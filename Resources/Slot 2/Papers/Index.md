@@ -5,12 +5,13 @@ Complete survey on transformer interpretability techniques.
 - Published: 2024
 - Read: 18/05/24
 - Annotated: 19/05/24
+- Notes written: 23/05/24
 ## Type
 Survey paper
 ## Resources
 - [PDF file](./a_primer_on_the_inner_workings_of_transformer-based_language_models.pdf)
 - [Annotated PDF file](./Annotated/a_primer_on_the_inner_workings_of_transformer-based_language_models_annotated.pdf)
-- [Notes]()
+- [Notes](./Notes/a_primer_on_the_inner_workings_of_transformer-based_language_models.md)
 
 # Interpreting GPT: the logit lens
 ## Topics
@@ -86,4 +87,4 @@ Paper
 ## Resources
 - [PDF file](./emergent_and_predictable_memorization_in_large_language_models.pdf)
 - [Annotated PDF file](./Annotated/emergent_and_predictable_memorization_in_large_language_models_annotated.pdf)
-- [Notes]()
+- [Notes](./Notes/emergent_and_predictable_memorization_in_large_language_models.md)
