@@ -56,7 +56,7 @@ The *logit lens* focuses on what GPT "*believes*" after each step of processing,
 - Comparing the *similarity* of two probability distributions through the **KL divergence**: by taking the *KL divergence* of the *intermediate probabilities* w.r.t. the *final probabilities*, we get a more *continuous* view of how the distributions *smoothly converge* to the model's output.
 - Also plot the $KL(input||layer)$ instead of the $KL(output||layer)$ of the previous point and compare both against the rank view.
 ##### Findings
-- Immediately, after the very *first layer*, the input has been *transformed* into something that looks more like the final output (47 layers layer) than it does like the input; after this one *discontinuous jump*, the distribution progresses in a much moresmooth way to the final output distribution.
+- Immediately, after the very *first layer*, the input has been *transformed* into something that looks more like the final output (47 layers layer) than it does like the input; after this one *discontinuous jump*, the distribution progresses in a much more smooth way to the final output distribution.
 - There is still a *fast jump* in $KL(input||layer)$ after the input, but it's far *smaller* than the jump in $KL(output||layer)$ at the same point.
 - Likewise, while *ranks jump quickly* after the input, they often stay relatively high in the context of a ~50K vocab, but in particular some tokens are "*preserved*" much more in this sense than others.
 This is apparently *contextual*, not just based on the token itself.

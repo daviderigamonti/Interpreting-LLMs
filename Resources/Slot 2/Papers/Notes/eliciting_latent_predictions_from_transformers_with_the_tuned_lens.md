@@ -52,9 +52,8 @@ where $f_{>\ell}(\vec{h}_\ell)$ refers to the rest of the transformer after laye
 
 To explore whether the *tuned lens* finds *causally relevant* features, we will assess two desired **properties**:
 1) *Latent directions that are important to the tuned lens should also be important to the final layer output*.
-2) *These latent directions should be important in the same
-way for both the tuned lens and the model.
-We will call this property stimulus-response alignment*.
+2) *These latent directions should be important in the same way for both the tuned lens and the model.*
+*We will call this property stimulus-response alignment*.
 
 To test **Property 1**, we first need to find the *important directions* for the *tuned lens*.
 **Amnesic probing** provides one way to do this by seeking a direction whose erasure *maximally degrades* a model's *accuracy*.
@@ -89,7 +88,7 @@ If LogitLens relies on the *presence* or *absence* of particular *outlier* dimen
 Even when controlling for *rogue dimensions*, we observe a *strong* tendency for the *covariance matrices* of hidden states at different layers to *drift apart* as the number of layers *separating* them increases.
 One simple, general way to correct for *drifting covariance* is to introduce a *learnable change of basis matrix* $A_\ell$, which learns to map from the *output space* of layer $\ell$ to the *input space* of the *final layer*.
 ##### Findings
-- We find that the *tuned lens* resolves the problems with the *logit lens*: it has *significantly lower bias*, and* much lower perplexity* than the *logit lens* across the board.
+- We find that the *tuned lens* resolves the problems with the *logit lens*: it has *significantly lower bias*, and *much lower perplexity* than the *logit lens* across the board.
 
 #### Transferability across layers/models
 
@@ -132,7 +131,7 @@ On the other hand, the *SRM baseline* does *consistently well*, the tuned lens *
 
 #### Measuring Example Difficulty
 
-- Some early exiting strategies are based on the observation that "*easy*" examples require *less computatio*n to classify than "*difficult*" examples.
+- Some early exiting strategies are based on the observation that "*easy*" examples require *less computation* to classify than "*difficult*" examples.
 We propose to use the tuned lens to *estimate example difficulty in pretrained transformers*, without the need to fine-tune the model for early exiting.
 - We evaluate the model's *zero-shot performance* on twelve multiple-choice tasks.
 For each checkpoint, we store the *top 1 prediction* on every individual example, allowing us to compute the iteration learned.

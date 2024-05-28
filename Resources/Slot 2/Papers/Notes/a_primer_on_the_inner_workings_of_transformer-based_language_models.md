@@ -243,7 +243,7 @@ Particularly, certain heads specialize in given *dependency relation* types.
 
 #### Attention Heads with Interpretable QK/OV Circuits
 
-- *Copying heads*: several attention heads in transformer LMs have *OV matrices* that exhibit *copying* behavior.
+- **Copying heads**: several attention heads in transformer LMs have *OV matrices* that exhibit *copying* behavior.
 - **Induction heads**: an *induction* mechanism that allows language models to *complete patterns*.
 This mechanism involves two heads in different layers composing together, specifically a *Previous Token Head* (*PTH*) and an *induction head*.
 The *induction* mechanism learns to increase the *likelihood* of token $B$ given the sequence $A B ... A$, irrespective of what $A$ and $B$ are.

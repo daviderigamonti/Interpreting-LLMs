@@ -92,7 +92,7 @@ We remove the top $k = {1, 3, 5}$ dimensions, where dimensions are ranked by $CC
 By contrast, in *later layers*, the *variability* of *cosine similarity* is driven by just *1-5 dimensions*.
 - Token pairs which are *similar* to one another in the *full embedding* space are *drastically different* from the pairs which are *similar* when just a handful of dimensions are *removed*.
 - Small subset of dimensions in later layers seem to drive the *cosine similarity* of *randomly sampled* words toward 1, but this subset also drives the *variability* of the measure.
-This result effectively renders* cosine similarity* a measure over *1-5 rogue dimensions* rather than the *entire embedding space*.
+This result effectively renders *cosine similarity* a measure over *1-5 rogue dimensions* rather than the *entire embedding space*.
 
 #### Behavioral Influence of Individual Dimensions
 
@@ -108,7 +108,7 @@ We evaluate this using word *similarity/relatedness* judgment datasets where exa
 ##### Findings
 - *Postprocessing* aligns the *embedding space* more closely to *human similarity judgments* across almost *all layers* of *all models*.
 We found that **standardization** was the *most successful postprocessing method*, showing consistent improvement over the original embeddings in all but the early layers of BERT.
-- **All-but-the-top** was *generally effectiv*e but highly *dependent* on the *number of components removed*.
+- **All-but-the-top** was *generally effective* but highly *dependent* on the *number of components removed*.
 - Simply **subtracting the mean vector** (common factor between *standardization* and *all-but-the-top*) also yielded *substantial gains* in most models.
 - *Converting embeddings into ranks* (**Spearman correlation**) also resulted in *significantly stronger correlations* with human judgments in *all layers* of *all models*, though the correlation was often *weaker* than *standardization* or *all-but-the-top*.
 - Previous work has suggested that the *final layers* of transformer language models are *highly task-specific*.
