@@ -1,4 +1,5 @@
 # Nicolò 29/4/24
+
 - Implementing embedding injection
     - Click on a cell -> Popup over cell -> Insert new word -> Choose embedding type -> Recompute table/Sankey
     - Issue about multi-token embeddings: First token/Average/Sum?

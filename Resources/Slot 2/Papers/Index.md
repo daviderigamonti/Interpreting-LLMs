@@ -88,3 +88,17 @@ Paper
 - [PDF file](./emergent_and_predictable_memorization_in_large_language_models.pdf)
 - [Annotated PDF file](./Annotated/emergent_and_predictable_memorization_in_large_language_models_annotated.pdf)
 - [Notes](./Notes/emergent_and_predictable_memorization_in_large_language_models.md)
+
+# A Mathematical Framework for Transformer Circuits
+## Topics
+Attempt at reverse-engineering transformers and, in particular, the attention mechanism.
+## Status
+- Published: 2021
+- Read: 29/05/24
+- Annotated: 29/05/24
+## Type
+Blog
+## Resources
+- [Original link](https://transformer-circuits.pub/2021/framework/index.html)
+- [PDF file](./a_mathematical_framework_for_transformer_circuits.pdf)
+- [Annotated PDF file](./Annotated/a_mathematical_framework_for_transformer_circuits_annotated.pdf)
