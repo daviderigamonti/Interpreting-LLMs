@@ -55,8 +55,7 @@ Since we specifically select single-token words in Chinese (ZH) as well as Engli
 The *logit lens* gives us one set of language probabilities per input prompt and layer.
 
 - Tasks:
-    1) **Translation task**: Here the task is to *translate* the
-    preceding *language A* word to *language B* (both not being English).
+    1) **Translation task**: Here the task is to *translate* the preceding *language A* word to *language B* (both not being English).
     We show the model four words with their correct translations, followed by a fifth word without its translation, and let the model predict the next token.
     2) **Repetition task**: We task the model to simply *repeat the last word*, instead of translating it.
     3) **Cloze task**: We consider a *cloze test*, where the model must predict a masked word in a sentence.
@@ -69,7 +68,7 @@ Neither the correct Chinese token nor its English analog garner **any** noticeab
 Then, around the *middle layer*, English begins a *sharp rise* followed by a decline, while Chinese *slowly grows* and, after a *crossover* with English, *spikes on the last five layers*.
 - On the *repetition* task, Chinese already *rises alongside* English.
 This is in contrast to all other languages, where English *rises first*.
-- Regarding the *entropy* of the *full next-token distribution*, we again observe a *consistent pattern* across tasks and model sizes: h*igh entropy in the first half of layers*, while both $P(lang = ZH)$ and $P(lang = EN)$ are *close to zero*, followed by a *sharp drop* at the same time that $P(lang = EN)$ *rises*.
+- Regarding the *entropy* of the *full next-token distribution*, we again observe a *consistent pattern* across tasks and model sizes: *high entropy in the first half of layers*, while both $P(lang = ZH)$ and $P(lang = EN)$ are *close to zero*, followed by a *sharp drop* at the same time that $P(lang = EN)$ *rises*.
 From there on, *entropy remains low*, with a *slight rebound* as probability mass shifts from English to Chinese.
 - With $32,000 \approx 2^{15}$ tokens in the vocabulary, the *early entropy* of around $14$ bits implies a *close-to-uniform next-token distribution* (around $15$ bits).
 - Regarding the *forward computation paths*: an English and a Chinese *token cluster* emerges, suggesting that the same latent also gives *high probability* to an *entire language*, in addition to the language-specific version of the correct next token.

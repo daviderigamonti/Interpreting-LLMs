@@ -14,7 +14,7 @@ Introduction of the logit lens to look and interpret transformer intermediate re
 
 In the **logit lens**, the early layers sometimes look like *nonsense*, and sometimes look like very *simple guesses* about the output.
 They almost *never* look like the input.
-Apparently, the model does **not** "k*eep the inputs around*" for a while and gradually process them into some intermediate representation, then into a prediction.
+Apparently, the model does **not** "*keep the inputs around*" for a while and gradually process them into some intermediate representation, then into a prediction.
 Instead, the inputs are *immediately* converted to a very different representation, which is smoothly refined into the final *prediction*.
 
 1) Transformers are *residual networks*.

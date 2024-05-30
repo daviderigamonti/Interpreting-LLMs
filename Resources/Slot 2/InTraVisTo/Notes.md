@@ -23,3 +23,17 @@
     - Write down small/general UML diagram for a new class organization
     - Change model interface to include Vincenzo's libraries
     - No concrete progress towards the heatmap -> table switch
+
+# Meeting 30/5/24
+
+- Ideas
+    - Extract weights from combinations in tuned lens-style
+
+- Anisotropy
+    - Observe entropy of logits distribution
+        - High entropy -> Embeddings being close/far holds less significance
+
+- Extra: Are layers linear transformations
+    - Train a model from scratch
+    - Pretraining on original dataset
+    - Force independence between layers
