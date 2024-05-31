@@ -102,3 +102,17 @@ Blog
 - [Original link](https://transformer-circuits.pub/2021/framework/index.html)
 - [PDF file](./a_mathematical_framework_for_transformer_circuits.pdf)
 - [Annotated PDF file](./Annotated/a_mathematical_framework_for_transformer_circuits_annotated.pdf)
+
+# A Mathematical Framework for Transformer Circuits
+## Topics
+Expansion of the work done in [a previous paper](#a-mathematical-framework-for-transformer-circuits) to also inclde feedforward layers
+## Status
+- Published: 2022
+- Read: 31/05/24
+- Annotated: 31/05/24
+## Type
+Blog
+## Resources
+- [Original link](https://transformer-circuits.pub/2022/solu/index.html)
+- [PDF file](./softmax_linear_units.pdf)
+- [Annotated PDF file](./Annotated/softmax_linear_units_annotated.pdf)

@@ -37,3 +37,23 @@
     - Train a model from scratch
     - Pretraining on original dataset
     - Force independence between layers
+
+# Meeting 30/5/24
+
+- When looking at the token representation of the difference between layers:
+    - Look at the difference of logits:
+        - We are looking at the relationship/change ("capital city of", "masculine of",...)
+    - Look at the difference of probability distribution:
+        - We are looking at the importance of the tokens
+    - Give the possibility to switch between the two representations
+
+- Interface changes
+    - Smaller words or on intermediate/attention/ffnn (not main layers)
+        - Give the possibility to remove them by using a flag
+    - Embedding selection popup
+        - Change "Insert your embedding" to "Embedding to change"
+        - Change the color of a cell when selecting it
+    - Possibly change the color of nodes by the size of the euclidean norm vector
+
+- Bugfix
+    - Check interpolation level off-by-one errors for token injection
