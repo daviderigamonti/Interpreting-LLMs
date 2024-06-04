@@ -103,16 +103,31 @@ Blog
 - [PDF file](./a_mathematical_framework_for_transformer_circuits.pdf)
 - [Annotated PDF file](./Annotated/a_mathematical_framework_for_transformer_circuits_annotated.pdf)
 
-# A Mathematical Framework for Transformer Circuits
+# Softmax Linear Units
 ## Topics
-Expansion of the work done in [a previous paper](#a-mathematical-framework-for-transformer-circuits) to also inclde feedforward layers
+Expansion of the work done in [a previous paper](#a-mathematical-framework-for-transformer-circuits) to also inclde feedforward layers.
 ## Status
 - Published: 2022
 - Read: 31/05/24
-- Annotated: 31/05/24
+- Annotated: 03/06/24
 ## Type
 Blog
 ## Resources
 - [Original link](https://transformer-circuits.pub/2022/solu/index.html)
 - [PDF file](./softmax_linear_units.pdf)
 - [Annotated PDF file](./Annotated/softmax_linear_units_annotated.pdf)
+
+# Toy Models of Superposition
+## Topics
+Expansion of the work done in previous papers ([1](#a-mathematical-framework-for-transformer-circuits) [2](#softmax-linear-units)) to better exploer the superposition phenomenon.
+## Status
+- Published: 2022
+- Read: 04/06/24
+- Annotated: 04/06/24
+## Type
+Blog
+## Resources
+- [Original link](https://www.anthropic.com/research/toy-models-of-superposition)
+- [Paper](https://arxiv.org/pdf/2209.10652)
+- [PDF file](./toy_models_of_superposition.pdf)
+- [Annotated PDF file](./Annotated/toy_models_of_superposition_annotated.pdf)
