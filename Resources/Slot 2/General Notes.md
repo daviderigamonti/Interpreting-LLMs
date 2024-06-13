@@ -13,7 +13,7 @@
     - Check linearity of transformer transformations
     - Possible justification of rogue dimensions
 
-# Meeting 30/5/24
+# Meeting 31/5/24
 
 - Positional information
     - In recent models there is no positional information in the residuals
@@ -35,3 +35,14 @@
             - Look at how similar the attention head was for each attention head to a semantic/syntactic parse tree
             - Parallel with minimum spanning tree over the sequence of tokens and find where the minimum spanning tree encodes the noun phrase
             - Take a bunch of multi-token NEs, encode their embedding as the mean and feed it to the model OR search it inside the computation of the model
+
+# Nicolò 11/6/24
+
+- Old paper (Nicolò idea)
+    - understand if fixing experiments is worth it or doesn't make sense
+
+# Meeting 13/6/24
+
+- ACML paper (Mark idea)
+    - good ideas that might get stale, push towards another paper quickly
+    - additional experiments and fix reveiws

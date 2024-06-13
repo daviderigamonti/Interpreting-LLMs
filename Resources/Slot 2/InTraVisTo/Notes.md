@@ -38,7 +38,7 @@
     - Pretraining on original dataset
     - Force independence between layers
 
-# Meeting 30/5/24
+# Meeting 31/5/24
 
 - When looking at the token representation of the difference between layers:
     - Look at the difference of logits:
@@ -48,7 +48,7 @@
     - Give the possibility to switch between the two representations
 
 - Interface changes
-    - Smaller words or on intermediate/attention/ffnn (not main layers)
+    - Smaller words on intermediate/attention/ffnn (not main layers)
         - Give the possibility to remove them by using a flag
     - Embedding selection popup
         - Change "Insert your embedding" to "Embedding to change"
@@ -57,3 +57,11 @@
 
 - Bugfix
     - Check interpolation level off-by-one errors for token injection
+
+# Nicolò 11/6/24
+
+- 5 August deadline for EMNLP demo track
+- New single visualization that merges heatmap with Sankey
+    - remove heatmap
+    - multiple cells for each layer
+    - Sankey as a highlight of cells
