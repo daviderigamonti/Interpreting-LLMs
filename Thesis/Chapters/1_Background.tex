@@ -1,0 +1,143 @@
+With the current escalation in popularity and pervasiveness of machine learning solutions applied to the realm of natural languages, there exists an increasingly relevant topic that is still being the subject of extensive studies by experts in this field: interpretabilty.
+Interpretabilty in itself is far from being a novel concept, as from the early advent of machine learning there has always been the necessity of understanding the inner process by which an opaque model performs its inner computations, possibly even going as far as giving an algorithmic interpretation to it. 
+
+With the introduction of deep learning, the need for interpretabilty spiked as models got increasingly more complex.
+The entire paradigm of deep learning is centered around the removal of human control over the feature space, letting models figure out `what needs to be learnt' to solve the problem at hand.
+In particular, we are interested in a specific class of machine learning models that are currently considered state-of-the art in the Natural Language Processing (NLP): Large Language Models (or LLMs).
+
+This works intends to provide novel perspectives over the internal structure of Large Language Models, this goal is achieved by performing exploratory analyses, through the creation of tools and conducting of experiments aimed at confirming and possibly improving existing hypotheses and observations in the interpretability field.
+Particular focus will be placed on the observation and interpretation of the models' hidden states, which are their internal representations, conveying condensed information between various internal components and acting as the `internal language' of the Language Model.
+
+In this introductory section we will analyze the background and context of both NLP and machine learning techniques that will be relevant for this work.
+This serves the purpose of providing a common knowledge base as a starting point, briefly covering all of the pertinent subjects.
+
+\section{Machine Learning}
+
+Machine Learning is commonly considered a subfield of Artificial Intelligence, and is characterized by the idea of training a machine to learn from past experience, without providing an explicit algorithm to execute.
+The term `past experience' is often used loosely in this scenario: it is not necessarily tied with information directly perceived by an agent within a specific environment.
+Instead, it commonly denotes the entirety of accumulated data, often referred to as the dataset, which may have been collected heterogenuously and asinchronously, and that is fed to the model in order to learn.
+
+There exist three main paradigms of learning for machine learning:
+\begin{itemize}
+    \item \textbf{Supervised learning}: in supervised learning, the data that we feed to the model is labeled, meaning that each data point is associated to a specific label representing the ground truth.
+The model receives a sample from the dataset as input, eliciting an output that fulfills the role of the model's prediction.
+This prediction is then compared against the label corresponding to the input data point.
+If there is a discrepancy between the two, the model's internals are algorithmically adjusted to minimize future suboptimal predictions.
+Most machine learning techniques belong to this category, and it also will be our main focus for this work.
+    \item \textbf{Unsupervised learning}: unsupervised learning detaches the labeled component from the dataset, and removes direct feedback from the model's training process.
+In this scenario we let the model autonomously find patterns inside data.
+This process usually implies some kind of summarization or condensation of information, however the common factor is given by the search of hidden structure inside data.
+Clustering techniques are a fairly common and well-known instance of unsupervised learning. 
+    \item \textbf{Reinforcement learning}: reinforcement learning mostly concerns the decision-making process of an agent placed inside a dynamic environment.
+The inputs of a reinforcement learning algorithm are represented by the environment state and rewards, while the agent's actions are treated as output.
+In this paradigm we are trying to discover the optimal policy to navigate the environment, balancing both the exploration of new states, and the exploitation of the current maximally rewarding actions.
+\end{itemize}
+
+\subsection{Neural Networks}
+
+Neural networks are one of the most popular machine learning techniques.
+They are heavily inspired by the structure of the human brain, which is generally considered to be constituted by multiple neurons connected by synapses.
+Classical neural networks usually have a layer-based architecture, where a layer consists of an array of neurons connected to neurons belonging to both the previous and next layers.
+A neural network may have any number of intermediate layers, an input layer (which collects information at its inputs) and an output layer (which aggregates the outputs of its neurons into the final network prediction). 
+
+Neurons are generally mono-directional and perform a linear combination of their inputs, each one scaled by the weight associated to its synapse.
+Before transmitting their output, they also apply an activation function which in most cases is a `S-shaped' nonlinear function.
+This is mainly chosen in order to prevent the network from just degenerating into a single linear transformation due to the linearity properties.
+Thus, nonlinearities directly affect the expressive power of neural networks and are a vital component to guarantee their success, even on complex problems that require elaborate decision boundaries.
+
+The central process used by neural networks to learn new information is backpropagation.
+It works by following the inverse flow of information and updating the network's parameters (represented by the synapses' weights) according to the gradient value accumulated inside each neuron.
+The gradient is said to be `accumulated inside neurons' for computational reasons, however it is always computed starting from the loss function at the output of the network and with respect to the parameters of the network.
+
+\subsection{Deep Learning}
+
+Deep Learning is a further specialization of machine learning.
+The `deep' adjective refers to the high number of hidden layers that compose the intermediate section of deep neural networks.
+
+The most important property obtained through the dimensonal scale-up is the hierarchical feature extraction capability, which consists in obtaining rich condensed representations that follow a semantic hierarchy from the latent spaces defined by the network's layer projections.
+
+This is not a property that is exclusive to deep architectures, even classic neural networks present the same hierarchical feature patterns.
+However, the sheer scale of deep neural networks makes the exploitation of these condensed representations a viable option to build an artificial feature base that has many upsides with respect to human-defined features.
+For instance, we may require expert knowledge in order to craft an appropriate dataset containing meaningful features, while this would be done automatically in a deep learning scenario.
+
+The main drawback of this approach comes from the fact that learned features are not directly human-understandable, as they result from mathematical optimization.
+Consequently, the process of explaining a model's prediction is not as straightforward as with classical machine learning techniques.
+
+The latent feature space concept and its properties are of particular relevance for this work, as most of the experiments that will be performed are aimed at attempting to understand them in the context of state-of-the-art models in the Natural Language Processing field of study.
+
+\section{Natural Language Processing}
+
+Natural Language Processing (NLP) is a subfield of computer science that stems off the branches of artificial intelligence, information engineering and computational linguistics.
+Its main purpose is to interface computers to languages that are commonly used between humans for the purpose of communication.
+This entails a great variety of many different subtasks, from text classification and machine translation to text generation itself.
+The main focus of most of the state-of-the art models is text generation, even though it is possible to repurpose them for many other tasks due to their modular nature.
+
+One of the first promising approaches to text generation was the Recurrent Neural Network (RNN) architecture, which featured a structure much more similiar to classic neural networks, but with the addition of recurrent connections.
+Recurrent connections enable RNN models to establish a distributed hidden state that acts as a memory, much like a flip-flop gate array in electronics.
+In practice, each RNN module is fed the inputs at the current time instant and its own outputs at the previous time instant, making it suitable to process sequences and other time-based data.
+
+The most popular architecture for text generation before the current state-of-the-art models was the Long Short-Term Memory (LSTM).
+LSTMs are a direct improvement on the RNN, solving the vanishing gradient problem, which was the main failure point of classic RNNs.
+The \todo{overwhelming} vanishing gradient in RNNs is a direct consequence of the co-occurrence between activation functions without a prominent zero-valued region and the Backpropagation Through Time process (being the backpropagation equivalent of a network using recurrent connections), resulting in drastically small gradient values which can limit the model's context window and make the training process slow and unreliable.
+LSTMs solve this by applying specialized gating functions that let the model decide what information to rembember, forget and pass along into what is called the Constant Error Carousel.
+
+\subsection{Word Embeddings}
+
+One of the most relevant and groundbreaking developments in the field of NLP was the introduction of word embeddings.
+Word embeddings came as straightforward application of deep learning concepts and approaches to the world of NLP.
+Their introduction not only determined an improvement in most text-based applications, but also motivated a shift in text representation techniques, incentivizing a word-centric approach rather than focusing on documents and defining words as frequencies inside them.
+
+The main appeal of word embeddings is the dimensionality reduction, since the original vocabulary representation (often referred as Bag of Words) suffers from the curse of dimensionalty to a great extent.
+The `curse of dimensionality' is a common way to refer to feature spaces that present a large number of dimensions in conjunction with high data sparsity.
+In a feature space affected by the curse of dimensionality, as the vocabulary space is, we can observe the fact that some common similarity measures and distances between data points (such as the Euclidean distance) almost lose meaning due to the majority of dimensions suppressing comparisons along the few dimensions that actually matter.
+Word embeddings are not able to completely solve the curse of dimensionality as they still are relatively high-dimensional.
+However, the improvement of adopting a dense feature space, with the choice of a normalized similarity function (such as cosine similarity) was still substantial enough to revolutionize the NLP field.
+
+In fact, another enticing property is their ability to capture the semantic depth and context information inside the representation of each word.
+Word embeddings are generally created by extrapolating the intermediate latent representations of a neural network solving a certain task, obtaining a continuous vector space for words to reside.
+In practice, word embeddings are mappings from the vocabulary space to the embedding space which features a reduced number of dense dimensions devoid of any human-understandable meaning, characteristic of deep learning methodologies.
+
+The concept of using distributed word representations was anticipated by Bengio et al. with the Neural Network Language Model (NNLM) \cite{bengio2020} in the early 2000s.
+The first real successful implementation of word embeddings was Word2Vec \cite{mikolov2013} by Mikolov et al., greatly inspired by Bengio's previous work.
+The main purpose of Word2Vec is to create word embeddings, it is composed by a single hidden layer and is trained discriminatevely by using both positive and negative examples.
+
+\blockquote[J.R. Firth]{You Shall Know a Word by the Company It Keeps}
+
+Mikolov's original work introduces two primary training variants for Word2Vec:
+\begin{itemize}
+    \item \textbf{Continuous Bag of Words (CBoW)}: predict a target word given its context.
+The context is given as a symmetric window containing all terms occuring around the target term, modeling a many-to-1 prediction.
+    \item \textbf{Skip-gram}: predicts surrounding words given a target word.
+Single context words are predicted one at a time, modeling a 1-to-1 prediction.
+\end{itemize}
+The results are generally comparable between the two techniques.
+The key aspect is that the full context of each word is integrated into the word representation itself.
+
+\subsubsection*{Word Embeddings Semantic Properties}
+
+One particular property that emerges from the majority of latent representations is their flexibility to arithmetic manipulations.
+It is not uncommon to observe these properties showcased in many other deep learning applications, such as computer vision.
+However, in the word embeddings scenario, these arithmetic properties have been reported to be much more prominent and \todo{reflecting} of the actual word semantics.
+
+In particular, the semantic meaningfulness of certain arithmetic and geometric transformations applied to word embeddings was noticed by Mikolov himself in the Word2Vec paper \cite{mikolov2013}.
+This went from finding similarities in embeddings of words that manifested syntactic regularities, to complete double-word analogies located in common semantic fields.
+One of the most famouse examples presented in \cite{mikolov2013} is: \texttt{emb(`King') - emb(`Man') + emb(`Woman') $\simeq$ emb(`Queen')}, which models both the relationships of `gender' and `royalty'.
+Other \todo{relevant} analogies include country-capital, family relation, and verb tenses.
+However, any kind of semantic relationship could be potentially modeled by word embeddings, given enough support in the training dataset.
+
+While these properties have some direct use cases principally involving clustering and similarity comparisons, their study has been proven to be insightful from the explainability standpoint.
+Possibly understanding the semantic associations that exist \todo{at the base} of text models can provide an educated perspective on how they interpret their inputs, but also underline human and language biases.
+Additionally, this topic is of particular relevance due to the focus on interpretability of this work.
+
+\section{Transformer Architectures}
+
+Transformers are the current state-of-the art model architecture for most text applications and not only.
+Although they were initially conceived for textual sequential inputs, in recent years saw discrete success in a wide variety of other applications (in particular image processing), albeit occasionally with some slight variations.
+This architecture has proven to be flexible, efficient and parellizable, in contrast with previous popular choices for sequence learning problems such as RNNs and LSTMs.
+
+The first transformer architecture was introduced by Vaswani et al. in the seminal 2017 paper "Attention Is All You Need" \cite{vaswani2017}.
+This architecture is of the encoder-decoder type, following the typical paradigm of sequence-to-sequence (seq2seq) learning.
+This structure implies the existence of two separate modules (an encoder and a decoder), which work in tandem to elaborate inputs and provide an output.
+The purpose of the encoder module is to process the inputs and create an intermediate representation that is read and processed by the decoder, which outputs the next token.
+
+\subsection{Structure}
