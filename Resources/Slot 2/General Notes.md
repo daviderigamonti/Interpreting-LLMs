@@ -46,3 +46,17 @@
 - ACML paper (Mark idea)
     - good ideas that might get stale, push towards another paper quickly
     - additional experiments and fix reveiws
+
+# Meeting 27/6/24
+
+- Ideas for thesis title
+    - towards a better understanding of the computation mechanisms levarged by trnsformers
+    - Key points:
+        - towards a better understanding 
+        - visualizing the computations
+
+# Nicolò 
+
+- Thesis
+    - Add a lot of nice images
+    - Show word embedding vectors

@@ -65,3 +65,33 @@
     - remove heatmap
     - multiple cells for each layer
     - Sankey as a highlight of cells
+
+# Mark 14/6/24
+
+- Interface changes
+    - Add banner at the top of page
+    - Tooltips
+        - "Number of token" -> "Token position"
+        - Remove new lines
+    - Set 12 as default font size
+    - Change attention from "att_in from x to y" -> "Attention x"
+
+- Weird "residual + attention" outputs, double check them
+
+- What happens when we give different weights to the average between numerical embeddings?
+    - 1 + 1 + 4 = 
+    - e[""], e[1], e["_+"], e["_1"], e["_+"], e["_"], e["4"], e["_="]
+    - 1 + 0.4e[1] + 0.6e[2] + 4 = ?
+
+# Meeting 27/6/24
+
+- Interface changes
+    - outflows should be the same color 
+    - my idea: Try hiding small weights to avoid cluttering
+
+- Sankey
+    - we are kinda visualizing a linear approximation of the system since we are simulating weighted sums without nonlinearities (assuming as)
+    - mutual information way for decomposing: "how much of the information is coming from one to the"
+    - Sankey is the right diagram! It's exactly the flow of information that we want to show
+
+- Play around with easy summations and find examples where we can determine internally the calculations that are happening
