@@ -1,1 +1,76 @@
-.
+The field of transformer interpretability has garnered significant attention over the past decade, resulting in a substantial and ever increasing body of literature.
+Particular \todo{care} must be put into the fact that this is a relatively novel field of research, which is constantly being subjected by a great number of contributions \todo{as of the time of writing}.
+Consequently, it is very possible that some of the information provided in this work may be obsoleted or invalidated by more recent works.
+This section reviews the key contributions and developments in this area, highlighting the foundational studies and recent advancements that are pertinent to the present research.
+
+In such a fast-moving and prolific field it is nearly impossible to consider every relevant contribution and it is inevitable that there might be gaps in the considered material, to this end we propose a cutoff date that standardizes a fixed knowledge basis to build upon.
+It is important to note that there may be instances where the proposed cutoff date will be disregarded, particularly in cases of recent exceptional contributions to the field that potentially revolutionize, subvert or significantly alter the context of the present research, and therefore deserve to be acknowledged.
+The chosen cutoff date is July 2024, which corresponds to current time of writing.
+
+Rai et al. \todo[orange]{cite a} propose a taxonomy for interpretability techniques centered aroung the concept of Mechanistic interpretability (MI).
+It is possible to identify two main fundamental objects of study in this context: \textbf{features} and \textbf{circuits}.
+\todo[green]{Maybe explain features and circuits}
+These objects of study serve as starting points for interpretability inquiries, while specific techniques act as tools to explore and verify those inquiries.
+By using MI tools to puruse interpretability inquiries, possibly through the use of evaluation techniques, we obtain findings: true generalizable statemenets about the model's inner workings.
+
+Mechanistic interpretability offers a novel perspective over the interpretability research field, its primary aim being the reverse-engineering of language models (LMs) from an in-depth perspective \todo[orange]{cite b}.
+Previously identified model-agnostic techniques have been proven to offer limited insight for the transformer architecture \todo[orange]{cite}, whereas MI embraces the opposite philosophy by removing model abstractions and analyzing LMs in \todo{terms} of their components and how their interactions.
+
+Mechanistic interpretability was initially mentioned as being the main driving ideology behind the transformer circuits thread \todo[orange]{cite transformer circuits thread}.
+Nonetheless, by following Rai et al. \todo[orange]{cite a} approach, we can observe that the concept of MI is not limited to the application of circuits.
+Envisioning MI as being characterized by a general bottom-up approach for interpreting LMs, its interpretation can be extended to include some \todo{predecessing} techniques such as the logit lens \todo[orange]{cite} and other probing approaches.
+
+Another possible taxonomy for interpretability techniques, more focused on their nature rather than their use, is presented by Ferrando et al. \todo[orange]{cite c}.
+They indentify two main classes of interpretability approaches: \textbf{behavior localization} and \textbf{information decoding}.
+In the next sections we will follow their insightful classification to provide a synthetical analysis of the state of the art, with a specific focus on a restricted number of techniques that are especially relevant for the purpose of this work.
+
+\section{Behavior localization}
+
+Behavior localization techniques consist in the localization elements inside language models that are responsible for specific predictions or certain prediction patterns.
+It is a generally broad task, but an important distinction can be made between the localization of behaviors towards input features (\textbf{input attribution}) and towards model components (\textbf{model component attribution}) \todo[orange]{cite c}. 
+
+\subsection{Input attribution}
+
+In the \textbf{input attribution} case, the model's predictions are directly traced back to the inputs via some kind of attribution mechanism.
+The two main input attribution \todo{pathways} are either gradients \todo[orange]{cite d e f g} or perturbations \todo[orange]{cite h i l}.
+In both cases the great majority of techniques was directly influenced by model-agnostic approaches \todo[orange]{cite m n o p} that were initially studied and applied in the context of deep learning.
+
+More recent input attribution techniques experimented with the aggregation of intermediate information to provide token-wise attributions exploiting context mixing properties of transformers \todo[orange]{cite q r s}, while other approaches focused on providing counterfactual explanations based on contrastive gradient attributions \todo[orange]{cite t} or studying specific training examples to model their influence on model predictions \todo[orange]{cite u v}.
+It is important to note that, through the years, some critiques have been moved towards input attribution methods, mainly concerning their limited reliability \todo[orange]{cite z aa ab}.
+
+\subsection{Model component attribution}
+
+In \textbf{model component attribution}, the main research focus shifts towards analyzing the effects of individual or groups of transformer components, such as attention heads, feedforward layers, and neurons.
+This shift is principally motivated by the inherent sparsity of LMs, where only a subset of the model's parameters significantly contributes to its predictions \todo[orange]{cite}.
+By isolating and understanding the effects of these key components, it is possible to shed light on their contribution to the actual model's prediction.
+We can identify three main distinct approaches for model component attribution: \textbf{logit attribution}, \textbf{causal interventions} and \textbf{circuit analysis}
+
+\textbf{Logit attribution} is based upon the concept of direct logit attribution (DLA), a metric specifically devised to measure the contribution of a certain component $c$ to the logit of the output token $w$ exploiting the inherent linearity of the transformer model's components.
+Some variation on this idea enabled the computation of the logit attribution metric in more specialized cases.
+For example: Geva et al. managed to measure the DLA of each FFN neuron \todo[orange]{cite ac}, Ferrando et al. identified an alternative to measure the DLA of each path involving a certain attention head \todo[orange]{cite ad}, and Wang et al. proposed the direct logit difference attribution (DLDA) using the logit difference (LD) as a comparative mean to measure contrastive attribution \todo[orange]{cite ae}.
+
+\textbf{Causal interventions} approaches are centered around the interpretation of the LM as a causal model \todo[orange]{cite af}, which takes the form of a directed acyclic graph (DAG) having model computations as nodes and activations as edges.
+The primary purpose of this representation is to enable specific interventions (known as activation patching or causal tracing) directly on the model's components, allowing for comparisons of different computational outcomes.
+There are three main choices which influence the result of causal intervention: choice of model component to patch, patching function and evaluation metric.
+Different authors have suggested a variety of possible patched activation functions that accomplish different goals and have different uses.
+There have been cases of null vectors being used as patched activations (zero intervention) \todo[orange]{cite ag ah}, noise being added to the input of the component (noise intervention) \todo[orange]{cite ai} and counterfactual data being fed to the component either by sampling (resample intervention) \todo[orange]{cite al am} or averaging (mean intervention) \todo[orange]{cite an}.
+Zhang et al. provide an insightful overview for common practices of activation patching in language models, identifying KL divergence, probability and logit difference as common evaluation metrics \todo[orange]{cite ao}
+Additionally, it is possible to identify an alternate `denoising' setup, which subverts the classic activation patching operation by applying a patched activation from a clean run to a corrupted one \todo[orange]{cite ap aq}.
+
+\todo[green]{important, expand aq}
+
+\subsubsection{Circuit analysis}
+
+\textbf{Circuit analysis} is closely related to the mechanistic interpretability (MI) subfield analyzed previously as its main goal is tied to the discovery of circuits inside LMs.
+Circuits are subsets of model components that can be seen as acting independently while carrying out a specific task, and can possibly be synthetized into an algorithm.
+Despite their successful application on LMs, circuits weren't originally identified with the transformer architecture in mind; in fact, their first application was on vision models \todo[orange]{cite ar}.
+Most of the initial work regarding transformer circuits was performed on publications belonging to the `transformer circuits thread' \todo[orange]{cite}, heavily inspired by the precurring vision counterpart \todo[orange]{cite ar}.
+By applying the circuit concept to the previously causal intervention techniques, we can extend the idea of activation patching to edge patching and path patching: novel circuits-based techniqes that take into account the interactions between model components.
+Edge patching \todo[orange]{cite} considers edges that directly conect pairs of model components due to the fact that each component input can be modeled as the sum of the outputs of the previous model components inside the residual stream, while path patching \todo[orange]{cite} is a generalization of edge patching to multiple edges.
+
+\todo[green]{important, expand circuits}
+
+\section{Information decoding}
+
+\subsection{Probing}
+\subsection{Sparse autoencoders}
