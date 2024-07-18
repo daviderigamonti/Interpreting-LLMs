@@ -58,6 +58,9 @@ Zhang et al. provide an insightful overview for common practices of activation p
 Additionally, it is possible to identify an alternate `denoising' setup, which subverts the classic activation patching operation by applying a patched activation from a clean run to a corrupted one \cite{lieberum2023, meng2022}.
 
 \todo[green]{important, expand meng2022}
+\todo[green]{Locating and Editing Factual Associations in GPT}
+\todo[green]{Transformer Feed-Forward Layers Are Key-Value Memories}
+\todo[green]{How Pre-trained Language Models Capture Factual Knowledge? A Causal-Inspired Analysis}
 
 \subsubsection{Circuit analysis}
 
@@ -69,6 +72,9 @@ By applying the circuit concept to the previously causal intervention techniques
 Edge patching \todo[orange]{cite} considers edges that directly conect pairs of model components due to the fact that each component input can be modeled as the sum of the outputs of the previous model components inside the residual stream, while path patching \todo[orange]{cite} is a generalization of edge patching to multiple edges.
 
 \todo[green]{important, expand circuits}
+\todo[green]{A Mathematical Framework for Transformer Circuits}
+\todo[green]{Softmax Linear Units}
+\todo[green]{Toy Models of Superposition}
 
 \section{Information decoding}
 
@@ -84,6 +90,7 @@ Particular attention has been put towards probing transformer models \cite{chwan
 Some exceptional results includes the discovery of syntactinc information inside the hidden representations of BERT models \cite{tenney2019a, lin2019, liu2019}, even to the extent of uncovering entire syntax trees \cite{hewitt2019} and hierarchical computation structures along the residual stream, reminiscent of classical NLP pipelines \cite{tenney2019b}.
 
 \todo[green]{important, expand probing}
+\todo[green]{Factual Probing Is [MASK]: Learning vs. Learning to Recall}
 
 The \textbf{linear representation hypothesis} \cite{park2023} is a theory that assumes a linear reprsentation for high-level concepts inside the representation space of a model.
 The central idea for this hypothesis is based upon the early discoverings of linearity inside the embedding space done by Mikolov et al. \cite{mikolov2013}, as the resulting analogies and geometric properties are direct consequence of a linear embedding space.
@@ -95,6 +102,8 @@ The effects of information compression performed by dimensionality reduction alg
 Many extend these observations to actual experiments, successfully proving the existence of superposition both in simplified scenarios \cite{elhage2022, arora2018} and in the early layers of transformer-based LMs \cite{gurnee2023}.
 
 \todo[green]{important, expand linear representation hypothesis}
+\todo[green]{All Bark and No Bite: Rogue Dimensions in Transformer Language Models Obscure Representational Quality}
+\todo[green]{Do Llamas Work in English? On the Latent Language of Multilingual Transformers}
 
 Autoencoders with sparsity regularization, also known as \textbf{Sparse autoencoders} (SAEs), have been extensively used to reconstruct the internal representation of neural networks that exhibit superposition by finding an overcomplete feature basis via dictionary learning and promoting feature sparsity \cite{bricken2023, cunningham2023}.
 
@@ -111,6 +120,8 @@ Other significant approaches include the direct decoding of model weights \cite{
 This last method aims to identify and analyze specific parts of the hidden representation spectrum that are most likely to be overlooked by the classic logit lens.
 
 \todo[green]{important, expand logit-lens approaches}
+\todo[green]{Interpreting GPT: the logit lens}
+\todo[green]{Eliciting Latent Predictions from Transformers with the Tuned Lens}
 
 Other unrelated approaches based on vocabulary space decoding involve using maximally-activating inputs to explain the behavior of units and neurons that exhibit significant responses to specific features \cite{dalvi2018}.
 Additionally, other LMs have been used as zero-shot explainers to provide insights into possible shared features between input sequences that cause substantial activations of specific neurons in the target model \cite{bills2023}.
