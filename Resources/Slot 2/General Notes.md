@@ -55,8 +55,13 @@
         - towards a better understanding 
         - visualizing the computations
 
-# Nicolò 
+# Nicolò 23/7/24
 
 - Thesis
-    - Add a lot of nice images
-    - Show word embedding vectors
+    - Introduction (1)
+        - Add a lot of nice images
+        - Show word embedding vectors
+        - Insert "LLM" subsection containing pre-training, fine-tuning, open source models...
+    - New sections
+        - Deconstruct each research question into multiple subquestions and aim each experiments at one or more subquestions
+        - Fix an approach pattern/structure for each experiment (e.g.: theory, dataset, findings)

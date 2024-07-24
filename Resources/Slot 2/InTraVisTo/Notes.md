@@ -95,3 +95,14 @@
     - Sankey is the right diagram! It's exactly the flow of information that we want to show
 
 - Play around with easy summations and find examples where we can determine internally the calculations that are happening
+
+# Nicolò 23/7/24
+
+- EMNLP August 4th deadlin
+- Primary Tasks
+    - scrollable vis
+    - overlay model substitution
+    - KL Div weighted on norm
+    - Look at proabilities
+- Secondary Tasks
+    - Fix colors
