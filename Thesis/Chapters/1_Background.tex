@@ -97,8 +97,8 @@ In fact, another enticing property is their ability to capture the semantic dept
 Word embeddings are generally created by extrapolating the intermediate latent representations of a neural network solving a certain task, obtaining a continuous vector space for words to reside.
 In practice, word embeddings are mappings from the vocabulary space to the embedding space which features a reduced number of dense dimensions devoid of any human-understandable meaning, characteristic of deep learning methodologies.
 
-The concept of using distributed word representations was anticipated by Bengio et al. with the Neural Network Language Model (NNLM) \cite{bengio2020} in the early 2000s.
-The first real successful implementation of word embeddings was Word2Vec \cite{mikolov2013} by Mikolov et al., greatly inspired by Bengio's previous work.
+The concept of using distributed word representations was anticipated by \citet{bengio2020} with the Neural Network Language Model (NNLM) in the early 2000s.
+The first real successful implementation of word embeddings was Word2Vec by \citet{mikolov2013}, greatly inspired by Bengio's previous work.
 The main purpose of Word2Vec is to create word embeddings, it is composed by a single hidden layer and is trained discriminatevely by using both positive and negative examples.
 
 \blockquote[J.R. Firth]{You Shall Know a Word by the Company It Keeps}
@@ -135,7 +135,7 @@ Transformers are the current state-of-the art model architecture for most text a
 Although they were initially conceived for textual sequential inputs, in recent years saw discrete success in a wide variety of other applications (in particular image processing), albeit occasionally with some slight variations.
 This architecture has proven to be flexible, efficient and parellizable, in contrast with previous popular choices for sequence learning problems such as RNNs and LSTMs.
 
-The first transformer architecture was introduced by Vaswani et al. in the seminal 2017 paper ``Attention Is All You Need'' \cite{vaswani2017}.
+The first transformer architecture was introduced by \citet{vaswani2017} in the seminal 2017 paper ``Attention Is All You Need''.
 This architecture is of the encoder-decoder type, following the typical paradigm of sequence-to-sequence (seq2seq) learning.
 This structure implies the existence of two separate modules (an encoder and a decoder), which work in tandem to elaborate inputs and provide an output.
 Both input and output consist of sequential data.
@@ -300,3 +300,7 @@ In the case of Llama models, the gating mechanism happens through an element-wis
 For Llama models, all biases of the transformation matrices referring to the SwiGLU implementation are set to zero ($b_{in} = b_V = b_{out} = \vec 0$).
 The benefits of SwiGLU are largely tied to providing a better downstream performance on fine-tuning tasks and pre-training objectives, despite proof of SwiGLU actually having an impactful effect on transformer models being purely empirical.
 However, the reasons for its effectiveness may potentially be associated with its capability to model complex functions through the gating mechanism. \todo[orange]{cite https://arxiv.org/pdf/2002.05202v1 https://kikaben.com/swiglu-2020/}
+
+\subsection{The Large Language Model Paradigm}
+
+\todo[green]{Insert "LLM" subsection containing pre-training, fine-tuning, open source models...}

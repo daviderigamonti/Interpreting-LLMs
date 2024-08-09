@@ -7,7 +7,7 @@ In such a fast-moving and prolific field it is nearly impossible to consider eve
 It is important to note that there may be instances where the proposed cutoff date will be disregarded, particularly in cases of recent exceptional contributions to the field that potentially revolutionize, subvert or significantly alter the context of the present research, and therefore deserve to be acknowledged.
 The chosen cutoff date is July 2024, which corresponds to current time of writing.
 
-Rai et al. \cite{rai2024} propose a taxonomy for interpretability techniques centered aroung the concept of Mechanistic interpretability (MI).
+\citet{rai2024} propose a taxonomy for interpretability techniques centered aroung the concept of Mechanistic interpretability (MI).
 It is possible to identify two main fundamental objects of study in this context: \textbf{features} and \textbf{circuits}.
 \todo[green]{Maybe explain features and circuits}
 These objects of study serve as starting points for interpretability inquiries, while specific techniques act as tools to explore and verify those inquiries.
@@ -17,10 +17,10 @@ Mechanistic interpretability offers a novel perspective over the interpretabilit
 Previously identified model-agnostic techniques have been proven to offer limited insight for the transformer architecture \todo[orange]{cite}, whereas MI embraces the opposite philosophy by removing model abstractions and analyzing LMs in \todo{terms} of their components and how their interactions.
 
 Mechanistic interpretability was initially mentioned as being the main driving ideology behind the `transformer circuits thread' \todo[orange]{cite transformer circuits thread}.
-Nonetheless, by following Rai et al. \cite{rai2024} approach, we can observe that the concept of MI is not limited to the application of circuits.
+Nonetheless, by following \citet{rai2024} approach, we can observe that the concept of MI is not limited to the application of circuits.
 Envisioning MI as being characterized by a general bottom-up approach for interpreting LMs, its interpretation can be extended to include some \todo{predecessing} techniques such as the logit lens \todo[orange]{cite} and other probing approaches.
 
-Another possible taxonomy for interpretability techniques, more focused on their nature rather than their use, is presented by Ferrando et al. \cite{ferrando2024}.
+Another possible taxonomy for interpretability techniques, more focused on their nature rather than their use, is presented \citet{ferrando2024}.
 They indentify two main classes of interpretability approaches: \textbf{behavior localization} and \textbf{information decoding}.
 In the next sections we will follow their insightful classification to provide a synthetical analysis of the state of the art, with a specific focus on a restricted number of techniques that are especially relevant for the purpose of this work.
 
@@ -47,14 +47,14 @@ We can identify three main distinct approaches for model component attribution: 
 
 \textbf{Logit attribution} is based upon the concept of direct logit attribution (DLA), a metric specifically devised to measure the contribution of a certain component $c$ to the logit of the output token $w$ exploiting the inherent linearity of the transformer model's components.
 Some variation on this idea enabled the computation of the logit attribution metric in more specialized cases.
-For example: Geva et al. managed to measure the DLA of each FFN neuron \cite{geva2022}, Ferrando et al. identified an alternative to measure the DLA of each path involving a certain attention head \cite{ferrando2023}, and Wang et al. proposed the direct logit difference attribution (DLDA) using the logit difference (LD) as a comparative mean to measure contrastive attribution \cite{wang2022}.
+For example: \citet{geva2022} managed to measure the DLA of each FFN neuron, \citet{ferrando2023} identified an alternative to measure the DLA of each path involving a certain attention head, and \citet{wang2022} proposed the direct logit difference attribution (DLDA) using the logit difference (LD) as a comparative mean to measure contrastive attribution.
 
 \textbf{Causal interventions} approaches are centered around the interpretation of the LM as a causal model \cite{geiger2021}, which takes the form of a directed acyclic graph (DAG) having model computations as nodes and activations as edges.
 The primary purpose of this representation is to enable specific interventions (known as activation patching or causal tracing) directly on the model's components, allowing for comparisons of different computational outcomes.
 There are three main choices which influence the result of causal intervention: choice of model component to patch, patching function and evaluation metric.
 Different authors have suggested a variety of possible patched activation functions that accomplish different goals and have different uses.
 There have been cases of null vectors being used as patched activations (zero intervention) \cite{olsson2022, mohebbi2023}, noise being added to the input of the component (noise intervention) \cite{meng2022} and counterfactual data being fed to the component either by sampling (resample intervention) \cite{hanna2023, conmy2023} or averaging (mean intervention) \cite{wang2022}.
-Zhang et al. provide an insightful overview for common practices of activation patching in language models, identifying KL divergence, probability and logit difference as common evaluation metrics \cite{zhang2024}
+\citet{zhang2024} provide an insightful overview for common practices of activation patching in language models, identifying KL divergence, probability and logit difference as common evaluation metrics.
 Additionally, it is possible to identify an alternate `denoising' setup, which subverts the classic activation patching operation by applying a patched activation from a clean run to a corrupted one \cite{lieberum2023, meng2022}.
 
 \todo[green]{important, expand meng2022}
@@ -93,7 +93,7 @@ Some exceptional results includes the discovery of syntactinc information inside
 \todo[green]{Factual Probing Is [MASK]: Learning vs. Learning to Recall}
 
 The \textbf{linear representation hypothesis} \cite{park2023} is a theory that assumes a linear reprsentation for high-level concepts inside the representation space of a model.
-The central idea for this hypothesis is based upon the early discoverings of linearity inside the embedding space done by Mikolov et al. \cite{mikolov2013}, as the resulting analogies and geometric properties are direct consequence of a linear embedding space.
+The central idea for this hypothesis is based upon the early discoverings of linearity inside the embedding space done by \citet{mikolov2013}, as the resulting analogies and geometric properties are direct consequence of a linear embedding space.
 Recent work has uncovered many instances of FFN neurons that consistently fire with specific patterns \todo{traceable} to input features \cite{voita2023}, suggesting that this behavior is an effect of the next token prediction training paradigm \cite{jiang2024}.
 Additionally, there have been many attempts aimed at modifying the internal representations of a model by exploiting their linear properties.
 These types of linear interventions resulted successful in erasing concepts and features from intermediate model representations \cite{ravfogel2020, ravfogel2022, belrose2023b}, and even meaningfully changing the model's behavior \cite{nanda2023, belrose2023b}, opening up new \todo{venues} for model steering and alignment. 
