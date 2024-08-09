@@ -106,3 +106,44 @@
     - Look at proabilities
 - Secondary Tasks
     - Fix colors
+
+# Week 29/7/24 - 4/8/24
+
+- Paper
+    - Related works & background
+        - Lens-like applications
+        - 3 sections
+            - Interpreting hidden states
+            - Information flow
+            - Injecting information
+    - Research questions
+        - Interpreting model
+        - Let the human understand the process that the model performs in order to return an output
+    - Beware of comparisons! Less comparisons and reduce "brutality"
+
+- Application
+    - Interpolation problem
+    - Normalization
+        - transformations:
+            - Normalizing to length RMS
+            - Rescaling to weight
+        - Non linear transformation given by n_hid weights
+        - do we normalize using the weights or just rescale?
+    - Attention
+        - Set attention non-highlighted opacity to 0 by default
+        - Change attention opacity label name (remove)
+        - Alternative ways to weight attention traces
+            - Show top-k attention traces (default)
+            - Hide all traces with weights under x
+            - Show all traces that sum up to a probability x
+    - Visual
+        - Add X-AI logo
+        - Change line color
+        - Future hypothetical layout
+            - Column on the left with parameters
+            - Visualization on the right
+    - Injection
+        - New injection idea: change contribution of attention/residual ffn/residual
+    - Fixes
+        - Why input probabiliteis of embedding layer are 0.0
+        - Use normalization to increase weight probabilities
