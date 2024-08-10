@@ -2,20 +2,20 @@ With the current escalation in popularity and pervasiveness of machine learning 
 Interpretabilty in itself is far from being a novel concept, as from the early advent of machine learning there has always been the necessity of understanding the inner process by which an opaque model performs its inner computations, possibly even going as far as giving an algorithmic interpretation to it. 
 
 With the introduction of deep learning, the need for interpretabilty spiked as models got increasingly more complex.
-The entire paradigm of deep learning is centered around the removal of human control over the feature space, letting models figure out `what needs to be learnt' to solve the problem at hand.
+The entire paradigm of deep learning is centered around the removal of human control over the feature space, letting models figure out `what needs to be learned' to solve the problem at hand.
 In particular, we are interested in a specific class of machine learning models that are currently considered state-of-the art in the Natural Language Processing (NLP): Large Language Models (or LLMs).
 
 This works intends to provide novel perspectives over the internal structure of Large Language Models, this goal is achieved by performing exploratory analyses, through the creation of tools and conducting of experiments aimed at confirming and possibly improving existing hypotheses and observations in the interpretability field.
 Particular focus will be placed on the observation and interpretation of the models' hidden states, which are their internal representations, conveying condensed information between various internal components and acting as the `internal language' of the Language Model.
 
 In this introductory section we will analyze the background and context of both NLP and machine learning techniques that will be relevant for this work.
-This serves the purpose of providing a common knowledge base as a starting point, briefly covering all of the pertinent subjects.
+This serves the purpose of providing a common knowledge base as a starting point, briefly covering all the pertinent subjects.
 
 \section{Machine Learning}
 
 Machine Learning is commonly considered a subfield of Artificial Intelligence, and is characterized by the idea of training a machine to learn from past experience, without providing an explicit algorithm to execute.
 The term `past experience' is often used loosely in this scenario: it is not necessarily tied with information directly perceived by an agent within a specific environment.
-Instead, it commonly denotes the entirety of accumulated data, often referred to as the dataset, which may have been collected heterogenuously and asinchronously, and that is fed to the model in order to learn.
+Instead, it commonly denotes the entirety of accumulated data, often referred to as the dataset, which may have been collected heterogeneously and asynchronously, and that is fed to the model in order to learn.
 
 There exist three main paradigms of learning for machine learning:
 \begin{itemize}
@@ -54,7 +54,7 @@ The gradient is said to be `accumulated inside neurons' for computational reason
 Deep Learning is a further specialization of machine learning.
 The `deep' adjective refers to the high number of hidden layers that compose the intermediate section of deep neural networks.
 
-The most important property obtained through the dimensonal scale-up is the hierarchical feature extraction capability, which consists in obtaining rich condensed representations that follow a semantic hierarchy from the latent spaces defined by the network's layer projections.
+The most important property obtained through the dimensional scale-up is the hierarchical feature extraction capability, which consists in obtaining rich condensed representations that follow a semantic hierarchy from the latent spaces defined by the network's layer projections.
 
 This is not a property that is exclusive to deep architectures, even classic neural networks present the same hierarchical feature patterns.
 However, the sheer scale of deep neural networks makes the exploitation of these condensed representations a viable option to build an artificial feature base that has many upsides with respect to human-defined features.
@@ -72,14 +72,14 @@ Its main purpose is to interface computers to languages that are commonly used b
 This entails a great variety of many different subtasks, from text classification and machine translation to text generation itself.
 The main focus of most of the state-of-the art models is text generation, even though it is possible to repurpose them for many other tasks due to their modular nature.
 
-One of the first promising approaches to text generation was the Recurrent Neural Network (RNN) architecture, which featured a structure much more similiar to classic neural networks, but with the addition of recurrent connections.
+One of the first promising approaches to text generation was the Recurrent Neural Network (RNN) architecture, which featured a structure much more similar to classic neural networks, but with the addition of recurrent connections.
 Recurrent connections enable RNN models to establish a distributed hidden state that acts as a memory, much like a flip-flop gate array in electronics.
 In practice, each RNN module is fed the inputs at the current time instant and its own outputs at the previous time instant, making it suitable to process sequences and other time-based data.
 
 The most popular architecture for text generation before the current state-of-the-art models was the Long Short-Term Memory (LSTM).
 LSTMs are a direct improvement on the RNN, solving the vanishing gradient problem, which was the main failure point of classic RNNs.
 The \todo{overwhelming} vanishing gradient in RNNs is a direct consequence of the co-occurrence between activation functions without a prominent zero-valued region and the Backpropagation Through Time process (being the backpropagation equivalent of a network using recurrent connections), resulting in drastically small gradient values which can limit the model's context window and make the training process slow and unreliable.
-LSTMs solve this by applying specialized gating functions that let the model decide what information to rembember, forget and pass along into what is called the Constant Error Carousel.
+LSTMs solve this by applying specialized gating functions that let the model decide what information to remember, forget and pass along into what is called the Constant Error Carousel.
 
 \subsection{Word Embeddings}
 
@@ -87,8 +87,8 @@ One of the most relevant and groundbreaking developments in the field of NLP was
 Word embeddings came as straightforward application of deep learning concepts and approaches to the world of NLP.
 Their introduction not only determined an improvement in most text-based applications, but also motivated a shift in text representation techniques, incentivizing a word-centric approach rather than focusing on documents and defining words as frequencies inside them.
 
-The main appeal of word embeddings is the dimensionality reduction, since the original vocabulary representation (often referred as Bag of Words) suffers from the curse of dimensionalty to a great extent.
-The `curse of dimensionality' is a common way to refer to feature spaces that present a large number of dimensions in conjunction with high data sparsity.
+The main appeal of word embeddings is the dimensionality reduction, since the original vocabulary representation (often referred as Bag of Words) suffers from the curse of dimensionality to a great extent.
+The `curse of dimensionality' is a common way to refer to feature spaces that present numerous dimensions in conjunction with high data sparsity.
 In a feature space affected by the curse of dimensionality, as the vocabulary space is, we can observe the fact that some common similarity measures and distances between data points (such as the Euclidean distance) almost lose meaning due to the majority of dimensions suppressing comparisons along the few dimensions that actually matter.
 Word embeddings are not able to completely solve the curse of dimensionality as they still are relatively high-dimensional.
 However, the improvement of adopting a dense feature space, with the choice of a normalized similarity function (such as cosine similarity) was still substantial enough to revolutionize the NLP field.
@@ -99,14 +99,14 @@ In practice, word embeddings are mappings from the vocabulary space to the embed
 
 The concept of using distributed word representations was anticipated by \citet{bengio2020} with the Neural Network Language Model (NNLM) in the early 2000s.
 The first real successful implementation of word embeddings was Word2Vec by \citet{mikolov2013}, greatly inspired by Bengio's previous work.
-The main purpose of Word2Vec is to create word embeddings, it is composed by a single hidden layer and is trained discriminatevely by using both positive and negative examples.
+The main purpose of Word2Vec is to create word embeddings, it is composed by a single hidden layer and is trained discriminatively by using both positive and negative examples.
 
 \blockquote[J.R. Firth]{You Shall Know a Word by the Company It Keeps}
 
 Mikolov's original work introduces two primary training variants for Word2Vec:
 \begin{itemize}
     \item \textbf{Continuous Bag of Words (CBoW)}: predict a target word given its context.
-The context is given as a symmetric window containing all terms occuring around the target term, modeling a many-to-1 prediction.
+The context is given as a symmetric window containing all terms occurring around the target term, modeling a many-to-1 prediction.
     \item \textbf{Skip-gram}: predicts surrounding words given a target word.
 Single context words are predicted one at a time, modeling a 1-to-1 prediction.
 \end{itemize}
@@ -121,7 +121,7 @@ However, in the word embeddings scenario, these arithmetic properties have been 
 
 In particular, the semantic meaningfulness of certain arithmetic and geometric transformations applied to word embeddings was noticed by Mikolov himself in the Word2Vec paper \cite{mikolov2013}.
 This went from finding similarities in embeddings of words that manifested syntactic regularities, to complete double-word analogies located in common semantic fields.
-One of the most famouse examples presented in \cite{mikolov2013} is: \texttt{emb(`King') - emb(`Man') + emb(`Woman') $\simeq$ emb(`Queen')}, which models both the relationships of `gender' and `royalty'.
+One of the most famous examples presented in \cite{mikolov2013} is: \texttt{emb(`King') - emb(`Man') + emb(`Woman') $\simeq$ emb(`Queen')}, which models both the relationships of `gender' and `royalty'.
 Other \todo{relevant} analogies include country-capital, family relation, and verb tenses.
 However, any kind of semantic relationship could be potentially modeled by word embeddings, given enough support in the training dataset.
 
@@ -133,7 +133,7 @@ Additionally, this topic is of particular relevance due to the focus on interpre
 
 Transformers are the current state-of-the art model architecture for most text applications and not only.
 Although they were initially conceived for textual sequential inputs, in recent years saw discrete success in a wide variety of other applications (in particular image processing), albeit occasionally with some slight variations.
-This architecture has proven to be flexible, efficient and parellizable, in contrast with previous popular choices for sequence learning problems such as RNNs and LSTMs.
+This architecture has proven to be flexible, efficient and parallelizable, in contrast with previous popular choices for sequence learning problems such as RNNs and LSTMs.
 
 The first transformer architecture was introduced by \citet{vaswani2017} in the seminal 2017 paper ``Attention Is All You Need''.
 This architecture is of the encoder-decoder type, following the typical paradigm of sequence-to-sequence (seq2seq) learning.
@@ -151,37 +151,37 @@ The first step to process inputs is tokenization, as it is fundamental to reduce
 This is normally done by a tokenizer, which performs some preprocessing on the input sentence to obtain a sequence of tokens that will be fed to the model.
 Most transformer architectures use different variants of sub-word tokenization algorithms, meaning that each word may correspond to a combination of multiple tokens.
 This type of tokenization is usually obtained as the result of a training process where common character sequences get progressively aggregated until they reach a certain frequency threshold, at this point a compact and efficient representation of the vocabulary that is balanced between granularity and size is achieved.
-Sub-word tokenization improves the ability of the model to deal with rare and unknown words, greatly limiting the use of unknown tokens (special tokens used in place of certain words that cannot be correctly tokenized and encoded) and potentially facilitating the creation of multi-lingual models.
+Sub-word tokenization improves the ability of the model to deal with rare and unknown words, greatly limiting the use of unknown tokens (special tokens used in place of certain words that cannot be correctly tokenized and encoded) and potentially facilitating the creation of multilingual models.
 
 The tokenization and embedding steps are perhaps the most critical processes due to the fact that they shape both inputs and outputs of the transformer, framing how it interfaces itself with the environment.
 Additionally, the transformer architecture is word position agnostic, meaning that embedded tokens do not directly contain any additional information that \todo{tells} the model their position inside the input sentence.
 This is commonly solved by implementing \textbf{positional encoding}: an additive mask that gets applied to the input tokens right after the embedding step.
-The original ``Attention Is All You Need'' \cite{vaswani2017} paper suggests the use of fixed positional encodings based on the \textit{sine} and \textit{cosine} functions, although alternatives exist.
+The original ``Attention Is All You Need'' \cite{vaswani2017} paper suggests the use of fixed positional encodings based on the \emph{sine} and \emph{cosine} functions, although alternatives exist.
 
 \subsubsection*{Basic Block Structure}
 
-Transformer blocks \todo{compose} large part of the transformer architecure and contain \textbf{attention blocks}, \textbf{feed-forward blocks}, \textbf{residual connections} and \textbf{normalization blocks}.
+Transformer blocks \todo{compose} large part of the transformer architecture and contain \textbf{attention blocks}, \textbf{feed-forward blocks}, \textbf{residual connections} and \textbf{normalization blocks}.
 
 \textbf{Attention blocks} are \todo{powered} by the attention mechanism, the \todo{principal mechanic} responsible for the outstanding results achieved by transformer models.
 The concept of attention is not novel and did already see some applications in seq2seq models \todo[orange]{cite https://arxiv.org/pdf/1409.0473, https://arxiv.org/pdf/1702.00887, https://arxiv.org/pdf/1507.01053}, determining substantial improvements in most LSTM architectures.
 Attention in encoder-decoder models is implemented by allowing the decoder to \todo{look} at the internal states generated by the encoder, thus eliminating the information bottleneck represented by the single point of connection between the two.
 The most important part of attention is its scoring function, which allows the decoder to `focus' on certain tokens by modeling a weight distribution on the attended hidden states using an attention function.
-There exist different attention function implementations such as \textit{simple dot product}, \textit{Luong (multiplicative)} \todo[orange]{cite} and \textit{Bahdanau (additive)} \todo[orange]{cite}.
-The original transformer architecture mentioned in ``Attention Is All You Need'' \cite{vaswani2017} uses \textit{scaled dot product attention}, which is implemented with the following formula:
+There exist different attention function implementations such as \emph{simple dot product}, \emph{Luong (multiplicative)} \todo[orange]{cite} and \emph{Bahdanau (additive)} \todo[orange]{cite}.
+The original transformer architecture mentioned in ``Attention Is All You Need'' \cite{vaswani2017} uses \emph{scaled dot product attention}, which is implemented with the following formula:
 \begin{equation}
     Attention(Q,K,V) = softmax\left(\frac{QK^\mathrm{T}}{\sqrt{d_K}}\right)V
 \end{equation}
-Where $Q$, $K$ and $V$ represent the \textit{query}, \textit{key} and \textit{value} components of attention which are obtained by multiplying the hidden state vectors to their respective projection matrices $W_Q$, $W_K$ and $W_V$, which are composed of leaernable model parameters.
+Where $Q$, $K$ and $V$ represent the \emph{query}, \emph{key} and \emph{value} components of attention which are obtained by multiplying the hidden state vectors to their respective projection matrices $W_Q$, $W_K$ and $W_V$, which are composed of learnable model parameters.
 
-The transformer arhitecure implements three different types of attention:
+The transformer architecture implements three different types of attention:
 \begin{itemize}
-    \item An \textbf{encoder-decoder attention} (or \textbf{cross-attention}), which is found inside the decoder block, and attends to the encoder blocks' hidden states using its current state as the \textit{query}.
+    \item An \textbf{encoder-decoder attention} (or \textbf{cross-attention}), which is found inside the decoder block, and attends to the encoder blocks' hidden states using its current state as the \emph{query}.
     \item The \textbf{self-attention}, which is used by both the encoder block to process the hidden states at its input.
-It works in following the same principles as cross-attention however, it attends to representations of the same nature, meaning that \textit{query}, \textit{key} and \textit{value} are extrapolated by the same set of hidden states.
+It works in following the same principles as cross-attention however, it attends to representations of the same nature, meaning that \emph{query}, \emph{key} and \emph{value} are extrapolated by the same set of hidden states.
 In practice, the model is able to manage long-range dependencies and possibly capture patterns or associations between representations in a completely parallelizable way.
     \item Lastly, \textbf{masked self-attention} is a specific implementation of self-attention that can be found in the decoder block, due to its need of autoregressive modeling.
 In fact, the decoder is not allowed to use information about future words, since it is capable of returning a single output token per stack execution.
-Masked self-attention differs from self-attention in scenarios where the full output is available (e.g.\ training), and it works by adding a mask with the effect of nullyfing the contribution of future tokens in the attention computation.
+Masked self-attention differs from self-attention in scenarios where the full output is available (e.g.\ training), and it works by adding a mask with the effect of nullifying the contribution of future tokens in the attention computation.
 The masked self-attention formula can be summarized as follows:
 \begin{equation}
     \begin{gathered}
@@ -196,7 +196,7 @@ The masked self-attention formula can be summarized as follows:
 \end{itemize}
 
 In reality, transformers use a more refined attention implementation, called \textbf{multi-head attention} which can be applied in all the previously identified scenarios.
-Multi-head attention is a novelty introduced in the ``Attention Is All You Need'' \cite{vaswani2017} paper and it consists in replicating the attention structure multiple times, thus obtaining multiple representation spaces for each attention layer.
+Multi-head attention is a novelty introduced in the ``Attention Is All You Need'' \cite{vaswani2017} paper, and it consists in replicating the attention structure multiple times, thus obtaining multiple representation spaces for each attention layer.
 This operation influences the dimension of attention vectors, which needs to be divided by $h$, where $h$ is the chosen number of separate attention heads for multi-head attention.
 The attention output for multi-head attention is obtained as the concatenation between the attention outputs of all $h$ heads as follows:
 \begin{equation}
@@ -205,7 +205,7 @@ The attention output for multi-head attention is obtained as the concatenation b
                         &= Concat(Attention_1(Q,K,V),\ \ldots,\ Attention_h(Q,K,V))
     \end{aligned}
 \end{equation}
-In practice, multi-head attention enables the model to simultaneously focus on information present at differnet positions, avoiding excessive attention on single tokens.
+In practice, multi-head attention enables the model to simultaneously focus on information present at different positions, avoiding excessive attention on single tokens.
 
 \todo[green]{attention dimensional analysis}
 
@@ -231,13 +231,13 @@ If $v_i$ is a vector representation, after layer normalization at layer $\ell$ w
 \todo[cyan]{Check equation pedices}
     \item \textbf{Residual connections} \todo[orange]{cite https://arxiv.org/pdf/1512.03385} are a strategy employed in deep architectures to streamline gradient propagation and avoid vanishing gradients.
 Additionally, it helps the transformer to preserve local information as attention and feed-forward blocks are added to the base residual flow, limiting their freedom in the effective output space.
-In practice, residual connections sum the identity function of the input of a block to the output of that block, in the transformer's case the resiudal summation happens before layer normalization.
+In practice, residual connections sum the identity function of the input of a block to the output of that block, in the transformer's case the residual summation happens before layer normalization.
 \end{itemize}
 
 \subsubsection*{Postprocessing}
 
 Of particular importance is the last step in the transformer generative process.
-After the inputs have been embedded and have been passed through all the decoder's transformer blocks, iteratively refinining them into new vector representations, the decoder has to output a new token.
+After the inputs have been embedded and have been passed through all the decoder's transformer blocks, iteratively refining them into new vector representations, the decoder has to output a new token.
 Given the fact that a transformer model generates a single token at a time, we would presumably obtain a single hidden representation at the end of the decoder stack with a size compatible to the embedding space.
 However, in order to output a vocabulary token we need the vector to lay in the vocabulary space.
 To achieve this goal, the transformer architecture features a last linear layer outside of the stack with the purpose of bringing the last hidden representation from the embedding space to the vocabulary space, modeling an `unembedding' operation.
@@ -252,15 +252,15 @@ However, with time, a large number of variations and improvements on the base ar
 We are going to be mainly concerned with the Llama 2 \todo[orange]{cite} and Llama 3 \todo[orange]{cite} (from here just Llama) models, developed by Meta AI \todo{reference} in 2023 and 2024 respectively; other minor models may also be taken into consideration, although without particular focus on their architecture.
 
 The first main novelty in the new state-of-the-art models is the complete removal of the encoder from the architecture.
-These models are often called \textbf{`decoder-only'} or \textbf{`GPT-like'} from the Global Pretrained Transformer (GPT) architecture \todo[orange]{cite https://openai.com/index/language-unsupervised/} that popularized the use of transformer models without the decoder, although the first documented use of a `decoder-only' architecture can be ascribed to this 2018 paper by Liu et al.\todo[orange]{cite https://arxiv.org/pdf/1801.10198} 
+These models are often called \textbf{`decoder-only'} or \textbf{`GPT-like'} from the Generative Pre-trained Transformer (GPT) architecture \todo[orange]{cite https://openai.com/index/language-unsupervised/} that popularized the use of transformer models without the decoder, although the first documented use of a `decoder-only' architecture can be ascribed to this 2018 paper by Liu et al.\todo[orange]{cite https://arxiv.org/pdf/1801.10198} 
 The major improvement of decoder-only architectures consists in a substantial performance enhancement for longer sequences of text.
 In addition, removing the encoder also removes possible information redundancy between the two components.
 The decoder remains mostly unchanged from this modification, with the exception of the cross-attention block since it can no longer fetch the representations generated by the encoder
 Cross-attention is consequently removed, \todo{leaving} a single masked self-attention block \todo{inside} the decoder architecture.
 
 Another important change in the transformer architecture is the \textbf{Rotary Position Embeddings (RoPE)} mechanism, proposed in 2021 by Su et al. \todo[orange]{https://arxiv.org/pdf/2104.09864}
-This technique completely replaces the positional encoding strategy that was previously employed in transformer models (absolute positional encoding) by guaranteeing better flexibility for long sequences and introducting the decay of inter-token dependency with increasing relative token distance.
-One of the main flaws of absolute positional encoding is its inability to model dependence between tokens, as each token positional encoding is independent from the others and, in particular, from the distance between tokens.
+This technique completely replaces the positional encoding strategy that was previously employed in transformer models (absolute positional encoding) by guaranteeing better flexibility for long sequences and introducing the decay of inter-token dependency with increasing relative token distance.
+One of the main flaws of absolute positional encoding is its inability to model dependence between tokens, as each token positional encoding is independent of the others and, in particular, from the distance between tokens.
 RoPE is able to model both absolute and relative token positional information by encoding them as a geometric rotation inside the embedding space.
 This rotation operation, which has a multiplicative nature (opposed to the additive one of absolute positional encoding), has the additional advantages of avoiding any change in vector norm for the subjected hidden representation.
 This property is vital in determining RoPE's capability of being directly applied inside the query and key matrices in linear self-attention, improving overall efficiency.
@@ -275,7 +275,7 @@ This improvement allowed the removal of the `learning rate warm-up stage': a tec
 Another variation on the transformer normalization mechanism was achieved with the introduction of \textbf{root mean square layer normalization (RMSNorm)} \todo[orange]{cite https://arxiv.org/pdf/1910.07467}.
 The fundamental improvement introduced by RMSNorm is a substantial reduction in the amount of computation performed with respect to classical layer normalization and an overall gain in efficiency, this is especially true for deep architectures where the computational overhead of layer normalization is meaningful.
 Implementation wise, RMSNorm only focuses on the rescaling aspect rather than including both centering and rescaling as layer normalization does.
-The central quantity used to perform the rescaling computation is the Root Mean Square (RMS) statistic and only the $\gamma$ parameter is retained from the set of learnable parameters due to the fact that the re-centering operation performed by $\beta$ was deemed to be mostly ininfluential for both layer normalization and RMSNorm.
+The central quantity used to perform the rescaling computation is the Root Mean Square (RMS) statistic and only the $\gamma$ parameter is retained from the set of learnable parameters due to the fact that the re-centering operation performed by $\beta$ was deemed to be mostly irrelevant for both layer normalization and RMSNorm.
 If $v_i$ is a vector representation, after RMSNorm at layer $\ell$ we obtain:
 \begin{equation}
     \begin{aligned}
@@ -283,13 +283,13 @@ If $v_i$ is a vector representation, after RMSNorm at layer $\ell$ we obtain:
         \text{where}\ RMS(v) = \sqrt{\frac{1}{n}\sum_{i=1}^{n}{v_i^2}}
     \end{aligned}
 \end{equation}
-One peculiar side-effect of RMSNorm is the fact it forces the summed inputs into a $\sqrt{n}$-scaled unit sphere which benfits the stability of layer activations and output distribution, positively influencing the interpretability of the hidden space.
+One peculiar side effect of RMSNorm is the fact it forces the summed inputs into a $\sqrt{n}$-scaled unit sphere which benefits the stability of layer activations and output distribution, positively influencing the interpretability of the hidden space.
 
 The last main change featured in most recent decoder-only transformer architectures concerns the structure of the feed-forward block.
-The base transformer implementation esetablishes the feed-forward layer as the combination of two linear transformations separated by a non-linear activation function, tipically a choice between \textit{ReLU} and \textit{GELU}.
-However, newer architectures have begun to incorporate Gated Linear Units (GLUs) \todo[orange]{cite https://arxiv.org/pdf/1612.08083} implemented using a \textit{Swish} (also called \textit{SiLU}) activation function, this particular architectural combination for the feed-forward block is commonly referred to as \textbf{SwiGLU} \todo[orange]{cite https://arxiv.org/pdf/2002.05202v1}.
-\textit{Swish} \todo[orange]{cite https://arxiv.org/pdf/2002.05202v1} is an activation function similar to \textit{ReLU}, characterized by a non-monotonic depression in its zero-region, and is implemented in the following way: $Swish(x) = x \cdot \sigma(x)$ where $\sigma(x)$ represents the logistic sigmoid function.
-\textit{Swish} was shown to offer marginal improvements over \textit{ReLU} and other similar variations, based on its smoothness and possibility of returning small negative values for inputs close to zero, implying the efficient convergence of non-zero gradients and consequently minimizing the problem of dead neurons (caused by the nullification of gradient).
+The base transformer implementation establishes the feed-forward layer as the combination of two linear transformations separated by a non-linear activation function, typically a choice between \emph{ReLU} and \emph{GELU}.
+However, newer architectures have begun to incorporate Gated Linear Units (GLUs) \todo[orange]{cite https://arxiv.org/pdf/1612.08083} implemented using a \emph{Swish} (also called \emph{SiLU}) activation function, this particular architectural combination for the feed-forward block is commonly referred to as \textbf{SwiGLU} \todo[orange]{cite https://arxiv.org/pdf/2002.05202v1}.
+\emph{Swish} \todo[orange]{cite https://arxiv.org/pdf/2002.05202v1} is an activation function similar to \emph{ReLU}, characterized by a non-monotonic depression in its zero-region, and is implemented in the following way: $Swish(x) = x \cdot \sigma(x)$ where $\sigma(x)$ represents the logistic sigmoid function.
+\emph{Swish} was shown to offer marginal improvements over \emph{ReLU} and other similar variations, based on its smoothness and possibility of returning small negative values for inputs close to zero, implying the efficient convergence of non-zero gradients and consequently minimizing the problem of dead neurons (caused by the nullification of gradient).
 On the other hand, GLUs determine an entire revision of the feed-forward architecture, as they introduce a gating mechanism where one linear transformation is modulated by the output of another, which allows the model to dynamically control the flow of information.
 In the case of Llama models, the gating mechanism happens through an element-wise multiplication where $W_{in} \in \mathbb{R}^{d_{model} \times d_{hid}}$ represents the input transformation matrix with its respective bias $b_{in}$, $V \in \mathbb{R}^{d_{model} \times d_{hid}}$ is the gate transformation matrix with its respective bias $b_{V}$, $W_{out} \in \mathbb{R}^{d_{hid} \times d_{model}}$ performs the out-projection to the model's hidden representation dimensionality with its respective bias $b_{out}$ and $f$ represents the activation/gating function (in the SwiGLU case $f(x) = Swish(x)$):
 \begin{equation}
@@ -303,4 +303,4 @@ However, the reasons for its effectiveness may potentially be associated with it
 
 \subsection{The Large Language Model Paradigm}
 
-\todo[green]{Insert "LLM" subsection containing pre-training, fine-tuning, open source models...}
+\todo[green]{Insert ''LLM" subsection containing pre-training, fine-tuning, open source models...}

@@ -1,28 +1,29 @@
-The field of transformer interpretability has garnered significant attention over the past decade, resulting in a substantial and ever increasing body of literature.
+The field of transformer interpretability has garnered significant attention over the past decade, resulting in a substantial and ever-increasing body of literature.
 Particular \todo{care} must be put into the fact that this is a relatively novel field of research, which is constantly being subjected by a great number of contributions \todo{as of the time of writing}.
 Consequently, it is very possible that some of the information provided in this work may be obsoleted or invalidated by more recent works.
 This section reviews the key contributions and developments in this area, highlighting the foundational studies and recent advancements that are pertinent to the present research.
 
-In such a fast-moving and prolific field it is nearly impossible to consider every relevant contribution and it is inevitable that there might be gaps in the considered material, to this end we propose a cutoff date that standardizes a fixed knowledge basis to build upon.
+In such a fast-moving and prolific field it is nearly impossible to consider every relevant contribution, and it is inevitable that there might be gaps in the considered material.
+To this end we propose a cutoff date that standardizes a fixed knowledge basis to build upon.
 It is important to note that there may be instances where the proposed cutoff date will be disregarded, particularly in cases of recent exceptional contributions to the field that potentially revolutionize, subvert or significantly alter the context of the present research, and therefore deserve to be acknowledged.
 The chosen cutoff date is July 2024, which corresponds to current time of writing.
 
-\citet{rai2024} propose a taxonomy for interpretability techniques centered aroung the concept of Mechanistic interpretability (MI).
+\citet{rai2024} propose a taxonomy for interpretability techniques centered around the concept of Mechanistic interpretability (MI).
 It is possible to identify two main fundamental objects of study in this context: \textbf{features} and \textbf{circuits}.
 \todo[green]{Maybe explain features and circuits}
 These objects of study serve as starting points for interpretability inquiries, while specific techniques act as tools to explore and verify those inquiries.
-By using MI tools to puruse interpretability inquiries, possibly through the use of evaluation techniques, we obtain findings: true generalizable statemenets about the model's inner workings.
+By using MI tools to pursue interpretability inquiries, possibly through the use of evaluation techniques, we obtain findings: true generalizable statements about the model's inner workings.
 
 Mechanistic interpretability offers a novel perspective over the interpretability research field, its primary aim being the reverse-engineering of language models (LMs) from an in-depth perspective \cite{olah2022}.
 Previously identified model-agnostic techniques have been proven to offer limited insight for the transformer architecture \todo[orange]{cite}, whereas MI embraces the opposite philosophy by removing model abstractions and analyzing LMs in \todo{terms} of their components and how their interactions.
 
 Mechanistic interpretability was initially mentioned as being the main driving ideology behind the `transformer circuits thread' \todo[orange]{cite transformer circuits thread}.
 Nonetheless, by following \citet{rai2024} approach, we can observe that the concept of MI is not limited to the application of circuits.
-Envisioning MI as being characterized by a general bottom-up approach for interpreting LMs, its interpretation can be extended to include some \todo{predecessing} techniques such as the logit lens \todo[orange]{cite} and other probing approaches.
+Envisioning MI as being characterized by a general bottom-up approach for interpreting LMs, its interpretation can be extended to include some \todo{preceding} techniques such as the logit lens \todo[orange]{cite} and other probing approaches.
 
 Another possible taxonomy for interpretability techniques, more focused on their nature rather than their use, is presented \citet{ferrando2024}.
-They indentify two main classes of interpretability approaches: \textbf{behavior localization} and \textbf{information decoding}.
-In the next sections we will follow their insightful classification to provide a synthetical analysis of the state of the art, with a specific focus on a restricted number of techniques that are especially relevant for the purpose of this work.
+They identify two main classes of interpretability approaches: \textbf{behavior localization} and \textbf{information decoding}.
+In the next sections we will follow their insightful classification to provide a synthetic analysis of the state of the art, with a specific focus on a restricted number of techniques that are especially relevant for the purpose of this work.
 
 \section{Behavior localization}
 
@@ -65,11 +66,11 @@ Additionally, it is possible to identify an alternate `denoising' setup, which s
 \subsubsection{Circuit analysis}
 
 \textbf{Circuit analysis} is closely related to the mechanistic interpretability (MI) subfield analyzed previously as its main goal is tied to the discovery of circuits inside LMs.
-Circuits are subsets of model components that can be seen as acting independently while carrying out a specific task, and can possibly be synthetized into an algorithm.
+Circuits are subsets of model components that can be seen as acting independently while carrying out a specific task, and can possibly be synthesized into an algorithm.
 Despite their successful application on LMs, circuits were not originally identified with the transformer architecture in mind; in fact, their first application was on vision models \cite{cammarata2020}.
-Most of the initial work regarding transformer circuits was performed on publications belonging to the `transformer circuits thread' \todo[orange]{cite}, heavily inspired by the precurring vision counterpart \cite{cammarata2020}.
-By applying the circuit concept to the previously causal intervention techniques, we can extend the idea of activation patching to edge patching and path patching: novel circuits-based techniqes that take into account the interactions between model components.
-Edge patching \todo[orange]{cite} considers edges that directly conect pairs of model components due to the fact that each component input can be modeled as the sum of the outputs of the previous model components inside the residual stream, while path patching \todo[orange]{cite} is a generalization of edge patching to multiple edges.
+Most of the initial work regarding transformer circuits was performed on publications belonging to the `transformer circuits thread' \todo[orange]{cite}, heavily inspired by the preceding vision counterpart \cite{cammarata2020}.
+By applying the circuit concept to the previously causal intervention techniques, we can extend the idea of activation patching to edge patching and path patching: novel circuits-based techniques that take into account the interactions between model components.
+Edge patching \todo[orange]{cite} considers edges that directly connect pairs of model components due to the fact that each component input can be modeled as the sum of the outputs of the previous model components inside the residual stream, while path patching \todo[orange]{cite} is a generalization of edge patching to multiple edges.
 
 \todo[green]{important, expand circuits}
 \todo[green]{A Mathematical Framework for Transformer Circuits}
@@ -80,24 +81,24 @@ Edge patching \todo[orange]{cite} considers edges that directly conect pairs of 
 
 \textbf{Information decoding} takes a step back from behavior localization techniques by focusing on the extraction of single pieces of information from model components, rather than trying to explain entire predictions by attributing them to various internal mechanisms.
 These pieces of information take the name of features (or concepts) and are commonly characterized by being human interpretable properties of the input \cite{kim2018}.
-The three main categories that can be identified in this approach consist of \textbf{probing} which can be seen as the LM adaptation of a popular technique in deep learning, a broader categorization nsamed \textbf{sparse autoencoders} that includes the application of sparse autoencoders following the linear representation hypothesis, and \textbf{vocabulary space decoding} which tackles the representation of models' representations using vocabulary tokens.
+The three main categories that can be identified in this approach consist of \textbf{probing} which can be seen as the LM adaptation of a popular technique in deep learning, a broader categorization named \textbf{sparse autoencoders} that includes the application of sparse autoencoders following the linear representation hypothesis, and \textbf{vocabulary space decoding} which tackles the representation of models' representations using vocabulary tokens.
 
 \textbf{Probing} techniques are used to analyze the inner workings of LMs and, more generally, any kind of deep neural network.
 Probing usually implies the supervised training of ad-hoc models (often classifiers) to interpret the features present in the intermediate representations of the main model.
 The probing classifier is specifically trained to evaluate how much information about a certain property is encoded inside an intermediate representation.
 While the actual property that the probe seeks out often depends on the purpose of the analysis, some critics have \todo{been moved out towards} the limitations of probing classifiers \cite{belinkov2022}.
 Particular attention has been put towards probing transformer models \cite{chwang2024, zou2023, macdiarmid2024, burns2024}, especially the family of encoder-only models related to BERT \cite{devlin2018}.
-Some exceptional results includes the discovery of syntactinc information inside the hidden representations of BERT models \cite{tenney2019a, lin2019, liu2019}, even to the extent of uncovering entire syntax trees \cite{hewitt2019} and hierarchical computation structures along the residual stream, reminiscent of classical NLP pipelines \cite{tenney2019b}.
+Some exceptional results include the discovery of syntactic information inside the hidden representations of BERT models \cite{tenney2019a, lin2019, liu2019}, even to the extent of uncovering entire syntax trees \cite{hewitt2019} and hierarchical computation structures along the residual stream, reminiscent of classical NLP pipelines \cite{tenney2019b}.
 
 \todo[green]{important, expand probing}
 \todo[green]{Factual Probing Is [MASK]: Learning vs. Learning to Recall}
 
-The \textbf{linear representation hypothesis} \cite{park2023} is a theory that assumes a linear reprsentation for high-level concepts inside the representation space of a model.
-The central idea for this hypothesis is based upon the early discoverings of linearity inside the embedding space done by \citet{mikolov2013}, as the resulting analogies and geometric properties are direct consequence of a linear embedding space.
+The \textbf{linear representation hypothesis} \cite{park2023} is a theory that assumes a linear representation for high-level concepts inside the representation space of a model.
+The central idea for this hypothesis is based upon the early discoveries of linearity inside the embedding space done by \citet{mikolov2013}, as the resulting analogies and geometric properties are direct consequence of a linear embedding space.
 Recent work has uncovered many instances of FFN neurons that consistently fire with specific patterns \todo{traceable} to input features \cite{voita2023}, suggesting that this behavior is an effect of the next token prediction training paradigm \cite{jiang2024}.
 Additionally, there have been many attempts aimed at modifying the internal representations of a model by exploiting their linear properties.
 These types of linear interventions resulted successful in erasing concepts and features from intermediate model representations \cite{ravfogel2020, ravfogel2022, belrose2023b}, and even meaningfully changing the model's behavior \cite{nanda2023, belrose2023b}, opening up new \todo{venues} for model steering and alignment. 
-Another important aspect of the linear representation hypothesis is the presence of polysemanticty and superposition in the identified features.
+Another important aspect of the linear representation hypothesis is the presence of polysemanticity and superposition in the identified features.
 The effects of information compression performed by dimensionality reduction algorithms resulting in distributed representations has widely been observed and studied in many fields, however Olah makes an important distinction between the separate phenomena of composition and superposition \cite{olah2023}.
 Many extend these observations to actual experiments, successfully proving the existence of superposition both in simplified scenarios \cite{elhage2022, arora2018} and in the early layers of transformer-based LMs \cite{gurnee2023}.
 
@@ -111,11 +112,11 @@ Autoencoders with sparsity regularization, also known as \textbf{Sparse autoenco
 
 One of the most direct methods to comprehend a model's hidden representations is by employing its own vocabulary to derive plausible interpretations. \textbf{Vocabulary space decoding} techniques are founded on this principle, by utilizing the model's existing vocabulary they can generate outputs that are immediately understandable and may unveil hidden patterns inside the model's generation process.
 
-The first real implementation of vocabulary space decoding is the logit lens \cite{nostalgebraist2020}, which proposed the decoding of inter-layer hidden representation using the model's own unembedding matrix following the intuition of an iterative refining of the model's prediction throughout the forward pass \cite{jastrzebski2017}.
+The first real implementation of vocabulary space decoding is the logit lens \cite{nostalgebraist2020}, which proposed the decoding of interlayer hidden representation using the model's own unembedding matrix following the intuition of an iterative refining of the model's prediction throughout the forward pass \cite{jastrzebski2017}.
 The contribution of the logit lens was groundbreaking and, despite some acknowledged shortcomings by the author, inspired numerous similar techniques aimed at improving its design or offering alternative functionalities.
 Some significant advancements include the introduction of translators, which act as probing classifiers to enhance the logit lens' predictions by applying either linear mappings \cite{din2024} or affine transformations \cite{belrose2023a}.
-Additionally, the attention lens \cite{sakarvadia2023} applies the concepts of the logit lens and translators to the outputs of attention heads, while the future lens \cite{pal2023} extends logit lens predictions to also include the next most probable tokens by exploting causal intervention methods.
-Another crucial contribution, inspired by the future lens, is the patchscopes framework \cite{ghandeharioun2024}, which aims to generalize all prior interpretability methods based on vocabulary space decoding and causal interventions.
+Additionally, the attention lens \cite{sakarvadia2023} applies the concepts of the logit lens and translators to the outputs of attention heads, while the future lens \cite{pal2023} extends logit lens predictions to also include the next most probable tokens by exploiting causal intervention methods.
+Another crucial contribution, inspired by the future lens, is the \emph{patchscopes} framework \cite{ghandeharioun2024}, which aims to generalize all prior interpretability methods based on vocabulary space decoding and causal interventions.
 Other significant approaches include the direct decoding of model weights \cite{dar2023}, potentially using singular value decomposition techniques to factorize the weight matrices \cite{millidge2022}, and logit spectroscopy \cite{cancedda2024}, which employs a spectral analysis of the residual stream and parameter matrices interacting with it.
 This last method aims to identify and analyze specific parts of the hidden representation spectrum that are most likely to be overlooked by the classic logit lens.
 
