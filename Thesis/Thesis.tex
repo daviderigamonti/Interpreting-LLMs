@@ -44,7 +44,7 @@
 \usepackage{subfig} % Numbered and caption subfigures using \subfloat.
 \usepackage{tikz} % A package for high-quality hand-made figures.
 \usetikzlibrary{}
-\graphicspath{{./Images/}} % Directory of the images
+\graphicspath{{./Images/}{./Images/Template/}{./TikZ/img/}} % Directory of the images
 \usepackage{caption} % Coloured captions
 \usepackage{xcolor} % Coloured captions
 \usepackage{amsthm,thmtools,xcolor} % Coloured "Theorem"
@@ -99,6 +99,7 @@
 
 \usepackage[threshold=1, thresholdtype=words]{csquotes}
 \usepackage{booktabs}
+\usepackage{cleveref}
 
 % TODO: REMOVE after draft
 \usepackage{soul}
@@ -108,9 +109,11 @@
 %----------------------------------------------------------------------------
 
 \renewcommand\mkblockquote[4]{\leavevmode\llap{``}\textit{#1#2#3}''#4} % Blockquote quotation marks
+\newcommand{\gbm}[1]{\bm{\mathbf{#1}}} % General Bold Math for both greek and latin letters
+\renewcommand{\T}{\mathrm{T}} % Transpose
 
 % TODO: REMOVE after draft
-\newcommand{\todo}[2][yellow]{\sethlcolor{#1}\texthl{#2}} % TODO highlight
+\newcommand{\todo}[2][yellow]{\sethlcolor{#1}\hl{#2}} % TODO highlight
 
 %----------------------------------------------------------------------------
 %	BEGIN OF YOUR DOCUMENT
@@ -214,14 +217,11 @@ Qui va l'Abstract in lingua italiana della tesi seguito dalla lista di parole ch
 \chapter{Methodology}\label{ch:methodology}
 \input{Chapters/4_Methodology.tex}
 
-\chapter{Datasets}\label{ch:datasets}
-\input{Chapters/5_Datasets.tex}
-
 \chapter{Experiments}\label{ch:experiments}
-\input{Chapters/6_Experiments.tex}
+\input{Chapters/5_Experiments.tex}
 
 \chapter{Conclusions}\label{ch:conclusions}
-\input{Chapters/7_Conclusions.tex}
+\input{Chapters/6_Conclusions.tex}
 
 %-------------------------------------------------------------------------
 %	BIBLIOGRAPHY

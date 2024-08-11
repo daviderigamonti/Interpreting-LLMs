@@ -169,7 +169,8 @@ The most important part of attention is its scoring function, which allows the d
 There exist different attention function implementations such as \emph{simple dot product}, \emph{Luong (multiplicative)} \todo[orange]{cite} and \emph{Bahdanau (additive)} \todo[orange]{cite}.
 The original transformer architecture mentioned in ``Attention Is All You Need'' \cite{vaswani2017} uses \emph{scaled dot product attention}, which is implemented with the following formula:
 \begin{equation}
-    Attention(Q,K,V) = softmax\left(\frac{QK^\mathrm{T}}{\sqrt{d_K}}\right)V
+    \label{eq:background_attention}
+    Attention(Q,K,V) = softmax\left(\frac{QK^\T}{\sqrt{d_K}}\right)V
 \end{equation}
 Where $Q$, $K$ and $V$ represent the \emph{query}, \emph{key} and \emph{value} components of attention which are obtained by multiplying the hidden state vectors to their respective projection matrices $W_Q$, $W_K$ and $W_V$, which are composed of learnable model parameters.
 
@@ -184,8 +185,9 @@ In fact, the decoder is not allowed to use information about future words, since
 Masked self-attention differs from self-attention in scenarios where the full output is available (e.g.\ training), and it works by adding a mask with the effect of nullifying the contribution of future tokens in the attention computation.
 The masked self-attention formula can be summarized as follows:
 \begin{equation}
+    \label{eq:background_masked-attention}
     \begin{gathered}
-        MaskedAttention(Q,K,V) = softmax\left(\frac{QK^\mathrm{T} + M}{\sqrt{d_K}}\right)V \\
+        MaskedAttention(Q,K,V) = softmax\left(\frac{QK^\T + M}{\sqrt{d_K}}\right)V \\
         M_{ij} = \begin{cases}
             0 & \text{if}\ i \ge j, \\
             -\infty & \text{otherwise}.
@@ -200,9 +202,10 @@ Multi-head attention is a novelty introduced in the ``Attention Is All You Need'
 This operation influences the dimension of attention vectors, which needs to be divided by $h$, where $h$ is the chosen number of separate attention heads for multi-head attention.
 The attention output for multi-head attention is obtained as the concatenation between the attention outputs of all $h$ heads as follows:
 \begin{equation}
+    \label{eq:background_multihead-attention}
     \begin{aligned}
-    MultiHead(Q,K,V)    &= Concat(head_1,\ \ldots,\ head_h) \\
-                        &= Concat(Attention_1(Q,K,V),\ \ldots,\ Attention_h(Q,K,V))
+    MultiHead(Q,K,V)    &= head_1\ \oplus\ \ldots\ \oplus\ head_h \\
+                        &= Attention_1(Q,K,V)\ \oplus\ \ldots\ \oplus\ Attention_h(Q,K,V)
     \end{aligned}
 \end{equation}
 In practice, multi-head attention enables the model to simultaneously focus on information present at different positions, avoiding excessive attention on single tokens.
@@ -222,12 +225,12 @@ In particular:
 It consists of two steps: a batch-independent normalization step performed with parameters ($\mu$, $\sigma$) which model a normal distribution over the feature space of the vector representations, and a linear transformation using a bias and a scale factor.
 The bias and scale factor are usually referred to as $\beta$ and $\gamma$ respectively, and are trainable layer-level parameters which perform a shift and rescale operation on the normalized vector.
 If $v_i$ is a vector representation, after layer normalization at layer $\ell$ we obtain:
-\begin{equation}
-    \begin{gathered}
-        \bar v_{i,\ell} = \gamma_\ell \cdot \left( \frac{v_i - \mu}{\sigma} \right) + \beta_\ell, \\
-        \text{where}\ \mu = \frac{1}{n}\sum_{i=1}^{n}{v_i},\ \sigma = \sqrt{\frac{1}{n}\sum_{i=1}^{n}{(v_i - \mu)^2}}
-    \end{gathered}
-\end{equation}
+\begin{subequations}
+    \begin{gather}
+        \bar v_{i,\ell} = \gamma_\ell \cdot \left( \frac{v_i - \mu}{\sigma} \right) + \beta_\ell, \label{eq:background_layernorm} \\
+        \text{where}\ \mu = \frac{1}{n}\sum_{i=1}^{n}{v_i},\ \sigma = \sqrt{\frac{1}{n}\sum_{i=1}^{n}{{(v_i - \mu)}^2}} \label{eq:background_layernorm_extra}
+    \end{gather}
+\end{subequations}
 \todo[cyan]{Check equation pedices}
     \item \textbf{Residual connections} \todo[orange]{cite https://arxiv.org/pdf/1512.03385} are a strategy employed in deep architectures to streamline gradient propagation and avoid vanishing gradients.
 Additionally, it helps the transformer to preserve local information as attention and feed-forward blocks are added to the base residual flow, limiting their freedom in the effective output space.
@@ -252,8 +255,8 @@ However, with time, a large number of variations and improvements on the base ar
 We are going to be mainly concerned with the Llama 2 \todo[orange]{cite} and Llama 3 \todo[orange]{cite} (from here just Llama) models, developed by Meta AI \todo{reference} in 2023 and 2024 respectively; other minor models may also be taken into consideration, although without particular focus on their architecture.
 
 The first main novelty in the new state-of-the-art models is the complete removal of the encoder from the architecture.
-These models are often called \textbf{`decoder-only'} or \textbf{`GPT-like'} from the Generative Pre-trained Transformer (GPT) architecture \todo[orange]{cite https://openai.com/index/language-unsupervised/} that popularized the use of transformer models without the decoder, although the first documented use of a `decoder-only' architecture can be ascribed to this 2018 paper by Liu et al.\todo[orange]{cite https://arxiv.org/pdf/1801.10198} 
-The major improvement of decoder-only architectures consists in a substantial performance enhancement for longer sequences of text.
+These models are often called \textbf{`decoder-only'}, \textbf{`autoregressive'}, \textbf{`causal'} \todo[green]{differentiate between causal/autoregressive?}or \textbf{`GPT-like'} from the Generative Pre-trained Transformer (GPT) architecture \todo[orange]{cite https://openai.com/index/language-unsupervised/} that popularized the use of transformer models without the decoder, although the first documented use of a `decoder-only' architecture can be ascribed to this 2018 paper by Liu et al.\todo[orange]{cite https://arxiv.org/pdf/1801.10198} 
+The major improvement of autoregressive architectures consists in a substantial performance enhancement for longer sequences of text \todo[orange]{cite}.
 In addition, removing the encoder also removes possible information redundancy between the two components.
 The decoder remains mostly unchanged from this modification, with the exception of the cross-attention block since it can no longer fetch the representations generated by the encoder
 Cross-attention is consequently removed, \todo{leaving} a single masked self-attention block \todo{inside} the decoder architecture.
@@ -278,6 +281,7 @@ Implementation wise, RMSNorm only focuses on the rescaling aspect rather than in
 The central quantity used to perform the rescaling computation is the Root Mean Square (RMS) statistic and only the $\gamma$ parameter is retained from the set of learnable parameters due to the fact that the re-centering operation performed by $\beta$ was deemed to be mostly irrelevant for both layer normalization and RMSNorm.
 If $v_i$ is a vector representation, after RMSNorm at layer $\ell$ we obtain:
 \begin{equation}
+    \label{eq:background_rmsnorm}
     \begin{aligned}
         \bar v_{i,\ell} = \gamma_\ell \cdot \frac{v_i}{RMS(v)}, &&
         \text{where}\ RMS(v) = \sqrt{\frac{1}{n}\sum_{i=1}^{n}{v_i^2}}
@@ -285,7 +289,7 @@ If $v_i$ is a vector representation, after RMSNorm at layer $\ell$ we obtain:
 \end{equation}
 One peculiar side effect of RMSNorm is the fact it forces the summed inputs into a $\sqrt{n}$-scaled unit sphere which benefits the stability of layer activations and output distribution, positively influencing the interpretability of the hidden space.
 
-The last main change featured in most recent decoder-only transformer architectures concerns the structure of the feed-forward block.
+The last main change featured in most recent autoregressive transformer architectures concerns the structure of the feed-forward block.
 The base transformer implementation establishes the feed-forward layer as the combination of two linear transformations separated by a non-linear activation function, typically a choice between \emph{ReLU} and \emph{GELU}.
 However, newer architectures have begun to incorporate Gated Linear Units (GLUs) \todo[orange]{cite https://arxiv.org/pdf/1612.08083} implemented using a \emph{Swish} (also called \emph{SiLU}) activation function, this particular architectural combination for the feed-forward block is commonly referred to as \textbf{SwiGLU} \todo[orange]{cite https://arxiv.org/pdf/2002.05202v1}.
 \emph{Swish} \todo[orange]{cite https://arxiv.org/pdf/2002.05202v1} is an activation function similar to \emph{ReLU}, characterized by a non-monotonic depression in its zero-region, and is implemented in the following way: $Swish(x) = x \cdot \sigma(x)$ where $\sigma(x)$ represents the logistic sigmoid function.
@@ -293,6 +297,7 @@ However, newer architectures have begun to incorporate Gated Linear Units (GLUs)
 On the other hand, GLUs determine an entire revision of the feed-forward architecture, as they introduce a gating mechanism where one linear transformation is modulated by the output of another, which allows the model to dynamically control the flow of information.
 In the case of Llama models, the gating mechanism happens through an element-wise multiplication where $W_{in} \in \mathbb{R}^{d_{model} \times d_{hid}}$ represents the input transformation matrix with its respective bias $b_{in}$, $V \in \mathbb{R}^{d_{model} \times d_{hid}}$ is the gate transformation matrix with its respective bias $b_{V}$, $W_{out} \in \mathbb{R}^{d_{hid} \times d_{model}}$ performs the out-projection to the model's hidden representation dimensionality with its respective bias $b_{out}$ and $f$ represents the activation/gating function (in the SwiGLU case $f(x) = Swish(x)$):
 \begin{equation}
+    \label{eq:background_ffnn}
     FFN(x) = GLU(x) * W_{out} + b_{out} 
     = \Bigl( f(xV + b_V) \odot xW_{in} + b_{in} \Bigr) * W_{out} + b_{out}
 \end{equation}

@@ -1,0 +1,88 @@
+In this section we will explore the theoretical fundaments of our experiments.
+To do so, we are going to subdivide our analysis into three main sections, where each one is paired with one of the previously identified research questions.
+
+\section{Transformer Visualization}
+
+The first section is dedicated to the exploration of the main features pertaining the proposed interactive tool for the exploration of autoregressive transformer architectures, \emph{InTraVisTo} (Inside Transformer Visualization Tool).
+
+\todo[purple!20]{Start of paper section}
+
+    \emph{InTraVisTo} is an open-source visualization tool depicting the internal computations performed within a Transformer.
+    The tool provides visualizations of both the internal state of the LLM, using a heatmap of decoded embedding vectors for all layer/token positions, and the information flow between components of the LLM, using a Sankey diagram to depict paths through which information accumulates to produce next-token predictions.
+
+\subsection{Decoding States}
+
+    In this context, with the expression \emph{`decoding process'} we refer to the \emph{vocabulary decoding} process, which consists in the conversion of transformers hidden states, represented by vectors in a high-dimensional space, into human-readable content.
+    InTraVisTo enables the decoding and inspection of the main four vectors produced by each layer $\ell$ of a transformer:
+    \begin{itemize}
+        \item $\gbm{\delta}_\textit{att}^{(\ell)}$ represents the output of the attention component.
+        \item ${\gbm{x}'}^{(\ell)}$ is the \emph{intermediate state}, given by the addition of $\gbm{\delta}_\textit{att}^{(\ell)}$ to the residual stream.
+        \item $\gbm{\delta}_\textit{ff}^{(\ell)}$ represents the output of the feedforward network component.
+        \item $\gbm{x}^{(\ell)}$ is the \emph{layer output}, which can be seen as the residual stream with the contributions of both $\gbm{\delta}_\textit{ff}^{(\ell)}$ and $\gbm{\delta}_\textit{att}^{(\ell)}$.
+    \end{itemize}
+
+    Decoding the meaning of hidden state vectors at various depths of a transformer stack is essential for providing an intuition as to how the model is working.
+    We pose our focus on causal models, and assume the state-of-the-art LLM architecture, which involves a continuous \emph{decoration process} where each transformer layer adds the results of its computations to a residual embedding vector from the layer below.
+    InTraVisTo provides a human-interpretable representation of this internal decoration pipeline by decoding each hidden state with a specific decoder and displaying the most likely token from the model's vocabulary.
+
+    As for the decoding process, we compute the probability distribution over the vocabulary space for a hidden state $\gbm{x}$ in the following way:
+    \begin{equation}
+        \label{eq:method_intravisto_decoding}
+        P(\ \cdot \mid \gbm{x}, d_\textit{dec}, n_\textit{norm}) = \mathrm{softmax}\left(N_{n_\textit{norm}}(\gbm{x}) \cdot \gbm{W}_{d_\textit{dec}}\right)
+    \end{equation}
+    Where $\gbm{W}_{d_\textit{dec}}$ represents the matrix of decoder weights according to the user decoder choice $d_\textit{dec}$, and $N_{n_\textit{norm}}$ is used to identify the normalization operation selected by the user through $n_\textit{norm}$:
+    \begin{equation}
+        N_{n_\textit{norm}}(\gbm{x}) = 
+        \label{eq:method_intravisto_normalization}
+        \left\{
+        \begin{array}{cl}
+            \gbm{x} &\ \text{if}\ n_\textit{norm} = \text{`no normalization'} \\
+            \mathcal{N}{(\gbm{x})} &\ \text{if}\ n_\textit{norm} = \text{`normalize only'} \\
+            \gbm{\gamma}_\ell \cdot \mathcal{N}{(\gbm{x})} + \gbm{\beta}_\ell &\ \text{if}\ n_\textit{norm} = \text{`normalize and scale'}
+        \end{array}
+        \right.
+    \end{equation}
+    \todo[cyan]{Fix notation}
+    Considering $\mathcal{N}{(\gbm{x})}$ the normalization component of the model's final normalization layer, being reliant on $\mu$ and $\sigma$ for LayerNorm implementations as defined in \Cref{eq:background_layernorm,eq:background_layernorm_extra}, and $RMS(\gbm{x})$ for RMSNorm implementations as defined in \Cref{eq:background_rmsnorm}
+    Considering $RMS(\gbm{x})$ and $\gbm{\gamma}_\ell$ as the Root Mean Square and scaling weight referencing the Root Mean Square as already defined in \Cref{eq:background_rmsnorm}.
+
+    Two natural choices of decoders to use are the transpose of the \emph{input embedding matrix} $\gbm{W}_\textit{in}^\T$ used by the model to convert tokens to vectors on input, and the \emph{output decoder} $\gbm{W}_\textit{out}$ used upon output within the language modeling head.
+    Some models, like GPT-2 \todo[orange]{cite} and Gemma \todo[orange]{cite} tie these two parameter matrices together during training, while other popular models such as Mistral \todo[orange]{cite} and Llama \todo[orange]{cite} allow these two matrices to differ.
+    This structural weight difference will be analyzed more in depth in later sections, \todo{however}, in our current scope having different weight matrices for embedding and unembedding ($\mathbf{W}_\textit{in}^\T \neq \mathbf{W}_\textit{out}$) implies that earlier layers tend to be much more interpretable when decoded with the input embedding ($\gbm{W}_\textit{in}^\T$) while latter layers are more meaningful if the output decoder ($\gbm{W}_\textit{out}$) is used.
+
+    Previous work has looked to \emph{train specialized decoders} \todo[orange]{cite} for generating meaningful vocabulary distributions at any point in a model, at the cost of introducing a great deal of additional complexity and potential errors.
+    InTraVisTo employs a simpler and elegant alternative, by \emph{interpolating} the input and output decoders based on the depth $\ell\in\{0,\ldots,L\}$ of the model layer we wish to decode, we obtain a `hybrid' decoding weight matrix that acts as an equilibrium point calibrated on the current model depth.
+    We define various alternatives for decoder interpolation mainly focusing on \emph{linear interpolation} and \emph{quadratic interpolation}, defined as follows:
+    \begin{subequations}
+        \begin{align}
+            \gbm{W}_\textit{linear}^{(\ell)} =\left(1-\frac{\ell}{L}\right) \cdot \gbm{W}_\textit{in}^\T + \frac{\ell}{L} \cdot \gbm{W}_\textit{out} \label{eq:method_intravisto_linear-interp} \\
+            \gbm{W}_\textit{quadratic}^{(\ell)} =\frac{{(L - \ell)}^2 \cdot \gbm{W}_\textit{in}^\T + \ell^2 \cdot \gbm{W}_\textit{out}}{L^2 - 2 \ell L + 2\ell^2} \label{eq:method_intravisto_quadratic-interp}
+        \end{align}
+    \end{subequations}
+    \todo[cyan]{check again quadratic interpolation}
+    \todo[cyan]{It is important to note that the term `quadratic interpolation' comprises a small abuse of terminology, as it refers to a specific class of possible quadratic interpolations between the two decoders.
+    More specifically, the contributions given by the joint }
+
+    Any of the matrices $\gbm{W}_\textit{in}$, $\gbm{W}_\textit{out}$, $\gbm{W}_\textit{linear}$ and $\gbm{W}_\textit{quadratic}$ can be used as the decoder matrix $\gbm{W}_{d_\textit{dec}}$ to decode an embedding $\gbm{x}$ into a probability distribution over $\mathcal{V}$ as described in \Cref{eq:method_intravisto_decoding}.
+    As previously mentioned, this behavior selection is controlled by specifying $d_\textit{dec}$.
+    
+    \todo[green]{visualizing decoded tokens + decoding secondary tokens}
+
+    \todo[green]{colored quantities: probability, entropy, ...}
+    Other meaningful quantities that are shown through the InTraVisTo visualization are tied to the actual probabilities as
+    %\paragraph{Other settings} As shown in \Cref{fig:decoders}, the other settings are the "Colour", which stands for what quantity to use to weight the colour grading in the heatmap. The first option is "P(argmax term)" which translates into the probability of the most probable token output from the chosen decoder. It gives an idea of how much the model is sure about the token sampled (greedily). On the other hand, a complementary measure is the entropy of the probability distribution over the vocabulary space, which the higher it is, the more unsure the model is of the next token. The attention and FF contributions checkboxes stand for measuring, respectively, how much the output of the attention block, or Feed Forward, contributes in its summation with the residual stream in the transformer block depicted in \Cref{fig:debug_model}. The purpose of these metrics is to highlight where the main information of that block is coming from, whether from the Attention or Feed Forward component. Lastly, the "Residual Contribution" checkbox in \Cref{fig:decoders} represents the quantity to monitor in order to plot Sankey Diagrams, specifically refers to the colour gradient in each block and whether basing its gradient on the distance in terms of norms of vectors or the Kullback-Leibler divergence between each residual summation and its components (either attention or FF).
+
+\subsection{Flow}
+
+
+\subsection{Injection}
+
+\section{Embedding Analysis}
+
+\subsection{Analogies}
+\subsection{Delta Analogies}
+
+\section{First Order Prediction}
+
+\subsection{Matrix Comparison}
+\subsection{Prediction Comparison}
