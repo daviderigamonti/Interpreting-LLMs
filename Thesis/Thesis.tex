@@ -108,9 +108,12 @@
 %	ADD YOUR DEFINITIONS AND COMMANDS (be careful of existing commands)
 %----------------------------------------------------------------------------
 
-\renewcommand\mkblockquote[4]{\leavevmode\llap{``}\textit{#1#2#3}''#4} % Blockquote quotation marks
 \newcommand{\gbm}[1]{\bm{\mathbf{#1}}} % General Bold Math for both greek and latin letters
+
+\renewcommand\mkblockquote[4]{\leavevmode\llap{``}\textit{#1#2#3}''#4} % Blockquote quotation marks
 \renewcommand{\T}{\mathrm{T}} % Transpose
+
+\setlength{\jot}{12pt} % Vertical equation spacing
 
 % TODO: REMOVE after draft
 \newcommand{\todo}[2][yellow]{\sethlcolor{#1}\hl{#2}} % TODO highlight
