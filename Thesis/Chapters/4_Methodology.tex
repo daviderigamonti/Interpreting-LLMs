@@ -49,7 +49,7 @@ Considering $\mathcal{N}{(\gbm{x})}$ the normalization component of the model's 
 
 Two natural choices of decoders to use are the transpose of the \emph{input embedding matrix} $\gbm{W}_\textit{in}^\T$ used by the model to convert tokens to vectors on input, and the \emph{output decoder} $\gbm{W}_\textit{out}$ used upon output within the language modeling head.
 Some models, like GPT-2 \todo[orange]{cite} and Gemma \todo[orange]{cite} tie these two parameter matrices together during training, while other popular models such as Mistral \todo[orange]{cite} and Llama \todo[orange]{cite} allow these two matrices to differ.
-This structural weight difference will be analyzed more in depth in later sections, \todo{however}, in our current scope having different weight matrices for embedding and unembedding ($\gbm{W}_\textit{in}^\T \neq \gbm{W}_\textit{out}$) implies that earlier layers tend to be much more interpretable when decoded with the input embedding ($\gbm{W}_\textit{in}^\T$) while latter layers are more meaningful if the output decoder ($\gbm{W}_\textit{out}$) is used.
+This structural weight difference will be analyzed more in depth in later sections, \todo{however,} in our current scope having different weight matrices for embedding and unembedding ($\gbm{W}_\textit{in}^\T \neq \gbm{W}_\textit{out}$) implies that earlier layers tend to be much more interpretable when decoded with the input embedding ($\gbm{W}_\textit{in}^\T$) while latter layers are more meaningful if the output decoder ($\gbm{W}_\textit{out}$) is used.
 
 Previous work has looked to \emph{train specialized decoders} \todo[orange]{cite} for generating meaningful vocabulary distributions at any point in a model, at the cost of introducing a great deal of additional complexity and potential errors.
 InTraVisTo employs a simpler and elegant alternative, by \emph{interpolating} the input and output decoders based on the depth $\ell\in\{0,\ldots,L\}$ of the model layer we wish to decode, we obtain a `hybrid' decoding weight matrix that acts as an equilibrium point calibrated on the current model depth.
@@ -86,7 +86,7 @@ To alleviate this issue we propose a novel way to extract secondary representati
 The rationale behind the proposed approach is that hidden representations contain an overlap of concepts in an embedding space that is loosely related to both the input and output embedding spaces.
 As a consequence, we postulate that hidden representations existing in these intermediate embedding spaces should retain the linear properties that have been ascertained to exist in the input and output embedding spaces of transformer architectures \todo[orange]{cite}.
 Iterative decoding exploits these linear properties by performing a sequence of subtractions from the main hidden representation, removing the embedding of the most probable representation during each iteration.
-\begin{algorithm}[H]
+\begin{algorithm}
     \caption{Iterative decoding algorithm}\label{alg:method_intravisto_iter-dec}
     \begin{algorithmic}
         \STATE{$tokens \gets \{\}$}
@@ -118,7 +118,6 @@ While this has only a marginal impact on the decoding process, it can significan
 
 \subsubsection{Decoding Metrics}
 
-\todo[green]{colored quantities: probability, entropy, ...}
 Other meaningful quantities that are shown through the InTraVisTo visualization are tied to the actual probability distributions obtained through the decoding process.
 The first option is \emph{``P(argmax term)''}, which directly translates into the probability of the most probable token output from the chosen decoder.
 It gives an immediate idea of how much the model is sure about the token that has been greedily sampled.
@@ -137,18 +136,18 @@ We devised two main approaches to weigh the contribution of each component to th
 In practice, we compute:
 \begin{equation}
     \left\{
-        \begin{aligned}
-            &{\%}^{(\ell)}_{\textit{norm},\textit{att}} = \frac{\|\gbm{\delta}_\textit{att}^{(\ell)}\|_2}{\|\gbm{\delta}_\textit{att}^{(\ell)}\|_2 + \|\gbm{x}^{(\ell-1)}\|_2} \\
-            &{\%}^{(\ell)}_{\textit{norm},\textit{ff}} = \frac{\|\gbm{\delta}_\textit{ff}^{(\ell)}\|_2}{\|\gbm{\delta}_\textit{ff}^{(\ell)}\|_2 + \|{\gbm{x}'}^{(\ell)}\|_2} \label{eq:method_intravisto_norm-contrib}
-        \end{aligned}
+    \begin{aligned}
+        &{\%}^{(\ell)}_{\textit{norm},\textit{att}} = \frac{\|\gbm{\delta}_\textit{att}^{(\ell)}\|_2}{\|\gbm{\delta}_\textit{att}^{(\ell)}\|_2 + \|\gbm{x}^{(\ell-1)}\|_2} \\
+        &{\%}^{(\ell)}_{\textit{norm},\textit{ff}} = \frac{\|\gbm{\delta}_\textit{ff}^{(\ell)}\|_2}{\|\gbm{\delta}_\textit{ff}^{(\ell)}\|_2 + \|{\gbm{x}'}^{(\ell)}\|_2} \label{eq:method_intravisto_norm-contrib}
+    \end{aligned}
     \right.
 \end{equation}
 \begin{equation}
     \left\{
-        \begin{aligned}
-            &{\%}^{(\ell)}_{\textit{KL},\textit{att}} = \frac{D_{\text{KL}}(\gbm{x}^{(\ell-1)} \parallel {\gbm{x}'}^{(\ell)})}{D_{\text{KL}}(\gbm{\delta}_\textit{att}^{(\ell)} \parallel {\gbm{x}'}^{(\ell)}) + D_{\text{KL}}(\gbm{x}^{(\ell-1)} \parallel {\gbm{x}'}^{(\ell)})} \\
-            &{\%}^{(\ell)}_{\textit{KL},\textit{ff}} = \frac{D_{\text{KL}}({\gbm{x}'}^{(\ell)} \parallel \gbm{x}^{(\ell)})}{D_{\text{KL}}(\gbm{\delta}_\textit{ff}^{(\ell)} \parallel \gbm{x}^{(\ell)}) + D_{\text{KL}}({\gbm{x}'}^{(\ell)} \parallel \gbm{x}^{(\ell)})} \label{eq:method_intravisto_kl-contrib}
-        \end{aligned}
+    \begin{aligned}
+        &{\%}^{(\ell)}_{\textit{KL},\textit{att}} = \frac{D_{\text{KL}}(\gbm{x}^{(\ell-1)} \parallel {\gbm{x}'}^{(\ell)})}{D_{\text{KL}}(\gbm{\delta}_\textit{att}^{(\ell)} \parallel {\gbm{x}'}^{(\ell)}) + D_{\text{KL}}(\gbm{x}^{(\ell-1)} \parallel {\gbm{x}'}^{(\ell)})} \\
+        &{\%}^{(\ell)}_{\textit{KL},\textit{ff}} = \frac{D_{\text{KL}}({\gbm{x}'}^{(\ell)} \parallel \gbm{x}^{(\ell)})}{D_{\text{KL}}(\gbm{\delta}_\textit{ff}^{(\ell)} \parallel \gbm{x}^{(\ell)}) + D_{\text{KL}}({\gbm{x}'}^{(\ell)} \parallel \gbm{x}^{(\ell)})} \label{eq:method_intravisto_kl-contrib}
+    \end{aligned}
     \right.
 \end{equation}
 Where $D_{\text{KL}}$ is the Kullback-Liebler divergence between two distributions, and the notation of hidden states (such as $\gbm{x}^{(\ell)}$, $\gbm{\delta}_\textit{att}^{(\ell)}$, \ldots) references the distinctions made at \Cref{ssec:method_intravisto_decoding}.
@@ -156,40 +155,85 @@ It is possible to note that the contributions computed through norms and KL dive
 
 \subsection{Flow}
 
-%The second visualisation introduced in InTraVisTo is a Sankey diagram that aims to depict the information flow through the transformer network (\Cref{fig:sankey}). Edges in the diagram indicate the amount of influence that the nodes have on each other and show how the information accumulates from the bottom of the diagram to the top in order to generate the final prediction. The flow snakes its way through self-attention nodes (in green), which combine information from attended tokens in the level below, feed-forward networks nodes (in pink), which introduce information based on detected patterns in the state vector, and aggregation nodes (in blue), where updates from the other two types of nodes are added to the residual vector. A complete Sankey diagram containing 32 layers of Transformer blocks would be very tall, so only the last 5 layers of the network are shown in \Cref{fig:sankey}.
+The second vizualisation introduced in InTraVisTo is a Sankey diagram \todo[orange]{cite} that aims to depict the information flow through the transformer network.
+Edges in the diagram indicate the amount of influence that the nodes have on each other and show how the information accumulates from the bottom of the diagram to the top in order to generate the final prediction.
+The flow snakes its way through self-attention nodes, which combine information from attended tokens in the level below, feed-forward networks nodes, which introduce information based on detected patterns in the state vector, and aggregation nodes, where updates from the other two types of nodes are added to the residual vector.
 
-%In order to calculate the information flow, an attribution algorithm works backwards from the top layers of the network, recursively apportioning the incident flow from the components below based on their relative contributions to the internal state vector above (using the Equations~\ref{eq:mhacontribution} \&~\ref{eq:ffnncontribution}). The calculations for the feed-forward, intermediate aggregation and attention nodes are then simply:
-%\begin{eqnarray}
-%    \textit{flow}_{\textit{ffnn}}^{(l,j)} &=& {\%}_{\textit{ffnn}}^{(l,j)}*\textit{flow}_{x}^{(l,j)}\\
-%    \textit{flow}_{x'}^{(l,j)} %&=& \textit{flow}_{\textit{ffnn}}^{(l,j)}  + ( 1 - {\%}_{\textit{ffnn}}^{(l,j)})* \textit{flow}_{\textit{x}}^{(l,j)} \nonumber \\
-%                               &=& \textit{flow}_{x}^{(l,j)}\\
-%    \textit{flow}_{\textit{att}}^{(l,j)} &=& {\%}_{\textit{att}}^{(l,j)}*\textit{flow}_{x'}^{(l,j)}
-%\end{eqnarray}
-%Computing the outgoing flow from the aggregation node at the next layer down ($l\!-\!1$), requires combining all outgoing contributions to subsequent self-attention nodes as well as the residual flow:
-%\begin{eqnarray}
-%    \textit{flow}_{x}^{(l-1,j)} 
-%    &=& \sum_{i\in[j,k]}\overline{\textit{attend}}^{(l,i)}[j]*\textit{flow}_{\textit{att}}^{(l,i)} 
-%    \nonumber \\
-%    && + ( 1 - {\%}_{\textit{att}}^{(l,j)})* \textit{flow}_{\textit{x'}}^{(l,j)} 
-%\end{eqnarray}
-%Where $\overline{\textit{attend}}^{(l,i)}[j]$ denotes the average attention placed on position $j$ by the attention heads at level $l$, position $i$.
+In order to calculate the information flow, an attribution algorithm works backwards from the top layers of the network, recursively apportioning the incident flow from the components below based on their relative contributions to the internal state vector above using \Cref{eq:method_intravisto_norm-contrib,eq:method_intravisto_kl-contrib}.
+The flow's constantly updating state can be defined in a way that reflects the recursive computations performed by InTraVisTo:
+\begin{equation}
+    \left\{
+    \begin{alignedat}{2}
+        &\textit{flow}_{\textit{ffnn}}^{(\ell,j)} &&= {\%}_{\textit{ffnn}}^{(\ell,j)} \cdot \textit{flow}_{x}^{(\ell,j)} \\
+        &\textit{flow}_{x'}^{(\ell,j)} &&= \textit{flow}_{\textit{ffnn}}^{(\ell,j)} + (1 - {\%}_{\textit{ffnn}}^{(\ell,j)}) \cdot \textit{flow}_{\textit{x}}^{(\ell,j)} = \textit{flow}_{\textit{x}}^{(\ell,j)} \\
+        &\textit{flow}_{\textit{att}}^{(\ell,j)} &&= {\%}_{\textit{att}}^{(\ell,j)} \cdot \textit{flow}_{x'}^{(\ell,j)} = {\%}_{\textit{att}}^{(\ell,j)} \cdot \textit{flow}_{x}^{(\ell,j)} \\
+        &\textit{flow}_{x}^{(\ell-1,j)} &&= \sum_{i\in\{j,\ldots,k\}}{\overline{\textit{attend}{\,}}^{(\ell,i)}\bigl[j\bigr]}\cdot\textit{flow}_{\textit{att}}^{(\ell,i)} + ( 1 - {\%}_{\textit{att}}^{(\ell,j)})\cdot \textit{flow}_{\textit{x'}}^{(\ell,j)} \\
+            &\quad &&= \biggl(\Bigl(\sum_{i\in\{j,\ldots,k\}}\overline{\textit{attend}{\,}}^{(\ell,i)}\bigl[j\bigr] - 1\Bigr)\cdot{\%}_{\textit{att}}^{(\ell,j)} + 1\biggr) \cdot \textit{flow}_{\textit{x}}^{(\ell,j)}
+    \end{alignedat}
+    \right.
+\end{equation}
+Where $\overline{\textit{attend}{\,}}^{(\ell,i)}$ denotes the average attention placed on token $j$ by the attention heads present at position $i$ of layer $\ell$.
+This quantity is used to compute all outgoing contributions of a token $j$ to subsequent self-attention nodes, thus it is computed considering tokens between $j$ and $k$ as the attention sources, where $k$ denotes the index of the last token in the generated sentence.
 
-    %To plot this information flow we use a Sankey diagram.
-    %With the Sankey diagram we visualise the flow dividing it across the different nodes (the Transformer layers) and recursively computing the contribution of each previous node (input embedding) to each subsequent node (output embeddings) starting from the very last node (the last embeddings passed to the language modelling head). We show an example in \Cref{fig:sankey}, where we can see how the contributions different embeddings at different layers accumulates up to the embedding to decode.
-
-%In the visualisation we control the width of the accumulated flow to track the amount of information. In self-attention nodes, we divide the flow according to attention weights and we scale it according to the relative norm of $\bm{\delta}_\textit{att}^{(l)}$ and ${\mathbf{x}'}^{(l)}$, as described by \Cref{eq:mhacontribution}. In feed-forward nodes we divide the flow according to the relative norm of $\bm{\delta}_\textit{ff}^{(l)}$ and $\mathbf{x}^{(l)}$, as described by \Cref{eq:mhacontribution}. 
-
-%The aim of the diagram is to visualise the relative contributions of the self-attention and feed-forward networks to the residual connection between layers, and thus allow the user to track down the sources of the major contributions to the prediction of the output at the top of the diagram.
-
-%As an alternative to the attribution of importance based on the relative size of the vectors (given by Equations~\ref{eq:mhacontribution} \& ~\ref{eq:ffnncontribution}), we consider also enabling the scaling of the flows according to the similarity between the resulting term distributions, whereby similar distributions are apportioned more weight since they are more likely to have been the ``source of the information'' flowing upwards in the network. The \emph{KL-Divergence} is used to compute the similarity between the distributions on both branches and then normalised to be used as a node contribution weight. 
-    %{\color{red}NEEDS EDITING: To do this, the \emph{KL-Divergence} of the distributions obtained decoding the embedding in output to the self-attention or feed-forward nodes from the distribution obtained decoding the embedding after the sum to the residual and the KL-Divergence of the distributions obtained decoding the residual before adding the contribution of the node from the distribution obtained decoding the embedding after the sum of the node contribution to the residual.We compute the proportion normalising on the sum of the two KL-Divergences.}
-
-%Oftentimes, the complexity of the attention patterns can make the Sankey diagram difficult to read. To cope with this problem, we enable the filtering of the edges to show only the top $k$ most significant contributions to the attention, discarding the remaining ones, making it easier to visually track the incoming information in the final embedding.
-Finally, we decorated the nodes showing the $k$ most probable tokens obtained decoding the current embedding (to observe the neighborhood of the embedding) and the $k$ most probable tokens obtained difference between the output embedding and the input embedding to that node (to observe the information being added to the flow by that node).
+Another type of information shown in the Sankey diagram concerns the computation of differences between residual representations, with the goal of visualizing the flow's `evolution' throughout the model's layers.
+To achieve this objective we devised two main approaches that we implemented to explore this \todo{visualization dimension}.
+The first approach consists \todo{of} computing the KL divergence between the probability distributions of hidden states belonging to each combination of component outputs and the residual stream state.
+In practice, we compute the following quantity for five different state combinations:
+\begin{equation}
+    \label{eq:method_intravisto_kl-diff}
+    \begin{gathered}
+        {\textit{kl\_diff}{\,}\strut}_{\gbm{x}_a, \gbm{x}_b}^{(\ell)} = D_{\text{KL}}(P_{\gbm{x}_b} \parallel P_{\gbm{x}_a}) \\
+        \text{for} \ (\gbm{x}_a, \gbm{x}_b) \in \Bigl\{
+            (\gbm{x}^{(\ell-1)}, {\gbm{x}'}^{(\ell)}), 
+            (\gbm{\delta}_\textit{att}^{(\ell)}, {\gbm{x}'}^{(\ell)}), 
+            ({\gbm{x}'}^{(\ell)}, \gbm{\delta}_\textit{ffnn}^{(\ell)}), 
+            ({\gbm{x}'}^{(\ell)}, \gbm{x}^{(\ell)}), 
+            (\gbm{\delta}_\textit{ffnn}^{(\ell)}, \gbm{x}^{(\ell)})
+        \Bigr\}
+    \end{gathered}
+\end{equation}
+\todo[cyan]{check KL order}
+Where $P_{\gbm{x}} = P(\ \cdot \mid \gbm{x}, d_\textit{dec}, n_\textit{norm})$ as computed in \Cref{eq:method_intravisto_decoding}, $D_{\text{KL}}$ is the Kullback-Liebler divergence between two distributions, and the notation of hidden states (such as $\gbm{x}^{(\ell)}$, $\gbm{\delta}_\textit{att}^{(\ell)}$, \ldots) references the distinctions made at \Cref{ssec:method_intravisto_decoding}.
+Whereas, the second approach compares the residual stream states at the input and output location for each layer in the transformer stack.
+It does so by calculating the difference between the two hidden states, and performing the decoding operation defined in \Cref{eq:method_intravisto_decoding} as to generate primary and secondary tokens for the resulting quantity.
+This is showcased in the following computation:
+\begin{equation}
+    \label{eq:method_intravisto_state-diff}
+    {\textit{state\_diff}{\,}\strut}^{(\ell)} = P(\ \cdot \mid \gbm{x}^{(\ell)} - \gbm{x}^{(\ell - 1)}, d_\textit{dec}, n_\textit{norm})
+\end{equation}
+It is possible to notice how this last approach could suffer from the same weaknesses that have been identified in iterative decoding as shown in \Cref{alg:method_intravisto_iter-dec}, due to the presence of an operation (difference) which assumes that its operands exist in a shared embedding space with linear properties.
+Although this is true, the minimal distance between the hidden states used to compute the difference makes the presented issue have minimal impact on the actual decoding result.
 
 \subsection{Injection}
 
-\section{Embedding Analysis}
+Lastly, we also include the possibility to perform \emph{injections} in InTraVisTo.
+\emph{Injections} are an instance of \emph{activation patching} \todo[orange]{cite} utilized in a context that is not strictly tied to a formal \emph{causal intervention} framework \todo[orange]{cite} .
+In fact, the main purpose of injections is to give the user the possibility to explore the model predictions in an interactive way, making it possible to change outputs of components and parts of the residual stream in order to unveil interesting patterns and properties.
+
+Being a type of intervention, it is possible to express an injection utilizing the \emph{do-operator} as defined by \todo[orange]{cite}.
+Assuming that we would like to inject an embedding $\gbm{\hat x}$ into the hidden state obtained as a result of the transformation $f_c^{(\ell)}$ of a component $c^{(\ell)}$ during the $i$-th token of the model's forward pass expressed as $f$, we can notate our injection utilizing the do-operator as:
+\begin{equation}
+    \label{eq:method_intravisto_injection}
+    f\Bigl(\gbm{x}_i \, \Big| \, \text{do}\bigl(f_c^{(\ell)}(\gbm{x}_i) = \gbm{\hat x}\bigr)\Bigr)
+    \; \text{where}\ \gbm{\hat x} = \textit{encode}(\textit{id}_{\textit{inject}} \,|\, n_\textit{norm}, d_{dec})
+\end{equation}
+As previously noted for similar approaches, it is important to specify that there might be some problems with the nature of $\gbm{\hat x}$, as it is a representation that is generated from an encoded user-defined textual input ${id}_{\textit{inject}}$, which undergoes an embedding and normalization process utilizing $\gbm{W}_{d_{dec}}$ and $N_{n_\textit{norm}}$ following \Cref{eq:method_intravisto_linear-interp,eq:method_intravisto_quadratic-interp,eq:method_intravisto_normalization}.
+This results in the injection of a `clean' embedding that is unexpected by the model, \todo{and thus} may destabilize the generation process.
+In most causal intervention scenarios, this problem is not present when performing activation patching using counterfactual examples, due to the fact that patches are generated utilizing resampling or averaging approaches \todo[orange]{cite}.
+We choose to avoid these techniques since our main focus is directed towards giving the user complete control over the injected information, which is achieved by directly inserting the wanted embedding vector in the hidden state without letting the model elaborate it to create a plausible representation.
+
+Another noteworthy step in the injection process is the actual encoding of the injected embedding, since the formula used to compute $\gbm{\hat x}$ that has been broadly mentioned in \Cref{eq:method_intravisto_injection} is used considering an injection input that is composed by a single token.
+However, InTraVisTo's interface offers the possibility of injecting an embedding representation that contains more than one token, thus we would like to generalize the aforementioned formula to actually handle multiple tokens at once.
+\todo[cyan]{check if true} This behavior is modeled by averaging the embedding representations of all tokens that compose the sentence, always under the assumption of a linear embedding space \todo[orange]{cite}. \todo[green]{remarks for sentence embedding?}
+Considering a total of $id_1,\ldots,id_t$ tokens to be encoded, this averaging operation can be represented in the following way:
+\begin{equation}
+    \label{eq:method_intravisto_emb-avg}
+    \gbm{\hat x} = N_{n_\textit{norm}}\Bigl(\frac{1}{t} \sum_{i=1}^{t}{{(\gbm{W}_{d_{dec}})}_{\textit{id}_{i},\cdot}}\Bigr)
+\end{equation}
+The soundness of this approach, including possible variants based on the same or different assumptions will be analyzed more in depth in the next section (\Cref{sec:method_embeddings}).
+
+
+\section{Embedding Analysis}\label{sec:method_embeddings}
 
 \subsection{Analogies}
 \subsection{Delta Analogies}
