@@ -230,13 +230,92 @@ Considering a total of $id_1,\ldots,id_t$ tokens to be encoded, this averaging o
     \label{eq:method_intravisto_emb-avg}
     \gbm{\hat x} = N_{n_\textit{norm}}\Bigl(\frac{1}{t} \sum_{i=1}^{t}{{(\gbm{W}_{d_{dec}})}_{\textit{id}_{i},\cdot}}\Bigr)
 \end{equation}
-The soundness of this approach, including possible variants based on the same or different assumptions will be analyzed more in depth in the next section (\Cref{sec:method_embeddings}).
+The soundness of this approach, including possible variants based on the same or different assumptions, will be analyzed more in depth in the next section (\Cref{sec:method_embeddings}).
 
 
 \section{Embedding Analysis}\label{sec:method_embeddings}
 
-\subsection{Analogies}
-\subsection{Delta Analogies}
+This second section is geared towards understanding the extent to which text embeddings still retain some degree of semantic factuality in LLMs (Large Language Models).
+Early transformer models have been noted for their text embedding representations possessing interesting spatial properties deeply correlated with the semantic properties of the embedded words \todo[orange]{cite DBLP:journals/corr/abs-2009-11226,DBLP:conf/icml/AllenH19}.
+However, with the emergence of newer models that are larger and more intricate than ever before, our objective is to assess whether the semantic properties inherently tied with the geometry of embeddings still hold true.
+
+\subsection{Word Encoding}
+
+\todo[green]{describe section}
+
+\subsubsection{Distance Metrics}
+
+To this end, we define two main distance metrics that will be used to compare embedding vectors in their space:
+\begin{equation}
+    d_{\textit{dist}}(\gbm{x}, \gbm{y}) = 
+    \label{eq:method_embeddings_distance}
+    \left\{
+    \begin{array}{cl}
+        \sqrt{\sum_{i=1}^{n}{{(x_i - y_i)}^2}} &\ \text{if}\ \textit{dist} = \text{`euclidean'} \\
+        1 - \frac{\sum_{i=1}^{n}{x_i y_i}}{\sqrt{\sum_{i=1}^{n}{x_i^2}} \cdot \sqrt{\sum_{i=1}^{n}{y_i^2}}} &\ \text{if}\ \textit{dist} = \text{`cosine'}
+    \end{array}
+    \right.
+\end{equation}
+\todo[cyan]{check dimension}
+The \emph{cosine similarity/distance} metric is the most immediate and widely used approach to compare embeddings since it utilizes the angle between two vectors to determine their similarity, its inherent normalization means that the magnitude of the vectors is not taken into consideration and only their directionality is compared.
+On the other hand, the \emph{euclidean distance} is a less common distance metric that we decided to include to provide an alternative interpretation option, which can provide a different geometric perspective over the embedding space.
+Unfortunately, in order to make the euclidean distance an effective metric we need to normalize it separately.
+
+\subsubsection{Normalization}
+
+On the topic of normalization, we also include the possibility of \emph{`pre-normalizing'} the embedding space before performing the experiments.
+This practice should help improve the comparability of embedding vectors, enhancing the results of linear operations in the embedding space.
+Although it is also possible for it to have detrimental effects in some specific scenarios, mainly due to the intrinsic nonlinearity of the normalization operation.
+In practice, the `pre-normalization' step includes the normalization of all embedding vectors using the euclidean norm as follows:
+\begin{equation}
+    \label{eq:method_embeddings_normalization}
+    \gbm{W}_{\textit{emb}} = (\bar w_{ij})_{\textit{vocab} \times n}
+    \ \ \text{where}\ \bar w_{ij} = \frac{w_{ij}}{{\| w_{ij} \|}_2}
+\end{equation}
+\todo[cyan]{check dimension}
+
+\subsubsection{Multi-token Words}
+
+\todo[green]{handling multi-token words}
+%Handling multi-token words is a vital aspect of our experiment.
+%Therefore we devised three main strategies to address multi-token words when they are fed into the embedding as inputs ($w_a$, $w_b$ or $w_d$), along with three additional strategies to handle them as valid outputs ($w_c$) of analogies.
+%Strategies applicable to both cases involve considering only the first token of a multi-token word (this causes results to be slightly worse on average, but the impact seems to be negligible in most cases) and possibly reducing the dataset by exclusively considering analogies composed of single-token words.
+%For multi-token words as inputs, other approaches include calculating the average or the sum over all the embedded tokens that form the multi-token word.
+%Conversely, for output multi-token words, we subdivide them into their token components, to then consider all tokens as targets for assessing the top-$k$ accuracy of an analogy result in the embedding space.
+
+\subsection{Word Analogies}
+
+The first step \todo{towards the direction of this approach} was the experimentation on a \emph{word analogy task}, as already illustrated in \citet{mikolov2013}.
+\todo[green]{describe section}
+
+\subsubsection{Analogy Computation}
+
+\todo[green]{classic analogies}
+As far as the actual word analogy computation is concerned \todo[green]{compute closest words}
+\begin{equation}
+    \begin{gathered}
+        closest = \arg\min {\Bigl\{ d_{\textit{dist}}\bigl(\tilde w, \textit{encode}(v_{id})\bigr) \ |\ v_{id} \in \mathcal{V} \Bigr\}} \\ \label{eq:method_embeddings_analogy}
+        \tilde w = \textit{analogy}(w_1, w_2, w_3, w_4)
+    \end{gathered}
+\end{equation}
+
+\todo[green]{delta analogy}
+
+%To validate these claims we have chosen the classic word analogy task \cite{DBLP:conf/icml/AllenH19,DBLP:conf/icml/AllenH19}, which given four words ($w_a$, $w_{b}$, $w_c$ and $w_d$) that follow an analogy relationship of the form $w_a : w_b = w_c : w_d$, by leveraging the linear properties inherent in text embeddings we anticipate the capability to deduce any word within the analogy if provided with the remaining three.
+%There exist multiple ways to approach this problem \cite{DBLP:conf/conll/LevyG14,DBLP:conf/coling/DrozdGM16}, our primary technique involves performing additions and subtractions in order to retrieve the missing element:
+%\begin{center}
+%  \begin{math}
+%    emb(w_a) - emb(w_b) + emb(w_d) \approx emb(w_c)
+%\end{math}  
+%\end{center}
+%This specific experiment allows us to elaborate on the degree of factuality and semantic information stored within the embeddings of an LLM.
+
+\subsubsection{Analogy Evaluation}
+
+\todo[green]{analogy evaluation metrics}
+
+%To assess the models' performance in this particular task we opted to show the top-$k$ accuracy for each analogy, that is the accuracy with which the embeddings of a model can produce an object in the latent embedding space, with the correct answer to the analogy inside its $k$ closest elements.
+%Consequently, only embedded elements that correspond to actual tokens within the model's vocabulary are considered when seeking the closest elements of an object.
 
 \section{First Order Prediction}
 
