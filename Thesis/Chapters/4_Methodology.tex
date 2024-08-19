@@ -155,7 +155,7 @@ It is possible to note that the contributions computed through norms and KL dive
 
 \subsection{Flow}
 
-The second vizualisation introduced in InTraVisTo is a Sankey diagram \todo[orange]{cite} that aims to depict the information flow through the transformer network.
+The second visualization introduced in InTraVisTo is a Sankey diagram \todo[orange]{cite} that aims to depict the information flow through the transformer network.
 Edges in the diagram indicate the amount of influence that the nodes have on each other and show how the information accumulates from the bottom of the diagram to the top in order to generate the final prediction.
 The flow snakes its way through self-attention nodes, which combine information from attended tokens in the level below, feed-forward networks nodes, which introduce information based on detected patterns in the state vector, and aggregation nodes, where updates from the other two types of nodes are added to the residual vector.
 
@@ -204,7 +204,7 @@ This is showcased in the following computation:
 It is possible to notice how this last approach could suffer from the same weaknesses that have been identified in iterative decoding as shown in \Cref{alg:method_intravisto_iter-dec}, due to the presence of an operation (difference) which assumes that its operands exist in a shared embedding space with linear properties.
 Although this is true, the minimal distance between the hidden states used to compute the difference makes the presented issue have minimal impact on the actual decoding result.
 
-\subsection{Injection}
+\subsection{Injection}\label{ssec:method_intravisto_injection}
 
 Lastly, we also include the possibility to perform \emph{injections} in InTraVisTo.
 \emph{Injections} are an instance of \emph{activation patching} \todo[orange]{cite} utilized in a context that is not strictly tied to a formal \emph{causal intervention} framework \todo[orange]{cite} .
@@ -241,10 +241,12 @@ However, with the emergence of newer models that are larger and more intricate t
 
 \subsection{Word Encoding}
 
-\todo[green]{describe section}
+The first step for performing experiments on embedding representations, is defining a set of operations that make the encoding and comparison of embedding vectors possible.
+In the following section we will illustrate the theoretical basis of the preliminary steps that were used to set up the actual experiments.
 
 \subsubsection{Distance Metrics}
 
+In order to compare and find `close' embeddings, we need to formalize a similarity measure between two embeddings. 
 To this end, we define two main distance metrics that will be used to compare embedding vectors in their space:
 \begin{equation}
     d_{\textit{dist}}(\gbm{x}, \gbm{y}) = 
@@ -258,7 +260,7 @@ To this end, we define two main distance metrics that will be used to compare em
 \end{equation}
 \todo[cyan]{check dimension}
 The \emph{cosine similarity/distance} metric is the most immediate and widely used approach to compare embeddings since it utilizes the angle between two vectors to determine their similarity, its inherent normalization means that the magnitude of the vectors is not taken into consideration and only their directionality is compared.
-On the other hand, the \emph{euclidean distance} is a less common distance metric that we decided to include to provide an alternative interpretation option, which can provide a different geometric perspective over the embedding space.
+On the other hand, the \emph{euclidean distance} is a less common distance metric that we decided to include to lay out an alternate interpretation option, which can provide a different geometric perspective over the embedding space.
 Unfortunately, in order to make the euclidean distance an effective metric we need to normalize it separately.
 
 \subsubsection{Normalization}
@@ -276,39 +278,100 @@ In practice, the `pre-normalization' step includes the normalization of all embe
 
 \subsubsection{Multi-token Words}
 
-\todo[green]{handling multi-token words}
-%Handling multi-token words is a vital aspect of our experiment.
-%Therefore we devised three main strategies to address multi-token words when they are fed into the embedding as inputs ($w_a$, $w_b$ or $w_d$), along with three additional strategies to handle them as valid outputs ($w_c$) of analogies.
-%Strategies applicable to both cases involve considering only the first token of a multi-token word (this causes results to be slightly worse on average, but the impact seems to be negligible in most cases) and possibly reducing the dataset by exclusively considering analogies composed of single-token words.
-%For multi-token words as inputs, other approaches include calculating the average or the sum over all the embedded tokens that form the multi-token word.
-%Conversely, for output multi-token words, we subdivide them into their token components, to then consider all tokens as targets for assessing the top-$k$ accuracy of an analogy result in the embedding space.
+Handling multi-token words is a vital aspect of our analysis, as we may encounter words that are split into multiple sub-word tokens by the model's tokenization process.
+As we will see later in \Cref{ssec:method_embeddings_analogies}, our main experiments for this section will concern the evaluation of analogies and similarities between word groups.
+Therefore, we devised three main strategies to address multi-token words when they are fed into the embedding as inputs of analogies, along with two additional strategies to handle them as valid outputs of analogies.
+Strategies applicable to both cases involve considering only the first token of a multi-token word (this causes results to be slightly worse on average, but the impact seems to be negligible in most cases).
+For multi-token words as inputs, other approaches include calculating the average as already done in \Cref{eq:method_intravisto_emb-avg} or the sum over all the embedded tokens that form the multi-token word.
+Conversely, for output multi-token words, we subdivide them into their token components, to then consider all tokens as targets for assessing the top-$k$ accuracy of an analogy result in the embedding space.
+Formalizing the previously identified alternatives we obtain two $\textit{encode}$ functions controlled by $\textit{enc\_strat}$ for a series of $t$ tokens obtained from a word $w$:
+\begin{equation}
+    \label{eq:method_embeddings_multitok-in}
+    {\textit{encode}}_{\textit{enc\_strat}}^{in}(w) = 
+    \left\{
+    \begin{array}{cl}
+        \gbm{e}_1^w &\ \text{if}\ \textit{enc\_strat} = \text{`first\_only'} \\
+        \frac{1}{t}\sum_{i=1}^{t}{\gbm{e}_i^w} &\ \text{if}\ \textit{enc\_strat} = \text{`average'} \\
+        \sum_{i=1}^{t}{\gbm{e}_i^w} &\ \text{if}\ \textit{enc\_strat} = \text{`sum'}
+    \end{array}
+    \right.
+\end{equation}
+\begin{equation}
+    \label{eq:method_embeddings_multitok-out}
+    {\textit{encode}}_{\textit{enc\_strat}}^{out}(w) = 
+    \left\{
+    \begin{array}{cl}
+        \{ tok_1^w \} &\ \text{if}\ \textit{enc\_strat} = \text{`first\_only'} \\
+        \{ tok_1^w, \ldots, tok_t^w \} &\ \text{if}\ \textit{enc\_strat} = \text{`subdivide'}
+    \end{array}
+    \right.
+\end{equation}
+\vspace{0.25em}
+\begin{equation*}
+    \text{where}\  tok_1^w,\ldots,tok_t^w = \textit{tokenize}(w)
+    ,\ \ \gbm{e}_1^w, \ldots, \gbm{e}_{t}^w = \Bigl\{ {{(\gbm{W}_{emb})}_{\textit{tok}_{i},\cdot}} \ |\ \forall tok_i \in \textit{tokenize}(w) \Bigr\}
+\end{equation*}
+One important distinction between the $\textit{encode}$ functions for input and output is the type of \todo{data} returned.
+When performing input encoding we are interested in obtaining a single aggregated embedded representation of the target word, whereas, when encoding a word to be checked against the outputs of our experiment we need a set of token identifiers in the vocabulary space.
+The first preliminary transformations performed on $w$ is tokenization, modeled as the $\textit{tokenize}$ function, and utilizing the model's tokenizer to obtain a set of token identifiers $tok_1^w,\ldots,tok_t^w$ from $w$.
+After tokenization, tokens get transformed into embedding vectors $\gbm{e}_1^w, \ldots, \gbm{e}_{t}^w$ by selecting the corresponding row from the embedding matrix $\gbm{W}_{emb}$.
+The role of the embedding matrix $\gbm{W}_{emb}$ can be fulfilled by either the input and output embedding matrices, as already seen previously.
 
-\subsection{Word Analogies}
+As anticipated before in \Cref{ssec:method_intravisto_injection}, the main choice of computing multi-token representations using linear operations comes from the supposed preservation of linear features in the embedding space \todo[orange]{cite}.
+Additionally, \todo[green]{add}.
 
-The first step \todo{towards the direction of this approach} was the experimentation on a \emph{word analogy task}, as already illustrated in \citet{mikolov2013}.
-\todo[green]{describe section}
+Another approach that will be used to completely set aside the issues tied with multi-token words consists in reducing the dataset to exclusively consider analogies composed of single-token words, at the cost of less overall valid samples
+This will be discussed more in depth in the section dedicated to the dataset of the experiment \todo[orange]{insert reference}.
+
+\subsection{Word Analogies}\label{ssec:method_embeddings_analogies}
+
+We wish to establish if geometric relationships can still be modeled inside the input or output embedding space of recent LLM architectures.
+The first step \todo{towards the direction of this approach} was the direct experimentation on \emph{word analogy tasks}, as already illustrated in \citet{mikolov2013}.
+Solving word analogies showcases the ability of an embedding space to model the semantics of words in a relatively consistent way, implying the existence of embedding dimensions with associated meanings (even if overlapping or under superposition as mentioned by \todo[orange]{cite}), which is not necessarily an expected feature of language models on a large scale.
 
 \subsubsection{Analogy Computation}
 
-\todo[green]{classic analogies}
-As far as the actual word analogy computation is concerned \todo[green]{compute closest words}
+\todo[green]{maybe slightly expand this text}
+As far as the actual word analogy computation is concerned, given 4 words $\{w_1, w_2, w_3, w_4\}$ set up as an analogy of the type $`w_1 : w_2 = w_3 : w_4'$, we can formalize it as follows:
 \begin{equation}
+    \label{eq:method_embeddings_analogy}
     \begin{gathered}
-        closest = \arg\min {\Bigl\{ d_{\textit{dist}}\bigl(\tilde w, \textit{encode}(v_{id})\bigr) \ |\ v_{id} \in \mathcal{V} \Bigr\}} \\ \label{eq:method_embeddings_analogy}
+        closest = \arg\min {\Bigl\{ d_{\textit{dist}}\bigl(\tilde w, \textit{encode}^{\textit{emb}}(v_{id})\bigr) \ |\ \forall v_{id} \in \mathcal{V} \Bigr\}} \\
         \tilde w = \textit{analogy}(w_1, w_2, w_3, w_4)
     \end{gathered}
 \end{equation}
+Where $d_{\textit{dist}}$ is the chosen distance metric as illustrated in \Cref{eq:method_embeddings_distance}, and $\textit{encode}^{\textit{emb}}$ refers to a simple encoding of a single token $v_{id} \in \mathcal{V}$ using the embedding matrix $\gbm{W}_{\textit{emb}}$.
+On the other hand, \emph{`closest'} indicates the returned value, which is the actual token identifier of the closest embedding (of a word present in vocabulary $\mathcal{V}$) to the computed result of the word analogy.
+\todo[green]{possibility of using top-k instead of closest}
+Furthermore, the $\textit{analogy}$ function expresses the combination of words $\{w_1, w_2, w_3, w_4\}$ that composes the logic relationship of the word analogy.
+Due to the fact that it is possible to define multiple analogy test cases from a single combination of words, the definitions of the actual \emph{analogy function} implementations slightly fall out of the scope of this section, while keeping in mind that they will be discussed more in depth inside the actual experimental setup section \todo[orange]{reference}.
+Thus, for simplicity, we can assume to \todo{follow} the \todo{renowed} $`king - man + woman \approx queen'$ example from \citet{mikolov2013}, obtaining:
+\begin{equation}
+    \label{eq:method_embeddings_analogy-function}
+    \begin{aligned}
+        \tilde w &= \textit{analogy}(w_1, w_2, w_3, w_4) \\
+        &= {\textit{encode}}_{\textit{enc\_strat}}^{in}(w_1) - {\textit{encode}}_{\textit{enc\_strat}}^{in}(w_2) + {\textit{encode}}_{\textit{enc\_strat}}^{in}(w_4) \\
+        &\color{gray} \approx {\textit{encode}}_{\textit{enc\_strat}}^{out}(w_3) 
+    \end{aligned}
+\end{equation}
+Where the ${\textit{encode}}_{\textit{enc\_strat}}$ functions follows the definitions laid out in \Cref{eq:method_embeddings_multitok-in,eq:method_embeddings_multitok-out}.
 
-\todo[green]{delta analogy}
-
-%To validate these claims we have chosen the classic word analogy task \cite{DBLP:conf/icml/AllenH19,DBLP:conf/icml/AllenH19}, which given four words ($w_a$, $w_{b}$, $w_c$ and $w_d$) that follow an analogy relationship of the form $w_a : w_b = w_c : w_d$, by leveraging the linear properties inherent in text embeddings we anticipate the capability to deduce any word within the analogy if provided with the remaining three.
-%There exist multiple ways to approach this problem \cite{DBLP:conf/conll/LevyG14,DBLP:conf/coling/DrozdGM16}, our primary technique involves performing additions and subtractions in order to retrieve the missing element:
-%\begin{center}
-%  \begin{math}
-%    emb(w_a) - emb(w_b) + emb(w_d) \approx emb(w_c)
-%\end{math}  
-%\end{center}
-%This specific experiment allows us to elaborate on the degree of factuality and semantic information stored within the embeddings of an LLM.
+Another perspective over the classic word analogies task consists in the ``delta analogies'' task where the premise is similar, and the input words are the same.
+However, we perform a further subdivision of the dataset, assigning each word analogy into a bigger group based on the actual relationship that is modeled by the analogy (such as `gender', `capital of', `royalty', \todo{etc.}).
+Subsequently, we use multiple analogies from the same group to obtain the relationship term as a vector (delta term), and we observe if it is possible to shift the representation from an element of the analogy to the other utilizing the computed delta term.
+\begin{equation}
+    \label{eq:method_embeddings_delta-analogy-function}
+    \begin{aligned}
+        \tilde{w}^i &= \textit{delta\_analogy}(\gbm{\Delta}_{\textit{batch}}^{(w_3, w_4)}, w_3^i, w_4^i) \\
+        &= {\textit{encode}}_{\textit{enc\_strat}}^{in}(w_3^i) + \gbm{\Delta}_{\textit{batch}}^{(w_3, w_4)} \\
+        &\color{gray} \approx {\textit{encode}}_{\textit{enc\_strat}}^{out}(w_4^i) \\
+        \gbm{\Delta}_{\textit{batch}}^{(w_a, w_b)} &= \frac{1}{B_{\textit{batch}}}\sum_{j=1}^{B_{\textit{batch}}}{\Bigl({\textit{encode}}_{\textit{enc\_strat}}^{in}(w_b^j) - {\textit{encode}}_{\textit{enc\_strat}}^{in}(w_a^j)\Bigr)} \\
+        \text{where}&\ \textit{batch} = \Bigl\{ \{w_1^i, w_2^i, w_3^i, w_4^i\} \ |\ \forall i \in \{1,\ldots, B_{\textit{batch}}\} \Bigr\}
+    \end{aligned}
+\end{equation}
+\todo{write better}
+\todo[cyan]{explain why delta analogies are done on half analogy}
+\todo[cyan]{change all instances of "delta analogies"}
 
 \subsubsection{Analogy Evaluation}
 
