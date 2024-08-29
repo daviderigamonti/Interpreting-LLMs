@@ -332,7 +332,7 @@ Solving word analogies showcases the ability of an embedding space to model the 
 \subsubsection{Analogy Computation}
 
 \todo[green]{maybe slightly expand this text}
-As far as the actual word analogy computation is concerned, given 4 words $\{w_1, w_2, w_3, w_4\}$ set up as an analogy of the type $`w_1 : w_2 = w_3 : w_4'$, we can formalize it as follows:
+As far as the actual word analogy computation is concerned, given 4 words $\{w_1, w_2, w_3, w_4\}$ set up as an analogy of the type `$w_1 : w_2 = w_3 : w_4$', we can formalize it as follows:
 \begin{equation}
     \label{eq:method_embeddings_analogy}
     \begin{gathered}
@@ -345,7 +345,7 @@ On the other hand, \emph{`closest'} indicates the returned value, which is the a
 \todo[green]{possibility of using top-k instead of closest}
 Furthermore, the $\textit{analogy}$ function expresses the combination of words $\{w_1, w_2, w_3, w_4\}$ that composes the logic relationship of the word analogy.
 Due to the fact that it is possible to define multiple analogy test cases from a single combination of words, the definitions of the actual \emph{analogy function} implementations slightly fall out of the scope of this section, while keeping in mind that they will be discussed more in depth inside the actual experimental setup section \todo[orange]{reference}.
-Thus, for simplicity, we can assume to \todo{follow} the \todo{renowed} $`king - man + woman \approx queen'$ example from \citet{mikolov2013}, obtaining:
+Thus, for simplicity, we can assume to \todo{follow} the \todo{renowed} `$king - man + woman \approx queen$' example from \citet{mikolov2013}, obtaining:
 \begin{equation}
     \label{eq:method_embeddings_analogy-function}
     \begin{aligned}
@@ -373,14 +373,85 @@ Subsequently, we use multiple analogies from the same group to obtain the relati
 \todo[cyan]{explain why delta analogies are done on half analogy}
 \todo[cyan]{change all instances of "delta analogies"}
 
-\subsubsection{Analogy Evaluation}
+\subsubsection{Analogy Evaluation} \label{subsubsec:method_embeddings_evaluation}
 
-\todo[green]{analogy evaluation metrics}
+One of the key aspects of the proposed analogy approaches is the actual evaluation process of a set of model's embeddings on a given analogy task.
+To assess the models' performance in this particular scenarios we considered two main metrics: the top-$k$ accuracy across all analogies, and the \emph{rankscore}.
 
-%To assess the models' performance in this particular task we opted to show the top-$k$ accuracy for each analogy, that is the accuracy with which the embeddings of a model can produce an object in the latent embedding space, with the correct answer to the analogy inside its $k$ closest elements.
-%Consequently, only embedded elements that correspond to actual tokens within the model's vocabulary are considered when seeking the closest elements of an object.
+The top-$k$ accuracy is a well established scoring metric that considers the number of times that a correct analogy solution appears inside the first $k$ results, averaging over all $n$ analogy samples present in the dataset.
+In our case, it can be written using the following notation:
+\begin{equation}
+    \label{eq:method_embeddings_topk-accuracy}
+    \textit{acc}_k = \frac{1}{n} \sum_{i=1}^{n} \mathbb{I}\Bigl( {\left\{ {\textit{result}\,}^i_j \ |\ \forall j = 1,\ldots,k \right\}} \cap {\textit{sol}\,}^i \neq \emptyset \Bigr)
+\end{equation}
+where ${\textit{result}\,}^i_j$ represents the $j$-th result of the $i$-th analogy, ${\textit{sol}\,}^i$ indicates the set of solution for the $i$-th analogy obtained through the use of the ${\textit{encode}}^{out}$ function as illustrated in \Cref{eq:method_embeddings_multitok-out}, and $n$ is the dimension of the considered dataset.
+
+Alternatively, we devised an additional measure which fulfills a similar purpose to the top-$k$ accuracy by evaluating a set of embeddings on an analogy task.
+The chosen metric is a slight variation of the Mean Reciprocal Rank statistic measure, commonly referred to as $MRR = \frac{1}{n}\sum_{i=1}{n}{\frac{1}{rank_i}}$ \todo[orange]{cite?}.
+We considered this approach in order to fully utilize the rank information given by the \todo{comparison analysis}, rather than just limiting the computation of our metric to check for the presence of matches between the results and the solutions, as it is done in the top-$k$ accuracy case.
+Rankscore:
+\begin{equation}
+    \label{eq:method_embeddings_rankscore}
+    \textit{rankscore}_k = 1 - \frac{\sum_{i=1}^{n}{rank_i}}{n \cdot k}
+\end{equation}
+\todo[cyan]{Understand if rankscore makes sense, eventually adapt it to MRR or remove MRR as a reference}
+
 
 \section{First Order Prediction}
 
+This third section explores the theoretical background of experiments analyzing the relationship between output embeddings (represented by output decoder weights) and input embeddings in the model's initial embedding layer.
+In particular, we are interested in observing if there exists any particular function that is being performed by the output decoder against the input embeddings, such as inversion or even an attempt at predicting the most likely next token.
+
+\subsection{Markov Models}
+
+The hypothesis regarding output embeddings carrying out a prediction of the most likely subsequent token based on the input is inspired by architectural deconstructions of decoder-only transformer models, revealing residual links directly connecting the embedding layer to the decoder \todo[orange]{cite DBLP:conf/nips/VaswaniSPUJGKP17}.
+Since the task of decoder-only models is to predict the next word given the previous context \todo[orange]{cite Radford2019LanguageMA}, by stripping from the architecture all the transformer blocks while keeping only a direct link from the input embedding layer to the output decoder layer, yields a \emph{First Order Model (FOM)} at best capable of predicting the next token given the previous one, akin to the behavior of first-order Markov models \todo[orange]{cite DBLP:journals/bstj/Shannon48a}.
+\todo[green]{add part regarding transformers circuit thread}
+Such Markov models leverage bigram probability estimates retrieved from a corpus of text in order to generate the next word, provided with the previous one.
+Given words $w_i$ and $w_j$, the bigram probability can be expressed as:
+
+\begin{equation}
+    P(w_j|w_i) = \frac{P(w_i, w_j)}{P(w_i)}
+\end{equation}
+\todo[yellow]{needed as separate equation?}
+
 \subsection{Matrix Comparison}
+
+As a preliminary way to explore various relationships between the input and output embeddings, we decide to perform an analysis of their matrices.
+To do so, we compute the `transition matrix' four our First Order Model (FOM) by combining and transposing the input and output weight matrices as follows:
+
+\begin{equation}
+    \label{eq:method_fom_fom-matrix}
+    \gbm{Q}_{\textit{FOM}} = \gbm{W}_{in} \cdot \gbm{W}_{out}^\T
+\end{equation}
+Where $W_{in}$ and $W_{out}$ are, respectively, the input and output embedding weight matrices.
+
+At this point, we are able to use the newly defined matrix to compare it against \todo{others} in order to quantify its resemblance against other known transition matrices.
+Our metric of choice for matrix comparison is the Frobenius norm, which is a relatively simple and natural way to estimate how two matrices differ from each other \todo[cyan]{are we sure of this? Check if Frobenius norm is the best choice}.
+
+To explore the potential inverse relationship, we computed the distance between the FOM transition matrix $\gbm{Q}_{\textit{FOM}}$ and the identity matrix of equivalent dimensions $I_n$.
+This follows the idea that a Markov model where every state leads into itself is represented by an identity matrix, thus if our input/output embedding pair is attempting to converge towards being equal (as it is enforced by weight tying) we should observe the FOM transition matrix degenerating into an identity one.
+We can model the distance between the FOM matrix and the identity matrix in the following way:
+
+\begin{equation}
+    \label{eq:method_fom_fom-i-comp}
+    d_{\textit{FOM},I} = \| \gbm{Q}_{\textit{FOM}} - \gbm{I}_n \|_F
+\end{equation}
+\todo[cyan]{n as dimension ok?}
+
+Following the same intuition, it is also possible to compare the FOM transition matrix $\gbm{Q}_{\textit{FOM}}$ with the transition matrix of a bigram Markov model $\gbm{Q}_{\textit{markov}}$ trained on a \todo{statistically relevant dataset}:
+
+\begin{equation}
+    \label{eq:method_fom_fom-markov-comp}
+    d_{\textit{FOM},\textit{markov}} = \| \gbm{Q}_{\textit{FOM}} - \gbm{Q}_{\textit{markov}} \|_F
+\end{equation}
+\todo[cyan]{n as dimension ok?}
+
 \subsection{Prediction Comparison}
+
+Additionally, we wanted to approach the previous ideas from a more practical point of view.
+To this end we recorded the top-$k$ answers elicited using the FOM matrix $\gbm{Q}_{\textit{FOM}}$ across all tokens inside the model's vocabulary, using each token as the known word and obtaining the FOM's most probable next tokens.
+Once we have the set of generated next tokens for each token inside the vocabulary we can compare them to our actual hypothesized reference tokens, obtained applying the identity function in the `inversion' hypothesis case, and in the `Markov' hypothesis case by querying the Markov model in the same way that we did with the FOM.
+As already done before in \Cref{subsubsec:method_embeddings_evaluation} using \Cref{eq:method_embeddings_topk-accuracy}, we employ the top-$k$ accuracy metric to establish the similarity between the predictions of the FOM against the two baselines defined by the identity function and the Markov model.
+The top-$k$ accuracy is computed by taking the $k$ tokens corresponding to the $k$ highest values between logits, and observing if the input token is present among them.
+\todo[green]{additional considerations, kl-div / perplexity analysis / }
