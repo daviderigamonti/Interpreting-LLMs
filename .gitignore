@@ -13,7 +13,9 @@
 *.swo
 
 # Thesis .pdf files
-Thesis/**/*.pdf
+Thesis/*.pdf
+Thesis/Backup/*.pdf
+Thesis/Images/TikZ/src/*.pdf
 
 ######## Python gitignore template
 

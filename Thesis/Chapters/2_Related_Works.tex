@@ -21,9 +21,18 @@ Mechanistic interpretability was initially mentioned as being the main driving i
 Nonetheless, by following \citet{rai2024} approach, we can observe that the concept of MI is not limited to the application of circuits.
 Envisioning MI as being characterized by a general bottom-up approach for interpreting LMs, its interpretation can be extended to include some \todo{preceding} techniques such as the logit lens \todo[orange]{cite} and other probing approaches.
 
-Another possible taxonomy for interpretability techniques, more focused on their nature rather than their use, is presented \citet{ferrando2024}.
+Another possible taxonomy for interpretability techniques, more focused on their nature rather than their use, is presented by \citet{ferrando2024}.
 They identify two main classes of interpretability approaches: \textbf{behavior localization} and \textbf{information decoding}.
 In the next sections we will follow their insightful classification to provide a synthetic analysis of the state of the art, with a specific focus on a restricted number of techniques that are especially relevant for the purpose of this work.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{related_ferrando-tax.pdf}
+    \caption{Taxonomy for transformer interpretability methods proposed by \citet{ferrando2024}.}
+    \label{fig:related_ferrando-tax}
+\end{figure}
+\todo[cyan]{Remove non-taxonomy sections from image}
+\todo[cyan]{Consider replacing with a handmade diagram}
 
 \section{Behavior localization}
 
@@ -120,6 +129,8 @@ Another crucial contribution, inspired by the future lens, is the \emph{patchsco
 Other significant approaches include the direct decoding of model weights \cite{dar2023}, potentially using singular value decomposition techniques to factorize the weight matrices \cite{millidge2022}, and logit spectroscopy \cite{cancedda2024}, which employs a spectral analysis of the residual stream and parameter matrices interacting with it.
 This last method aims to identify and analyze specific parts of the hidden representation spectrum that are most likely to be overlooked by the classic logit lens.
 
+\missingfigure[figwidth=\textwidth]{Patchscopes Visualization}
+
 \todo[green]{important, expand logit-lens approaches}
 \todo[green]{Interpreting GPT: the logit lens}
 \todo[green]{Eliciting Latent Predictions from Transformers with the Tuned Lens}
@@ -127,3 +138,7 @@ This last method aims to identify and analyze specific parts of the hidden repre
 Other unrelated approaches based on vocabulary space decoding involve using maximally-activating inputs to explain the behavior of units and neurons that exhibit significant responses to specific features \cite{dalvi2018}.
 Additionally, other LMs have been used as zero-shot explainers to provide insights into possible shared features between input sequences that cause substantial activations of specific neurons in the target model \cite{bills2023}.
 Unfortunately, the maximally-activating input analysis has been criticized for generating false positives \cite{bolukbasi2021}, while the elicitation of natural language explanations from LMs approach has faced criticism for its general lack of causal influence between the identified concept-neuron pairs \cite{huang2023}.
+
+\todo[green]{Add that one paper (LM-TT) with a very nice, comprehensive and interactive transformer execution visualization (maybe out of time scope?)}
+
+\missingfigure[figwidth=\textwidth]{Visualization of That One Paper (LM-TT)}
