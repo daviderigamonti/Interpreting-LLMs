@@ -1,10 +1,229 @@
-
-\section{Research Question}
-
 % Experiment Template
-\subsection{Experiment}
+%\subsection{Experiment}
+%\subsubsection{Experimental Setup}
+%\subsubsection{Dataset}
+%\subsubsection{Models}
+%\subsubsection{Results}
+%\subsubsection{Discussion}
+
+\section{Transformer Visualization}
+
+\subsection{Experiment 1}
+
 \subsubsection{Experimental Setup}
+\todo[green]{experimental setup}
 \subsubsection{Dataset}
+\todo[green]{dataset}
 \subsubsection{Models}
+\todo[green]{models}
+
 \subsubsection{Results}
+
+\todo[purple!20]{
+We are going to do a walkthrough of the main features of the tool by analyzing the visualizations from a given input prompt and probing the model with embedding injection.
+
+%\citet{DBLP:conf/nips/LiuAGKZ23}
+claimed that some model reasoning errors could be tied back to \emph{attention glitches}, minor errors propagated throughout the attention pattern in the model, leading to imperfect state information transferred through the layers.
+They tested the model on the Flip-Flop language, but a simpler yet effective use case turned out to be \emph{reversing sequences}.
+Thus, the input prompt for our example is: \textit{Write numbers in reverse order. Number: 13843234 Reverse:}.
+
+As depicted in
+%\Cref{fig:example_settings}
+, the output of the model is not correct as it is \emph{43234\textbf{38}1} instead of \emph{43234\textbf{83}1}.
+Let's now start inspecting the models' internals with InTraVisTo.
+
+Observing %
+%\Cref{fig:example_heatmap_wrong}
+, it is immediately clear that these models (in this case \texttt{mistralai/Mistral-7B-Instruct-v0.2}) present a clear step in the magnitude of probabilities when passing from the intermediate layers to the last layers.
+Through manual trials, we saw that this step tends to happen earlier in the layers as the next token becomes more obvious (e.g. see
+%\Cref{fig:heatmap}
+in the paper the column of token \texttt{\_capital} or \texttt{\_Italy}).
+In this case, there exists a difference between the layers where the step for ``correct output tokens'' and the step for the ``wrong output tokens'' (highlighted in red) occur: the latter seems to be one layer late which, assuming our behavioral assumption is correct, implies that this result is not so obvious according to the model.
+Then, by inspecting the magnitude of the probabilities for the wrong token, this conclusion seems legitimate due to a lower probability (lighter background color) compared with the correct token probabilities, even at the last layer of the network.
+
+Knowing that in
+%\Cref{fig:example_heatmap_wrong} 
+the correct final token in the red highlighted box should be \texttt{8} instead of \texttt{3}, let's now check if the model has ever introduced an \texttt{8} during its reasoning.
+%\Cref{fig:example_heatmap_multiple}
+represents the same slice of the heatmap inside the red box in 
+%\Cref{fig:example_heatmap_wrong}
+(just shifted below the purple horizontal line and showing nine layers instead of eight), but with different embeddings shown: the embedding coming from the attention, the one after the summation with the residual and the embedding coming from the Feed Forward component (the final embedding, the FF plus the residual is already shown in 
+%\Cref{fig:example_heatmap_wrong}
+).
+Despite the tokens decoded from the attention embeddings not being very informative and the ones coming from the embedding of the attention plus the residuals being similar to the final one, we can notice that in the embeddings coming from the FF, there is an 8 in the fourth-last layer.
+Now we can conjecture that the model result was probably wrong due to an incorrect or imprecise internal representation around the $29^{th}$ layer.
+
+To better profile the problem, we can inspect the information flow representation.
+%\Cref{fig:example_flow_perc}
+shows the flow percentages of the same FF block at the $29^{th}$ layer highlighted before: it is 1.7\% where the other is at least 1.8\%.
+This indicates that that particular block is slightly below the average in terms of contributions to the overall information flow.
+
+From these considerations, it seems that at a certain point, the model probably makes the correct computation, but actually forgets the final target of the task (i.e. reversing the sequence).
+We can check this conjecture by injecting an embedding and forcing the model to have the embedding of the token \texttt{8} as output embedding of the block at the $29^{th}$ layer.
+
+The injection procedure starts when the user clicks on a cell in the heatmap, writes in the pop-up block the token to inject and presses again the generation button.
+The generation process runs as before and redraws all the components, but this time while it is generating the embedding injecting is substituted to the real one at the specified location.
+The output after this procedure is \emph{432348313}.
+At first, it seems that the problem concerning the two swapped digits is solved, due to the fact that now the \texttt{8} and the \texttt{3} are in the correct positions, but this time the model added a digit at the end of the generation, instead of the new line character as before.
+By inspecting the heatmap again,
+%\Cref{fig:example_heatmap_inj}
+, the user can notice that the probability of token \texttt{8} is notably increased.
+Moreover, concerning the last wrong token, it is also clear that in the lower layer the model converged to the new line token (probably due to the end of the length of the sequence), but as the layer level reaches and is above the level of the injection, the output changed to a suboptimal token with respect to the final task.
+This could be expected since we are injecting an embedding that was not crafted from the network at that particular layer, so there could be minor modifications that, through causal attention, are influencing the next tokens negatively.
+}
+
 \subsubsection{Discussion}
+
+\todo[purple!20]{
+We presented InTraVisTo, a tool to visualize the internal states and the information flow of Transformer Neural Network, the core of LLMs.
+We developed InTraVisTo to provide a tool that NLP practitioners can use to understand the internal reasoning steps carried out by a LLM and, possibly, track down the causes of errors like hallucinations.
+Ultimately, we hope our tool will help improve the reliability of LLMs.
+Our focus at the moment is on providing better decoding and manipulation of hidden states, with focus on information injection, and improving the interface, to make InTraVisTo more user-friendly.
+}
+
+
+\section{Embedding Analysis}
+
+\subsection{Experiment 1}
+
+\subsubsection{Experimental Setup}
+\todo[green]{experimental setup}
+
+\subsubsection{Models}
+
+\todo[purple!20]{
+Experiments were conducted using LLaMA-2-7B 
+%\cite{DBLP:journals/corr/abs-2307-09288}
+and Mistral-7B 
+%\cite{DBLP:journals/corr/abs-2310-06825}
+(both with a vocabulary size of 32,000 and an embedding size of 4,096 dimensions).
+Additionaly, GPT-2 (with a vocabulary size of 50,257 tokens and embedding size of 768 dimensions) was also included to serve as a benchmarkdue to it being a non-LLM decoder-only transformer model.
+It is important to note that, whenever feasible, both input and output embeddings (derived from the weights of the decoder at the end of the model) were used and analyzed independently.
+The dataset employed to retrieve analogies is a composite of the \textit{question-words} and \textit{question-phrases} datasets available through the Gensim python library 
+%\cite{rehurek2011gensim} 
+and originally introduced in the word2vec paper 
+%\cite{DBLP:journals/corr/abs-1301-3781}
+.
+Some of the entries within the dataset that featured underscores to delimit compound words, where modified to use spaces instead.
+}
+
+\subsubsection{Dataset}
+
+\todo[purple!20]{
+We used a dataset of 22,766 analogies organised in 19 categories.
+In some evaluations, we considered the subset of analogies composed only of words encoded in single tokens by the model's tokenizer.
+Considering all models' tokenizers, the intersection of the filtered analogies accounted for 2,851 data points.
+}
+
+\subsubsection{Results}
+
+\todo[purple!20]{
+Upon examining the outcomes derived from the complete dataset in Fig.
+%\ref{RQ1:analog_complete} 
+it becomes apparent that the majority of LLMs seem to underperform with respect to GPT-2, this notable deviation in performance could be stem from various factors.
+However, by inspecting Fig. 
+%\ref{RQ1:analog_single}
+, which displays the same results, but for the single-token version of dataset, we can observe that the performance of GPT-2 alignes more closely with that of the other models.
+This mismatch in performance may be attributed on the tokenization strategy and vocabulary size of the chosen models, in fact all three models employ a Byte-Pair Encoding (BPE) tokenizer 
+%\cite{DBLP:conf/aaai/WangCG20}
+, however the tokenizers utilized by both Mistral and LLaMA are based on SentencePiece 
+%\cite{DBLP:conf/emnlp/KudoR18}
+, presenting a smaller overall vocabulary (32,000 tokens against GPT-2's 50,257 tokens), thus possibly implying a reduced selection of full-word tokens in favor of an increased number of sub-word tokens.
+By analyzing results on the single-only dataset in Fig. 
+%\ref{RQ1:analog_single}
+, we are able to infer that the exclusion of multi-token words from the dataset also mitigates differences that arising from how tokenizers segment words.
+This effectively normalizes away instances of analogies where GPT-2 may have held an advantage over other LLMs by being able to fully encode certain words.
+For the same reason, GPT-2 would have had both better representations encompassing semantic meanings of words without additional noise caused by multiple words sharing the same sub-word token, but also not having to be subject to the token-reconstruction previously mentioned strategies as ways to deal with multi-token words.
+
+Our analysis also reveals that for increasing $k$ values, output embeddings seem to consistently outperform input embeddings (contextually to the model performance), while for smaller $k$ values input embeddings demonstrate greater accuracy.
+This phenomenon suggests that input embeddings provide more reliable estimates for analogies results, but their vectors are laying in a sparser latent spaces, thus making it less likely to accidentaly include the correct vector out of a wrong prediction by extending the range given by $k$.
+Whereas output embeddings latent spaces are more compressed and benefit more from greater $k$ values.
+Such theory is corroborated by the fact that the trend that was previously identified is much less relevant in Fig. 
+%\ref{RQ1:analog_single}
+, where only single-token analogies are considered.
+Furthermore, we observe that the difference between input and output embeddings at earlier $k$ values is more accentuated, and the performance of output embeddings almost never surpasses the one of input embeddings.
+This may be due to the fact that overall (and in particular for input embeddings), it is less likely for the model to output a wrong result for any given single-token only analogy, therefore the margin of analogies with wrong answers according to input embeddings and only correct for output embeddings due to the fact that we are utilizing a large $k$ is greatly reduced.
+
+Finally, we show that input and output embedding pairs belonging to the same model tend to have the same trend, and are generally more prone to end up having similar accuracies, which is not a completely trivial result since, despite having the same dimensionality and possibly sharing some of the datasets used to train them (depending on the training setup and initialization values), they still operate with completely different weight matrices and carry out different tasks inside the model.
+}
+
+\subsubsection{Discussion}
+
+\todo[purple!20]{
+In the end, we can say that recent LLMs still retain a certain amount of facts inside their embeddings, albeit in a noticeably less developed and more noisy way with regards to older models.
+}
+
+
+\section{First Order Prediction}
+
+\subsection{Experiment 1}
+
+\subsubsection{Experimental Setup}
+\todo[green]{experimental setup}
+
+\subsubsection{Models}
+
+\todo[purple!20]{
+Experiments were conducted on LLaMA-2-7B 
+%\cite{DBLP:journals/corr/abs-2307-09288}
+and Mistral-7B 
+ %\cite{DBLP:journals/corr/abs-2310-06825}
+models, since they both present different input and output embeddings.
+We focused solely on the extraction of input and output embedding weights to construct the FOM, discarding the remaining components of the model infrastructure.
+}
+
+\subsubsection{Dataset}
+
+\todo[purple!20]{
+We trained the unigram Markov model on the \emph{WikiText 2} 
+%\cite{DBLP:conf/iclr/MerityX0S17}
+language modelling dataset.
+We ran the evaluations using each considered model's tokenizers and vocabulary.
+Both tokenizers have a vocabulary of 32,000 tokens, yielding a total of 3,499,853 tokens if considering LlaMA's tokenizer vocabulary and 3,423,005 tokens if considering Mistral's tokenizer vocabulary.
+}
+
+\subsubsection{Results}
+
+\todo[purple!20]{
+By observing Fig. 
+%\ref{fig:RQ2_mistral}
+ that depicts Mistral's performance on the self-regression and unigram-regression tasks, we can notice how, for any given value of $k$, the predictions generated by the FOM appear to align more closely with the inputs of the FOM rather than the most probable outputs generated by the unigram Markov model.
+This observation holds even when considering that, for the sake of this comparison, all traces (besides the one having $k_2 = 1$) are essentially more lenient variants of the corresponding top-$k_1$ prediction, achieved by expanding the range of valid subsequent tokens generated by the Markov model.
+This seems to suggest that the embeddings may exhibit a closer relationship to their inverse, rather than serving as representations of the subsequent token prediction based on the input.
+Unfortunately, this observation appears to contradict the recorded matrix distances, since we have a distance of 178.7063 between the FOM transition matrix and the identity matrix and a distance of 76.9151 between the FOM and Markov model transition matrices.
+
+However, these results are relative to LLaMA's performance on the same exact tasks.
+By looking at Fig. 
+%\ref{RQ2:llama_self}
+, which illustrates its perfomance on the self-regression task and Fig. 
+%\ref{RQ2:llama_markov}
+ representing its performance on the unigram-regression, we notice opposite results, the LLaMA FOM exhibits greater top-$k$ accuracy when compared to the unigram Markov model rather than its own inputs.
+This peculiarity is noticeable by empirically examining the LLaMA FOM predictions for some common tokens, which appear to be plausible next tokens:
+}
+
+\begin{table}
+\centering
+\begin{tabular}{||c || c | >{\columncolor[gray]{0.9}}c | c||} 
+\hline
+Input token/Model   & Mistral FOM   & LLaMA FOM & Markov models \\ 
+\hline\hline
+mount               & gorith        & clock     &  s            \\ 
+easy                & /******/      & going     & to            \\
+hair                & teenth        & loss      & ,             \\
+\hline
+\end{tabular}
+\end{table}
+
+\todo[purple!20]{
+Furthermore, the recorded matrix distances reveal a notable disparity in scale compared to those obtained using Mistral's FOM.
+Specifically, a distance of 522.3115 observed between the FOM transition matrix and the identity matrix and a distance of 509.2659 recorded between the FOM and Markov model transition matrices.
+Even for a model so clearly predisposed towards predicting the next word rather than returning the input word itself, the difference between the distances is minimal.
+This suggests a potential bias towards lower distance estimates between the FOM transition matrix and the Markov transition matrix, possibly due smaller quantities of null values present in the latter matrix with regard to the identity matrix.
+}
+
+\subsubsection{Discussion}
+
+\todo[purple!20]{
+Overall, the feasibility of a FOM approximation appears highly dependent on the specific model under analysis, although overall, all analyzed First Order Models comprised by the combination of their input and output embeddings seem to exhibit a slight bias towards trying to approximate a unigram first order Markov model.
+Extracting the embedding weights from the transition matrix of a unigram Markov model and utilizing them to initialize the embedding layer and decoder weights of an LLM would be an interesting potential development of this idea in future work.
+}

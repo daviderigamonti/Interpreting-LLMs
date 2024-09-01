@@ -348,7 +348,12 @@ What was previously described is generally considered the first transformer arch
 However, with time, a large number of variations and improvements on the base architecture has struck the NLP field.
 We are going to be mainly concerned with the Llama 2 \todo[orange]{cite} and Llama 3 \todo[orange]{cite} (from here just Llama) models, developed by Meta AI \todo{reference} in 2023 and 2024 respectively; other minor models may also be taken into consideration, although without particular focus on their architecture.
 
-\missingfigure[figwidth=\textwidth]{Decoder-only Architecture Llama}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{background_llama-arch_placeholder.pdf}
+    \caption{\todo[red]{placeholder image: Decoder-only Architecture Llama https://github.com/hkproj/pytorch-llama-notes.}}
+    \label{fig:background_llama-arch}
+\end{figure}
 
 The first main novelty in the new state-of-the-art models is the complete removal of the encoder from the architecture.
 These models are often called \textbf{`decoder-only'}, \textbf{`autoregressive'}, \textbf{`causal'} \todo[green]{differentiate between causal/autoregressive?}or \textbf{`GPT-like'} from the Generative Pre-trained Transformer (GPT) architecture \todo[orange]{cite https://openai.com/index/language-unsupervised/} that popularized the use of transformer models without the decoder, although the first documented use of a `decoder-only' architecture can be ascribed to this 2018 paper by Liu et al.\todo[orange]{cite https://arxiv.org/pdf/1801.10198} 
@@ -391,7 +396,12 @@ However, newer architectures have begun to incorporate Gated Linear Units (GLUs)
 \emph{Swish} \todo[orange]{cite https://arxiv.org/pdf/2002.05202v1} is an activation function similar to \emph{ReLU}, characterized by a non-monotonic depression in its zero-region, and is implemented in the following way: $Swish(x) = x \cdot \sigma(x)$ where $\sigma(x)$ represents the logistic sigmoid function.
 \emph{Swish} was shown to offer marginal improvements over \emph{ReLU} and other similar variations, based on its smoothness and possibility of returning small negative values for inputs close to zero, implying the efficient convergence of non-zero gradients and consequently minimizing the problem of dead neurons (caused by the nullification of gradient).
 
-\missingfigure[figwidth=\textwidth]{GLU Feedforward Architecture}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{background_ffnn-glu_placeholder.pdf}
+    \caption{\todo[red]{placeholder image: GLU Feedforward Architecture.}}
+    \label{fig:background_ffnn-glu}
+\end{figure}
 
 On the other hand, GLUs determine an entire revision of the feed-forward architecture, as they introduce a gating mechanism where one linear transformation is modulated by the output of another, which allows the model to dynamically control the flow of information.
 In the case of Llama models, the gating mechanism happens through an element-wise multiplication where $W_{in} \in \mathbb{R}^{d_{model} \times d_{hid}}$ represents the input transformation matrix with its respective bias $b_{in}$, $V \in \mathbb{R}^{d_{model} \times d_{hid}}$ is the gate transformation matrix with its respective bias $b_{V}$, $W_{out} \in \mathbb{R}^{d_{hid} \times d_{model}}$ performs the out-projection to the model's hidden representation dimensionality with its respective bias $b_{out}$ and $f$ represents the activation/gating function (in the SwiGLU case $f(x) = Swish(x)$):
@@ -403,8 +413,19 @@ In the case of Llama models, the gating mechanism happens through an element-wis
 \todo[cyan]{check dimensionality}
 For Llama models, all biases of the transformation matrices referring to the SwiGLU implementation are set to zero ($b_{in} = b_V = b_{out} = \vec 0$).
 The benefits of SwiGLU are largely tied to providing a better downstream performance on fine-tuning tasks and pre-training objectives, despite proof of SwiGLU actually having an impactful effect on transformer models being purely empirical.
-However, the reasons for its effectiveness may potentially be associated with its capability to model complex functions through the gating mechanism. \todo[orange]{cite https://arxiv.org/pdf/2002.05202v1 https://kikaben.com/swiglu-2020/}
+However, the reasons for its effectiveness may potentially be associated with its capability to model complex functions through the gating meschanism. \todo[orange]{cite https://arxiv.org/pdf/2002.05202v1 https://kikaben.com/swiglu-2020/}
 
 \subsection{The Large Language Model Paradigm}
 
-\todo[green]{Insert ''LLM" subsection containing pre-training, fine-tuning, open source models...}
+With the advent of Large Language Models (LLMs), a complete shift in training paradigms was observed throughout the NLP field since, due to their massive scale, the need for applying ad-hoc Deep Learning training techniques \todo{arose}.
+In particular, we can point out two main approaches commonly using for streamlining, improving and optimizing the training process: \textbf{pre-training} and \textbf{fine-tuning}.
+
+\textbf{pre-training} is often performed in an unsupervised or \emph{`self-supervised'} manner, meaning that either the training dataset is used without labels or labels can be directly inferred from it.
+Pre-training fulfills the function of providing the model with general language patterns, without specific orientation or direction.
+For this reason, large unbiased corpuses of text are needed to perform a successful pre-training, often resulting in lengthy and expensive training runs.
+There are two principal methods to perform pre-training: \emph{Masked Language Modeling (MLM)} and \emph{Next Sentence Prediction (NSP)}.
+\emph{MLM} is popular between encoder architectures such as the BERT family, and consists of trying to infer certain `masked' tokens given the surrounding ones by leveraging the provided context.
+Whereas, \emph{NSP} sees more use in the pre-training of GPT-like and decoder-based models by giving the model a pair of sentences and asking it to determine if the second sentence can logically follow the first one.
+
+On the other hand, \textbf{fine-tuning} is usually faster and performed after pre-training, having the goal of specializing the model to carry out a specific task.
+By freezing part of the model architecture (usually the first layers), fine-tuning can be performed on a subset of the model's parameters resulting in a faster and less disruptive training, as one of the main concerns correlated with fine-tuning is the model's possibility of forgetting what was learned during pre-training.
