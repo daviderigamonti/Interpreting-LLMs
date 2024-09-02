@@ -17,7 +17,7 @@ By using MI tools to pursue interpretability inquiries, possibly through the use
 Mechanistic interpretability offers a novel perspective over the interpretability research field, its primary aim being the reverse-engineering of language models (LMs) from an in-depth perspective \cite{olah2022}.
 Previously identified model-agnostic techniques have been proven to offer limited insight for the transformer architecture \todo[orange]{cite}, whereas MI embraces the opposite philosophy by removing model abstractions and analyzing LMs in \todo{terms} of their components and how their interactions.
 
-Mechanistic interpretability was initially mentioned as being the main driving ideology behind the `transformer circuits thread' \todo[orange]{cite transformer circuits thread}.
+Mechanistic interpretability was initially mentioned as being the main driving ideology behind the `transformer circuits thread' \cite{elhage2021}.
 Nonetheless, by following \citet{rai2024} approach, we can observe that the concept of MI is not limited to the application of circuits.
 Envisioning MI as being characterized by a general bottom-up approach for interpreting LMs, its interpretation can be extended to include some \todo{preceding} techniques such as the logit lens \cite{nostalgebraist2020} and other probing approaches.
 
@@ -77,9 +77,9 @@ Additionally, it is possible to identify an alternate `denoising' setup, which s
 \textbf{Circuit analysis} is closely related to the mechanistic interpretability (MI) subfield analyzed previously as its main goal is tied to the discovery of circuits inside LMs.
 Circuits are subsets of model components that can be seen as acting independently while carrying out a specific task, and can possibly be synthesized into an algorithm.
 Despite their successful application on LMs, circuits were not originally identified with the transformer architecture in mind; in fact, their first application was on vision models \cite{cammarata2020}.
-Most of the initial work regarding transformer circuits was performed on publications belonging to the `transformer circuits thread' \todo[orange]{cite}, heavily inspired by the preceding vision counterpart \cite{cammarata2020}.
+Most of the initial work regarding transformer circuits was performed on publications belonging to the `transformer circuits thread' \cite{elhage2021,olsson2022,elhage2022,bricken2023}, heavily inspired by the preceding vision counterpart \cite{cammarata2020}.
 By applying the circuit concept to the previously causal intervention techniques, we can extend the idea of activation patching to edge patching and path patching: novel circuits-based techniques that take into account the interactions between model components.
-Edge patching \todo[orange]{cite} considers edges that directly connect pairs of model components due to the fact that each component input can be modeled as the sum of the outputs of the previous model components inside the residual stream, while path patching \todo[orange]{cite} is a generalization of edge patching to multiple edges.
+Edge patching \cite{li2023} considers edges that directly connect pairs of model components due to the fact that each component input can be modeled as the sum of the outputs of the previous model components inside the residual stream, while path patching \cite{wang2023} is a generalization of edge patching to multiple edges.
 
 \todo[green]{important, expand circuits}
 \todo[green]{A Mathematical Framework for Transformer Circuits}
