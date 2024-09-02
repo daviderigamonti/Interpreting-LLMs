@@ -6,7 +6,7 @@ The novelty of this work is not necessarily \todo{inherent in the} chosen approa
 
 The first research question is centered around the development of an interactive visualization tool for LLMs.
 The goal is to create a tool that allows users to visually explore and interpret the whole computation performed by an LLM when generating a sentence.
-The chosen approach will be centered around the concept of vocabulary space decoding and will take the direction of the already mentioned logit lens \todo[orange]{cite}.
+The chosen approach will be centered around the concept of vocabulary space decoding and will take the direction of the already mentioned logit lens \cite{nostalgebraist2020}.
 Additionally, new ideas will be introduced in the context of hidden representation decoding and visualization.
 One of \todo{the central purposes} of the proposed tool is the visualization of the residual stream, making it possible to observe the path of influence composed of residuals and attention, that cumulates into each token prediction.
 
@@ -18,7 +18,7 @@ This framework serves as a starting point for many of the inquiries that will be
 With the aid of the previously developed tool we noticed some peculiarities in the behavior of LLMs with respect to smaller and less \todo{sophisticated} language models, in particular, the embedding representations of LLMs seemed to encode less information about the actual word semantics.
 From this starting point, the second research question investigates whether autoregressive LLMs retain linear properties in their embedding spaces.
 
-As mentioned in the previous chapters, the linearity of the embedding space is an established property both in the original word2vec embedding space \cite{mikolov2013} and in transformer-based encoder models such as BERT \todo[orange]{cite}.
+As mentioned in the previous chapters, the linearity of the embedding space is an established property both in the original word2vec embedding space \cite{mikolov2013} and in transformer-based encoder models such as BERT \cite{devlin2019}.
 A linear embedding space enables particular geometric properties such as the ability to solve word analogies (`king' - `man' + `woman' = `queen') and the possibility of modeling semantic similarity between tokens as a distance relationship.
 Given the recent developments in transformer training and architecture, we aim to examine if these properties still hold in the embedding spaces of recent causal LLMs and whether \todo{these properties} are consistent across various model architectures and sizes, while pointing out differences between the embedding and unembedding spaces in models \todo{where the two are different}.
 
