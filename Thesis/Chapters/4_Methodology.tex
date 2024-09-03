@@ -48,10 +48,10 @@ Where $\gbm{W}_{d_\textit{dec}}$ represents the matrix of decoder weights accord
 Considering $\mathcal{N}{(\gbm{x})}$ the normalization component of the model's final normalization layer, being reliant on $\mu$ and $\sigma$ for LayerNorm implementations as defined in \Cref{eq:background_layernorm,eq:background_layernorm_extra}, and $RMS(\gbm{x})$ for RMSNorm implementations as defined in \Cref{eq:background_rmsnorm}
 
 Two natural choices of decoders to use are the transpose of the \emph{input embedding matrix} $\gbm{W}_\textit{in}^\T$ used by the model to convert tokens to vectors on input, and the \emph{output decoder} $\gbm{W}_\textit{out}$ used upon output within the language modeling head.
-Some models, like GPT-2 \cite{radford2019} and Gemma \cite{mesnard2024} tie these two parameter matrices together during training, while other popular models such as Mistral \cite{jiang2023} and Llama \cite{touvron2023,dubey2024} allow these two matrices to differ.
+Some models, like GPT-2~\cite{radford2019} and Gemma~\cite{mesnard2024} tie these two parameter matrices together during training, while other popular models such as Mistral~\cite{jiang2023} and Llama~\cite{touvron2023,dubey2024} allow these two matrices to differ.
 This structural weight difference will be analyzed more in depth in later sections, \todo{however,} in our current scope having different weight matrices for embedding and unembedding ($\gbm{W}_\textit{in}^\T \neq \gbm{W}_\textit{out}$) implies that earlier layers tend to be much more interpretable when decoded with the input embedding ($\gbm{W}_\textit{in}^\T$) while latter layers are more meaningful if the output decoder ($\gbm{W}_\textit{out}$) is used.
 
-Previous work has looked to \emph{train specialized decoders} \todo[orange]{cite} for generating meaningful vocabulary distributions at any point in a model, at the cost of introducing a great deal of additional complexity and potential errors.
+Previous work has looked to \emph{train specialized decoders}~\cite{belrose2023a,sakarvadia2023,pal2023} for generating meaningful vocabulary distributions at any point in a model, at the cost of introducing a great deal of additional complexity and potential errors.
 InTraVisTo employs a simpler and elegant alternative, by \emph{interpolating} the input and output decoders based on the depth $\ell\in\{0,\ldots,L\}$ of the model layer we wish to decode, we obtain a `hybrid' decoding weight matrix that acts as an equilibrium point calibrated on the current model depth.
 We define various alternatives for decoder interpolation mainly focusing on \emph{linear interpolation} and \emph{quadratic interpolation}, defined as follows:
 \begin{subequations}
@@ -71,20 +71,20 @@ As previously mentioned, this behavior selection is controlled by specifying $d_
     
 As previously illustrated, each hidden representation is decoded by performing a normalization operation first, to then multiply the result for the chosen decoding matrix, and finally obtain a probability distribution over the model's vocabulary by applying a softmax function on the resulting logits.
 At this point we utilize the same \emph{sampling policy} of the model in order to extract the `predicted' vocabulary token ID from the computed distribution.
-We assume the policy to always be \emph{greedy decoding}, both as a simplifying factor and to reflect the default settings for causal models provided by Hugging Face's transformers library \todo[orange]{cite}.
+We assume the policy to always be \emph{greedy decoding}, both as a simplifying factor and to reflect the default settings for causal models provided by Hugging Face's transformers library~\cite{wolf2020}.
 
-Nevertheless, our interest in decoding the model's hypothetical intermediate predictions doesn't extend only to the first token, as important information that cannot be condensed into a single vocabulary token is usually withheld inside the hidden representation \todo[orange]{cite}.
+Nevertheless, our interest in decoding the model's hypothetical intermediate predictions doesn't extend only to the first token, as important information that cannot be condensed into a single vocabulary token is usually withheld inside the hidden representation~\cite{elhage2022,henighan2023,elhage2023}.
 In order to extract this `leftover information', we devise two main approaches that \todo{sublimate} it into \emph{secondary tokens}.
 We define \emph{secondary tokens} as additional vocabulary tokens that are the result of a \emph{secondary decoding process}, aimed at obtaining tokens that hold less importance than the token obtained as a result of the \emph{primary decoding process} (as mentioned before) of the same hidden representation.
 
 The first secondary decoding approach is \emph{Top-K probability decoding} and consists of expanding the number of selected tokens from the probability distribution to $k$, thus obtaining $k-1$ secondary tokens ordered by their probability values.
-This is a rather simple and immediate technique, which is widely-used in many interpretability applications and non \todo[orange]{cite}.
+This is a rather simple and immediate technique, which is widely-used in many interpretability applications and non~\cite{belrose2023a,pal2023,tufanov2024}.
 The principal downside of this approach comes from the fact that the obtained secondary tokens might be overly similar to the primary token, resulting in redundant information.
-This is likely caused by the fact that a large part of the hidden representation is used to represent the primary token, often skewing the embedding vector in favor of tokens that are semantically similar \todo[orange]{cite}.
+This is likely caused by the fact that a large part of the hidden representation is used to represent the primary token, often skewing the embedding vector in favor of tokens that are semantically similar~\cite{elhage2022}.
 
 To alleviate this issue we propose a novel way to extract secondary representations from a hidden representation: \emph{iterative decoding}.
 The rationale behind the proposed approach is that hidden representations contain an overlap of concepts in an embedding space that is loosely related to both the input and output embedding spaces.
-As a consequence, we postulate that hidden representations existing in these intermediate embedding spaces should retain the linear properties that have been ascertained to exist in the input and output embedding spaces of transformer architectures \todo[orange]{cite}.
+As a consequence, we postulate that hidden representations existing in these intermediate embedding spaces should retain the linear properties that have been ascertained to exist in the input and output embedding spaces of transformer architectures~\cite{mikolov2013,park2023}.
 Iterative decoding exploits these linear properties by performing a sequence of subtractions from the main hidden representation, removing the embedding of the most probable representation during each iteration.
 \begin{algorithm}
     \caption{Iterative decoding algorithm}\label{alg:method_intravisto_iter-dec}
@@ -112,7 +112,7 @@ As it is possible to observe in \Cref{alg:method_intravisto_iter-dec}, we perfor
 This is due to the fact that a secondary token that is found in two separate iterations is recorded only on the first one, and the presence of a stopping condition that triggers in case the norm of the resulting hidden representation is under a certain threshold ${norm}_{min}$ or is higher than the norm found at the previous iteration.
 This last condition is used to avoid situations where the embedding vector of the hidden state `flips' after the computation of the difference with the most probable representation, resulting in a vector that is not informative and can possibly reiterate the effect until ${rep}_{max}$ is reached, thus generating predictions based purely on noise. \todo[cyan]{check if necessary}
 
-One downside of this approach, besides the linearity assumption of the intermediate embedding spaces \todo{which is based upon}, is the fact that there exists a notable shift in representation magnitudes throughout the layers of most state-of-the-art transformer models \todo[orange]{cite}.
+One downside of this approach, besides the linearity assumption of the intermediate embedding spaces \todo{which is based upon}, is the fact that there exists a notable shift in representation magnitudes throughout the layers of most state-of-the-art transformer models~\cite{heimersheim2023}.
 This typically results in a steady increase in the norms of the embedding vectors, proportional to the layer number.
 While this has only a marginal impact on the decoding process, it can significantly disrupt the embedding vector subtraction operation within the iterative decoding approach, as the quantities involved may differ in magnitude.
 
@@ -155,9 +155,10 @@ It is possible to note that the contributions computed through norms and KL dive
 
 \subsection{Flow}
 
-The second visualization introduced in InTraVisTo is a Sankey diagram \todo[orange]{cite} that aims to depict the information flow through the transformer network.
+The second visualization introduced in InTraVisTo is a \emph{Sankey diagram} that aims to depict the information flow through the transformer network.
 Edges in the diagram indicate the amount of influence that the nodes have on each other and show how the information accumulates from the bottom of the diagram to the top in order to generate the final prediction.
 The flow snakes its way through self-attention nodes, which combine information from attended tokens in the level below, feed-forward networks nodes, which introduce information based on detected patterns in the state vector, and aggregation nodes, where updates from the other two types of nodes are added to the residual vector.
+The proposed Sankey diagram, technically qualifies as an \emph{Alluvial diagram} due to the fact that nodes are grouped into `steps' (in our case corresponding to layers), which provide intermediate subdivisions of the flow mass, and help to \todo{focalize attention} on the changes in flow composition throughout the model's layers.
 
 In order to calculate the information flow, an attribution algorithm works backwards from the top layers of the network, recursively apportioning the incident flow from the components below based on their relative contributions to the internal state vector above using \Cref{eq:method_intravisto_norm-contrib,eq:method_intravisto_kl-contrib}.
 The flow's constantly updating state can be defined in a way that reflects the recursive computations performed by InTraVisTo:
@@ -207,10 +208,10 @@ Although this is true, the minimal distance between the hidden states used to co
 \subsection{Injection}\label{ssec:method_intravisto_injection}
 
 Lastly, we also include the possibility to perform \emph{injections} in InTraVisTo.
-\emph{Injections} are an instance of \emph{activation patching} \todo[orange]{cite} utilized in a context that is not strictly tied to a formal \emph{causal intervention} framework \todo[orange]{cite} .
+\emph{Injections} are an instance of \emph{activation patching}~\cite{olsson2022,meng2022,hanna2023,conmy2023,wang2023,mohebbi2023,zhang2024} utilized in a context that is not strictly tied to a formal \emph{causal intervention} framework~\cite{geiger2021,mcgrath2023}.
 In fact, the main purpose of injections is to give the user the possibility to explore the model predictions in an interactive way, making it possible to change outputs of components and parts of the residual stream in order to unveil interesting patterns and properties.
 
-Being a type of intervention, it is possible to express an injection utilizing the \emph{do-operator} as defined by \todo[orange]{cite}.
+Being a type of intervention, it is possible to express an injection utilizing the \emph{do-operator} as defined by~\citet{pearl2009}.
 Assuming that we would like to inject an embedding $\gbm{\hat x}$ into the hidden state obtained as a result of the transformation $f_c^{(\ell)}$ of a component $c^{(\ell)}$ during the $i$-th token of the model's forward pass expressed as $f$, we can notate our injection utilizing the do-operator as:
 \begin{equation}
     \label{eq:method_intravisto_injection}
@@ -219,12 +220,12 @@ Assuming that we would like to inject an embedding $\gbm{\hat x}$ into the hidde
 \end{equation}
 As previously noted for similar approaches, it is important to specify that there might be some problems with the nature of $\gbm{\hat x}$, as it is a representation that is generated from an encoded user-defined textual input ${id}_{\textit{inject}}$, which undergoes an embedding and normalization process utilizing $\gbm{W}_{d_{dec}}$ and $N_{n_\textit{norm}}$ following \Cref{eq:method_intravisto_linear-interp,eq:method_intravisto_quadratic-interp,eq:method_intravisto_normalization}.
 This results in the injection of a `clean' embedding that is unexpected by the model, \todo{and thus} may destabilize the generation process.
-In most causal intervention scenarios, this problem is not present when performing activation patching using counterfactual examples, due to the fact that patches are generated utilizing resampling or averaging approaches \todo[orange]{cite}.
+In most causal intervention scenarios, this problem is not present when performing activation patching using counterfactual examples, due to the fact that patches are generated utilizing resampling or averaging approaches~\cite{hanna2023,conmy2023,wang2023}.
 We choose to avoid these techniques since our main focus is directed towards giving the user complete control over the injected information, which is achieved by directly inserting the wanted embedding vector in the hidden state without letting the model elaborate it to create a plausible representation.
 
 Another noteworthy step in the injection process is the actual encoding of the injected embedding, since the formula used to compute $\gbm{\hat x}$ that has been broadly mentioned in \Cref{eq:method_intravisto_injection} is used considering an injection input that is composed by a single token.
 However, InTraVisTo's interface offers the possibility of injecting an embedding representation that contains more than one token, thus we would like to generalize the aforementioned formula to actually handle multiple tokens at once.
-\todo[cyan]{check if true} This behavior is modeled by averaging the embedding representations of all tokens that compose the sentence, always under the assumption of a linear embedding space \todo[orange]{cite}. \todo[green]{remarks for sentence embedding?}
+\todo[cyan]{check if true} This behavior is modeled by averaging the embedding representations of all tokens that compose the sentence, always under the assumption of a linear embedding space~\cite{mikolov2013,park2023}. \todo[green]{remarks for sentence embedding?}
 Considering a total of $id_1,\ldots,id_t$ tokens to be encoded, this averaging operation can be represented in the following way:
 \begin{equation}
     \label{eq:method_intravisto_emb-avg}
@@ -236,7 +237,7 @@ The soundness of this approach, including possible variants based on the same or
 \section{Embedding Analysis}\label{sec:method_embeddings}
 
 This second section is geared towards understanding the extent to which text embeddings still retain some degree of semantic factuality in LLMs (Large Language Models).
-Early transformer models have been noted for their text embedding representations possessing interesting spatial properties deeply correlated with the semantic properties of the embedded words \todo[orange]{cite DBLP:journals/corr/abs-2009-11226,DBLP:conf/icml/AllenH19}.
+Early transformer models have been noted for their text embedding representations possessing interesting spatial properties deeply correlated with the semantic properties of the embedded words~\cite{allen2019,kalinowski2020}.
 However, with the emergence of newer models that are larger and more intricate than ever before, our objective is to assess whether the semantic properties inherently tied with the geometry of embeddings still hold true.
 
 \subsection{Word Encoding}
@@ -317,7 +318,7 @@ The first preliminary transformations performed on $w$ is tokenization, modeled 
 After tokenization, tokens get transformed into embedding vectors $\gbm{e}_1^w, \ldots, \gbm{e}_{t}^w$ by selecting the corresponding row from the embedding matrix $\gbm{W}_{emb}$.
 The role of the embedding matrix $\gbm{W}_{emb}$ can be fulfilled by either the input and output embedding matrices, as already seen previously.
 
-As anticipated before in \Cref{ssec:method_intravisto_injection}, the main choice of computing multi-token representations using linear operations comes from the supposed preservation of linear features in the embedding space \todo[orange]{cite}.
+As anticipated before in \Cref{ssec:method_intravisto_injection}, the main choice of computing multi-token representations using linear operations comes from the supposed preservation of linear features in the embedding space~\cite{mikolov2013,park2023}.
 Additionally, \todo[green]{add}.
 
 Another approach that will be used to completely set aside the issues tied with multi-token words consists in reducing the dataset to exclusively consider analogies composed of single-token words, at the cost of less overall valid samples
@@ -326,8 +327,8 @@ This will be discussed more in depth in the section dedicated to the dataset of 
 \subsection{Word Analogies}\label{ssec:method_embeddings_analogies}
 
 We wish to establish if geometric relationships can still be modeled inside the input or output embedding space of recent LLM architectures.
-The first step \todo{towards the direction of this approach} was the direct experimentation on \emph{word analogy tasks}, as already illustrated in \citet{mikolov2013}.
-Solving word analogies showcases the ability of an embedding space to model the semantics of words in a relatively consistent way, implying the existence of embedding dimensions with associated meanings (even if overlapping or under superposition as mentioned by \todo[orange]{cite}), which is not necessarily an expected feature of language models on a large scale.
+The first step \todo{towards the direction of this approach} was the direct experimentation on \emph{word analogy tasks}, as already illustrated in~\citet{mikolov2013}.
+Solving word analogies showcases the ability of an embedding space to model the semantics of words in a relatively consistent way, implying the existence of embedding dimensions with associated meanings (even if overlapping or under superposition as mentioned by~\citet{elhage2022,henighan2023}), which is not necessarily an expected feature of language models on a large scale.
 
 \subsubsection{Analogy Computation}
 
@@ -345,7 +346,7 @@ On the other hand, \emph{`closest'} indicates the returned value, which is the a
 \todo[green]{possibility of using top-k instead of closest}
 Furthermore, the $\textit{analogy}$ function expresses the combination of words $\{w_1, w_2, w_3, w_4\}$ that composes the logic relationship of the word analogy.
 Due to the fact that it is possible to define multiple analogy test cases from a single combination of words, the definitions of the actual \emph{analogy function} implementations slightly fall out of the scope of this section, while keeping in mind that they will be discussed more in depth inside the actual experimental setup section \todo[orange]{reference}.
-Thus, for simplicity, we can assume to \todo{follow} the \todo{renowed} `$king - man + woman \approx queen$' example from \citet{mikolov2013}, obtaining:
+Thus, for simplicity, we can assume to \todo{follow} the \todo{renowed} `$king - man + woman \approx queen$' example from~\citet{mikolov2013}, obtaining:
 \begin{equation}
     \label{eq:method_embeddings_analogy-function}
     \begin{aligned}
@@ -404,8 +405,8 @@ In particular, we are interested in observing if there exists any particular fun
 
 \subsection{Markov Models}
 
-The hypothesis regarding output embeddings carrying out a prediction of the most likely subsequent token based on the input is inspired by architectural deconstructions of decoder-only transformer models, revealing residual links directly connecting the embedding layer to the decoder \todo[orange]{cite DBLP:conf/nips/VaswaniSPUJGKP17}.
-Since the task of decoder-only models is to predict the next word given the previous context \todo[orange]{cite Radford2019LanguageMA}, by stripping from the architecture all the transformer blocks while keeping only a direct link from the input embedding layer to the output decoder layer, yields a \emph{First Order Model (FOM)} at best capable of predicting the next token given the previous one, akin to the behavior of first-order Markov models \todo[orange]{cite DBLP:journals/bstj/Shannon48a}.
+The hypothesis regarding output embeddings carrying out a prediction of the most likely subsequent token based on the input is inspired by architectural deconstructions of decoder-only transformer models, revealing residual links directly connecting the embedding layer to the decoder~\cite{vaswani2017}.
+Since the task of decoder-only models is to predict the next word given the previous context~\cite{radford2019}, by stripping from the architecture all the transformer blocks while keeping only a direct link from the input embedding layer to the output decoder layer, yields a \emph{First Order Model (FOM)} at best capable of predicting the next token given the previous one, akin to the behavior of first-order Markov models~\cite{markov2006}.
 \todo[green]{add part regarding transformers circuit thread}
 Such Markov models leverage bigram probability estimates retrieved from a corpus of text in order to generate the next word, provided with the previous one.
 Given words $w_i$ and $w_j$, the bigram probability can be expressed as:

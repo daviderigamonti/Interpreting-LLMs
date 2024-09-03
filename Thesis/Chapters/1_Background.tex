@@ -150,8 +150,8 @@ In fact, another enticing property is their ability to capture the semantic dept
 Word embeddings are generally created by extrapolating the intermediate latent representations of a neural network solving a certain task, obtaining a continuous vector space for words to reside.
 In practice, word embeddings are mappings from the vocabulary space to the embedding space which features a reduced number of dense dimensions devoid of any human-understandable meaning, characteristic of deep learning methodologies.
 
-The concept of using distributed word representations was anticipated by \citet{bengio2000} with the Neural Network Language Model (NNLM) in the early 2000s.
-The first real successful implementation of word embeddings was Word2Vec by \citet{mikolov2013}, greatly inspired by Bengio's previous work.
+The concept of using distributed word representations was anticipated by~\citet{bengio2000} with the Neural Network Language Model (NNLM) in the early 2000s.
+The first real successful implementation of word embeddings was Word2Vec by~\citet{mikolov2013}, greatly inspired by Bengio's previous work.
 The main purpose of Word2Vec is to create word embeddings, it is composed by a single hidden layer and is trained discriminatively by using both positive and negative examples.
 
 \blockquote[J.R. Firth]{You Shall Know a Word by the Company It Keeps}
@@ -185,9 +185,9 @@ One particular property that emerges from the majority of latent representations
 It is not uncommon to observe these properties showcased in many other deep learning applications, such as computer vision.
 However, in the word embeddings scenario, these arithmetic properties have been reported to be much more prominent and \todo{reflecting} of the actual word semantics.
 
-In particular, the semantic meaningfulness of certain arithmetic and geometric transformations applied to word embeddings was noticed by Mikolov himself in the Word2Vec paper \cite{mikolov2013}.
+In particular, the semantic meaningfulness of certain arithmetic and geometric transformations applied to word embeddings was noticed by Mikolov himself in the Word2Vec paper~\cite{mikolov2013}.
 This went from finding similarities in embeddings of words that manifested syntactic regularities, to complete double-word analogies located in common semantic fields.
-One of the most famous examples presented in \cite{mikolov2013} is: \texttt{emb(`King') - emb(`Man') + emb(`Woman') $\simeq$ emb(`Queen')}, which models both the relationships of `gender' and `royalty'.
+One of the most famous examples presented in~\cite{mikolov2013} is: \texttt{emb(`King') - emb(`Man') + emb(`Woman') $\simeq$ emb(`Queen')}, which models both the relationships of `gender' and `royalty'.
 Other \todo{relevant} analogies include country-capital, family relation, and verb tenses.
 However, any kind of semantic relationship could be potentially modeled by word embeddings, given enough support in the training dataset.
 
@@ -208,7 +208,7 @@ Transformers are the current state-of-the art model architecture for most text a
 Although they were initially conceived for textual sequential inputs, in recent years saw discrete success in a wide variety of other applications (in particular image processing), albeit occasionally with some slight variations.
 This architecture has proven to be flexible, efficient and parallelizable, in contrast with previous popular choices for sequence learning problems such as RNNs and LSTMs.
 
-The first transformer architecture was introduced by \citet{vaswani2017} in the seminal 2017 paper ``Attention Is All You Need''.
+The first transformer architecture was introduced by~\citet{vaswani2017} in the seminal 2017 paper ``Attention Is All You Need''.
 This architecture is of the encoder-decoder type, following the typical paradigm of sequence-to-sequence (seq2seq) learning.
 This structure implies the existence of two separate modules (an encoder and a decoder), which work in tandem to elaborate inputs and provide an output.
 Both input and output consist of sequential data.
@@ -236,18 +236,18 @@ Sub-word tokenization improves the ability of the model to deal with rare and un
 The tokenization and embedding steps are perhaps the most critical processes due to the fact that they shape both inputs and outputs of the transformer, framing how it interfaces itself with the environment.
 Additionally, the transformer architecture is word position agnostic, meaning that embedded tokens do not directly contain any additional information that \todo{tells} the model their position inside the input sentence.
 This is commonly solved by implementing \textbf{positional encoding}: an additive mask that gets applied to the input tokens right after the embedding step.
-The original ``Attention Is All You Need'' \cite{vaswani2017} paper suggests the use of fixed positional encodings based on the \emph{sine} and \emph{cosine} functions, although alternatives exist.
+The original ``Attention Is All You Need''~\cite{vaswani2017} paper suggests the use of fixed positional encodings based on the \emph{sine} and \emph{cosine} functions, although alternatives exist.
 
 \subsubsection*{Basic Block Structure}
 
 Transformer blocks \todo{compose} large part of the transformer architecture and contain \textbf{attention blocks}, \textbf{feed-forward blocks}, \textbf{residual connections} and \textbf{normalization blocks}.
 
 \textbf{Attention blocks} are \todo{powered} by the attention mechanism, the \todo{principal mechanic} responsible for the outstanding results achieved by transformer models.
-The concept of attention is not novel and did already see some applications in seq2seq models \cite{bahdanau2015,kim2017,cho2015}, determining substantial improvements in most LSTM architectures.
+The concept of attention is not novel and did already see some applications in seq2seq models~\cite{bahdanau2015,kim2017,cho2015}, determining substantial improvements in most LSTM architectures.
 Attention in encoder-decoder models is implemented by allowing the decoder to \todo{look} at the internal states generated by the encoder, thus eliminating the information bottleneck represented by the single point of connection between the two.
 The most important part of attention is its scoring function, which allows the decoder to `focus' on certain tokens by modeling a weight distribution on the attended hidden states using an attention function.
-There exist different attention function implementations such as \emph{simple dot product}, \emph{Luong} \cite{luong2015} (multiplicative) and \emph{Bahdanau} \cite{bahdanau2015} (additive).
-The original transformer architecture mentioned in ``Attention Is All You Need'' \cite{vaswani2017} uses \emph{scaled dot product attention}, which is implemented with the following formula:
+There exist different attention function implementations such as \emph{simple dot product}, \emph{Luong}~\cite{luong2015} (multiplicative) and \emph{Bahdanau}~\cite{bahdanau2015} (additive).
+The original transformer architecture mentioned in ``Attention Is All You Need''~\cite{vaswani2017} uses \emph{scaled dot product attention}, which is implemented with the following formula:
 \begin{equation}
     \label{eq:background_attention}
     Attention(Q,K,V) = softmax\left(\frac{QK^\T}{\sqrt{d_K}}\right)V
@@ -291,7 +291,7 @@ The masked self-attention formula can be summarized as follows:
 \end{itemize}
 
 In reality, transformers use a more refined attention implementation, called \textbf{multi-head attention} which can be applied in all the previously identified scenarios.
-Multi-head attention is a novelty introduced in the ``Attention Is All You Need'' \cite{vaswani2017} paper, and it consists in replicating the attention structure multiple times, thus obtaining multiple representation spaces for each attention layer.
+Multi-head attention is a novelty introduced in the ``Attention Is All You Need''~\cite{vaswani2017} paper, and it consists in replicating the attention structure multiple times, thus obtaining multiple representation spaces for each attention layer.
 This operation influences the dimension of attention vectors, which needs to be divided by $h$, where $h$ is the chosen number of separate attention heads for multi-head attention.
 The attention output for multi-head attention is obtained as the concatenation between the attention outputs of all $h$ heads as follows:
 \begin{equation}
@@ -314,7 +314,7 @@ The feed-forward network acts as a `grouping' mechanism, where information gathe
 \textbf{Layer normalization} and \textbf{residual connections} are techniques that are commonly found in most deep learning models and are generally used to improve gradient flow, training stability and overall generalization.
 In particular:
 \begin{itemize}
-    \item \textbf{Layer normalization} \cite{ba2016} is applied after each attention and feed-forward block.
+    \item \textbf{Layer normalization}~\cite{ba2016} is applied after each attention and feed-forward block.
 It consists of two steps: a batch-independent normalization step performed with parameters ($\mu$, $\sigma$) which model a normal distribution over the feature space of the vector representations, and a linear transformation using a bias and a scale factor.
 The bias and scale factor are usually referred to as $\beta$ and $\gamma$ respectively, and are trainable layer-level parameters which perform a shift and rescale operation on the normalized vector.
 If $v_i$ is a vector representation, after layer normalization at layer $\ell$ we obtain:
@@ -325,7 +325,7 @@ If $v_i$ is a vector representation, after layer normalization at layer $\ell$ w
     \end{gather}
 \end{subequations}
 \todo[cyan]{Check equation pedices}
-    \item \textbf{Residual connections} \cite{he2016} are a strategy employed in deep architectures to streamline gradient propagation and avoid vanishing gradients.
+    \item \textbf{Residual connections}~\cite{he2016} are a strategy employed in deep architectures to streamline gradient propagation and avoid vanishing gradients.
 Additionally, it helps the transformer to preserve local information as attention and feed-forward blocks are added to the base residual flow, limiting their freedom in the effective output space.
 In practice, residual connections sum the identity function of the input of a block to the output of that block, in the transformer's case the residual summation happens before layer normalization.
 \end{itemize}
@@ -344,9 +344,9 @@ However, in order to get an actual probability distribution over the vocabulary 
 
 \subsection{Current Decoder Architectures}
 
-What was previously described is generally considered the first transformer architecture that was originally mentioned in the ``Attention Is All You Need'' \cite{vaswani2017} paper in 2017.
+What was previously described is generally considered the first transformer architecture that was originally mentioned in the ``Attention Is All You Need''~\cite{vaswani2017} paper in 2017.
 However, with time, a large number of variations and improvements on the base architecture has struck the NLP field.
-We are going to be mainly concerned with the Llama 2 \cite{touvron2023} and Llama 3 \cite{dubey2024} (from \todo{here} just Llama) models, developed by \hyperref[https://ai.meta.com/]{Meta AI} in 2023 and 2024 respectively; other minor models may also be taken into consideration, although without particular focus on their architecture.
+We are going to be mainly concerned with the Llama 2~\cite{touvron2023} and Llama 3~\cite{dubey2024} (from \todo{here} just Llama) models, developed by \hyperref[https://ai.meta.com/]{Meta AI} in 2023 and 2024 respectively; other minor models may also be taken into consideration, although without particular focus on their architecture.
 
 \begin{figure}[H]
     \centering
@@ -356,13 +356,13 @@ We are going to be mainly concerned with the Llama 2 \cite{touvron2023} and Llam
 \end{figure}
 
 The first main novelty in the new state-of-the-art models is the complete removal of the encoder from the architecture.
-These models are often called \textbf{`decoder-only'}, \textbf{`autoregressive'}, \textbf{`causal'} \todo[green]{differentiate between causal/autoregressive?}or \textbf{`GPT-like'} from the Generative Pre-trained Transformer (GPT) architecture \cite{radford2018,radford2019,brown2020,openai2023} that popularized the use of transformer models without the decoder, although the first documented use of a `decoder-only' architecture can be ascribed to this 2018 paper by \citet{liu2018}.
-The major improvement of autoregressive architectures consists in a substantial performance enhancement for longer sequences of text \todo[orange]{cite}.
-In addition, removing the encoder also removes possible information redundancy between the two components.
+These models are often called \textbf{`decoder-only'}, \textbf{`autoregressive'}, \textbf{`causal'} \todo[green]{differentiate between causal/autoregressive?}or \textbf{`GPT-like'} from the Generative Pre-trained Transformer (GPT) architecture~\cite{radford2018,radford2019,brown2020,openai2023} that popularized the use of transformer models without the decoder, although the first documented use of a `decoder-only' architecture can be ascribed to this 2018 paper by~\citet{liu2018}.
+The major improvement of autoregressive architectures consists in the massive reduction in parameters, which enables more flexibility during training, besides the upsides tied to scalability and efficiency.
+In addition, removing the encoder also negates possible information redundancy between the two components, empirically improving the optimization procedure~\citet{liu2018}.
 The decoder remains mostly unchanged from this modification, with the exception of the cross-attention block since it can no longer fetch the representations generated by the encoder.
 Cross-attention is consequently removed, \todo{leaving} a single masked self-attention block \todo{inside} the decoder architecture.
 
-Another important change in the transformer architecture is the \textbf{Rotary Position Embeddings (RoPE)} mechanism, proposed in 2021 by \citet{su2024}.
+Another important change in the transformer architecture is the \textbf{Rotary Position Embeddings (RoPE)} mechanism, proposed in 2021 by~\citet{su2024}.
 This technique completely replaces the positional encoding strategy that was previously employed in transformer models (absolute positional encoding) by guaranteeing better flexibility for long sequences and introducing the decay of inter-token dependency with increasing relative token distance.
 One of the main flaws of absolute positional encoding is its inability to model dependence between tokens, as each token positional encoding is independent of the others and, in particular, from the distance between tokens.
 RoPE is able to model both absolute and relative token positional information by encoding them as a geometric rotation inside the embedding space.
@@ -371,12 +371,12 @@ This property is vital in determining RoPE's capability of being directly applie
 
 The original transformer implementation establishes the presence of layer normalization right after each attention and feed-forward blocks, after residual addition.
 Extensive research has been performed on possible alternatives and a notable shift from models implementing classic normalization (post-norm) to models implementing pre-normalization emerged.
-The \textbf{pre-normalization (pre-norm)} \todo[orange]{cite https://arxiv.org/pdf/1809.10853, (https://aclanthology.org/P18-1167.pdf mentions tensor2tensor), https://github.com/tensorflow/tensor2tensor?tab=readme-ov-file: no single paper that claims to have introduced pre-norm} approach consists in applying layer normalization directly inside the residual block, right before the attention or feed-forward blocks.
+The \textbf{pre-normalization (pre-norm)}~\cite{baevski2019,xiong2020} approach consists in applying layer normalization directly inside the residual block, right before the attention or feed-forward blocks.
 Additionally, a further layer normalization operation is performed before prediction, right after the last transformer block.
-The main benefits of this technique are tied to training efficiency and convergence speed \cite{xiong2020} as it was shown to improve overall gradient stability, even at initialization time.
-This improvement allowed the removal of the `learning rate warm-up stage': a technique that was commonly used in post-norm transformer architectures to avoid diverging in training \cite{popel2018} and involved a gradual increase of the learning rate in the first training epochs.
+The main benefits of this technique are tied to training efficiency and convergence speed~\cite{xiong2020} as it was shown to improve overall gradient stability, even at initialization time.
+This improvement allowed the removal of the `learning rate warm-up stage': a technique that was commonly used in post-norm transformer architectures to avoid diverging in training~\cite{popel2018} and involved a gradual increase of the learning rate in the first training epochs.
 
-Another variation on the transformer normalization mechanism was achieved with the introduction of \textbf{root mean square layer normalization (RMSNorm)} \cite{zhang2019}.
+Another variation on the transformer normalization mechanism was achieved with the introduction of \textbf{root mean square layer normalization (RMSNorm)}~\cite{zhang2019}.
 The fundamental improvement introduced by RMSNorm is a substantial reduction in the amount of computation performed with respect to classical layer normalization and an overall gain in efficiency, this is especially true for deep architectures where the computational overhead of layer normalization is meaningful.
 Implementation wise, RMSNorm only focuses on the rescaling aspect rather than including both centering and rescaling as layer normalization does.
 The central quantity used to perform the rescaling computation is the Root Mean Square (RMS) statistic and only the $\gamma$ parameter is retained from the set of learnable parameters due to the fact that the re-centering operation performed by $\beta$ was deemed to be mostly irrelevant for both layer normalization and RMSNorm.
@@ -392,8 +392,8 @@ One peculiar side effect of RMSNorm is the fact it forces the summed inputs into
 
 The last main change featured in most recent autoregressive transformer architectures concerns the structure of the feed-forward block.
 The base transformer implementation establishes the feed-forward layer as the combination of two linear transformations separated by a non-linear activation function, typically a choice between \emph{ReLU} and \emph{GELU}.
-However, newer architectures have begun to incorporate Gated Linear Units (GLUs) \cite{dauphin2017} implemented using a \emph{Swish} (also called \emph{SiLU}) activation function, this particular architectural combination for the feed-forward block is commonly referred to as \textbf{SwiGLU} \cite{shazeer2020}.
-\emph{Swish} \cite{shazeer2020} is an activation function similar to \emph{ReLU}, characterized by a non-monotonic depression in its zero-region, and is implemented in the following way: $Swish(x) = x \cdot \sigma(x)$ where $\sigma(x)$ represents the logistic sigmoid function.
+However, newer architectures have begun to incorporate Gated Linear Units (GLUs)~\cite{dauphin2017} implemented using a \emph{Swish} (also called \emph{SiLU}) activation function, this particular architectural combination for the feed-forward block is commonly referred to as \textbf{SwiGLU}~\cite{shazeer2020}.
+\emph{Swish}~\cite{shazeer2020} is an activation function similar to \emph{ReLU}, characterized by a non-monotonic depression in its zero-region, and is implemented in the following way: $Swish(x) = x \cdot \sigma(x)$ where $\sigma(x)$ represents the logistic sigmoid function.
 \emph{Swish} was shown to offer marginal improvements over \emph{ReLU} and other similar variations, based on its smoothness and possibility of returning small negative values for inputs close to zero, implying the efficient convergence of non-zero gradients and consequently minimizing the problem of dead neurons (caused by the nullification of gradient).
 
 \begin{figure}[H]
@@ -404,16 +404,16 @@ However, newer architectures have begun to incorporate Gated Linear Units (GLUs)
 \end{figure}
 
 On the other hand, GLUs determine an entire revision of the feed-forward architecture, as they introduce a gating mechanism where one linear transformation is modulated by the output of another, which allows the model to dynamically control the flow of information.
-In the case of Llama models \cite{touvron2023,dubey2024}, the gating mechanism happens through an element-wise multiplication where $W_{in} \in \mathbb{R}^{d_{model} \times d_{hid}}$ represents the input transformation matrix with its respective bias $b_{in}$, $V \in \mathbb{R}^{d_{model} \times d_{hid}}$ is the gate transformation matrix with its respective bias $b_{V}$, $W_{out} \in \mathbb{R}^{d_{hid} \times d_{model}}$ performs the out-projection to the model's hidden representation dimensionality with its respective bias $b_{out}$ and $f$ represents the activation/gating function (in the SwiGLU case $f(x) = Swish(x)$):
+In the case of Llama models~\cite{touvron2023,dubey2024}, the gating mechanism happens through an element-wise multiplication where $W_{in} \in \mathbb{R}^{d_{model} \times d_{hid}}$ represents the input transformation matrix with its respective bias $b_{in}$, $V \in \mathbb{R}^{d_{model} \times d_{hid}}$ is the gate transformation matrix with its respective bias $b_{V}$, $W_{out} \in \mathbb{R}^{d_{hid} \times d_{model}}$ performs the out-projection to the model's hidden representation dimensionality with its respective bias $b_{out}$ and $f$ represents the activation/gating function (in the SwiGLU case $f(x) = Swish(x)$):
 \begin{equation}
     \label{eq:background_ffnn}
     FFN(x) = GLU(x) \cdot W_{out} + b_{out} 
     = \Bigl( f(xV + b_V) \odot xW_{in} + b_{in} \Bigr) \cdot W_{out} + b_{out}
 \end{equation}
 \todo[cyan]{check dimensionality}
-For Llama models \cite{touvron2023,dubey2024}, all biases of the transformation matrices referring to the SwiGLU implementation are set to zero ($b_{in} = b_V = b_{out} = \vec 0$).
+For Llama models~\cite{touvron2023,dubey2024}, all biases of the transformation matrices referring to the SwiGLU implementation are set to zero ($b_{in} = b_V = b_{out} = \vec 0$).
 The benefits of SwiGLU are largely tied to providing a better downstream performance on fine-tuning tasks and pre-training objectives, despite proof of SwiGLU actually having an impactful effect on transformer models being purely empirical.
-However, the reasons for its effectiveness may potentially be associated with its capability to model complex functions through the gating mechanism \cite{shazeer2020,shibuya2023}.
+However, the reasons for its effectiveness may potentially be associated with its capability to model complex functions through the gating mechanism~\cite{shazeer2020,shibuya2023}.
 
 \subsection{The Large Language Model Paradigm}
 
