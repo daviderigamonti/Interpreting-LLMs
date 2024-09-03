@@ -1,0 +1,43 @@
+\documentclass[crop, tikz, multi=false]{standalone}
+
+\usepackage{xcolor}
+\usepackage{tikzstyle}
+
+\usetikzlibrary{
+  arrows.meta, calc, decorations.pathreplacing, ext.paths.ortho, 
+  positioning, quotes, shapes, backgrounds, calligraphy, math
+}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+  \node[archroundblock, fill=green!30, minimum width = 20em, minimum height = 16em](ffnn){};
+    \node[helv, below right, inner sep=0pt] at ([xshift=0.5em,yshift=-0.5em]ffnn.north west) {FFNN};
+
+  \node[archblock, fill=purple!30, above left = 2em and 2em of ffnn.south](gate){Gate};
+  \node[archblock, fill=yellow!30, above = 2em of gate](silu){SiLU};
+  \node[archblock, fill=cyan!30, above right = 4em and 2em of ffnn.south](upp){Up projection};
+  \node[op, fill=gray!30, above = 9.5em of ffnn.south](times){$\times$};
+  \node[archblock, fill=red!30, above = 1.5em of times](downp){Down projection};
+
+  \node[below right = 0.75em and 0.5em of ffnn.south](in){$\mathbf{x}$};
+  \node[above left = 0.75em and 0.5em of ffnn.north](in){$FFNN(\mathbf{x})$};
+
+
+  \draw[line] ([yshift=-2em]ffnn.south) -- ++(0,3em) coordinate(split);
+  \draw[arrow] (split) -| (gate.south);
+  \draw[arrow] (split) -| (upp.south);
+
+  \draw[arrow] (gate.north) -- (silu.south);
+
+  \draw[arrow] (silu.north) |- (times.west);
+  \draw[arrow] (upp.north) |- (times.east);
+
+  \draw[arrow] (times.north) -- (downp.south);
+
+  \draw[arrow] (downp.north) -- ([yshift=2em]ffnn.north);
+
+\end{tikzpicture}
+
+\end{document}

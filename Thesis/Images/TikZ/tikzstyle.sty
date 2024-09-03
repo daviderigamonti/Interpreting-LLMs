@@ -4,18 +4,6 @@
 \RequirePackage{xcolor}
 
 \tikzset{
-    background/.style n args={
-        1
-    }{
-        show background rectangle,
-        tight background,
-        background rectangle/.style={
-            fill=#1
-        }
-    }
-}
-
-\tikzset{
     semifill/.style 2 args={
         fill=#1,
         path picture={
@@ -27,33 +15,73 @@
     }
 }
 
+% Fonts
+\tikzset{
+    helv/.style={
+        font=\fontfamily{phv}\selectfont
+    }
+}
+
+% Blocks
 \tikzset{
     block/.style={
-        draw=gray!80,
-        very thick, rounded corners,
-        minimum width=15ex, minimum height=5ex,
+        helv,
+        draw=black!100,
+        very thick,
+    },
+    archblock/.style={
+        block,
+        rounded corners=0.25em,
+        minimum width=6em, minimum height=2em,
         align=center
     },
+    archroundblock/.style={
+        archblock,
+        rounded corners=0.75em,
+    },
     splitblock/.style={
-        block,
+        archblock,
         rectangle split, rectangle split horizontal, rectangle split parts=6
     },
-    arrow/.style={
-        draw=gray!80, -stealth, thick, rounded corners
+}
+
+% Arrows
+\tikzset{
+    line/.style={
+        draw=black!100, very thick, rounded corners
     },
+    arrow/.style={
+        line, -stealth
+    },
+}
+
+% Operators
+\tikzset{
+    op/.style={
+        helv,
+        draw=black!100,
+        circle,
+        very thick,
+        minimum width=1em, minimum height=1em,
+        align=center,
+    },
+}
+
+% Other
+\tikzset{
     trap/.style={
         draw=gray!80,
         trapezium,
         very thick,
-        minimum width=15ex, minimum height=5ex,
+        minimum width=15em, minimum height=5em,
         align=center
     },
     circ/.style={
         draw=gray!80, fill=bgcolor!95, 
         circle,
         ultra thick,
-        minimum width=6ex, minimum height=6ex,
+        minimum width=6em, minimum height=6em,
         align=center,
-        text width=4ex
+        text width=4em
     }
 }
