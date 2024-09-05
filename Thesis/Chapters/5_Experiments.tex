@@ -89,6 +89,14 @@ Our focus at the moment is on providing better decoding and manipulation of hidd
 \subsubsection{Experimental Setup}
 \todo[green]{experimental setup}
 
+\subsubsection{Dataset}
+
+\todo[purple!20]{
+We used a dataset of 22,766 analogies organised in 19 categories.
+In some evaluations, we considered the subset of analogies composed only of words encoded in single tokens by the model's tokenizer.
+Considering all models' tokenizers, the intersection of the filtered analogies accounted for 2,851 data points.
+}
+
 \subsubsection{Models}
 
 \todo[purple!20]{
@@ -105,14 +113,6 @@ and originally introduced in the word2vec paper
 %\cite{DBLP:journals/corr/abs-1301-3781}
 .
 Some of the entries within the dataset that featured underscores to delimit compound words, where modified to use spaces instead.
-}
-
-\subsubsection{Dataset}
-
-\todo[purple!20]{
-We used a dataset of 22,766 analogies organised in 19 categories.
-In some evaluations, we considered the subset of analogies composed only of words encoded in single tokens by the model's tokenizer.
-Considering all models' tokenizers, the intersection of the filtered analogies accounted for 2,851 data points.
 }
 
 \subsubsection{Results}
@@ -161,6 +161,16 @@ In the end, we can say that recent LLMs still retain a certain amount of facts i
 \subsubsection{Experimental Setup}
 \todo[green]{experimental setup}
 
+\subsubsection{Dataset}
+
+\todo[purple!20]{
+We trained the unigram Markov model on the \emph{WikiText 2} 
+%\cite{DBLP:conf/iclr/MerityX0S17}
+language modelling dataset.
+We ran the evaluations using each considered model's tokenizers and vocabulary.
+Both tokenizers have a vocabulary of 32,000 tokens, yielding a total of 3,499,853 tokens if considering LlaMA's tokenizer vocabulary and 3,423,005 tokens if considering Mistral's tokenizer vocabulary.
+}
+
 \subsubsection{Models}
 
 \todo[purple!20]{
@@ -170,16 +180,6 @@ and Mistral-7B
  %\cite{DBLP:journals/corr/abs-2310-06825}
 models, since they both present different input and output embeddings.
 We focused solely on the extraction of input and output embedding weights to construct the FOM, discarding the remaining components of the model infrastructure.
-}
-
-\subsubsection{Dataset}
-
-\todo[purple!20]{
-We trained the unigram Markov model on the \emph{WikiText 2} 
-%\cite{DBLP:conf/iclr/MerityX0S17}
-language modelling dataset.
-We ran the evaluations using each considered model's tokenizers and vocabulary.
-Both tokenizers have a vocabulary of 32,000 tokens, yielding a total of 3,499,853 tokens if considering LlaMA's tokenizer vocabulary and 3,423,005 tokens if considering Mistral's tokenizer vocabulary.
 }
 
 \subsubsection{Results}
