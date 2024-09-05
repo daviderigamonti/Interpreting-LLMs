@@ -1,7 +1,7 @@
 In this section we will explore the theoretical fundaments of our experiments.
 To do so, we are going to subdivide our analysis into three main sections, where each one is paired with one of the previously identified research questions.
 
-\section{Transformer Visualization}
+\section{Transformer Visualization}\label{sec:method_intrvisto}
 
 The first section is dedicated to the exploration of the main features pertaining the proposed interactive tool for the exploration of autoregressive transformer architectures, \emph{InTraVisTo} (Inside Transformer Visualization Tool).
 
@@ -376,7 +376,7 @@ Subsequently, we use multiple analogies from the same group to obtain the relati
 \todo[cyan]{explain why delta analogies are done on half analogy}
 \todo[cyan]{change all instances of "delta analogies"}
 
-\subsubsection{Analogy Evaluation} \label{subsubsec:method_embeddings_evaluation}
+\subsubsection{Analogy Evaluation}\label{subsubsec:method_embeddings_evaluation}
 
 One of the key aspects of the proposed analogy approaches is the actual evaluation process of a set of model's embeddings on a given analogy task.
 To assess the models' performance in this particular scenarios we considered two main metrics: the top-$k$ accuracy across all analogies, and the \emph{rankscore}.
@@ -400,7 +400,7 @@ Rankscore:
 \todo[cyan]{Understand if rankscore makes sense, eventually adapt it to MRR or remove MRR as a reference}
 
 
-\section{First Order Prediction}
+\section{First Order Prediction}\label{sec:method_fom}
 
 This third section explores the theoretical background of experiments analyzing the relationship between output embeddings (represented by output decoder weights) and input embeddings in the model's initial embedding layer.
 In particular, we are interested in observing if there exists any particular function that is being performed by the output decoder against the input embeddings, such as inversion or even an attempt at predicting the most likely next token.

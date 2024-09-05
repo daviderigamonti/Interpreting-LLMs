@@ -1,19 +1,33 @@
-% Experiment Template
-%\subsection{Experiment}
-%\subsubsection{Experimental Setup}
-%\subsubsection{Dataset}
-%\subsubsection{Models}
-%\subsubsection{Results}
-%\subsubsection{Discussion}
+This chapter presents the experiments conducted to evaluate the methodology proposed in \Cref{ch:methodology} for the reference scenarios described in \Cref{ch:research_questions}.
+The experiments were initially designed to shed light onto some specific aspects of LLM internal state interpretability via vocabulary decoding, although after some interesting findings, more attention was given to the actual initial and final embedding representations in LLMs.
+
+This chapter is organized similarly to \Cref{ch:research_questions,ch:methodology}, following the three main research questions as a baseline.
+Each research question contemplates multiple experiments aimed at providing empirical evidence to elicit a deeper understanding of large transformer architectures through the perspective of the question at hand.
+Additionally, each experiment includes a fixed set of key points to formalize the analysis in a structured way.
+These points include:
+\begin{itemize}
+    \item \textbf{Experimental Setup}: complete description of the experiment performed in reference of the theoretical background provided in \Cref{ch:methodology}.
+Parameter combinations, hardware specifications and resources employed may also be mentioned in the setup description.
+    \item \textbf{Dataset}: summary of data and information utilized for the experiment, \todo{either} for training models or as direct testing material.
+    \item \textbf{Models}: list of models, along with brief \todo{specifics}, that have been utilized to perform the experiment or have been employed for auxiliary tasks. 
+    \item \textbf{Results}: set of results emerged from the experiment paired with comments, explanations and a breakdown of the findings' possible implications.
+\end{itemize}
+If the previously identified points overlap for all the identified experiments of any given research question then, those are directly incorporated inside the main section belonging to the question in order to avoid meaningless repetition.
+Furthermore, each research question has a final discussion section, which is aimed at comparing the results of all the performed experiments and providing final remarks considering the overall outcomes for the specific inquiry.
 
 \section{Transformer Visualization}
+
+As anticipated in \Cref{sec:rq_intravisto} and explored in \Cref{sec:method_intrvisto}, the experiments tied to this research question are centered around the InTraVisTo tool.
+In each experiment we are going to provide various prompts to different models, and explore specific aspects of the extracted internal representations and information flows utilizing InTraVisTo.
 
 \subsection{Experiment 1}
 
 \subsubsection{Experimental Setup}
 \todo[green]{experimental setup}
+
 \subsubsection{Dataset}
 \todo[green]{dataset}
+
 \subsubsection{Models}
 \todo[green]{models}
 
@@ -72,7 +86,7 @@ Moreover, concerning the last wrong token, it is also clear that in the lower la
 This could be expected since we are injecting an embedding that was not crafted from the network at that particular layer, so there could be minor modifications that, through causal attention, are influencing the next tokens negatively.
 }
 
-\subsubsection{Discussion}
+\subsection{Discussion}
 
 \todo[purple!20]{
 We presented InTraVisTo, a tool to visualize the internal states and the information flow of Transformer Neural Network, the core of LLMs.
@@ -83,6 +97,11 @@ Our focus at the moment is on providing better decoding and manipulation of hidd
 
 
 \section{Embedding Analysis}
+
+Following the path laid out in \Cref{sec:rq_embeddings,sec:method_embeddings}, the experiments of this section will gravitate around the possibility of identifying linear properties modeling semantic relationships inside the input and output embedding spaces of LLMs.
+
+To explore this inquiry, we have set up various experiments aimed at replicating some of the well-established embeddings properties~\cite{mikolov2013} in recent state-of-the-art architectures.
+Additionally, we expand upon these ideas and provide further explanations for the behaviors emerged from the performed experiments.
 
 \subsection{Experiment 1}
 
@@ -147,7 +166,7 @@ This may be due to the fact that overall (and in particular for input embeddings
 Finally, we show that input and output embedding pairs belonging to the same model tend to have the same trend, and are generally more prone to end up having similar accuracies, which is not a completely trivial result since, despite having the same dimensionality and possibly sharing some of the datasets used to train them (depending on the training setup and initialization values), they still operate with completely different weight matrices and carry out different tasks inside the model.
 }
 
-\subsubsection{Discussion}
+\subsection{Discussion}
 
 \todo[purple!20]{
 In the end, we can say that recent LLMs still retain a certain amount of facts inside their embeddings, albeit in a noticeably less developed and more noisy way with regards to older models.
@@ -155,6 +174,14 @@ In the end, we can say that recent LLMs still retain a certain amount of facts i
 
 
 \section{First Order Prediction}
+
+Building on the foundation established in \Cref{sec:rq_fom}, the experiments in this section will focus on exploring the implications of creating a First Order Model (FOM).
+A FOM is obtained by removing the all intermediate architectural components from an LLM, leaving behind the input and output embedding layers, and the residual connections joining them.
+As explained in \Cref{sec:method_fom}, this operation can be seen as the creation of a Markov model possessing a transition matrix formed by the product between the input and output embedding matrices.
+
+Most of the experiments in this section are geared towards understanding if the FOM actually represents a faithful bigram Markov model over the original model's vocabulary.
+Although past work has theorized and partially demonstrated on a restricted set of models the possibility of this hypothesis being \todo{correct}~\cite{elhage2021}, we suspect that FOMs extracted from different LLMs may have different degrees of \todo{`Markovness'} and we strive to explore this intuition in this section.
+\todo[green]{Add part on weight tying}
 
 \subsection{Experiment 1}
 
@@ -221,7 +248,7 @@ Even for a model so clearly predisposed towards predicting the next word rather 
 This suggests a potential bias towards lower distance estimates between the FOM transition matrix and the Markov transition matrix, possibly due smaller quantities of null values present in the latter matrix with regard to the identity matrix.
 }
 
-\subsubsection{Discussion}
+\subsection{Discussion}
 
 \todo[purple!20]{
 Overall, the feasibility of a FOM approximation appears highly dependent on the specific model under analysis, although overall, all analyzed First Order Models comprised by the combination of their input and output embeddings seem to exhibit a slight bias towards trying to approximate a unigram first order Markov model.
