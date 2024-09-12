@@ -19,7 +19,7 @@ Machine Learning is commonly considered a subfield of Artificial Intelligence, a
 The term `past experience' is often used loosely in this scenario: it is not necessarily tied with information directly perceived by an agent within a specific environment.
 Instead, it commonly denotes the entirety of accumulated data, often referred to as the dataset, which may have been collected heterogeneously and asynchronously, and that is fed to the model in order to learn.
 
-\begin{figure}[H]
+\begin{figure}[t!]
     \centering
     \includegraphics[width=\textwidth]{background_ml-para_placeholder.pdf}
     \caption{\todo[red]{placeholder image: Machine Learning Paradigms.}}
@@ -49,7 +49,7 @@ They are heavily inspired by the structure of the human brain, which is generall
 Classical neural networks usually have a layer-based architecture, where a layer consists of an array of neurons connected to neurons belonging to both the previous and next layers.
 A neural network may have any number of intermediate layers, an input layer (which collects information at its inputs) and an output layer (which aggregates the outputs of its neurons into the final network prediction).
 
-\begin{figure}[H]
+\begin{figure}[t!]
     \centering
     \subfloat[Neural Network Architecture.\label{fig:background_nn-arch}]{
         \includegraphics[width=0.46\textwidth]{background_nn-arch_placeholder.pdf}
@@ -78,14 +78,14 @@ The `deep' adjective refers to the high number of hidden layers that compose the
 
 The most important property obtained through the dimensional scale-up is the hierarchical feature extraction capability, which consists in obtaining rich condensed representations that follow a semantic hierarchy from the latent spaces defined by the network's layer projections.
 
-\begin{figure}[H]
+\begin{figure}[t!]
     \centering
     \subfloat[Classic Machine Learning.\label{fig:background_fex}]{
-        \includegraphics[width=0.46\textwidth]{background_fex_placeholder.pdf}
+        \raisebox{2.65em}{\includegraphics[width=0.46\textwidth]{background_fex.pdf}}
     }
     \quad
     \subfloat[Deep Learning.\label{fig:background_deep-fex}]{
-        \includegraphics[width=0.46\textwidth]{background_deep-fex_placeholder.pdf}
+        \includegraphics[width=0.46\textwidth]{background_deep-fex.pdf}
     }
     \caption{\todo[red]{placeholder image: Deep Learning Hierarchical Feature Extraction.}}
     \label{fig:background_fex_deep-fex}
@@ -119,14 +119,14 @@ One of the first promising approaches to text generation was the Recurrent Neura
 Recurrent connections enable RNN models to establish a distributed hidden state that acts as a memory, much like a flip-flop gate array in electronics.
 In practice, each RNN module is fed the inputs at the current time instant and its own outputs at the previous time instant, making it suitable to process sequences and other time-based data.
 
-\begin{figure}[H]
+\begin{figure}[t!]
     \centering
     \subfloat[Recurrent Neural Networks Architecture.\label{fig:background_rnn}]{
-        \includegraphics[width=0.46\textwidth]{background_rnn_placeholder.pdf}
+        \includegraphics[width=\textwidth]{background_rnn.pdf}
     }
     \quad
     \subfloat[LSTMs.\label{fig:background_lstm}]{
-        \includegraphics[width=0.46\textwidth]{background_lstm_placeholder.pdf}
+        \includegraphics[width=0.9\textwidth]{background_lstm.pdf}
     }
     \caption{\todo[red]{placeholder image: Recurrent Neural Networks Architectures + LSTMs.}}
     \label{fig:background_rnn_lstm}
@@ -143,7 +143,7 @@ One of the most relevant and groundbreaking developments in the field of NLP was
 Word embeddings came as a straightforward application of deep learning concepts and approaches to the world of NLP.
 Their introduction not only determined an improvement in most text-based applications, but also motivated a shift in text representation techniques, incentivizing a word-centric approach rather than focusing on documents and defining words as frequencies inside them.
 
-\begin{figure}[H]
+\begin{figure}[t!]
     \centering
     \includegraphics[width=0.6\textwidth]{background_embeddings_placeholder.pdf}
     \caption{\todo[red]{placeholder image: Word Embedding Space Visualization.}}
@@ -166,14 +166,14 @@ The main purpose of Word2Vec is to create word embeddings, it is composed by a s
 
 \blockquote[J.R. Firth]{You Shall Know a Word by the Company It Keeps}
 
-\begin{figure}[H]
+\begin{figure}[t!]
     \centering
     \subfloat[CBoW.\label{fig:background_word2vec-cbow}]{
-        \includegraphics[width=0.46\textwidth]{background_word2vec-cbow_placeholder.pdf}
+        \includegraphics[width=\textwidth]{background_word2vec-cbow.pdf}
     }
     \quad
     \subfloat[Skip-gram.\label{fig:background_word2vec-skipg}]{
-        \includegraphics[width=0.46\textwidth]{background_word2vec-skipg_placeholder.pdf}
+        \includegraphics[width=0.9\textwidth]{background_word2vec-skipg.pdf}
     }
     \caption{\todo[red]{placeholder image: Skip-gram and CBoW Word2Vec.}}
     \label{fig:background_word2vec-cbow_word2vec-skipg}
@@ -201,7 +201,7 @@ One of the most famous examples presented in~\cite{mikolov2013} is: \texttt{emb(
 Other \todo{relevant} analogies include country-capital, family relation, and verb tenses.
 However, any kind of semantic relationship could be potentially modeled by word embeddings, given enough support in the training dataset.
 
-\begin{figure}[H]
+\begin{figure}[t!]
     \centering
     \includegraphics[width=\textwidth]{background_emb-arithmetic_placeholder.pdf}
     \caption{\todo[red]{placeholder image: Embedding Arithmetic https://developers.google.com/machine-learning/crash-course/embeddings/embedding-space?hl=it.}}
@@ -223,7 +223,7 @@ This architecture is of the encoder-decoder type, following the typical paradigm
 This structure implies the existence of two separate modules (an encoder and a decoder), which work in tandem to elaborate inputs and provide an output.
 Both input and output consist of sequential data.
 
-\begin{figure}[H]
+\begin{figure}[t!]
     \centering
     \includegraphics[width=0.6\textwidth]{background_trans-enc-dec_placeholder.pdf}
     \caption{\todo[red]{placeholder image: Attention is All You Need Transformer Architecture https://arxiv.org/abs/1706.03762.}}
@@ -266,7 +266,7 @@ The original transformer architecture mentioned in ``Attention Is All You Need''
 \end{equation}
 Where $Q$, $K$ and $V$ represent the \emph{query}, \emph{key} and \emph{value} components of attention which are obtained by multiplying the hidden state vectors to their respective projection matrices $W_Q$, $W_K$ and $W_V$, which are composed of learnable model parameters.
 
-\begin{figure}[H]
+\begin{figure}[t!]
     \centering
     \subfloat[Encoder-Decoder.\label{fig:background_enc-dec-attention}]{
         \includegraphics[width=0.8\textwidth]{background_enc-dec-attention_placeholder.pdf}
@@ -360,7 +360,7 @@ What was previously described is generally considered the first transformer arch
 However, with time, a large number of variations and improvements on the base architecture has struck the NLP field.
 We are going to be mainly concerned with the Llama 2~\cite{touvron2023} and Llama 3~\cite{dubey2024} (from \todo{here} just Llama) models, developed by \href{https://ai.meta.com/}{Meta AI} in 2023 and 2024 respectively; other minor models may also be taken into consideration, although without particular focus on their architecture.
 
-\begin{figure}[H]
+\begin{figure}[t!]
     \centering
     \includegraphics[width=0.6\textwidth]{background_llama-arch_placeholder.pdf}
     \caption{\todo[red]{placeholder image: Decoder-only Architecture Llama https://github.com/hkproj/pytorch-llama-notes.}}
@@ -408,7 +408,7 @@ However, newer architectures have begun to incorporate Gated Linear Units (GLUs)
 \emph{Swish}~\cite{shazeer2020} is an activation function similar to \emph{ReLU}, characterized by a non-monotonic depression in its zero-region, and is implemented in the following way: $Swish(x) = x \cdot \sigma(x)$ where $\sigma(x)$ represents the logistic sigmoid function.
 \emph{Swish} was shown to offer marginal improvements over \emph{ReLU} and other similar variations, based on its smoothness and possibility of returning small negative values for inputs close to zero, implying the efficient convergence of non-zero gradients and consequently minimizing the problem of dead neurons (caused by the nullification of gradient).
 
-\begin{figure}[H]
+\begin{figure}[t!]
     \centering
     \includegraphics[width=0.6\textwidth]{background_ffnn-glu.pdf}
     \caption{\todo[red]{placeholder image: GLU Feedforward Architecture.}}

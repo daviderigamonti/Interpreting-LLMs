@@ -1,0 +1,156 @@
+\documentclass[crop, tikz, multi=false]{standalone}
+
+\usepackage{xcolor}
+\usepackage{tikzstyle}
+
+\usetikzlibrary{
+  arrows.meta, calc, decorations.pathreplacing, decorations.pathmorphing, 
+  ext.paths.ortho, positioning, quotes, shapes, backgrounds, calligraphy, math
+}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+    \node[
+        neuron,
+        fill=green!20,
+        minimum width = 3em,
+    ] (in) {$x$} ;
+
+    \node[
+        above = of in,
+        archblock,
+        fill=orange!30,
+        minimum width = 7em, minimum height = 4em,
+    ] (hidden) {\Large RNN} ;
+
+    \node[
+        above = of hidden,
+        neuron,
+        fill=cyan!20,
+        minimum width = 3em,
+    ] (out) {$h$} ;
+
+    \draw[arrow] (in) -- (hidden);
+    \draw[arrow] (hidden) -- (out);
+    \draw[arrow, violet] (hidden.east) -- +(2em, 0) -- +(2em, 3.5em) -- +(-9em, 3.5em) -- +(-9em, 0em) -- (hidden.west);
+
+    \node[
+        right = 12em of hidden,
+        archblock,
+        fill=orange!30,
+        minimum width = 7em, minimum height = 4em,
+    ] (un0_hid) {\Large RNN} ;
+    \node[
+        below = of un0_hid,
+        neuron,
+        fill=green!20,
+        minimum width = 3em,
+    ] (un0_in) {$x_0$} ;
+    \node[
+        above = of un0_hid,
+        neuron,
+        fill=cyan!20,
+        minimum width = 3em,
+    ] (un0_out) {$h_0$} ;
+    \draw[arrow] (un0_in) -- (un0_hid);
+    \draw[arrow] (un0_hid) -- (un0_out);
+    \draw[arrow] (un0_hid.east) -- +(5em, 0);
+    \node[above = 1em of un0_out, helv, align=center] () {\large time $0$};
+
+    \draw[
+        ->, -stealth, decorate, decoration={snake,segment length=10, post length=0.5em},
+        very thick, black!20!yellow
+    ] ([xshift=4em]hidden.east) -- 
+    node[helv, below = 1.5em, text=black!20!yellow, align=center](){\Large Unrolling} ([xshift=-2em]un0_hid.west);
+
+    \draw[line, dashed, thick] ([xshift=4em]un0_out.east) -- ([xshift=4em]un0_in.east);
+
+    \node[right = 6em of un0_hid] (dots) {\Huge $\cdots$};
+
+    \node[
+        right = 6em of dots,
+        archblock,
+        fill=orange!30,
+        minimum width = 7em, minimum height = 4em,
+    ] (un3_hid) {\Large RNN} ;
+    \node[
+        below = of un3_hid,
+        neuron,
+        fill=green!20,
+        minimum width = 3em,
+    ] (un3_in) {$x_{t-3}$} ;
+    \node[
+        above = of un3_hid,
+        neuron,
+        fill=cyan!20,
+        minimum width = 3em,
+    ] (un3_out) {$h_{t-3}$} ;
+    \draw[arrow] (un3_in) -- (un3_hid);
+    \draw[arrow] (un3_hid) -- (un3_out);
+    \draw[arrow, stealth-] (un3_hid.west) -- +(-5em, 0);
+    \node[above = 1em of un3_out, helv, align=center] () {\large time $t-3$};
+
+    \draw[line, dashed, thick] ([xshift=-4em]un3_out.west) -- ([xshift=-4em]un3_in.west);
+
+    \foreach\i in {1,...,2} {
+        \tikzmath{int \ii; \ii = 3 - \i + 1;}
+        \tikzmath{int \iii; \iii = 3 - \i;}
+        \node[
+            right = 8em of un\ii_in,
+            neuron,
+            fill=green!20,
+            minimum width = 3em,
+        ] (un\iii_in) {$x_{t-\iii}$} ;
+        \node[
+            above = of un\iii_in,
+            archblock,
+            fill=orange!30,
+            minimum width = 7em, minimum height = 4em,
+        ] (un\iii_hid) {\Large RNN} ;
+        \node[
+            above = of un\iii_hid,
+            neuron,
+            fill=cyan!20,
+            minimum width = 3em,
+        ] (un\iii_out) {$h_{t-\iii}$} ;
+        \draw[arrow] (un\iii_in) -- (un\iii_hid);
+        \draw[arrow] (un\iii_hid) -- (un\iii_out);
+        \draw[arrow] (un\ii_hid.east) -- (un\iii_hid.west);
+        \node[above = 1em of un\iii_out, helv, align=center] () {\large time $t-\iii$};
+
+        \draw[line, dashed, thick] ([xshift=-4em]un\iii_out.west) -- ([xshift=-4em]un\iii_in.west);
+    }
+
+    \node[
+        right = 8em of un1_in,
+        neuron,
+        fill=green!20,
+        minimum width = 3em,
+    ] (unt_in) {$x_t$} ;
+    \node[
+        above = of unt_in,
+        archblock,
+        fill=orange!30,
+        minimum width = 7em, minimum height = 4em,
+    ] (unt_hid) {\Large RNN} ;
+    \node[
+        above = of unt_hid,
+        neuron,
+        fill=cyan!20,
+        minimum width = 3em,
+    ] (unt_out) {$h_t$} ;
+    \draw[arrow] (unt_in) -- (unt_hid);
+    \draw[arrow] (unt_hid) -- (unt_out);
+    \draw[arrow] (un1_hid.east) -- (unt_hid.west);
+    \node[above = 1em of unt_out, helv, align=center] () {\large time $t$};
+
+    \draw[line, dashed, thick] ([xshift=-4em]unt_out.west) -- ([xshift=-4em]unt_in.west);
+
+    \node[below = 0.5em of in, helv, text=black!35!green, align=center] () {\Large Input};
+    \node[above = 0.5em of out, helv, text=black!30!cyan, align=center] () {\Large Output};
+    \node[above right = 1.5em and -0.5em of hidden, helv, text=black!10!violet, align=center] () {\large Recurrent \tikznewl{\large Connection}};
+\end{tikzpicture}
+
+\end{document}

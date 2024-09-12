@@ -2,6 +2,10 @@
 
 \RequirePackage{tikz}
 \RequirePackage{xcolor}
+\RequirePackage{ifthen}
+
+% Redefine \\ to include space for both vertical ascenders and descenders
+\newcommand\tikznewl[1]{\vphantom{bg}\pgfutil@protect\tikz@align@newline@#1\vphantom{bg}}
 
 \tikzset{
     semifill/.style 2 args={
@@ -45,6 +49,23 @@
     },
 }
 
+%Neurons
+\tikzset{
+    neuron/.style={
+        draw=black!100,
+        circle,
+        very thick,
+        minimum width=2em, minimum height=2em,
+        align=center,
+    },
+    matrix/.style={
+        draw=black!100,
+        very thick,
+        minimum width=6em, minimum height=2em,
+        align=center,
+    },
+}
+
 % Arrows
 \tikzset{
     line/.style={
@@ -53,6 +74,9 @@
     arrow/.style={
         line, -stealth
     },
+    connectdots/.style={
+        densely dotted, draw=gray!50, thick
+    }
 }
 
 % Operators
@@ -84,4 +108,198 @@
         align=center,
         text width=4em
     }
+}
+
+\tikzset{
+    boxvecbox/.style={
+        draw=black,
+        outer sep=0,
+        thick,
+        text height=0.75em, text depth=0.12em,
+        align=center,
+        fill=gray!30, text=black,
+        minimum width=1em, minimum height=1em,
+    }
+}
+
+\def\hboxvec(#1)(#2:#3:#4)(#5)(#6:#7:#8)
+% (reference node)
+% (boxes before:boxes middle:boxes after)
+% (box params)
+% (dots1:dots2:dots length)
+{
+    \def\bbarray{{#2}}
+    \pgfmathparse{dim(\bbarray)}
+    \tikzmath{
+        \bbdim = \pgfmathresult;
+        \bbdimi = int(\pgfmathresult-1);
+    }
+
+    \def\bmarray{{#3}}
+    \pgfmathparse{dim(\bmarray)}
+    \tikzmath{
+        \bmdim = \pgfmathresult;
+        \bmdimi = int(\pgfmathresult-1);
+    }
+
+    \def\baarray{{#4}}
+    \pgfmathparse{dim(\baarray)}
+    \tikzmath{
+        \badim = \pgfmathresult;
+        \badimi = int(\pgfmathresult-1);
+    }
+
+    \def\lastboxref{#1}
+    
+    \ifthenelse{\bbdim>0}{
+        \node[
+            boxvecbox, #5
+        ](bb0) at (\lastboxref) {\pgfmathparse{\bbarray[0]}\pgfmathresult};
+        \ifthenelse{\bbdim>1}{
+            \foreach \i in {1,...,\bbdimi}  {
+                \tikzmath{int \ii; \ii = \i - 1;}
+                \node[
+                    boxvecbox, right = 0em of bb\ii, #5
+                ](bb\i){\pgfmathparse{\bbarray[\i]}\pgfmathresult};
+            }
+        }{}
+        \def\lastboxref{bb\bbdimi}
+    }{}
+
+    \ifthenelse{#6>0}{
+        \node[
+            boxvecbox, right = 0em of \lastboxref, #5, minimum width=#8,
+        ](dots1){$\cdots$};
+        \def\lastboxref{dots1}
+    }{}
+    \ifthenelse{\bmdim>0}{
+        \node[
+            boxvecbox, right = 0em of \lastboxref, #5
+        ](bm0){\pgfmathparse{\bmarray[0]}\pgfmathresult};
+        \ifthenelse{\bmdim>1}{
+            \foreach \i in {1,...,\bmdimi}  {
+                \tikzmath{int \ii; \ii = \i - 1;}
+                
+                \node[
+                    boxvecbox, right = 0em of bm\ii, #5
+                ](bm\i){\pgfmathparse{\bmarray[\i]}$\pgfmathresult$};
+            }
+        }{}
+        \def\lastboxref{bm\bmdimi}
+    }{}
+
+    \ifthenelse{#7>0}{
+        \node[
+            boxvecbox, right = 0em of \lastboxref, #5, minimum width=#8,
+        ](dots2){$\cdots$};
+        \def\lastboxref{dots2}
+    }{}
+
+    \ifthenelse{\badim>0}{
+        \node[
+            boxvecbox, right = 0em of \lastboxref, #5
+        ](ba0){\pgfmathparse{\baarray[0]}\pgfmathresult};
+        \ifthenelse{\badim>1}{
+            \foreach \i in {1,...,\badimi}  {
+                \tikzmath{int \ii; \ii = \i - 1;}
+                \node[
+                    boxvecbox, right = 0em of ba\ii, #5
+                ](ba\i){\pgfmathparse{\baarray[\i]}\pgfmathresult};
+            }
+        }{}
+        \def\lastboxref{ba\badimi}
+    }{}
+
+    \node[](hboxvec_last) at (\lastboxref) {};
+}
+
+\def\vboxvec(#1)(#2:#3:#4)(#5)(#6:#7:#8)
+% (reference node)
+% (boxes before:boxes middle:boxes after)s
+% (box params)
+% (dots1:dots2:dots height)
+{
+    \def\bbarray{{#2}}
+    \pgfmathparse{dim(\bbarray)}
+    \tikzmath{
+        \bbdim = \pgfmathresult;
+        \bbdimi = int(\pgfmathresult-1);
+    }
+
+    \def\bmarray{{#3}}
+    \pgfmathparse{dim(\bmarray)}
+    \tikzmath{
+        \bmdim = \pgfmathresult;
+        \bmdimi = int(\pgfmathresult-1);
+    }
+
+    \def\baarray{{#4}}
+    \pgfmathparse{dim(\baarray)}
+    \tikzmath{
+        \badim = \pgfmathresult;
+        \badimi = int(\pgfmathresult-1);
+    }
+
+    \def\lastboxref{#1}
+    
+    \ifthenelse{\bbdim>0}{
+        \node[
+            boxvecbox, #5
+        ](bb0) at (\lastboxref) {\pgfmathparse{\bbarray[0]}\pgfmathresult};
+        \ifthenelse{\bbdim>1}{
+            \foreach \i in {1,...,\bbdimi}  {
+                \tikzmath{int \ii; \ii = \i - 1;}
+                \node[
+                    boxvecbox, below = 0em of bb\ii, #5
+                ](bb\i){\pgfmathparse{\bbarray[\i]}\pgfmathresult};
+            }
+        }{}
+        \def\lastboxref{bb\bbdimi}
+    }{}
+
+    \ifthenelse{#6>0}{
+        \node[
+            boxvecbox, below = 0em of \lastboxref, #5, minimum height=#8,
+        ](dots1){$\vdots$};
+        \def\lastboxref{dots1}
+    }{}
+    \ifthenelse{\bmdim>0}{
+        \node[
+            boxvecbox, below = 0em of \lastboxref, #5
+        ](bm0){\pgfmathparse{\bmarray[0]}\pgfmathresult};
+        \ifthenelse{\bmdim>1}{
+            \foreach \i in {1,...,\bmdimi}  {
+                \tikzmath{int \ii; \ii = \i - 1;}
+                
+                \node[
+                    boxvecbox, below = 0em of bm\ii, #5
+                ](bm\i){\pgfmathparse{\bmarray[\i]}\pgfmathresult};
+            }
+        }{}
+        \def\lastboxref{bm\bmdimi}
+    }{}
+
+    \ifthenelse{#7>0}{
+        \node[
+            boxvecbox, below = 0em of \lastboxref, #5, minimum height=#8,
+        ](dots2){$\vdots$};
+        \def\lastboxref{dots2}
+    }{}
+
+    \ifthenelse{\badim>0}{
+        \node[
+            boxvecbox, below = 0em of \lastboxref, #5
+        ](ba0){\pgfmathparse{\baarray[0]}\pgfmathresult};
+        \ifthenelse{\badim>1}{
+            \foreach \i in {1,...,\badimi}  {
+                \tikzmath{int \ii; \ii = \i - 1;}
+                \node[
+                    boxvecbox, below = 0em of ba\ii, #5
+                ](ba\i){\pgfmathparse{\baarray[\i]}\pgfmathresult};
+            }
+        }{}
+        \def\lastboxref{ba\badimi}
+    }{}
+
+    \node[](vboxvec_last) at (\lastboxref) {};
 }

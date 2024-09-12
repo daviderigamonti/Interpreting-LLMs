@@ -15,7 +15,8 @@
 # Thesis .pdf files
 Thesis/*.pdf
 Thesis/Backup/*.pdf
-Thesis/Images/TikZ/img/*.pdf
+Thesis/Images/TikZ/**/*.png
+Thesis/Images/TikZ/**/*.pdf
 
 ######## Python gitignore template
 

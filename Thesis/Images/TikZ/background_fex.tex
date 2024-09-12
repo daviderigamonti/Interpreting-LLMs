@@ -1,0 +1,73 @@
+\documentclass[crop, tikz, multi=false]{standalone}
+
+\usepackage{xcolor}
+\usepackage{tikzstyle}
+
+\usetikzlibrary{
+  arrows.meta, calc, decorations.pathreplacing, ext.paths.ortho, 
+  positioning, quotes, shapes, backgrounds, calligraphy, math, shapes.arrows, shapes.misc
+}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+    \node[neuron, fill=green!30] (in0) {};
+    \foreach\i in {1,...,3} {
+        \tikzmath{int \ii; \ii = \i - 1;}
+        \node[below = 4ex of in\ii, neuron, fill=green!30] (in\i) {};
+    }
+
+    \node[below right = 0.25em and 10em of in0, neuron, fill=violet!30] (eng0) {};
+    \foreach\i in {1,...,2} {
+        \tikzmath{int \ii; \ii = \i - 1;}
+        \node[below = 2em of eng\ii, neuron, fill=violet!30] (eng\i) {};
+    }
+
+    \node[above right = 1em and 10em+2em+4em of in0, neuron, fill=yellow!50] (hid0) {};
+    \foreach\i in {1,...,4} {
+        \tikzmath{int \ii; \ii = \i - 1;}
+        \node[below = 2em of hid\ii, neuron, fill=yellow!50] (hid\i) {};
+    }
+    \foreach\i in {0,...,2} {
+        \foreach\j in {0,...,4}
+            \draw[line, semithick, white!40!violet] (eng\i) -- (hid\j);
+    }
+
+    \node[right = 4em of hid0, neuron, fill=yellow!50] (hidd0) {};
+    \foreach\i in {1,...,4} {
+        \tikzmath{int \ii; \ii = \i - 1;}
+        \node[below = 2em of hidd\ii, neuron, fill=yellow!50] (hidd\i) {};
+    }
+    \foreach\i in {0,...,4} {
+        \foreach\j in {0,...,4}
+            \draw[line, semithick, black!20!yellow] (hid\i) -- (hidd\j);
+    }
+
+    \node[below right = 1em and 4em of hidd0, neuron, fill=cyan!30] (out0) {};
+    \foreach\i in {1,...,2} {
+        \tikzmath{int \ii; \ii = \i - 1;}
+        \node[below = 3.6em of out\ii, neuron, fill=cyan!30] (out\i) {};
+    }
+    \foreach\i in {0,...,4} {
+        \foreach\j in {0,...,2}
+            \draw[line, semithick, black!25!cyan] (hidd\i) -- (out\j);
+    }
+
+    \node[above = 1.8em of in0, helv, text=black!35!green, align=center] () {\Large Raw \tikznewl{\Large Input} \tikznewl{\Large Features}};
+    \node[above = 2.5em of eng0, helv, text=black!10!violet, align=center] () {\Large Engineered \tikznewl{\Large Features}};
+    \node[above right = 1em and -0.35em of hid0, helv, text=black!30!yellow, align=center] () {\Large Hidden \tikznewl{\Large States}};
+    \node[above = 1.6em of out0, helv, text=black!30!cyan, align=center] () {\Large Classification};
+
+    \node[
+        single arrow, draw=black!20!orange, fill=orange,
+        line width = 0.25em,
+        left = 1em of eng1.west,
+        minimum width = 4em, single arrow head extend=0.5em, minimum height=7em
+    ] (bigarrow) {};
+    \node[above = 0.25em of bigarrow] () {\includegraphics[width=.06\textwidth]{src/man.png}};
+    \node[above = 3em of bigarrow, helv, text=black!20!orange, align=center] () {\Large Expert \tikznewl{\Large Feature} \tikznewl{\Large Extraction}};
+
+\end{tikzpicture}
+
+\end{document}

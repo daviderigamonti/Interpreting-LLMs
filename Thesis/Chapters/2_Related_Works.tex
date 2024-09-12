@@ -27,7 +27,7 @@ Another possible taxonomy for interpretability techniques, more focused on their
 They identify two main classes of interpretability approaches: \textbf{behavior localization} and \textbf{information decoding}.
 In the next sections we will follow their insightful classification to provide a synthetic analysis of the state of the art, with a specific focus on a restricted number of techniques that are especially relevant for the purpose of this work.
 
-\begin{figure}[H]
+\begin{figure}[t!]
     \centering
     \includegraphics[width=0.6\textwidth]{related_ferrando-tax.pdf}
     \caption{Taxonomy for transformer interpretability methods proposed by~\citet{ferrando2024}.}
@@ -132,7 +132,7 @@ Another crucial contribution, inspired by the future lens, is the \emph{patchsco
 Other significant approaches include the direct decoding of model weights~\cite{dar2023}, potentially using singular value decomposition techniques to factorize the weight matrices~\cite{millidge2022}, and logit spectroscopy~\cite{cancedda2024}, which employs a spectral analysis of the residual stream and parameter matrices interacting with it.
 This last method aims to identify and analyze specific parts of the hidden representation spectrum that are most likely to be overlooked by the classic logit lens.
 
-\begin{figure}[H]
+\begin{figure}[t!]
     \centering
     \includegraphics[width=0.8\textwidth]{related_patchscopes.pdf}
     \caption{\todo[red]{placeholder caption: Patchscopes Visualization.}}
@@ -149,7 +149,7 @@ Unfortunately, the maximally-activating input analysis has been criticized for g
 
 \todo[green]{Add that one paper (LM-TT) with a very nice, comprehensive and interactive transformer execution visualization (maybe out of time scope?)}
 
-\begin{figure}[H]
+\begin{figure}[t!]
     \centering
     \includegraphics[width=\textwidth]{related_lm-tt.pdf}
     \caption{\todo[red]{placeholder caption: Visualization of That One Paper (LM-TT).}}

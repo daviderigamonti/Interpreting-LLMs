@@ -1,0 +1,92 @@
+\documentclass[crop, tikz, multi=false]{standalone}
+
+\usepackage{xcolor}
+\usepackage{tikzstyle}
+
+\usetikzlibrary{
+  arrows.meta, calc, decorations.pathreplacing, decorations.pathmorphing, 
+  ext.paths.ortho, positioning, quotes, shapes, backgrounds, calligraphy, math
+}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+    \node[
+        archblock,
+        fill=green!20,
+        minimum width = 45em, minimum height = 25em,
+    ](lstm){};
+
+    \node[
+        below left = -9em and 12.5 em of lstm.south,
+        archblock,
+        fill=yellow!30,
+        minimum width = 6em, minimum height = 3em,
+    ](sig1){\Large $\sigma$};
+    \node[
+        right = 3em of sig1,
+        archblock,
+        fill=yellow!30,
+        minimum width = 6em, minimum height = 3em,
+    ](sig2){\Large $\sigma$};
+    \node[
+        right = 2em of sig2,
+        archblock,
+        fill=yellow!30,
+        minimum width = 6em, minimum height = 3em,
+    ](tan){\Large $\tan$};
+
+    \node[
+        right = 3em of tan,
+        archblock,
+        fill=yellow!30,
+        minimum width = 6em, minimum height = 3em,
+    ](sig3){\Large $\sigma$};
+
+    \node[op, fill=gray!30, above = 11.85em of sig1, minimum width = 2.25em](times1){$\times$};
+    \node[op, fill=gray!30, above = 5em of tan, minimum width = 2.25em](times2){$\times$};
+    \node[op, fill=gray!30, above right = 3em and 2em of sig3, minimum width = 2.25em](times3){$\times$};
+    \node[op, fill=gray!30, above = 11.85em of tan, minimum width = 2.25em](plus){$+$};
+    \node[op, fill=gray!30, above = 3em of times3, text width=2.25em, inner sep = 0em](tanh){$\tanh$};
+    \node[op, fill=gray!30, below left = 3em and -1em of sig1,  minimum width = 2.25em](concat){$\oplus$};
+
+    \draw[arrow] ([xshift=-2em, yshift=-10.5em]lstm.west) node[left, text=black!30!cyan]{\huge $h_{t-1}$} -- (concat.west);
+    \draw[arrow] ([yshift=-3em]concat.south) node[below, text=black!35!green]{\huge $x_{t}$} -- (concat.south);
+    \draw[arrow] (concat.east) -| (sig1.south);
+    \draw[arrow] (concat.east) -| (sig2.south);
+    \draw[arrow] (concat.east) -| (sig3.south);
+    \draw[arrow] (concat.east) -| (tan.south);
+    
+    \draw[arrow] (sig1.north) -- (times1.south);
+    \draw[arrow] (sig2.north) |- (times2.west);
+    \draw[arrow] (tan.north) -- (times2.south);
+    \draw[arrow] (sig3.north) |- (times3.west);
+
+    \draw[arrow] (times2.north) -- (plus.south);
+    \draw[arrow] (tanh.south) -- (times3.north);
+
+    \draw[arrow] ([xshift=-2em, yshift=9.5em]lstm.west) node[left, text=black!50!red]{\huge $C_{t-1}$} -- (times1.west);
+    \draw[arrow] (times1.east) -- (plus.west);
+    \draw[arrow] (plus.east) -- ([xshift=2em, yshift=9.5em]lstm.east) node[right, text=black!50!red]{\huge $C_t$};
+    \draw[arrow] (plus.east) -| (tanh.north);
+    \draw[arrow] (times3.south) |- ([xshift=2em, yshift=-10.5em]lstm.east) node[right, text=black!30!cyan]{\huge $h_{t}$};
+    
+    \draw[line, green!20, line width = 0.8em] ([xshift=-2em]lstm.east) -- +(0,12em);
+    \draw[arrow] ([xshift=-4em, yshift=-10.5em]lstm.east) -| ++(2em,25em) node[above, text=black!30!cyan]{\huge $h_{t}$};
+
+    \draw[line, dashed, orange, fill=orange!40, fill opacity=0.45] ([xshift=-4em,yshift=-2em]sig1.south) rectangle ++(8em,20.5em)
+        coordinate[pos=1] (forget_ref);
+    \draw[line, dashed, violet, fill=violet!40, fill opacity=0.45] ([xshift=-4em,yshift=-2em]sig2.south) rectangle ++(16.25em,20.5em)
+        coordinate[pos=1] (update_ref);
+    \draw[line, dashed, cyan, fill=cyan!40, fill opacity=0.45] ([xshift=-4em,yshift=-2em]sig3.south) rectangle ++(12em,17em)
+        coordinate[pos=1] (output_ref);
+
+    \draw[arrow, dashed, orange] ([xshift=-4em]forget_ref) -- ++(0,5em) node[above, helv, align=center](){\Large Forget Gate};
+    \draw[arrow, dashed, violet] ([xshift=-8.13em]update_ref) -- ++(0,5em) node[above, helv, align=center]{\Large Update Gate};
+    \draw[arrow, dashed, cyan] ([xshift=-6em]output_ref) -- ++(0,8.5em) node[above, helv, align=center]{\Large Output Gate};
+
+    
+\end{tikzpicture}
+
+\end{document}

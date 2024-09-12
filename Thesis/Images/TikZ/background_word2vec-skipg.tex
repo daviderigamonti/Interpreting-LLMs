@@ -1,0 +1,92 @@
+\documentclass[crop, tikz, multi=false]{standalone}
+
+\usepackage{xcolor}
+\usepackage{tikzstyle}
+
+\usetikzlibrary{
+  arrows.meta, calc, decorations.pathreplacing, ext.paths.ortho, 
+  positioning, quotes, shapes, backgrounds, calligraphy, math
+}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+    \node[] (latent_in) {};
+    \node[left = 1em of latent_in] (latent_inshift) {};
+    \vboxvec(latent_inshift)({"\Large $y_0$", "\phantom{0}", "\phantom{0}"}:{"\phantom{0}", "\phantom{0}", "{\Large $y_j$}", "\phantom{0}"}:{"\phantom{0}", "\Large $y_V$"})(
+        draw = white!0,
+        fill = white!0,
+        text = black!50!green,
+        minimum width = 1.5em,
+        minimum height = 0.1em
+    )(1:1:4.5em)
+    \vboxvec(latent_in)({0,0,0,0}:{0,0,1,0}:{0,0,0})(
+        draw = black!30!green,
+        fill = green!30,
+        minimum width = 1.5em,
+        minimum height = 0.1em
+    )(1:1:3em)
+    \node[](latent_ine) at (vboxvec_last) {};
+    \node[above right = 0.5em and 0.25em of latent_in] () {\Large $1 \times V$};
+
+    \node[
+        matrix, below right = -0.7em and 10em of latent_in,
+        minimum width = 12em, minimum height = 22em, 
+        fill=orange!30,
+    ] (W) {\Huge $\mathbf{W}$};
+    \node[above right = 0em and 0em of W] () {\Large $V \times D$};
+
+    \draw[connectdots] ([xshift=0.4em, yshift=0.4em]latent_in.north east) -- (W.north west);
+    \draw[connectdots] ([xshift=0.4em, yshift=-0.4em]latent_ine.south east) -- (W.south west);
+
+    \node[right = 4em of W] (eq1) {\Huge =};
+
+    \node[above right = 3.8em and 4em of eq1] (latent_hid) {};
+    \vboxvec(latent_hid)({"$h_1$", "$h_2$", "$h_3$"}:{}:{{"$h_D$"}})(
+        draw = violet,
+        fill = violet!30,
+        minimum width = 2.5em,
+        minimum height = 2.25em
+    )(1:0:3em)
+    \node[](latent_hide) at (vboxvec_last) {};
+    \node[above right = 1em and 0.75em of latent_hid] () {\Large $1 \times D$};
+
+    \node[
+        matrix, above right = 0.8em and 6em of latent_hid, anchor=north west,
+        minimum width = 22em, minimum height = 12em, 
+        fill=yellow!40,
+    ] (WW) {\Huge $\mathbf{W}^{\prime}$};
+    \node[above right = 0em and 0em of WW] () {\Large $D \times V$};
+
+    \draw[connectdots] ([xshift=1em, yshift=0.82em]latent_hid.north east) -- (WW.north west);
+    \draw[connectdots] ([xshift=1em, yshift=-0.82em]latent_hide.south east) -- (WW.south west);
+
+    \node[right = 4em of WW] (eq2) {\Huge =};
+
+    \node[above right = 9.5em and 4em of eq2] (latent_out) {};
+    \node[right = 1em of latent_out] (latent_outshift) {};
+    \vboxvec(latent_outshift)({"\Large $y_0$", "\phantom{0}", "\phantom{0}"}:{"\phantom{0}", "\phantom{0}", "{\Large $y_j$}", "\phantom{0}"}:{"\phantom{0}", "\Large $y_V$"})(
+        draw = white!0,
+        fill = white!0,
+        text = black!30!cyan,
+        minimum width = 1.5em,
+        minimum height = 0.1em
+    )(1:1:4.5em)
+    \vboxvec(latent_out)({0,0,0,0}:{0,0,1,0}:{0,0,0})(
+        draw = black!30!cyan,
+        fill = cyan!30,
+        minimum width = 1.5em,
+        minimum height = 0.1em
+    )(1:1:3em)
+    \node[above right = 0.5em and 0.25em of latent_out] () {\Large $1 \times V$};
+
+    \node[above = 4.5em of latent_in, helv, text=black!35!green, align=center] () {\Huge Input};
+    \node[above = 3em of W, helv, text=black!30!orange, align=center] () {\Huge Encoding \tikznewl{\Huge Matrix}};
+    \node[above = 3.5em of WW, helv, text=black!30!yellow, align=center] () {\Huge Decoding \tikznewl{\Huge Matrix}};
+    \node[above right = 4.4em and -4.5em of latent_hid, helv, text=black!10!violet, align=center] () {\Huge Hidden \tikznewl{\Huge State}};
+    \node[above = 4.5em of latent_out, helv, text=black!30!cyan, align=center] () {\Huge Output};
+
+\end{tikzpicture}
+
+\end{document}
