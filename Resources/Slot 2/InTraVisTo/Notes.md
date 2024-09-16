@@ -147,3 +147,18 @@
     - Fixes
         - Why input probabiliteis of embedding layer are 0.0
         - Use normalization to increase weight probabilities
+
+# Meeting 13/09/24
+
+- Change injection to new formula defined in .pdfs
+- Interface:
+    - Add XAI-lab, Politecnico di Milano logos in the top banner
+    - Spell out InTraVisTO 
+- Interpolation:
+    - Idea of dropping quadratic interpolation
+    - Are all the vectos in the input the same size?
+        - Test: Show norms of vectors in input and output embeddings
+        - It may make sense to first normalize embedding before performing interpolation
+
+- Possibility of letting the user remove links from the Sankey?
+- Possibility of implementing the table instead of the heatmap
