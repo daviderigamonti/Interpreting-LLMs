@@ -16,6 +16,14 @@
                 (path picture bounding box.north east) -- 
                 cycle;
         }
+    },
+    vsemifill/.style 2 args={
+        fill=#1,
+        path picture={
+            \fill[#2, sharp corners]  
+                (path picture bounding box.south) rectangle
+                (path picture bounding box.north east);
+        }
     }
 }
 

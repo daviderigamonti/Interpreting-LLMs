@@ -1,0 +1,74 @@
+\documentclass[crop, tikz, multi=false]{standalone}
+
+\usepackage{xcolor}
+\usepackage{pgfplots}
+\usepackage{tikzstyle}
+
+\usetikzlibrary{
+  arrows.meta, calc, decorations.pathreplacing, ext.paths.ortho, 
+  positioning, quotes, shapes, backgrounds, calligraphy, math,
+  decorations.text
+}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+    \tikzset{
+        squareneuron/.style={
+            draw=black!100,
+            rectangle,
+            very thick,
+            minimum width=3.5em, minimum height=3.5em,
+            align=center,
+        },
+    }
+
+    \node[squareneuron, fill=green!30] (in0) {\Large $x_1$};
+    \foreach\i in {1,...,2} {
+        \tikzmath{int \ii; \ii = \i - 1;}
+        \tikzmath{int \iii; \iii = \i + 1;}
+        \node[below = 3em of in\ii, squareneuron, fill=green!30] (in\i) {\Large $x_\iii$};
+    }
+    \node[below = 2em of in2, squareneuron, draw=none] (in_dots) {\Huge \vdots};
+    \node[below = 2em of in_dots, squareneuron, fill=green!30] (in3) {\Large $x_m$};
+
+    \node[
+        right = 10em of in2, 
+        neuron, fill=orange!50!yellow!10, minimum width = 6em,
+        vsemifill={orange!30}{violet!30}
+    ] (neuron) {\huge \textcolor{black!20!orange}{$\Sigma$}\hspace{0.8em}\textcolor{black!10!violet}{$f$}};
+
+    \draw[arrow, very thick] (in0.east) --  node[midway, above = 1em]{\large $w_1$} (neuron);
+    \draw[arrow, very thick] (in1.east) --  node[midway, above = 0.5em]{\large $w_2$} (neuron);
+    \draw[arrow, very thick] (in2.east) --  node[midway, above = 0.1em]{\large $w_3$} (neuron);
+    \draw[arrow, very thick] (in3.east) --  node[midway, above = 1em]{\large $w_m$} (neuron);
+
+    \node[
+        above right = 2em and 0em of in0, 
+        neuron, fill=gray!30,
+    ] (bias) {\scriptsize $x_0 = 1  $};
+    \draw[arrow, very thick, color=gray!80] (bias.south east) --  node[midway, above right = 1em and -0.5em]{\large $w_0 = b$} (neuron);
+
+    \node[right = 10em of neuron, squareneuron, fill=cyan!30] (out) {\Large $y$};
+    \draw[arrow, very thick, color=black!25!cyan] (neuron) -- 
+        node[midway, above=0.5em]{
+            \Large $\textcolor{black!30!cyan}{y} \,\textcolor{black}{=}\, \textcolor{black!10!violet}{f(}\textcolor{black!30!orange}{\displaystyle\sum\limits_{i=0}^{m}}{\textcolor{black}{w_i}\textcolor{black!30!green}{x_i}}\textcolor{black!10!violet}{)}$
+        } (out);
+
+    \node[below = 2em of in3, helv, text=black!35!green, align=center] () {\Large Inputs};
+    \node[below = 2em of out, helv, text=black!30!cyan, align=center] () {\Large Output};
+    \node[below = 2em of neuron, helv, text=black, align=center] () {\Large Neuron};
+    \node[right = 1.5em of bias, helv, text=black!30!gray] () {\Large Bias Term};
+
+
+    \node[above left = 8em and 1em of out](actfn){
+        \begin{axis}[scale=0.25,axis lines=middle,xtick=\empty, ytick=\empty]
+            \addplot[violet, domain=-1:1, smooth]{tanh(x)};
+        \end{axis}
+    };
+
+    \node[above left = 0em and -4em of actfn, helv, text=black!10!violet, align=center] () {\large Activation \tikznewl{\large Function $f(\cdot)$}};
+\end{tikzpicture}
+
+\end{document}

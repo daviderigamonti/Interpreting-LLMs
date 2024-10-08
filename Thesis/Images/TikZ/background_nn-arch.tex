@@ -1,0 +1,163 @@
+\documentclass[crop, tikz, multi=false]{standalone}
+
+\usepackage{xcolor}
+\usepackage{tikzstyle}
+
+\usetikzlibrary{
+  arrows.meta, calc, decorations.pathreplacing, ext.paths.ortho, 
+  positioning, quotes, shapes, backgrounds, calligraphy, math,
+  fadings, decorations.text
+}
+
+% Fading styles
+\tikzfading[name=fade right, 
+    left color=transparent!0,
+    right color=transparent!100,
+    middle color=transparent!90,
+]
+\tikzfading[name=fade left,
+    left color=transparent!100,
+    right color=transparent!0,
+    middle color=transparent!90,
+]
+
+\begin{document}
+
+\begin{tikzpicture}
+
+    \node[neuron, fill=green!30] (in0) {};
+    \foreach\i in {1,...,3} {
+        \tikzmath{int \ii; \ii = \i - 1;}
+        \node[below = 4ex of in\ii, neuron, fill=green!30] (in\i) {};
+    }
+
+    \node[above right = 1em and 6em of in0, neuron, fill=orange!50!yellow!10] (hid1_0) {};
+    \foreach\i in {1,...,4} {
+        \tikzmath{int \ii; \ii = \i - 1;}
+        \node[below = 2em of hid1_\ii, neuron, fill=orange!50!yellow!10] (hid1_\i) {};
+    }
+    \foreach\i in {0,...,3} {
+        \foreach\j in {0,...,4}
+            \draw[line, semithick, color=black!30!green] (in\i) -- (hid1_\j);
+    }
+
+    \node[
+        above left = 1em and 1em of hid1_0, 
+        neuron, fill=gray!30, minimum width=0.1em, minimum height=0.1em,
+    ] (bias1) {\scriptsize $1$};
+    \foreach\i in {0,...,4} {
+        \draw[line, semithick, color=gray!80] (bias1) -- (hid1_\i.north west);
+    }
+
+    \node[right = 6em of hid1_0, neuron, fill=orange!50!yellow!10] (hid2_0) {};
+    \foreach\i in {1,...,4} {
+        \tikzmath{int \ii; \ii = \i - 1;}
+        \node[below = 2em of hid2_\ii, neuron, fill=orange!50!yellow!10] (hid2_\i) {};
+    }
+    \foreach\i in {0,...,4} {
+        \foreach\j in {0,...,4}
+            \draw[line, semithick, color=black!80] (hid1_\i) -- (hid2_\j);
+    }
+
+    \node[
+        above left = 1em and 1em of hid2_0, 
+        neuron, fill=gray!30, minimum width=0.1em, minimum height=0.1em,
+    ] (bias2) {\scriptsize $1$};
+    \foreach\i in {0,...,4} {
+        \draw[line, semithick, color=gray!80] (bias2) -- (hid2_\i.north west);
+    }
+
+    \node[right = 6em of hid2_0, neuron, draw=none] (hid3_0) {};
+    \foreach\i in {1,...,4} {
+        \tikzmath{int \ii; \ii = \i - 1;}
+        \node[below = 2em of hid3_\ii, neuron, draw=none] (hid3_\i) {};
+    }
+    \foreach\i in {0,...,4} {
+        \foreach\j in {0,...,4}
+            \filldraw[line, semithick, color=black!80, path fading=fade right] (hid2_\i) -- (hid3_\j);
+    }
+
+    \node[right = 6em of hid3_0, neuron, draw=none] (hid4_0) {};
+    \foreach\i in {1,...,4} {
+        \tikzmath{int \ii; \ii = \i - 1;}
+        \node[below = 2em of hid4_\ii, neuron, draw=none] (hid4_\i) {};
+    }
+
+    \node[right = 9em of hid2_2, neuron, draw=none] (dots) {\huge $\cdots$};
+
+    \node[right = 6em of hid4_0, neuron, fill=orange!50!yellow!10] (hid5_0) {};
+    \foreach\i in {1,...,4} {
+        \tikzmath{int \ii; \ii = \i - 1;}
+        \node[below = 2em of hid5_\ii, neuron, fill=orange!50!yellow!10] (hid5_\i) {};
+    }
+    \foreach\i in {0,...,4} {
+        \foreach\j in {0,...,4}
+            \filldraw[line, semithick, color=black!80, path fading=fade left] (hid4_\i) -- (hid5_\j);
+    }
+
+    \node[
+        above left = 1em and 1em of hid5_0, 
+        neuron, fill=gray!30, minimum width=0.1em, minimum height=0.1em,
+    ] (bias5) {\scriptsize $1$};
+    \foreach\i in {0,...,4} {
+        \draw[line, semithick, color=gray!80] (bias5) -- (hid5_\i.north west);
+    }
+
+    \node[below right = 1em and 6em of hid5_0, neuron, fill=cyan!30] (out0) {};
+    \foreach\i in {1,...,2} {
+        \tikzmath{int \ii; \ii = \i - 1;}
+        \node[below = 3.6em of out\ii, neuron, fill=cyan!30] (out\i) {};
+    }
+    \foreach\i in {0,...,4} {
+        \foreach\j in {0,...,2}
+            \draw[line, semithick, black!25!cyan] (hid5_\i) -- (out\j);
+    }
+
+    \node[above = 12em of out0, draw=none](a){};
+    \draw [
+        arrow, line width = 0.2em, black!20!red,
+        postaction={
+            decorate,
+            decoration={
+                raise=1em, text along path, text align=center, reverse path,
+                text color=black!20!red,
+                text={|\Large\fontfamily{phv}\selectfont|Backwards Pass (Backpropagation)}
+            }
+        }
+    ] ([yshift=5em]out0.north) to[out=90, in=90, bend right=20] ([yshift=5em]in0.north);
+
+    \node[below = 6em of out2, draw=none](b){};
+    \draw [
+        arrow, line width = 0.2em, black!10!orange,
+        postaction={
+            decorate,
+            decoration={
+                raise=1em, text along path, text align=center,
+                text color=black!10!orange,
+                text={|\Large\fontfamily{phv}\selectfont|Forward Pass}
+            }
+        }
+    ] ([yshift=-6em]in3.south) -- ([yshift=-6em]out2.south);
+
+    \node[above left = 1em and 0em of in0, helv, text=black!35!green, align=center] () {\large Input \tikznewl{\large Layer}};
+    \node[above right = 1em and 0em of out0, helv, text=black!30!cyan, align=center] () {\large Output \tikznewl{\large Layer}};
+    \node[above = 2em of hid3_0, helv, align=center] () {\large Hidden Layers};
+
+    \node[
+        below right = 0em and 1.5em of in1,
+        archblock, minimum width = 2em,
+        fill=green!30,
+    ](w1){\Large $W_1$};
+    \node[
+        right = 1.5em of hid1_2,
+        archblock, minimum width = 2em,
+        fill=orange!50!yellow!10,
+    ](w2){\Large $W_2$};
+    \node[
+        right = 1.5em of hid5_2,
+        archblock, minimum width = 2em,
+        fill=cyan!30,
+    ](wd){\Large $W_d$};
+\end{tikzpicture}
+
+\end{document}
