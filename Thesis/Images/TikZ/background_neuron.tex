@@ -56,19 +56,19 @@
             \Large $\textcolor{black!30!cyan}{y} \,\textcolor{black}{=}\, \textcolor{black!10!violet}{f(}\textcolor{black!30!orange}{\displaystyle\sum\limits_{i=0}^{m}}{\textcolor{black}{w_i}\textcolor{black!30!green}{x_i}}\textcolor{black!10!violet}{)}$
         } (out);
 
-    \node[below = 2em of in3, helv, text=black!35!green, align=center] () {\Large Inputs};
-    \node[below = 2em of out, helv, text=black!30!cyan, align=center] () {\Large Output};
-    \node[below = 2em of neuron, helv, text=black, align=center] () {\Large Neuron};
-    \node[right = 1.5em of bias, helv, text=black!30!gray] () {\Large Bias Term};
+    \node[below = 1.25em of in3, figb, text=black!35!green, align=center] () {\Large Inputs};
+    \node[below = 1.25em of out, figb, text=black!30!cyan, align=center] () {\Large Output};
+    \node[below = 1.25em of neuron, figb, text=black, align=center] () {\Large Neuron};
+    \node[right = 1.25em of bias, figb, text=black!30!gray] () {\Large Bias Term};
 
 
-    \node[above left = 8em and 1em of out](actfn){
+    \node[above left = 6.5em and 1em of out](actfn){
         \begin{axis}[scale=0.25,axis lines=middle,xtick=\empty, ytick=\empty]
             \addplot[violet, domain=-1:1, smooth]{tanh(x)};
         \end{axis}
     };
 
-    \node[above left = 0em and -4em of actfn, helv, text=black!10!violet, align=center] () {\large Activation \tikznewl{\large Function $f(\cdot)$}};
+    \node[above left = 0em and -4em of actfn, figb, text=black!10!violet, align=center] () {\large Activation \tikznewl{\large Function $f(\cdot)$}};
 \end{tikzpicture}
 
 \end{document}

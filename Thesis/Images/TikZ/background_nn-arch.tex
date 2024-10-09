@@ -121,7 +121,7 @@
             decoration={
                 raise=1em, text along path, text align=center, reverse path,
                 text color=black!20!red,
-                text={|\Large\fontfamily{phv}\selectfont|Backwards Pass (Backpropagation)}
+                text={|\Large\fontfamily{FigTree}\selectfont\bfseries|Backwards Pass (Backpropagation)}
             }
         }
     ] ([yshift=5em]out0.north) to[out=90, in=90, bend right=20] ([yshift=5em]in0.north);
@@ -134,14 +134,14 @@
             decoration={
                 raise=1em, text along path, text align=center,
                 text color=black!10!orange,
-                text={|\Large\fontfamily{phv}\selectfont|Forward Pass}
+                text={|\Large\fontfamily{FigTree}\selectfont\bfseries|Forward Pass}
             }
         }
     ] ([yshift=-6em]in3.south) -- ([yshift=-6em]out2.south);
 
-    \node[above left = 1em and 0em of in0, helv, text=black!35!green, align=center] () {\large Input \tikznewl{\large Layer}};
-    \node[above right = 1em and 0em of out0, helv, text=black!30!cyan, align=center] () {\large Output \tikznewl{\large Layer}};
-    \node[above = 2em of hid3_0, helv, align=center] () {\large Hidden Layers};
+    \node[above left = 1em and 0em of in0, figb, text=black!35!green, align=center] () {\large Input \tikznewl{\large Layer}};
+    \node[above right = 1em and 0em of out0, figb, text=black!30!cyan, align=center] () {\large Output \tikznewl{\large Layer}};
+    \node[above = 2em of hid3_0, figb, align=center] () {\large Hidden Layers};
 
     \node[
         below right = 0em and 1.5em of in1,

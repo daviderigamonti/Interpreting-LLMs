@@ -54,10 +54,10 @@
             \draw[line, semithick, black!25!cyan] (hidd\i) -- (out\j);
     }
 
-    \node[above = 1.8em of in0, helv, text=black!35!green, align=center] () {\Large Raw \tikznewl{\Large Input} \tikznewl{\Large Features}};
-    \node[above = 2.5em of eng0, helv, text=black!10!violet, align=center] () {\Large Engineered \tikznewl{\Large Features}};
-    \node[above right = 1em and -0.35em of hid0, helv, text=black!30!yellow, align=center] () {\Large Hidden \tikznewl{\Large States}};
-    \node[above = 1.6em of out0, helv, text=black!30!cyan, align=center] () {\Large Classification};
+    \node[above = 2em of in0, figb, text=black!35!green, align=center] () {\Large Raw \tikznewl{\Large Input} \tikznewl{\Large Features}};
+    \node[above = 4.8em of eng0, figb, text=black!10!violet, align=center] () {\Large Engineered \tikznewl{\Large Features}};
+    \node[above right = 0.8em and -0.8em of hid0, figb, text=black!30!yellow, align=center] () {\Large Hidden \tikznewl{\Large States}};
+    \node[above = 4.3em of out0, figb, text=black!30!cyan, align=center] () {\Large Classification};
 
     \node[
         single arrow, draw=black!20!orange, fill=orange,
@@ -66,7 +66,7 @@
         minimum width = 4em, single arrow head extend=0.5em, minimum height=7em
     ] (bigarrow) {};
     \node[above = 0.25em of bigarrow] () {\includegraphics[width=.06\textwidth]{src/man.png}};
-    \node[above = 3em of bigarrow, helv, text=black!20!orange, align=center] () {\Large Expert \tikznewl{\Large Feature} \tikznewl{\Large Extraction}};
+    \node[above = 2.8em of bigarrow, figb, text=black!20!orange, align=center] () {\Large Expert \tikznewl{\Large Feature} \tikznewl{\Large Extraction}};
 
 \end{tikzpicture}
 

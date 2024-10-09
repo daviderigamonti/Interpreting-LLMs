@@ -18,7 +18,7 @@
         \node[below = 4ex of in\ii, neuron, fill=green!30] (in\i) {};
     }
 
-    \node[above right = 1em and 4em of in0, neuron, fill=orange!30] (enc0) {};
+    \node[above right = 1em and 5em of in0, neuron, fill=orange!30] (enc0) {};
     \foreach\i in {1,...,4} {
         \tikzmath{int \ii; \ii = \i - 1;}
         \node[below = 2em of enc\ii, neuron, fill=orange!30] (enc\i) {};
@@ -38,7 +38,7 @@
             \draw[line, semithick, black!20!orange] (enc\i) -- (encc\j);
     }
 
-    \node[right = 4em of encc0, neuron, fill=yellow!50] (decc0) {};
+    \node[right = 5em of encc0, neuron, fill=yellow!50] (decc0) {};
     \foreach\i in {1,...,2} {
         \tikzmath{int \ii; \ii = \i - 1;}
         \node[below = 2em of decc\ii, neuron, fill=yellow!50] (decc\i) {};
@@ -48,7 +48,7 @@
             \draw[line, semithick] (encc\i) -- (decc\j);
     }
 
-    \node[right = 4*3em+2*2em of enc0, neuron, fill=yellow!50] (dec0) {};
+    \node[right = 5em+4*2em+2*2em of enc0, neuron, fill=yellow!50] (dec0) {};
     \foreach\i in {1,...,4} {
         \tikzmath{int \ii; \ii = \i - 1;}
         \node[below = 2em of dec\ii, neuron, fill=yellow!50] (dec\i) {};
@@ -58,7 +58,7 @@
             \draw[line, semithick, black!20!yellow] (decc\i) -- (dec\j);
     }
 
-    \node[below right = 1em and 4em of dec0, neuron, fill=cyan!30] (out0) {};
+    \node[below right = 1em and 5em of dec0, neuron, fill=cyan!30] (out0) {};
     \foreach\i in {1,...,2} {
         \tikzmath{int \ii; \ii = \i - 1;}
         \node[below = 3.6em of out\ii, neuron, fill=cyan!30] (out\i) {};
@@ -68,12 +68,12 @@
             \draw[line, semithick, black!25!cyan] (dec\i) -- (out\j);
     }
 
-    \node[above = 1em of in0, helv, text=black!35!green, align=center] () {\Large Raw \tikznewl{\Large Input} \tikznewl{\Large Features}};
-    \node[right = 1em of enc0, helv, text=black!30!orange, align=center] () {\Large Encoding};
-    \node[left = 1em of dec0, helv, text=black!30!yellow, align=center] () {\Large Decoding};
-    \node[above = 1.5em of out0, helv, text=black!30!cyan, align=center] () {\Large Classification};
+    \node[above = 1em of in0, figb, text=black!35!green, align=center] () {\Large Raw \tikznewl{\Large Input} \tikznewl{\Large Features}};
+    \node[right = 1em of enc0, figb, text=black!30!orange, align=center] () {\Large Encoding};
+    \node[left = 1em of dec0, figb, text=black!30!yellow, align=center] () {\Large Decoding};
+    \node[above = 1.5em of out0, figb, text=black!30!cyan, align=center] () {\Large Classification};
 
-    \draw[line, black!50!red] ([yshift=1.5em]enc0.west) -- ++(0,1.5em) -| node[helv, above,align=center, pos=0.25]{\Large Feature Extraction} ([yshift=1.5em]dec0.east);
+    \draw[line, black!50!red] ([yshift=1.5em]enc0.west) -- ++(0,1.5em) -| node[figb, above,align=center, pos=0.25]{\Large Feature Extraction} ([yshift=1.5em]dec0.east);
 
     \draw[arrow, dashed, violet] ([yshift=-0.5em]encc2.south) -- ++(0,-6em) coordinate(latent);
     
@@ -83,7 +83,7 @@
         fill = violet!30,
     )(1:0:3em)
 
-    \node[right = 2em of hboxvec_last, helv, text=black!10!violet, align=center] () {\Large Latent \tikznewl{\Large Representation}};
+    \node[right = 2em of hboxvec_last, figb, text=black!10!violet, align=center] () {\Large Latent \tikznewl{\Large Representation}};
 
 \end{tikzpicture}
 

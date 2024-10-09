@@ -3,6 +3,16 @@
 \RequirePackage{tikz}
 \RequirePackage{xcolor}
 \RequirePackage{ifthen}
+\RequirePackage{fontspec}
+
+% Define Avenire font
+\newfontfamily{\figtree}[
+    NFSSFamily=FigTree,
+    Path=src/,
+    Extension = .ttf,
+    UprightFont = *-Regular,
+    BoldFont = *-Medium,
+]{FigTree}
 
 % Redefine \\ to include space for both vertical ascenders and descenders
 \newcommand\tikznewl[1]{\vphantom{bg}\pgfutil@protect\tikz@align@newline@#1\vphantom{bg}}
@@ -29,15 +39,18 @@
 
 % Fonts
 \tikzset{
-    helv/.style={
-        font=\fontfamily{phv}\selectfont
+    fig/.style={
+        font=\fontfamily{FigTree}\selectfont
+    },
+    figb/.style={
+        font=\fontfamily{FigTree}\selectfont\bfseries
     }
 }
 
 % Blocks
 \tikzset{
     block/.style={
-        helv,
+        fig,
         draw=black!100,
         very thick,
     },
@@ -90,7 +103,7 @@
 % Operators
 \tikzset{
     op/.style={
-        helv,
+        fig,
         draw=black!100,
         circle,
         very thick,

@@ -18,6 +18,9 @@ Thesis/Backup/*.pdf
 Thesis/Images/TikZ/**/*.png
 Thesis/Images/TikZ/**/*.pdf
 
+# Fonts
+*.ttf
+
 ######## Python gitignore template
 
 # Byte-compiled / optimized / DLL files
