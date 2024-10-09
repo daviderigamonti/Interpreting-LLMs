@@ -103,63 +103,91 @@ Following the path laid out in \Cref{sec:rq_embeddings,sec:method_embeddings}, t
 To explore this inquiry, we have set up various experiments aimed at replicating some of the well-established embeddings properties~\cite{mikolov2013} in recent state-of-the-art architectures.
 Additionally, we expand upon these ideas and provide further explanations for the behaviors emerged from the performed experiments.
 
+\subsection{Dataset}
+
+The dataset used for all the experiments under this research question was created by including the original analogy dataset employed by word2vec~\cite{mikolov2013} and the \textit{BATS (Bigger Analogy Test Set)}~\cite{drozd2016}.
+The word2vec dataset (also known as Google analogy dataset) is structured in two main files: \textit{question-words} and \textit{question-phrases}.
+Question-words contains $14$ categories for a total of \todo{$x$} analogies spacing from linguistic relations to semantic relations, while question-phrases only features $5$ classes and a total of \todo{$x$} analogies regarding common-knowledge relations involving proper nouns.
+BATS features a more complex hierarchy since it is meant to be an improvement over the Google dataset: it covers $4$ main relation types (inflectional morphology, derivational morphology, lexicographic semantics and encyclopedic semantics), each one being subdivided into $10$ further sub-categories containing $50$ unique word pairs each.
+In addition, BATS provides multiple correct answers for word pairs when applicable. 
+
+Due to the different format in which the two datasets have been released (BATS containing word pairs, while Google analogy dataset being comprised of already constructed analogies), some work has been put into collecting, standardizing and unifying analogies.
+To this end, BATS word pairs have been combined into a total of $(50 \times 49) \times 10 \times 4 = 98000$ unique analogies to be combined with the \todo{$x + x = x$} analogies provided by the Google dataset.
+After the removal of duplicate entries, the final comprehensive total of unique analogies amounts to \todo{$x$}.
+
+\todo[green]{handling of multiple correct answers}
+\todo[green]{address possible selection of some sub-categories for some experiments}
+\todo[green]{address dataset reduction to single tokens for some experiments}
+
+% Some of the entries within the dataset that featured underscores to delimit compound words, where modified to use spaces instead.
+
 \subsection{Experiment 1}
 
-\subsubsection{Experimental Setup}
-\todo[green]{experimental setup}
+As a starting point, we directly compare the performance of various state-of-the art models over the defined analogy task.
+We expect to observe similar results for architectures that are similar to one another, while accounting for the vocabulary and vector sizes of embeddings.
 
-\subsubsection{Dataset}
-
-\todo[purple!20]{
-We used a dataset of 22,766 analogies organised in 19 categories.
-In some evaluations, we considered the subset of analogies composed only of words encoded in single tokens by the model's tokenizer.
-Considering all models' tokenizers, the intersection of the filtered analogies accounted for 2,851 data points.
-}
+Interestingly, \citet{drozd2016} finds that scaling the vector size of embeddings has mixed effects in terms of performance when evaluating analogies with our chosen metrics.
+Whereas logically, an increase in vocabulary size should always constitute an improvement over analogy resolution.
+In this experiment we will verify the validity of these statements on the embeddings contained in large scale and newer models, while considering possible limitations in embedding expressiveness of these novel architectures.
+Therefore, we expect to see a clear distinction in the results achieved by newer models against older architectures used as a baseline, that is an inverse trend which favors the embeddings built and trained over old frameworks in analogy resolution.
 
 \subsubsection{Models}
 
-\todo[purple!20]{
-Experiments were conducted using LLaMA-2-7B 
-%\cite{DBLP:journals/corr/abs-2307-09288}
-and Mistral-7B 
-%\cite{DBLP:journals/corr/abs-2310-06825}
-(both with a vocabulary size of 32,000 and an embedding size of 4,096 dimensions).
-Additionaly, GPT-2 (with a vocabulary size of 50,257 tokens and embedding size of 768 dimensions) was also included to serve as a benchmarkdue to it being a non-LLM decoder-only transformer model.
-It is important to note that, whenever feasible, both input and output embeddings (derived from the weights of the decoder at the end of the model) were used and analyzed independently.
-The dataset employed to retrieve analogies is a composite of the \textit{question-words} and \textit{question-phrases} datasets available through the Gensim python library 
-%\cite{rehurek2011gensim} 
-and originally introduced in the word2vec paper 
-%\cite{DBLP:journals/corr/abs-1301-3781}
-.
-Some of the entries within the dataset that featured underscores to delimit compound words, where modified to use spaces instead.
-}
+Experiments were conducted using the input embeddings of bert-large-cased \todo[orange]{cite}, GPT-2 \todo[orange]{cite}, Gemma 2 \todo[orange]{cite}, LLaMA-2-7B \todo[orange]{cite}, LLaMA-3-7B \todo[orange]{cite}, Mistral-7B \todo[orange]{cite} and Phi-3-small-8k-instruct \todo[orange]{cite}.
+Additionally, the word embeddings generated by Word2Vec \todo[orange]{cite} and GloVe \todo[orange]{cite} will also be included to be evaluated as a baseline.
+
+\todo[green]{describe model architectures with reference to a table}
+% [Mistral, llama2] (both with a vocabulary size of 32,000 and an embedding size of 4,096 dimensions).
+% Additionaly, GPT-2 (with a vocabulary size of 50,257 tokens and embedding size of 768 dimensions) was also included to serve as a benchmark due to it being a non-LLM decoder-only transformer model.
+
+The evaluation of embeddings sourced from such a diverse set of models cannot be fair in nature.
+More specifically, no effort has been made to align the datasets \todo{with which} these architectures were trained, opting for comparing their most popular iterations instead.
+The chosen approach has clear limitations, but it is not within our scope to evaluate these models with the intention of finding the \todo{best performing one}.
+Rather, we are interested in assessing the presence of high-level trends that justify the employment of an approach of less granular nature.
 
 \subsubsection{Results}
 
 \todo[purple!20]{
-Upon examining the outcomes derived from the complete dataset in Fig.
-%\ref{RQ1:analog_complete} 
-it becomes apparent that the majority of LLMs seem to underperform with respect to GPT-2, this notable deviation in performance could be stem from various factors.
-However, by inspecting Fig. 
-%\ref{RQ1:analog_single}
-, which displays the same results, but for the single-token version of dataset, we can observe that the performance of GPT-2 alignes more closely with that of the other models.
+It becomes apparent that the majority of LLMs seem to underperform with respect to GPT-2, this notable deviation in performance could stem from various factors.
+However, by inspecting Fig., which displays the same results, but for the single-token version of dataset, we can observe that the performance of GPT-2 alignes more closely with that of the other models.
 This mismatch in performance may be attributed on the tokenization strategy and vocabulary size of the chosen models, in fact all three models employ a Byte-Pair Encoding (BPE) tokenizer 
 %\cite{DBLP:conf/aaai/WangCG20}
 , however the tokenizers utilized by both Mistral and LLaMA are based on SentencePiece 
 %\cite{DBLP:conf/emnlp/KudoR18}
 , presenting a smaller overall vocabulary (32,000 tokens against GPT-2's 50,257 tokens), thus possibly implying a reduced selection of full-word tokens in favor of an increased number of sub-word tokens.
-By analyzing results on the single-only dataset in Fig. 
-%\ref{RQ1:analog_single}
-, we are able to infer that the exclusion of multi-token words from the dataset also mitigates differences that arising from how tokenizers segment words.
+By analyzing results on the single-only dataset in Fig., we are able to infer that the exclusion of multi-token words from the dataset also mitigates differences arising from how tokenizers segment words.
 This effectively normalizes away instances of analogies where GPT-2 may have held an advantage over other LLMs by being able to fully encode certain words.
 For the same reason, GPT-2 would have had both better representations encompassing semantic meanings of words without additional noise caused by multiple words sharing the same sub-word token, but also not having to be subject to the token-reconstruction previously mentioned strategies as ways to deal with multi-token words.
+}
 
+\subsection{Experiment 2}
+
+For this second experiment we wish to delve deeper into the actual capabilities of the embeddings belonging to recent decoder-only LLMs.
+
+\todo[green]{explain}
+
+\subsubsection{Models}
+
+% It is important to note that, whenever feasible, both input and output embeddings (derived from the weights of the decoder at the end of the model) were used and analyzed independently.
+
+Experiments were conducted using the input embeddings of bert-large-cased \todo[orange]{cite}, GPT-2 \todo[orange]{cite}, Gemma 2 \todo[orange]{cite}, LLaMA-2-7B \todo[orange]{cite}, LLaMA-3-7B \todo[orange]{cite}, Mistral-7B \todo[orange]{cite} and Phi-3-small-8k-instruct \todo[orange]{cite}.
+Additionally, the word embeddings generated by Word2Vec \todo[orange]{cite} and GloVe \todo[orange]{cite} will also be included to be evaluated as a baseline.
+
+\todo[green]{describe model architectures with reference to a table}
+
+
+The evaluation of embeddings sourced from such a diverse set of models cannot be fair in nature.
+More specifically, no effort has been made to align the datasets \todo{with which} these architectures were trained, opting for comparing their most popular iterations instead.
+The chosen approach has clear limitations, but it is not within our scope to evaluate these models with the intention of finding the \todo{best performing one}.
+Rather, we are interested in assessing the presence of high-level trends that justify the employment of an approach of less granular nature.
+
+\subsubsection{Results}
+
+\todo[purple!20]{
 Our analysis also reveals that for increasing $k$ values, output embeddings seem to consistently outperform input embeddings (contextually to the model performance), while for smaller $k$ values input embeddings demonstrate greater accuracy.
 This phenomenon suggests that input embeddings provide more reliable estimates for analogies results, but their vectors are laying in a sparser latent spaces, thus making it less likely to accidentaly include the correct vector out of a wrong prediction by extending the range given by $k$.
 Whereas output embeddings latent spaces are more compressed and benefit more from greater $k$ values.
-Such theory is corroborated by the fact that the trend that was previously identified is much less relevant in Fig. 
-%\ref{RQ1:analog_single}
-, where only single-token analogies are considered.
+Such theory is corroborated by the fact that the trend that was previously identified is much less relevant in Fig., where only single-token analogies are considered.
 Furthermore, we observe that the difference between input and output embeddings at earlier $k$ values is more accentuated, and the performance of output embeddings almost never surpasses the one of input embeddings.
 This may be due to the fact that overall (and in particular for input embeddings), it is less likely for the model to output a wrong result for any given single-token only analogy, therefore the margin of analogies with wrong answers according to input embeddings and only correct for output embeddings due to the fact that we are utilizing a large $k$ is greatly reduced.
 
@@ -171,7 +199,6 @@ Finally, we show that input and output embedding pairs belonging to the same mod
 \todo[purple!20]{
 In the end, we can say that recent LLMs still retain a certain amount of facts inside their embeddings, albeit in a noticeably less developed and more noisy way with regards to older models.
 }
-
 
 \section{First Order Prediction}
 
@@ -185,8 +212,6 @@ Although past work has theorized and partially demonstrated on a restricted set 
 
 \subsection{Experiment 1}
 
-\subsubsection{Experimental Setup}
-\todo[green]{experimental setup}
 
 \subsubsection{Dataset}
 
