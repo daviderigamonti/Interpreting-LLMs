@@ -100,29 +100,14 @@ Consequently, the process of explaining a model's prediction is not as straightf
 
 The latent feature space concept and its properties are of particular relevance for this work, as most of the experiments that will be performed are aimed at attempting to understand them in the context of state-of-the-art models in the Natural Language Processing field of study.
 
-\section{Natural Language Processing}
-
-\todo[gray]{V: Add more subsections to this section, "Word Embeddings" is a widow subsection}
-
-\todo[gray]{V: Spend some more words on NLP (evolution, data-driven approaches,...)}
-
-\todo[gray]{V: Move RNNs to Deep Learning}
-
-\todo[gray]{V: Add Markov Chains}
-
-Natural Language Processing (NLP) is a subfield of computer science that stems off the branches of artificial intelligence, information engineering and computational linguistics.
-Its main purpose is to interface computers to languages that are commonly used between humans for the purpose of communication.
-This entails a great variety of many different subtasks, from text classification and machine translation to text generation itself.
-The main focus of most of the state-of-the art models is text generation, even though it is possible to repurpose them for many other tasks due to their modular nature.
-
-One of the first promising approaches to text generation was the Recurrent Neural Network (RNN) architecture, which featured a structure much more similar to classic neural networks, but with the addition of recurrent connections.
+Another type of deep architecture relevant for this work is the Recurrent Neural Network (RNN) architecture: one of the first promising approaches to text generation which featured a structure much more similar to classic neural networks, but with the addition of recurrent connections.
 Recurrent connections enable RNN models to establish a distributed hidden state that acts as a memory, much like a flip-flop gate array in electronics.
 In practice, each RNN module is fed the inputs at the current time instant and its own outputs at the previous time instant, making it suitable to process sequences and other time-based data.
 
 \begin{figure}[t!]
     \centering
     \subfloat[Recurrent Neural Networks Architecture.\label{fig:background_rnn}]{
-        \includegraphics[width=\textwidth]{background_rnn.pdf}
+        \includegraphics[width=0.95\textwidth]{background_rnn.pdf}
     }
     \quad
     \subfloat[LSTMs.\label{fig:background_lstm}]{
@@ -136,6 +121,25 @@ The most popular architecture for text generation before the current state-of-th
 LSTMs are a direct improvement on the RNN, solving the vanishing gradient problem, which was the main failure point of classic RNNs.
 The \todo{overwhelming} vanishing gradient in RNNs is a direct consequence of the co-occurrence between activation functions without a prominent zero-valued region and the Backpropagation Through Time process (being the backpropagation equivalent of a network using recurrent connections), resulting in drastically small gradient values which can limit the model's context window and make the training process slow and unreliable.
 LSTMs solve this by applying specialized gating functions that let the model decide what information to remember, forget and pass along into what is called the Constant Error Carousel.
+
+\section{Natural Language Processing}
+
+Natural Language Processing (NLP) is a subfield of computer science that stems off the branches of artificial intelligence, information engineering and computational linguistics.
+Its main purpose is to interface computers to languages that are commonly used between humans for the purpose of communication.
+This entails a great variety of many different subtasks, from text classification and machine translation to text generation itself.
+The main focus of most of the state-of-the art models is text generation, even though it is possible to repurpose them for many other tasks due to their modular nature.
+
+\subsection{Evolution of NLP}
+
+Before the modern artificial intelligence era, the NLP field was mainly focused on the study of rule-based systems which had their roots in formal logic.
+Consequently, the main sought after tasks were related to translation and parsing, which however, never resulted in any revolutionary breakthroughs.
+During the first AI winter that took place \todo{during} the 70s and 80s, the focus of NLP shifted towards statistical and data-driven approaches, opening the NLP field to major influences from other branches of mathematics, especially probability and statistics.
+
+Exactly in these years the use of Markov Models began to rise in popularity, despite being theorized decades prior \todo[orange]{cite shannon}.
+\todo[green]{explain markov models}
+
+\todo[green]{explain document-oriented representation approaches, tying into embeddings}
+
 
 \subsection{Word Embeddings}
 
@@ -235,7 +239,16 @@ The encoder and the decoder have a fairly similar structure, both featuring mult
 
 \subsection{Structure}\label{ssec:background_transf_structure}
 
-\todo[gray]{V: Consecutive titles}
+Having analyzed the overarching structure of a transformer model, we are now going to explore each module in depth.
+To this end, we are going to subdivide the architecture in three main parts:
+\begin{itemize}
+    \item Starting with the \textbf{preprocessing step}, which embodies the preliminary encoding operations performed at the start and a single time throughout each execution.
+    \item Then, the \textbf{module architecture} that concerns the internals of single basic transformer modules, being replicated multiple times in the transformer stack.
+    \item Finally, the \textbf{postprocessing step}, which covers the step that conclude the generation process of the transformer architecture.
+\end{itemize}
+
+All of the mentioned parts are vital for the \todo{correct functioning} of the transformer, albeit slight modifications will be introduced throughout the years in order to optimize the performance of the basic architecture shown in the current section.
+These additional improvements will see \todo{further discussion} in a dedicated section (\Cref{ssec:background_transf_current}).
 
 \subsubsection*{Preprocessing}
 
@@ -266,7 +279,7 @@ The original transformer architecture mentioned in ``Attention Is All You Need''
 \end{equation}
 Where $Q$, $K$ and $V$ represent the \emph{query}, \emph{key} and \emph{value} components of attention which are obtained by multiplying the hidden state vectors to their respective projection matrices $W_Q$, $W_K$ and $W_V$, which are composed of learnable model parameters.
 
-\begin{figure}[t!]
+\begin{figure}[!htp]
     \centering
     \subfloat[Encoder-Decoder.\label{fig:background_enc-dec-attention}]{
         \includegraphics[width=0.8\textwidth]{background_enc-dec-attention_placeholder.pdf}
@@ -354,7 +367,7 @@ In some specific model architectures, this last weight matrix is forced to be eq
 After the `unembedding' operation, the resulting vector of floating point numbers (commonly referred to as logits) will be laying in the vocabulary space.
 However, in order to get an actual probability distribution over the vocabulary for the next token of the input sequence, a last softmax application is needed.
 
-\subsection{Current Decoder Architectures}
+\subsection{Current Decoder Architectures}\label{ssec:background_transf_current}
 
 What was previously described is generally considered the first transformer architecture that was originally mentioned in the ``Attention Is All You Need''~\cite{vaswani2017} paper in 2017.
 However, with time, a large number of variations and improvements on the base architecture has struck the NLP field.
