@@ -1,0 +1,198 @@
+\documentclass[crop, tikz, multi=false]{standalone}
+
+\usepackage{xcolor}
+\usepackage{pgfplots}
+\usepackage{tikzstyle}
+
+\usetikzlibrary{
+  arrows.meta, calc, decorations.pathreplacing, ext.paths.ortho, 
+  positioning, quotes, shapes, backgrounds, calligraphy, math
+}
+
+\begin{document}
+
+\tikzset{
+    bigarrow/.style={
+        draw,
+        signal, signal to=east, signal from=west,
+        minimum width=18em, minimum height=6em,
+        line width=0.4em, line, draw=black,
+        font=\bfseries, figb,
+    },
+}
+
+\begin{tikzpicture}
+    \node[bigarrow, fill=gray!30] (sup1) {\Large Labeled Data};
+    \node[bigarrow, right = 4em of sup1, minimum width=40em, fill=green!30] (sup2) {\huge \ \ \ Supervised};
+    
+    \node[block, above = 3em of sup2, align=center, fill=white!50!green!30] (supb) {\Large Error \tikznewl{\Large Feedback}};
+    \draw[arrow, very thick] ([xshift=10em]sup2.north) |- (supb.east);
+    \draw[arrow, very thick] (supb.west) -| ([xshift=-10em]sup2.north);
+
+    \node[bigarrow, below = 12em of sup1, fill=gray!30] (unsup1) {\Large Unlabeled Data};
+    \node[bigarrow, right = 4em of unsup1, minimum width=40em, fill=red!30] (unsup2) {\huge \ \ \ Unsupervised};
+
+    \node[block, above = 3em of unsup2, align=center, fill=orange!50!red!30, minimum height=3em] (unsupb) {\Large Pattern Identification};
+    \draw[
+        decorate, decoration={snake, segment length=8, post length=0em}, very thick
+    ] (unsup2.north) -- (unsupb.south);
+
+    \node[bigarrow, below = 12em of unsup1, fill=gray!30, align=center] (rein1) {\Large State/Action \tikznewl{\Large Pairs}};
+    \node[bigarrow, right = 4em of rein1, minimum width=40em, fill=blue!30] (rein2) {\huge \ \ \ Reinforcement};
+
+    \node[block, above = 3em of rein2.north, xshift=-7em, align=center, fill=cyan!50!blue!30] (reinb1) {\Large Reward \tikznewl{\Large System}};
+    \node[block, xshift=7em, fill=cyan!50!blue!30, minimum height=3em] (reinb2) at (rein2 |- reinb1) {\Large Environment};
+    \draw[arrow, very thick] ([xshift=5em]rein2.north) -- ([xshift=-2em]reinb2.south);
+    \draw[arrow, very thick] ([xshift=2em]reinb2.south) -- ([xshift=9em]rein2.north);
+    \draw[arrow, very thick] (reinb2) -- (reinb1);
+    \draw[arrow, very thick] (reinb1.west) -| ([xshift=-13em]rein2.north);
+
+    \node[below right = 3em and 4em of sup2](unsup3){
+        \begin{axis}[
+            scale=0.75, xtick=\empty, ytick=\empty,
+            xmin=0, xmax=1, ymin=0, ymax=1, axis x line = bottom, axis y line = left,
+            scatter/classes={
+                a={mark size=2, line width=0.5pt, fill=red},
+                b={mark size=2, line width=0.5pt, fill=green}
+            }
+        ]
+            \addplot[scatter, only marks, scatter src=explicit symbolic, domain=0:1]
+                table[meta=label] {
+                    x y label
+                    0.23 0.11 b
+                    0.27 0.72 a
+                    0.82 0.23 b
+                    0.12 0.87 a
+                    0.40 0.46 a
+                    0.61 0.17 b
+                    0.89 0.54 a
+                    0.15 0.77 a
+                    0.68 0.88 a
+                    0.13 0.29 b
+                    0.32 0.19 b
+                    0.48 0.14 b
+                    0.06 0.48 a
+                    0.78 0.31 b
+                    0.11 0.39 a
+                    0.34 0.29 a
+                    0.17 0.57 b
+                    0.63 0.75 a
+                    0.71 0.85 a
+                    0.49 0.58 a
+                    0.45 0.88 a
+                    0.31 0.68 a
+                    0.44 0.08 b
+                    0.32 0.90 a
+                    0.85 0.75 a
+                    0.16 0.44 a
+                    0.59 0.36 b
+                    0.87 0.31 b
+                    0.41 0.66 a
+                    0.15 0.48 a
+                };
+            \addplot[color=violet, domain=0:0.9, mark=none, line width=1pt]{0.18+0.56*\x};
+        \end{axis}
+    };
+
+    \node[below right = 3em and 2.7em of unsup2](sup3){
+        \begin{axis}[
+            scale=0.75, xtick=\empty, ytick=\empty,
+            xmin=0, xmax=1, ymin=0, ymax=1, axis x line = bottom, axis y line = left,
+            scatter/classes={
+                a={mark size=2, line width=0.5pt, fill=red},
+                b={mark size=2, line width=0.5pt, fill=green},
+                c={mark size=2, line width=0.5pt, fill=cyan},
+                d={mark size=2, line width=0.5pt, fill=violet!60!white}
+            }
+        ]
+            \addplot[scatter, only marks, scatter src=explicit symbolic, domain=0:1]
+                table[meta=label] {
+                    x y label
+                    0.88 0.50 c
+                    0.42 0.81 d
+                    0.45 0.64 d
+                    0.07 0.70 a
+                    0.33 0.69 d
+                    0.71 0.48 c
+                    0.83 0.88 a
+                    0.38 0.10 b
+                    0.52 0.67 d
+                    0.96 0.93 a
+                    0.87 0.37 c
+                    0.41 0.05 b
+                    0.04 0.22 a
+                    0.23 0.10 a
+                    0.09 0.05 a
+                    0.35 0.25 b
+                    0.78 0.74 a
+                    0.58 0.96 a
+                    0.38 0.71 d
+                    0.82 0.54 c
+                    0.20 0.26 a
+                    0.52 0.73 d
+                    0.82 0.36 c
+                    0.56 0.81 d
+                    0.14 0.75 a
+                    0.23 0.47 a
+                    0.32 0.17 b
+                    0.51 0.99 a
+                    0.51 0.83 d
+                    0.45 0.18 b
+                };
+                \addplot[
+                    color=green, only marks,
+                    style={mark=*, fill=green!30, mark size=18, fill opacity = 0.4}
+                ] coordinates {(0.39,0.16)};
+                \addplot[
+                    color=cyan, only marks,
+                    style={mark=*, fill=cyan!30, mark size=20, fill opacity = 0.4}
+                ] coordinates {(0.8,0.45)};
+                \addplot[
+                    color=violet, only marks,
+                    style={mark=*, fill=violet!20, mark size=23, fill opacity = 0.4}
+                ] coordinates {(0.46,0.72)};
+        \end{axis}
+    };
+
+    \node[below right = 3em and 10em of rein2, draw=none](g00){};
+    \foreach \i in {0,...,5} {
+        \tikzmath{int \ii; \ii = \i + 1;}
+        \foreach \j in {0,...,5} {
+            \tikzmath{int \jj; \jj = \j + 1;}
+            \node[right = 2em of g\i\j, draw=none](g\i\jj){};
+        }
+        \node[above = 2em of g\i0, draw=none](g\ii0){};
+    }
+    \foreach \i in {0,...,5} {
+        \draw [thick] (g\i0.center) -- (g\i5.center);
+        \draw [thick] (g0\i.center) -- (g5\i.center);
+    }
+    \node[above right = 3em and 24.5em of rein2, draw=none](g2){};
+
+    \draw[draw=none] (g20.center) -- node[](a){} (g31.center);
+    \draw[draw=none] (g44.center) -- node[](b){} (g55.center);
+    \draw[draw=none] (g00.center) -- node[](c1){} (g11.center);
+    \draw[draw=none] (g14.center) -- node[](c2){} (g25.center);
+    \draw[draw=none] (g02.center) -- node[](abc1){} (g13.center);
+    \draw[draw=none] (g12.center) -- node[](abc2){} (g23.center);
+
+    \draw[draw=none] (g21.center) -- node[]{\Large \textcolor{red}{\texttt{x}}} (g32.center);
+    \draw[draw=none] (g32.center) -- node[]{\Large \textcolor{red}{\texttt{x}}} (g43.center);
+    \draw[draw=none] (g33.center) -- node[]{\Large \textcolor{red}{\texttt{x}}} (g44.center);
+    \draw[draw=none] (g03.center) -- node[]{\Large \textcolor{red}{\texttt{x}}} (g14.center);
+
+    \draw[arrow, line width = 0.2em, draw=black!20!gray!50] ([yshift=-0.4em]a.south) -- (c1.center) -- (abc1.center) -- (abc2.center) -- (c2.center) -- ([yshift=-0.25em]b.south);
+
+    \node[] at (a) {\Large \textcolor{black!20!green}{\texttt{A}}};
+    \node[] at (b) {\Large \textcolor{black!20!cyan}{\texttt{B}}};
+    \node[circle, draw=black!05!yellow!80, fill=black!05!yellow!80, minimum width=0.15em] at (c1) {};
+    \node[circle, draw=black!05!yellow!80, fill=black!05!yellow!80, minimum width=0.15em] at (c2) {};
+
+    \node[right = 28em of sup2, draw=none](){};
+    \node[right = 28em of rein2, draw=none](){};
+    \node[above = 5em of sup2, draw=none](){};
+    \node[below = 5em of rein2, draw=none](){};
+
+\end{tikzpicture}
+
+\end{document}
