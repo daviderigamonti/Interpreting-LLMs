@@ -143,11 +143,11 @@
     }
 }
 
-\def\hboxvec(#1)(#2:#3:#4)(#5)(#6:#7:#8)
+\def\hboxvec(#1)(#2:#3:#4)(#5)(#6:#7:#8:#9)
 % (reference node)
 % (boxes before:boxes middle:boxes after)
 % (box params)
-% (dots1:dots2:dots length)
+% (dots1:dots2:dots length:dots params)
 {
     \def\bbarray{{#2}}
     \pgfmathparse{dim(\bbarray)}
@@ -189,7 +189,7 @@
 
     \ifthenelse{#6>0}{
         \node[
-            boxvecbox, right = 0em of \lastboxref, #5, minimum width=#8,
+            boxvecbox, right = 0em of \lastboxref, #5, minimum width=#8, #9,
         ](dots1){$\cdots$};
         \def\lastboxref{dots1}
     }{}
@@ -211,7 +211,7 @@
 
     \ifthenelse{#7>0}{
         \node[
-            boxvecbox, right = 0em of \lastboxref, #5, minimum width=#8,
+            boxvecbox, right = 0em of \lastboxref, #5, minimum width=#8, #9,
         ](dots2){$\cdots$};
         \def\lastboxref{dots2}
     }{}
@@ -234,11 +234,11 @@
     \node[](hboxvec_last) at (\lastboxref) {};
 }
 
-\def\vboxvec(#1)(#2:#3:#4)(#5)(#6:#7:#8)
+\def\vboxvec(#1)(#2:#3:#4)(#5)(#6:#7:#8:#9)
 % (reference node)
 % (boxes before:boxes middle:boxes after)s
 % (box params)
-% (dots1:dots2:dots height)
+% (dots1:dots2:dots height:dots params)
 {
     \def\bbarray{{#2}}
     \pgfmathparse{dim(\bbarray)}
@@ -280,7 +280,7 @@
 
     \ifthenelse{#6>0}{
         \node[
-            boxvecbox, below = 0em of \lastboxref, #5, minimum height=#8,
+            boxvecbox, below = 0em of \lastboxref, #5, minimum height=#8, #9,
         ](dots1){$\vdots$};
         \def\lastboxref{dots1}
     }{}
@@ -302,7 +302,7 @@
 
     \ifthenelse{#7>0}{
         \node[
-            boxvecbox, below = 0em of \lastboxref, #5, minimum height=#8,
+            boxvecbox, below = 0em of \lastboxref, #5, minimum height=#8, #9, 
         ](dots2){$\vdots$};
         \def\lastboxref{dots2}
     }{}

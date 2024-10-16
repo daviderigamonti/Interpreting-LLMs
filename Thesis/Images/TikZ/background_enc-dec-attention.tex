@@ -1,0 +1,184 @@
+\documentclass[crop, tikz, multi=false]{standalone}
+
+\usepackage{xcolor}
+\usepackage{pgfplots}
+\usepackage{tikzstyle}
+
+\usetikzlibrary{
+  arrows.meta, calc, decorations.pathreplacing, ext.paths.ortho, 
+  positioning, quotes, shapes, backgrounds, calligraphy, math,
+  decorations.text
+}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+    \foreach\i in {1,...,6} {
+        \tikzmath{int \ii; \ii = \i - 1;}
+        \tikzmath{int \j; \j = \i - 4;}
+        \ifnum\i=1
+            \node[draw=none](inref\i){};
+        \else
+            \node[draw=none, right = 12em of inref\ii](inref\i){};
+        \fi
+        \ifnum\i<5
+            \node[neuron, fill=gray!30](in\i) at (inref\i) {$x_\i$};
+            \node[above = 6.2em of in\i, draw=none](invec\i){};
+            \draw[arrow, very thick] (in\i) -- ([yshift=-4.1em]invec\i.south);
+        \else
+            \node[above = 6.9em of inref\i, draw=none](invec\i){};
+        \fi
+        
+        \vboxvec(invec\i)({1,1,1,1,1}:{}:{})(
+            draw = black,
+            fill = green!30,
+            text = green!30,
+            minimum width = 1.2em, minimum height = 0.1em, text height = 0.2em,
+            font = \tiny,
+        )(
+            0:0:2em:
+            text = black, text height = 1em
+        )
+        \ifnum\i<5
+            \node[
+                block, above = 3em of invec\i,
+                minimum width=3em, minimum height=3em, fill=brown!30,
+            ](encdec\i){ENC};
+        \else
+            \node[
+                block, above = 3em of invec\i,
+                minimum width=3em, minimum height=3em, fill=violet!30,
+            ](encdec\i){DEC};
+        \fi
+        \node[above = 6.2em of encdec\i, draw=none](encdecvec\i){};
+        \vboxvec(encdecvec\i)({1,1,1,1,1}:{}:{})(
+            draw = black,
+            fill = green!30,
+            text = green!30,
+            minimum width = 1.2em, minimum height = 0.1em, text height = 0.2em,
+            font = \tiny,
+        )(
+            0:0:2em:
+            text = black, text height = 1em, 
+        )
+
+        \node[draw=none, above = 1em of encdecvec\i](encdecvect\i){};
+
+        \ifnum\i<5
+            \node[block, above left = 3em and 2em of encdecvec\i, fill=red!40](wv\i){$W_V$};
+            \node[block, above right = 3em and 2em of encdecvec\i, fill=yellow!40](wk\i){$W_K$};
+            \draw[arrow, very thick] (encdecvect\i.center) -- ++(0,0.5em) -| (wv\i.south);
+            \draw[arrow, very thick] (encdecvect\i.center) -- ++(0,0.5em) -| (wk\i.south);
+
+            \node[above = 6.2em of wv\i, draw=none](wvvec\i){};
+            \vboxvec(wvvec\i)({1,1,1,1,1}:{}:{})(
+                draw = black,
+                fill = red!30,
+                text = red!30,
+                minimum width = 1.2em, minimum height = 0.1em, text height = 0.2em,
+                font = \tiny,
+            )(
+                0:0:2em:
+                text = black, text height = 1em, 
+            )
+            \node[above = 6.2em of wk\i, draw=none](wkvec\i){};
+            \vboxvec(wkvec\i)({1,1,1,1,1}:{}:{})(
+                draw = black,
+                fill = yellow!30,
+                text = yellow!30,
+                minimum width = 1.2em, minimum height = 0.1em, text height = 0.2em,
+                font = \tiny,
+            )(
+                0:0:2em:
+                text = black, text height = 1em, 
+            )
+
+            \node[neuron, above = 2em of wkvec\i](wkx\i){$\times$};
+            \node[neuron, above = 2em of wkx\i](wkplus\i){$+$};
+            \draw[arrow, very thick] ([yshift=0.2em]wkvec\i.north) -- (wkx\i.south);
+            \draw[arrow, very thick] (wkx\i.north) -- (wkplus\i.south);
+
+            \node[neuron, above = 2em of wkplus\i, fill=orange!30, draw=orange](wksoft\i){};
+            \node[neuron, above = 14em of wvvec\i](wvx\i){$\times$};
+            \draw[arrow, very thick] (wkplus\i.north) -- (wksoft\i.south);
+            \draw[arrow, very thick] ([yshift=0.2em]wvvec\i.north) -- (wvx\i.south);
+            \draw[arrow, very thick] (wksoft\i.north) |- (wvx\i.east);
+        \else
+            \node[neuron, fill=gray!30, above right = 3em and 2.5em of encdecvec\i](out\i){$y_\j$};
+            \draw[arrow, very thick] (encdecvect\i.center) -- ++(0,0.5em) -| (out\i.south);
+
+            \draw[arrow, very thick] (encdecvect\ii.center)  -- ++(0,0.5em) -| ++(3.6em,-22em) -| ([yshift=-4.1em]invec\i.south);
+        \fi
+        
+        \draw[arrow, very thick] ([yshift=0.2em]invec\i.north) -- (encdec\i);
+        \draw[arrow, very thick] (encdec\i.north) -- ([yshift=-4.1em]encdecvec\i.south);
+        
+        \draw[line, very thick] ([yshift=0.2em]encdecvec\i.north) -- (encdecvect\i.center);
+    }
+
+    \draw[
+        arrow, stealth-, very thick, 
+        dash pattern=on 20pt off 2pt on 2pt off 2pt on 2pt off 2pt on 2pt
+    ] (encdec5.west) -| ++(-2em,2em);
+    \draw[
+        line, very thick,
+        dash pattern=on 300pt off 2pt on 2pt off 2pt on 2pt off 2pt on 2pt
+    ] (encdecvect6.center) -- ++(0,0.5em) -| ++(3.6em,-22em) -| ++(4em, 4em);
+    \draw[
+        line, very thick,
+        dash pattern=on 20pt off 2pt on 2pt off 2pt on 2pt off 2pt on 2pt
+    ] ([yshift=0.2em]encdecvec6.north) -- ++(0,4em);
+
+    \node[neuron, above right = 2em and 24em of wvx4](nplus){$+$};
+    \draw[arrow, very thick] (wvx1.north) |- (nplus.west);
+    \draw[arrow, very thick] (wvx2.north) |- (nplus.west);
+    \draw[arrow, very thick] (wvx3.north) |- (nplus.west);
+    \draw[arrow, very thick] (wvx4.north) |- (nplus.west);
+    \draw[arrow, very thick] (nplus.south) |- (encdec6.west);
+
+    \node[block, above = 3em of encdecvec5, fill=cyan!40](wq){$W_Q$};
+    \node[above = 6.2em of wq, draw=none](wqvec){};
+        \vboxvec(wqvec)({1,1,1,1,1}:{}:{})(
+            draw = black,
+            fill = cyan!30,
+            text = cyan!30,
+            minimum width = 1.2em, minimum height = 0.1em, text height = 0.2em,
+            font = \tiny,
+        )(
+            0:0:2em:
+            text = black, text height = 1em, 
+        )
+    \draw[arrow, very thick] ([yshift=0.2em]encdecvec5.north) -- (wq.south);
+    \draw[arrow, very thick] (wq) -- ([yshift=-4.1em]wqvec.south);
+    \node[draw=none, above left = 1em and 1em of wq](wqvect){};
+    \draw[line, very thick] ([yshift=0.2em]wqvec.north) -- ++(0,1em) -| (wqvect.center);
+
+    \draw[arrow, very thick] (wqvect.center) -- ++(0,-0.5em) -- ++(-41.9em,0) |- (wkx1.east);
+    \draw[arrow, very thick] (wqvect.center) -- ++(0,-0.5em) -- ++(-29.2em,0) |- (wkx2.east);
+    \draw[arrow, very thick] (wqvect.center) -- ++(0,-0.5em) -- ++(-16.5em,0) |- (wkx3.east);
+    \draw[arrow, very thick] (wqvect.center) -- ++(0,-0.5em) -- ++(-3.8em,0) |- (wkx4.east);
+
+    \foreach\i in {1,...,4} {
+        % Line interruption
+        \draw[line, white, line width = 0.8em] ([yshift=0.5em]wv\i.north) -- ([yshift=-4.6em]wvvec\i.south);
+        \draw[line, white, line width = 0.8em] ([yshift=0.5em]wk\i.north) -- ([yshift=-4.6em]wkvec\i.south);
+
+        \draw[arrow, very thick] (wv\i.north) -- ([yshift=-4.1em]wvvec\i.south);
+        \draw[arrow, very thick] (wk\i.north) -- ([yshift=-4.1em]wkvec\i.south);
+    }
+
+    \node[
+        block, minimum width=6em, minimum height=2em, fill=orange!30,
+        right = 5em of wksoft4
+    ](softmax){softmax};
+    \draw[line, dashed, very thick, orange] (softmax.west) -- (wksoft4.east);
+    \draw[line, dashed, very thick, orange] (wksoft4.west) -- (wksoft3.east);
+    \draw[line, dashed, very thick, orange] (wksoft3.west) -- (wksoft2.east);
+    \draw[line, dashed, very thick, orange] (wksoft2.west) -- (wksoft1.east);
+
+    \draw[line, dashed, violet, fill=violet!40, fill opacity=0.45] ([xshift=-4.5em]inref6.south) rectangle ++(10em,27.3em);
+
+\end{tikzpicture}
+
+\end{document}
