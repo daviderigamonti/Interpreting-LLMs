@@ -102,6 +102,7 @@
 \usepackage{cleveref}
 \usepackage{dsfont}
 \usepackage[export]{adjustbox}
+\usepackage{makecell}
 
 % TODO: REMOVE after draft
 \usepackage{soul}
@@ -117,6 +118,8 @@
 \renewcommand{\T}{\mathrm{T}} % Transpose
 
 \setlength{\jot}{12pt} % Vertical equation spacing
+
+\newcommand{\rowcolorhang}[1]{\rowcolor{#1}[\dimexpr\tabcolsep+0.1pt\relax]} % Add overang to table row coloring, to avoid vertical white lines
 
 % TODO: REMOVE after draft
 \renewcommand{\todo}[2][yellow]{\sethlcolor{#1}\hl{#2}} % TODO highlight
