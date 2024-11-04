@@ -164,7 +164,7 @@ Unfortunately, the maximally-activating input analysis has been criticized for g
 
 \textit{LM Transparency Tool} (LM-TT)~\cite{tufanov2024} is an exceptional toolkit that offers interactive tools for analyzing the internal workings of transformer models.
 LM-TT builds on top of the circuital interpretation of the transformer to visualize the information flow.
-As it is possible to observe from \Cref{fig:related_lm-tt}, LM-TT tool focuses on the visualization of the most relevant attention paths leading to the production of an embedding in the internal states of the transformer.
+As it is possible to observe from \cref{fig:related_lm-tt}, LM-TT tool focuses on the visualization of the most relevant attention paths leading to the production of an embedding in the internal states of the transformer.
 Additionally, it also provides useful information that can aid the interpretation of intermediate representations at varying degrees of granularity.
 
 \begin{figure}[t!]
@@ -174,9 +174,9 @@ Additionally, it also provides useful information that can aid the interpretatio
     \label{fig:related_lm-tt}
 \end{figure}
 
-Surprisingly, LM-TT bares a lot of similarities with our proposed tool, InTraVisTo (\Cref{sec:rq_intravisto}), as their main interpretative goal can be considered the same.
+Surprisingly, LM-TT bares a lot of similarities with our proposed tool, InTraVisTo (\cref{sec:rq_intravisto}), as their main interpretative goal can be considered the same.
 However, there are also some fundamental differences in how these tools carry out their intended purpose, and the approaches they take to visualize information.
 For example, InTraVisTo includes a unique visualization of the residual flow using a Sankey diagram, which comes with the advantage of providing the user with a complete overview of the influence of all tokens in a single screen.
 Additionally, the evolution of intermediate representations is quantified using the KL divergence measure between intermediate steps, and by applying vocabulary decoding techniques on their difference.
 Lastly, InTraVisTo offers an injection and ablation framework to enable interactive interventions in real time, allowing users to directly affect and observe the model computation.
-These distinctive features offered by InTraVisTo will be examined more in greater detail in \Cref{sec:rq_intravisto,sec:method_intrvisto,sec:exp_intravisto}.
+These distinctive features offered by InTraVisTo will be examined more in greater detail in \cref{sec:rq_intravisto,sec:method_intrvisto,sec:exp_intravisto}.

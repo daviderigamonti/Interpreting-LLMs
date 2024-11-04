@@ -1,12 +1,12 @@
-This chapter presents the experiments conducted to evaluate the methodology proposed in \Cref{ch:methodology} for the reference scenarios described in \Cref{ch:research_questions}.
+This chapter presents the experiments conducted to evaluate the methodology proposed in \cref{ch:methodology} for the reference scenarios described in \cref{ch:research_questions}.
 The experiments were initially designed to shed light onto some specific aspects of LLM internal state interpretability via vocabulary decoding, although after some interesting findings, more attention was given to the actual initial and final embedding representations in LLMs.
 
-This chapter is organized similarly to \Cref{ch:research_questions,ch:methodology}, following the three main research questions as a baseline.
+This chapter is organized similarly to \cref{ch:research_questions,ch:methodology}, following the three main research questions as a baseline.
 Each research question contemplates multiple experiments aimed at providing empirical evidence to elicit a deeper understanding of large transformer architectures through the perspective of the question at hand.
 Additionally, where applicable, experiments will include a fixed set of key points to formalize the analysis in a structured way.
 These points include:
 \begin{itemize}
-    \item \textbf{Experimental Setup}: complete description of the experiment performed in reference of the theoretical background provided in \Cref{ch:methodology}.
+    \item \textbf{Experimental Setup}: complete description of the experiment performed in reference of the theoretical background provided in \cref{ch:methodology}.
 Parameter combinations, hardware specifications and resources employed may also be mentioned in the setup description.
     \item \textbf{Dataset}: summary of data and information utilized for the experiment, \todo{either} for training models or as direct testing material.
     \item \textbf{Models}: list of models, along with brief \todo{specifics}, that have been utilized to perform the experiment or have been employed for auxiliary tasks. 
@@ -17,7 +17,7 @@ Furthermore, each research question has a final discussion section, which is aim
 
 \section{Transformer Visualization}\label{sec:exp_intravisto}
 
-As anticipated in \Cref{sec:rq_intravisto} and explored in \Cref{sec:method_intrvisto}, the experiments tied to this research question are centered around the InTraVisTo tool.
+As anticipated in \cref{sec:rq_intravisto} and explored in \cref{sec:method_intrvisto}, the experiments tied to this research question are centered around the InTraVisTo tool.
 In the first points we will provide an exhaustive overview of the interface, diving into the technicalities 
 
 
@@ -85,27 +85,27 @@ They tested the model on the Flip-Flop language, but a simpler yet effective use
 Thus, the input prompt for our example is: \textit{Write numbers in reverse order. Number: 13843234 Reverse:}.
 
 As depicted in
-%\Cref{fig:example_settings}
+%\cref{fig:example_settings}
 , the output of the model is not correct as it is \emph{43234\textbf{38}1} instead of \emph{43234\textbf{83}1}.
 Let's now start inspecting the models' internals with InTraVisTo.
 
 Observing %
-%\Cref{fig:example_heatmap_wrong}
+%\cref{fig:example_heatmap_wrong}
 , it is immediately clear that these models (in this case \texttt{mistralai/Mistral-7B-Instruct-v0.2}) present a clear step in the magnitude of probabilities when passing from the intermediate layers to the last layers.
 Through manual trials, we saw that this step tends to happen earlier in the layers as the next token becomes more obvious (e.g. see
-%\Cref{fig:heatmap}
+%\cref{fig:heatmap}
 in the paper the column of token \texttt{\_capital} or \texttt{\_Italy}).
 In this case, there exists a difference between the layers where the step for ``correct output tokens'' and the step for the ``wrong output tokens'' (highlighted in red) occur: the latter seems to be one layer late which, assuming our behavioral assumption is correct, implies that this result is not so obvious according to the model.
 Then, by inspecting the magnitude of the probabilities for the wrong token, this conclusion seems legitimate due to a lower probability (lighter background color) compared with the correct token probabilities, even at the last layer of the network.
 
 Knowing that in
-%\Cref{fig:example_heatmap_wrong} 
+%\cref{fig:example_heatmap_wrong} 
 the correct final token in the red highlighted box should be \texttt{8} instead of \texttt{3}, let's now check if the model has ever introduced an \texttt{8} during its reasoning.
 %\Cref{fig:example_heatmap_multiple}
 represents the same slice of the heatmap inside the red box in 
-%\Cref{fig:example_heatmap_wrong}
+%\cref{fig:example_heatmap_wrong}
 (just shifted below the purple horizontal line and showing nine layers instead of eight), but with different embeddings shown: the embedding coming from the attention, the one after the summation with the residual and the embedding coming from the Feed Forward component (the final embedding, the FF plus the residual is already shown in 
-%\Cref{fig:example_heatmap_wrong}
+%\cref{fig:example_heatmap_wrong}
 ).
 Despite the tokens decoded from the attention embeddings not being very informative and the ones coming from the embedding of the attention plus the residuals being similar to the final one, we can notice that in the embeddings coming from the FF, there is an 8 in the fourth-last layer.
 Now we can conjecture that the model result was probably wrong due to an incorrect or imprecise internal representation around the $29^{th}$ layer.
@@ -139,7 +139,7 @@ Our focus at the moment is on providing better decoding and manipulation of hidd
 
 \section{Embedding Analysis}
 
-Following the path laid out in \Cref{sec:rq_embeddings,sec:method_embeddings}, the experiments of this section will gravitate around the possibility of identifying linear properties modeling semantic relationships inside the input and output embedding spaces of LLMs.
+Following the path laid out in \cref{sec:rq_embeddings,sec:method_embeddings}, the experiments of this section will gravitate around the possibility of identifying linear properties modeling semantic relationships inside the input and output embedding spaces of LLMs.
 
 To explore this inquiry, we have set up various experiments aimed at replicating some of the well-established embeddings properties~\cite{mikolov2013} in recent state-of-the-art architectures.
 Additionally, we expand upon these ideas and provide further explanations for the behaviors emerged from the performed experiments.
@@ -225,25 +225,25 @@ For the same reason, GPT-2 would have had both better representations encompassi
 
 For this second experiment we wish to delve deeper into the actual capabilities of the embeddings belonging to recent decoder-only LLMs.
 To this end, we will also take into consideration the unembedding layer of said models.
-As mentioned in \Cref{ssec:background_transf_structure}, decoder-only transformers feature a reversed embedding matrix inside their language modeling head.
+As mentioned in \cref{ssec:background_transf_structure}, decoder-only transformers feature a reversed embedding matrix inside their language modeling head.
 This matrix is used to translate the last hidden state produced by the transformer stack into the index for the next predicted token.
 Since it shares a common structure with the actual embedding matrix, it should be possible to run the same analogy experiments and obtain meaningful, albeit different, results.
 
-However, not all model architectures provide different embedding and unembedding matrices as already hinted in \Cref{ssec:background_transf_structure}.
+However, not all model architectures provide different embedding and unembedding matrices as already hinted in \cref{ssec:background_transf_structure}.
 Consequently, in this experiment we will also observe the differences between these architectural choices through the lens of analogies.
 
-Additionally, inspired by the decoding approach introduced for the first research question (\Cref{sec:rq_intravisto}), we are also going to take into consideration interpolated embeddings.
-Embedding interpolation, defined in \Cref{ssec:method_intravisto_decoding} and formalized through \Cref{eq:method_intravisto_linear-interp,eq:method_intravisto_quadratic-interp}, is a novel technique that exploits linear properties of embedding spaces and hidden representations~\cite{park2023, mikolov2013, drozd2016} to generate intermediate unembedding matrices with the purpose of decoding said intermediate states.
+Additionally, inspired by the decoding approach introduced for the first research question (\cref{sec:rq_intravisto}), we are also going to take into consideration interpolated embeddings.
+Embedding interpolation, defined in \cref{ssec:method_intravisto_decoding} and formalized through \cref{eq:method_intravisto_linear-interp,eq:method_intravisto_quadratic-interp}, is a novel technique that exploits linear properties of embedding spaces and hidden representations~\cite{park2023, mikolov2013, drozd2016} to generate intermediate unembedding matrices with the purpose of decoding said intermediate states.
 Logically, since we are performing linear interpolation operation, we expect to observe a trend in the analogy resolution accuracy of the interpolated embeddings that goes from the input embedding to the output one according to the interpolation percentage.
 However, it could be possible that the actual rate of change for the interpolated performance might not be constant between the two end points. \todo[green]{what does this imply?}
 
 \subsubsection{Models}
 
 For the experiment at hand we select a smaller set of models to compare due to the fact that we wish to observe the differences between input and output embeddings.
-All changes to the models will be made referencing \todo[orange]{model table in exp.1}, defined for \Cref{ssec:exp_emb_exp1}.
+All changes to the models will be made referencing \todo[orange]{model table in exp.1}, defined for \cref{ssec:exp_emb_exp1}.
 
 As a first step, we are going to discard models without proper sub-word tokenization such as Word2Vec and GloVe.
-This allows us to also perform tests on the whole dataset, through the implementation of proper encoding strategies as defined in \Cref{eq:method_embeddings_multitok-in,eq:method_embeddings_multitok-out}.
+This allows us to also perform tests on the whole dataset, through the implementation of proper encoding strategies as defined in \cref{eq:method_embeddings_multitok-in,eq:method_embeddings_multitok-out}.
 In addition, we are not going to focus on models without distinct input and output embeddings such as GPT-2 and Gemma-2, therefore only GPT-2 will be included in order to provide a baseline evaluation.
 
 \subsubsection{Results}
@@ -267,9 +267,9 @@ In the end, we can say that recent LLMs still retain a certain amount of facts i
 
 \section{First Order Prediction}
 
-Building on the foundation established in \Cref{sec:rq_fom}, the experiments in this section will focus on exploring the implications of creating a First Order Model (FOM).
+Building on the foundation established in \cref{sec:rq_fom}, the experiments in this section will focus on exploring the implications of creating a First Order Model (FOM).
 A FOM is obtained by removing the all intermediate architectural components from an LLM, leaving behind the input and output embedding layers, and the residual connections joining them.
-As explained in \Cref{sec:method_fom}, this operation can be seen as the creation of a Markov model possessing a transition matrix formed by the product between the input and output embedding matrices.
+As explained in \cref{sec:method_fom}, this operation can be seen as the creation of a Markov model possessing a transition matrix formed by the product between the input and output embedding matrices.
 
 Most of the experiments in this section are geared towards understanding if the FOM actually represents a faithful bigram Markov model over the original model's vocabulary.
 Although past work has theorized and partially demonstrated on a restricted set of models the possibility of this hypothesis being \todo{correct}~\cite{elhage2021}, we suspect that FOMs extracted from different LLMs may have different degrees of \todo{`Markovness'} and we strive to explore this intuition in this section.
@@ -283,8 +283,8 @@ This dataset is used to train the unigram Markov model and to perform additional
 \subsection{Experiment 1}
 
 The first experiment explores the main inquiry by means of direct matrix comparison.
-The transition matrix for the model at hand is computed following \Cref{eq:method_fom_fom-matrix} for the purpose of being compared to the transition matrix belonging to an actual first order Markov model, and to the identity matrix.
-This preliminary matrix comparison is performed through the norm difference as shown in \Cref{eq:method_fom_fom-markov-comp}.
+The transition matrix for the model at hand is computed following \cref{eq:method_fom_fom-matrix} for the purpose of being compared to the transition matrix belonging to an actual first order Markov model, and to the identity matrix.
+This preliminary matrix comparison is performed through the norm difference as shown in \cref{eq:method_fom_fom-markov-comp}.
 
 As it will be later pointed out, the norm of the difference between transition matrices is not a reliable metric to measure their similarity.
 Consequently, we choose to use set similarity metrics to
@@ -292,7 +292,7 @@ Consequently, we choose to use set similarity metrics to
 
 \subsubsection{Models}
 
-Similarly to the models taken in consideration for \Cref{ssec:exp_emb_exp2}, the main chosen transformer architectures have different input and output embeddings.
+Similarly to the models taken in consideration for \cref{ssec:exp_emb_exp2}, the main chosen transformer architectures have different input and output embeddings.
 From these models we choose to analyze LLaMA-2-7B \todo[orange]{cite}, LLaMA-3-7B \todo[orange]{cite}, Mistral-7B \todo[orange]{cite} and Phi-3-small-8k-instruct \todo[orange]{cite}.
 
 Whereas, the unigram Markov model is trained utilizing the training split of \emph{WikiText 103} \todo[orange]{cite} for a total of $1.8M$ rows.

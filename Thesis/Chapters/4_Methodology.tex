@@ -45,7 +45,7 @@ Where $\gbm{W}_{d_\textit{dec}}$ represents the matrix of decoder weights accord
     \right.
 \end{equation}
 \todo[cyan]{Fix notation}
-Considering $\mathcal{N}{(\gbm{x})}$ the normalization component of the model's final normalization layer, being reliant on $\mu$ and $\sigma$ for LayerNorm implementations as defined in \Cref{eq:background_layernorm,eq:background_layernorm_extra}, and $RMS(\gbm{x})$ for RMSNorm implementations as defined in \Cref{eq:background_rmsnorm}
+Considering $\mathcal{N}{(\gbm{x})}$ the normalization component of the model's final normalization layer, being reliant on $\mu$ and $\sigma$ for LayerNorm implementations as defined in \cref{eq:background_layernorm,eq:background_layernorm_extra}, and $RMS(\gbm{x})$ for RMSNorm implementations as defined in \cref{eq:background_rmsnorm}
 
 Two natural choices of decoders to use are the transpose of the \emph{input embedding matrix} $\gbm{W}_\textit{in}^\T$ used by the model to convert tokens to vectors on input, and the \emph{output decoder} $\gbm{W}_\textit{out}$ used upon output within the language modeling head.
 Some models, like GPT-2~\cite{radford2019} and Gemma~\cite{mesnard2024} tie these two parameter matrices together during training, while other popular models such as Mistral~\cite{jiang2023} and Llama~\cite{touvron2023,dubey2024} allow these two matrices to differ.
@@ -64,7 +64,7 @@ We define various alternatives for decoder interpolation mainly focusing on \emp
 \todo[cyan]{It is important to note that the term `quadratic interpolation' comprises a small abuse of terminology, as it refers to a specific class of possible quadratic interpolations between the two decoders.
 More specifically, the contributions given by the joint }
 
-Any of the matrices $\gbm{W}_\textit{in}$, $\gbm{W}_\textit{out}$, $\gbm{W}_\textit{linear}$ and $\gbm{W}_\textit{quadratic}$ can be used as the decoder matrix $\gbm{W}_{d_\textit{dec}}$ to decode an embedding $\gbm{x}$ into a probability distribution over $\mathcal{V}$ as described in \Cref{eq:method_intravisto_decoding}.
+Any of the matrices $\gbm{W}_\textit{in}$, $\gbm{W}_\textit{out}$, $\gbm{W}_\textit{linear}$ and $\gbm{W}_\textit{quadratic}$ can be used as the decoder matrix $\gbm{W}_{d_\textit{dec}}$ to decode an embedding $\gbm{x}$ into a probability distribution over $\mathcal{V}$ as described in \cref{eq:method_intravisto_decoding}.
 As previously mentioned, this behavior selection is controlled by specifying $d_\textit{dec}$.
 
 \subsubsection{Secondary Tokens}
@@ -108,7 +108,7 @@ Iterative decoding exploits these linear properties by performing a sequence of 
     \end{algorithmic}
 \end{algorithm}
 \todo[cyan]{check algorithm}
-As it is possible to observe in \Cref{alg:method_intravisto_iter-dec}, we perform at most ${rep}_{max}$ iterations obtaining one primary token and between $0$ to ${rep}_{max} - 1$ secondary tokens.
+As it is possible to observe in \cref{alg:method_intravisto_iter-dec}, we perform at most ${rep}_{max}$ iterations obtaining one primary token and between $0$ to ${rep}_{max} - 1$ secondary tokens.
 This is due to the fact that a secondary token that is found in two separate iterations is recorded only on the first one, and the presence of a stopping condition that triggers in case the norm of the resulting hidden representation is under a certain threshold ${norm}_{min}$ or is higher than the norm found at the previous iteration.
 This last condition is used to avoid situations where the embedding vector of the hidden state `flips' after the computation of the difference with the most probable representation, resulting in a vector that is not informative and can possibly reiterate the effect until ${rep}_{max}$ is reached, thus generating predictions based purely on noise. \todo[cyan]{check if necessary}
 
@@ -128,7 +128,7 @@ Entropy for an embedding $\gbm{x}$ is computed in the following way:
     H_{\gbm{x}} = -\sum{P_{\gbm{x}} \cdot \log{P_{\gbm{x}}}}
 \end{equation}
 \todo[cyan]{check}
-Where $P_{\gbm{x}} = P(\ \cdot \mid \gbm{x}, d_\textit{dec}, n_\textit{norm})$ as computed in \Cref{eq:method_intravisto_decoding}.
+Where $P_{\gbm{x}} = P(\ \cdot \mid \gbm{x}, d_\textit{dec}, n_\textit{norm})$ as computed in \cref{eq:method_intravisto_decoding}.
 
 Other showcased metrics are the \emph{attention contribution} and \emph{feedforward contribution}, which measure respectively how much the output of the attention block, or feed forward, contributes in its summation with the residual stream of a transformer block.
 The purpose of these metrics is to highlight where the main information of that block is coming from, whether from the attention or feed forward components.
@@ -150,7 +150,7 @@ In practice, we compute:
     \end{aligned}
     \right.
 \end{equation}
-Where $D_{\text{KL}}$ is the Kullback-Liebler divergence between two distributions, and the notation of hidden states (such as $\gbm{x}^{(\ell)}$, $\gbm{\delta}_\textit{att}^{(\ell)}$, \ldots) references the distinctions made at \Cref{ssec:method_intravisto_decoding}.
+Where $D_{\text{KL}}$ is the Kullback-Liebler divergence between two distributions, and the notation of hidden states (such as $\gbm{x}^{(\ell)}$, $\gbm{\delta}_\textit{att}^{(\ell)}$, \ldots) references the distinctions made at \cref{ssec:method_intravisto_decoding}.
 It is possible to note that the contributions computed through norms and KL divergence feature opposite terms at the fractional numerator, this is due to their inverse relationship as the KL divergence measures the \emph{dissimilarity} between probability distributions, while the norm can be directly translated into the positive contribution of a hidden state. 
 
 \subsection{Flow}
@@ -160,7 +160,7 @@ Edges in the diagram indicate the amount of influence that the nodes have on eac
 The flow snakes its way through self-attention nodes, which combine information from attended tokens in the level below, feed-forward networks nodes, which introduce information based on detected patterns in the state vector, and aggregation nodes, where updates from the other two types of nodes are added to the residual vector.
 The proposed Sankey diagram, technically qualifies as an \emph{Alluvial diagram} due to the fact that nodes are grouped into `steps' (in our case corresponding to layers), which provide intermediate subdivisions of the flow mass, and help to \todo{focalize attention} on the changes in flow composition throughout the model's layers.
 
-In order to calculate the information flow, an attribution algorithm works backwards from the top layers of the network, recursively apportioning the incident flow from the components below based on their relative contributions to the internal state vector above using \Cref{eq:method_intravisto_norm-contrib,eq:method_intravisto_kl-contrib}.
+In order to calculate the information flow, an attribution algorithm works backwards from the top layers of the network, recursively apportioning the incident flow from the components below based on their relative contributions to the internal state vector above using \cref{eq:method_intravisto_norm-contrib,eq:method_intravisto_kl-contrib}.
 The flow's constantly updating state can be defined in a way that reflects the recursive computations performed by InTraVisTo:
 \begin{equation}
     \left\{
@@ -194,15 +194,15 @@ In practice, we compute the following quantity for five different state combinat
     \end{gathered}
 \end{equation}
 \todo[cyan]{check KL order}
-Where $P_{\gbm{x}} = P(\ \cdot \mid \gbm{x}, d_\textit{dec}, n_\textit{norm})$ as computed in \Cref{eq:method_intravisto_decoding}, $D_{\text{KL}}$ is the Kullback-Liebler divergence between two distributions, and the notation of hidden states (such as $\gbm{x}^{(\ell)}$, $\gbm{\delta}_\textit{att}^{(\ell)}$, \ldots) references the distinctions made at \Cref{ssec:method_intravisto_decoding}.
+Where $P_{\gbm{x}} = P(\ \cdot \mid \gbm{x}, d_\textit{dec}, n_\textit{norm})$ as computed in \cref{eq:method_intravisto_decoding}, $D_{\text{KL}}$ is the Kullback-Liebler divergence between two distributions, and the notation of hidden states (such as $\gbm{x}^{(\ell)}$, $\gbm{\delta}_\textit{att}^{(\ell)}$, \ldots) references the distinctions made at \cref{ssec:method_intravisto_decoding}.
 Whereas, the second approach compares the residual stream states at the input and output location for each layer in the transformer stack.
-It does so by calculating the difference between the two hidden states, and performing the decoding operation defined in \Cref{eq:method_intravisto_decoding} as to generate primary and secondary tokens for the resulting quantity.
+It does so by calculating the difference between the two hidden states, and performing the decoding operation defined in \cref{eq:method_intravisto_decoding} as to generate primary and secondary tokens for the resulting quantity.
 This is showcased in the following computation:
 \begin{equation}
     \label{eq:method_intravisto_state-diff}
     {\textit{state\_diff}{\,}\strut}^{(\ell)} = P(\ \cdot \mid \gbm{x}^{(\ell)} - \gbm{x}^{(\ell - 1)}, d_\textit{dec}, n_\textit{norm})
 \end{equation}
-It is possible to notice how this last approach could suffer from the same weaknesses that have been identified in iterative decoding as shown in \Cref{alg:method_intravisto_iter-dec}, due to the presence of an operation (difference) which assumes that its operands exist in a shared embedding space with linear properties.
+It is possible to notice how this last approach could suffer from the same weaknesses that have been identified in iterative decoding as shown in \cref{alg:method_intravisto_iter-dec}, due to the presence of an operation (difference) which assumes that its operands exist in a shared embedding space with linear properties.
 Although this is true, the minimal distance between the hidden states used to compute the difference makes the presented issue have minimal impact on the actual decoding result.
 
 \subsection{Injection}\label{ssec:method_intravisto_injection}
@@ -218,12 +218,12 @@ Assuming that we would like to inject an embedding $\gbm{\hat x}$ into the hidde
     f\Bigl(\gbm{x}_i \, \Big| \, \text{do}\bigl(f_c^{(\ell)}(\gbm{x}_i) = \gbm{\hat x}\bigr)\Bigr)
     \; \text{where}\ \gbm{\hat x} = \textit{encode}(\textit{id}_{\textit{inject}} \,|\, n_\textit{norm}, d_{dec})
 \end{equation}
-As previously noted for similar approaches, it is important to specify that there might be some problems with the nature of $\gbm{\hat x}$, as it is a representation that is generated from an encoded user-defined textual input ${id}_{\textit{inject}}$, which undergoes an embedding and normalization process utilizing $\gbm{W}_{d_{dec}}$ and $N_{n_\textit{norm}}$ following \Cref{eq:method_intravisto_linear-interp,eq:method_intravisto_quadratic-interp,eq:method_intravisto_normalization}.
+As previously noted for similar approaches, it is important to specify that there might be some problems with the nature of $\gbm{\hat x}$, as it is a representation that is generated from an encoded user-defined textual input ${id}_{\textit{inject}}$, which undergoes an embedding and normalization process utilizing $\gbm{W}_{d_{dec}}$ and $N_{n_\textit{norm}}$ following \cref{eq:method_intravisto_linear-interp,eq:method_intravisto_quadratic-interp,eq:method_intravisto_normalization}.
 This results in the injection of a `clean' embedding that is unexpected by the model, \todo{and thus} may destabilize the generation process.
 In most causal intervention scenarios, this problem is not present when performing activation patching using counterfactual examples, due to the fact that patches are generated utilizing resampling or averaging approaches~\cite{hanna2023,conmy2023,wang2023}.
 We choose to avoid these techniques since our main focus is directed towards giving the user complete control over the injected information, which is achieved by directly inserting the wanted embedding vector in the hidden state without letting the model elaborate it to create a plausible representation.
 
-Another noteworthy step in the injection process is the actual encoding of the injected embedding, since the formula used to compute $\gbm{\hat x}$ that has been broadly mentioned in \Cref{eq:method_intravisto_injection} is used considering an injection input that is composed by a single token.
+Another noteworthy step in the injection process is the actual encoding of the injected embedding, since the formula used to compute $\gbm{\hat x}$ that has been broadly mentioned in \cref{eq:method_intravisto_injection} is used considering an injection input that is composed by a single token.
 However, InTraVisTo's interface offers the possibility of injecting an embedding representation that contains more than one token, thus we would like to generalize the aforementioned formula to actually handle multiple tokens at once.
 \todo[cyan]{check if true} This behavior is modeled by averaging the embedding representations of all tokens that compose the sentence, always under the assumption of a linear embedding space~\cite{mikolov2013,park2023}. \todo[green]{remarks for sentence embedding?}
 Considering a total of $id_1,\ldots,id_t$ tokens to be encoded, this averaging operation can be represented in the following way:
@@ -231,7 +231,7 @@ Considering a total of $id_1,\ldots,id_t$ tokens to be encoded, this averaging o
     \label{eq:method_intravisto_emb-avg}
     \gbm{\hat x} = N_{n_\textit{norm}}\Bigl(\frac{1}{t} \sum_{i=1}^{t}{{(\gbm{W}_{d_{dec}})}_{\textit{id}_{i},\cdot}}\Bigr)
 \end{equation}
-The soundness of this approach, including possible variants based on the same or different assumptions, will be analyzed more in depth in the next section (\Cref{sec:method_embeddings}).
+The soundness of this approach, including possible variants based on the same or different assumptions, will be analyzed more in depth in the next section (\cref{sec:method_embeddings}).
 
 
 \section{Embedding Analysis}\label{sec:method_embeddings}
@@ -280,10 +280,10 @@ In practice, the `pre-normalization' step includes the normalization of all embe
 \subsubsection{Multi-token Words}
 
 Handling multi-token words is a vital aspect of our analysis, as we may encounter words that are split into multiple sub-word tokens by the model's tokenization process.
-As we will see later in \Cref{ssec:method_embeddings_analogies}, our main experiments for this section will concern the evaluation of analogies and similarities between word groups.
+As we will see later in \cref{ssec:method_embeddings_analogies}, our main experiments for this section will concern the evaluation of analogies and similarities between word groups.
 Therefore, we devised three main strategies to address multi-token words when they are fed into the embedding as inputs of analogies, along with two additional strategies to handle them as valid outputs of analogies.
 Strategies applicable to both cases involve considering only the first token of a multi-token word (this causes results to be slightly worse on average, but the impact seems to be negligible in most cases).
-For multi-token words as inputs, other approaches include calculating the average as already done in \Cref{eq:method_intravisto_emb-avg} or the sum over all the embedded tokens that form the multi-token word.
+For multi-token words as inputs, other approaches include calculating the average as already done in \cref{eq:method_intravisto_emb-avg} or the sum over all the embedded tokens that form the multi-token word.
 Conversely, for output multi-token words, we subdivide them into their token components, to then consider all tokens as targets for assessing the top-$k$ accuracy of an analogy result in the embedding space.
 Formalizing the previously identified alternatives we obtain two $\textit{encode}$ functions controlled by $\textit{enc\_strat}$ for a series of $t$ tokens obtained from a word $w$:
 \begin{equation}
@@ -318,7 +318,7 @@ The first preliminary transformations performed on $w$ is tokenization, modeled 
 After tokenization, tokens get transformed into embedding vectors $\gbm{e}_1^w, \ldots, \gbm{e}_{t}^w$ by selecting the corresponding row from the embedding matrix $\gbm{W}_{emb}$.
 The role of the embedding matrix $\gbm{W}_{emb}$ can be fulfilled by either the input and output embedding matrices, as already seen previously.
 
-As anticipated before in \Cref{ssec:method_intravisto_injection}, the main choice of computing multi-token representations using linear operations comes from the supposed preservation of linear features in the embedding space~\cite{mikolov2013,park2023}.
+As anticipated before in \cref{ssec:method_intravisto_injection}, the main choice of computing multi-token representations using linear operations comes from the supposed preservation of linear features in the embedding space~\cite{mikolov2013,park2023}.
 Additionally, \todo[green]{add}.
 
 Another approach that will be used to completely set aside the issues tied with multi-token words consists in reducing the dataset to exclusively consider analogies composed of single-token words, at the cost of less overall valid samples
@@ -343,7 +343,7 @@ As far as the actual word analogy computation is concerned, given 4 words $\{w_1
         \tilde w = \textit{analogy}(w_1, w_2, w_3, w_4)
     \end{gathered}
 \end{equation}
-Where $d_{\textit{dist}}$ is the chosen distance metric as illustrated in \Cref{eq:method_embeddings_distance}, and $\textit{encode}^{\textit{emb}}$ refers to a simple encoding of a single token $v_{id} \in \mathcal{V}$ using the embedding matrix $\gbm{W}_{\textit{emb}}$.
+Where $d_{\textit{dist}}$ is the chosen distance metric as illustrated in \cref{eq:method_embeddings_distance}, and $\textit{encode}^{\textit{emb}}$ refers to a simple encoding of a single token $v_{id} \in \mathcal{V}$ using the embedding matrix $\gbm{W}_{\textit{emb}}$.
 On the other hand, \emph{`closest'} indicates the returned value, which is the actual token identifier of the closest embedding (of a word present in vocabulary $\mathcal{V}$) to the computed result of the word analogy.
 \todo[green]{possibility of using top-k instead of closest}
 Furthermore, the $\textit{analogy}$ function expresses the combination of words $\{w_1, w_2, w_3, w_4\}$ that composes the logic relationship of the word analogy.
@@ -357,7 +357,7 @@ Thus, for simplicity, we can assume to \todo{follow} the \todo{renowed} `$king -
         &\color{gray} \approx {\textit{encode}}_{\textit{enc\_strat}}^{out}(w_3) 
     \end{aligned}
 \end{equation}
-Where the ${\textit{encode}}_{\textit{enc\_strat}}$ functions follows the definitions laid out in \Cref{eq:method_embeddings_multitok-in,eq:method_embeddings_multitok-out}.
+Where the ${\textit{encode}}_{\textit{enc\_strat}}$ functions follows the definitions laid out in \cref{eq:method_embeddings_multitok-in,eq:method_embeddings_multitok-out}.
 
 Another perspective over the classic word analogies task consists in the ``delta analogies'' task where the premise is similar, and the input words are the same.
 However, we perform a further subdivision of the dataset, assigning each word analogy into a bigger group based on the actual relationship that is modeled by the analogy (such as `gender', `capital of', `royalty', \todo{etc.}).
@@ -387,7 +387,7 @@ In our case, it can be written using the following notation:
     \label{eq:method_embeddings_topk-accuracy}
     \textit{acc}_k = \frac{1}{n} \sum_{i=1}^{n} \mathbb{I}\Bigl( {\left\{ {\textit{result}\,}^i_j \ |\ \forall j = 1,\ldots,k \right\}} \cap {\textit{sol}\,}^i \neq \emptyset \Bigr)
 \end{equation}
-where ${\textit{result}\,}^i_j$ represents the $j$-th result of the $i$-th analogy, ${\textit{sol}\,}^i$ indicates the set of solution for the $i$-th analogy obtained through the use of the ${\textit{encode}}^{out}$ function as illustrated in \Cref{eq:method_embeddings_multitok-out}, and $n$ is the dimension of the considered dataset.
+where ${\textit{result}\,}^i_j$ represents the $j$-th result of the $i$-th analogy, ${\textit{sol}\,}^i$ indicates the set of solution for the $i$-th analogy obtained through the use of the ${\textit{encode}}^{out}$ function as illustrated in \cref{eq:method_embeddings_multitok-out}, and $n$ is the dimension of the considered dataset.
 
 Alternatively, we devised an additional measure which fulfills a similar purpose to the top-$k$ accuracy by evaluating a set of embeddings on an analogy task.
 The chosen metric is a slight variation of the Mean Reciprocal Rank statistic measure, commonly referred to as $MRR = \frac{1}{n}\sum_{i=1}{n}{\frac{1}{rank_i}}$ \todo[orange]{cite?}.
@@ -455,6 +455,6 @@ Following the same intuition, it is also possible to compare the FOM transition 
 Additionally, we wanted to approach the previous ideas from a more practical point of view.
 To this end we recorded the top-$k$ answers elicited using the FOM matrix $\gbm{Q}_{\textit{FOM}}$ across all tokens inside the model's vocabulary, using each token as the known word and obtaining the FOM's most probable next tokens.
 Once we have the set of generated next tokens for each token inside the vocabulary we can compare them to our actual hypothesized reference tokens, obtained applying the identity function in the `inversion' hypothesis case, and in the `Markov' hypothesis case by querying the Markov model in the same way that we did with the FOM.
-As already done before in \Cref{subsubsec:method_embeddings_evaluation} using \Cref{eq:method_embeddings_topk-accuracy}, we employ the top-$k$ accuracy metric to establish the similarity between the predictions of the FOM against the two baselines defined by the identity function and the Markov model.
+As already done before in \cref{subsubsec:method_embeddings_evaluation} using \cref{eq:method_embeddings_topk-accuracy}, we employ the top-$k$ accuracy metric to establish the similarity between the predictions of the FOM against the two baselines defined by the identity function and the Markov model.
 The top-$k$ accuracy is computed by taking the $k$ tokens corresponding to the $k$ highest values between logits, and observing if the input token is present among them.
 \todo[green]{additional considerations, kl-div / perplexity analysis / }
