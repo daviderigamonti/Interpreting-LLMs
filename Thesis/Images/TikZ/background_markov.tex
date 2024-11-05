@@ -1,0 +1,79 @@
+\documentclass[crop, tikz, multi=false]{standalone}
+
+\usepackage{xcolor}
+\usepackage{tikzstyle}
+
+\usetikzlibrary{
+  arrows.meta, calc, decorations.pathreplacing, ext.paths.ortho, 
+  positioning, quotes, shapes, backgrounds, calligraphy, math
+}
+
+\tikzset{
+    mneuron/.style={
+        neuron,
+        fig,
+        minimum width=6em, minimum height=6em,
+    },
+    darrow/.style={
+        arrow,
+        stealth-stealth,
+    },
+}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+    \node[mneuron, fill=yellow!10] (start) {\_};
+
+    \node[above right = 0em and 5em of start, mneuron, fill=yellow!10] (t) {Today};
+    \node[below right = 0em and 5em of start, mneuron, fill=yellow!10] (y) {Yesterday};
+
+    \node[right = 5em of t, mneuron, fill=yellow!10] (i) {is};
+    \node[right = 5em of y, mneuron, fill=yellow!10] (w) {was};
+
+    \node[right = 24em of start, mneuron, fill=yellow!10] (a) {a};
+
+    \node[above right = 0em and 5em of a, mneuron, fill=yellow!10] (s) {sunny};
+    \node[below right = 0em and 5em of a, mneuron, fill=yellow!10] (r) {rainy};
+
+    \node[right = 16em of a, mneuron, fill=yellow!10] (d) {day};
+
+    \draw[arrow, semithick, stealth-] (start) -- ++(-2,0);
+
+    \draw[arrow, semithick] (start) -- node[midway,above left = 0em and -0.8em]{0.44} (t);
+    \draw[arrow, semithick] (start) -- node[midway,above right = 0em and -0.8em]{0.35} (y);
+
+    \draw[arrow, semithick] (t) -- node[midway,above]{0.57} (i);
+    \draw[arrow, semithick] (t) -- node[midway,above right = 0em and -0.8em]{0.21} (w);
+    \draw[arrow, semithick] (y) -- node[midway,above]{0.63} (w);
+
+    \draw[arrow, semithick] (i) -- node[midway,above right = 0em and -0.8em]{0.45} (a);
+    \draw[arrow, semithick] (w) -- node[midway,above left = 0em and -0.8em]{0.41} (a);
+
+    \draw[arrow, semithick] (a) -- node[midway,above left = 0em and -0.8em]{0.14} (s);
+    \draw[arrow, semithick] (a) -- node[midway,above right = 0em and -0.8em]{0.09} (r);
+
+    \draw[arrow, semithick] (s) -- node[midway,above right = 0em and -0.8em]{0.70} (d);
+    \draw[arrow, semithick] (r) -- node[midway,above left = 0em and -0.8em]{0.65} (d);
+
+    \draw[arrow, semithick] (start) -- ++(0,+2) node[fig, above]{\dots};
+
+    \draw[darrow, semithick] (t) -- ++(0,+2) node[fig, above]{\dots};
+    \draw[darrow, semithick] (y) -- ++(0,-2) node[fig, below]{\dots};
+
+    \draw[darrow, semithick] (i) -- ++(0,+2) node[fig, above]{\dots};
+    \draw[darrow, semithick] (w) -- ++(0,-2) node[fig, below]{\dots};
+
+    \draw[darrow, semithick] (a) -- ++(0,+2) node[fig, above]{\dots};
+
+    \draw[darrow, semithick] (s) -- ++(0,+2) node[fig, above]{\dots};
+    \draw[darrow, semithick] (r) -- ++(0,-2) node[fig, below]{\dots};
+
+    \draw[darrow, semithick] (d) -- ++(0,+2) node[fig, above]{\dots};
+
+
+
+\end{tikzpicture}
+
+\end{document}
