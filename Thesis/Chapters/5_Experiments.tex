@@ -1,9 +1,10 @@
 This chapter presents the experiments conducted to evaluate the methodology proposed in \cref{ch:methodology} for the reference scenarios described in \cref{ch:research_questions}.
 The experiments were initially designed to shed light onto some specific aspects of LLM internal state interpretability via vocabulary decoding, although after some interesting findings, more attention was given to the actual initial and final embedding representations in LLMs.
 
-This chapter is organized similarly to \cref{ch:research_questions,ch:methodology}, following the three main research questions as a baseline.
-Each research question contemplates multiple experiments aimed at providing empirical evidence to elicit a deeper understanding of large transformer architectures through the perspective of the question at hand.
-Additionally, where applicable, experiments will include a fixed set of key points to formalize the analysis in a structured way.
+This chapter is organized similarly to \cref{ch:research_questions,ch:methodology}, following the three main research questions defined as a baseline.
+Each research question contemplates multiple experiments aimed at providing empirical evidence to elicit a deeper understanding of large transformer architectures.
+This understanding is achieved through the perspective of the question at hand and, more generally, with the aid of InTraVisTo.
+Where applicable, experiments include a fixed set of key points to formalize the analysis in a structured way.
 These points include:
 \begin{itemize}
     \item \textbf{Experimental Setup}: complete description of the experiment performed in reference of the theoretical background provided in \cref{ch:methodology}.
@@ -12,28 +13,153 @@ Parameter combinations, hardware specifications and resources employed may also 
     \item \textbf{Models}: list of models, along with brief \todo{specifics}, that have been utilized to perform the experiment or have been employed for auxiliary tasks. 
     \item \textbf{Results}: set of results emerged from the experiment paired with comments, explanations and a breakdown of the findings' possible implications.
 \end{itemize}
-If the previously identified points overlap for all the identified experiments of any given research question then, those are directly incorporated inside the main section belonging to the question in order to avoid meaningless repetition.
+If the previously identified points overlap for all the \todo{identified} experiments of any given research question then, those are directly incorporated inside the main section belonging to the question in order to avoid meaningless repetition.
 Furthermore, each research question has a final discussion section, which is aimed at comparing the results of all the performed experiments and providing final remarks considering the overall outcomes for the specific inquiry.
 
 \section{Transformer Visualization}\label{sec:exp_intravisto}
 
 As anticipated in \cref{sec:rq_intravisto} and explored in \cref{sec:method_intrvisto}, the experiments tied to this research question are centered around the InTraVisTo tool.
-In the first points we will provide an exhaustive overview of the interface, diving into the technicalities 
+The first points (\cref{sec:exp_intravisto_exp1,sec:exp_intravisto_exp2}) within this section provide an exhaustive overview of the interface, diving into the technical aspects and explaining the role of components that are present in the application.
+Consequently, these points do not present the experimental structure defined in the introductory section of this chapter.
+Whereas, the last point (\cref{sec:exp_intravisto_exp3}) is dedicated to the exploration of the proposed tool's actual capabilities, taking into consideration specific use cases and small investigations to provide concrete examples of possible usage scenarios.
+
+\subsection{Decoding Interface}\label{sec:exp_intravisto_exp1}
+
+Decoding the meaning of hidden state vectors at various depths of a transformer stack is essential for providing an intuition as to how the model is working.
+InTraVisTo allows decoding and inspection of the main four vectors that compose each layer, while offering a human-interpretable representation of each hidden state by performing a decoding operation.
+\todo[green]{explain which four vectors}
+%$\bm{\delta}_\textit{att}^{(l)}$, ${\mathbf{x}'}^{(l)}$, $\bm{\delta}_\textit{ff}^{(l)}$ and $\mathbf{x}^{(l)}$
+This decoding operation is carried out using a specialized decoder which, given a hidden state as input, finds related tokens from the model's vocabulary with the goal of returning an interpretable output.
+
+In this section, we present the first visual output of InTraVisTo.
+Our goal revolves around a layer-by-layer interpretation of the model, thus layers are stacked vertically starting from the bottom with the embedding layer up to the top with the normalized outputs of the last layer.
+Due to the inference process of the transformer architecture, each stack of layers is repeated for every token, resulting in a grid where the x-axis represents token positions in the sequence and the y-axis represents layer numbers.
+A natural visual representation for this grid-like structure is the heatmap.
+Additionally, for the sake of being able to tell apart input tokens (prompted by the user) from output tokens (autonomously generated by the model), a blue vertical line is put in place to divide the former from the latter.
 
 
-\subsection{Experiment 1}
+\todo[purple!20]{
+    
+The generation of the heatmap requires the user to choose an embedding, a decoder and a colour (settings presented in Fig).
+The embedding refers to the high dimensional vector to be decoded (
+%$\bm{\delta}_\textit{att}^{(l)}$, ${\mathbf{x}'}^{(l)}$, $\bm{\delta}_\textit{ff}^{(l)}$ or $\mathbf{x}^{(l)}$
+explained in Section) so by changing this target vector the user can inspect the different subcomponents of a single layer.
+To avoid over-complicated visualisations, in InTraVisTo it is possible to decode only one embedding at a time.
+The choice of the decoder refers to what matrix to use in the decoding process (
+%$\mathbf{W}_\textit{in}$, $\mathbf{W}_\textit{out}$ or $\mathbf{W}_\textit{linear}$
+explained in Section) and represents the "perspective" of decoding.
+Choosing the right decoder is an essential task well-known in literature, nonetheless, unless training specialized decoders, as pointed out by 
+%\citet{DBLP:journals/corr/abs-2303-08112}
+, extracting meaningful layers from the intermediate states is not trivial: we can notice in Fig that both the semantic meaningfulness of decoded tokens (even with the interpolated decoder) and the confidence of the model drop in the intermediate part of the network.
+As a result, by choosing the input decoder, layers at the bottom of the network and close to the input layer will get more meaningful final tokens, instead, the output decoder results in more precise decoding close to the output layer.
+We decided to add the interpolated decoder in order to give the user a semantically meaningful representation for both the input and output layers.
+Starting from the chosen embedding to decode and a decoder type, each cell in the heatmap represents the textual decoded token from the embeddings in that particular layer of the transformer model.
+By changing the decoder type the user can change the "perspective" of decoding, so deciding in which part of the network getting more semantically meaningful tokens.
+By changing the embedding type, the user is able to look at different components and sub-components and check what information is propagated to the next layer.
+
+As shown in Fig, the other settings are the "Colour", which stands for what quantity to use to weight the colour grading in the heatmap.
+The first option is "P(argmax term)" which translates into the probability of the most probable token output from the chosen decoder.
+It gives an idea of how much the model is sure about the token sampled (greedily).
+On the other hand, a complementary measure is the entropy of the probability distribution over the vocabulary space, which the higher it is, the more unsure the model is of the next token.
+The attention and FF contributions checkboxes stand for measuring, respectively, how much the output of the attention block, or Feed Forward, contributes in its summation with the residual stream in the transformer block depicted in Fig.
+The purpose of these metrics is to highlight where the main information of that block is coming from, whether from the Attention or Feed Forward component.
+Lastly, the "Residual Contribution" checkbox in Fig represents the quantity to monitor in order to plot Sankey Diagrams, specifically refers to the colour gradient in each block and whether basing its gradient on the distance in terms of norms of vectors or the Kullback-Leibler divergence between each residual summation and its components (either attention or FF).
+
+The background colour is the other core dimension in the heatmap.
+With InTraVisTo, the user is able to decide what metric to monitor and grade the background colour of the fina heatmap consequently.
+As shown in Fig the possible metrics are: \emph{P(argmax term)}, \emph{entropy} and \emph{attention} or \emph{Feed forward} contributions percentages.
+The first option is the most natural one and represents the probability of the most probable token output from the chosen decoder.It shows how much the model is sure about the token sampled.
+On the other hand, a complementary measure is the entropy of the probability distribution over the vocabulary space, which the higher it is, the more unsure the model is of the next token.
+The attention and FF contributions stand for measuring, respectively, how much the output of the attention block, or Feed Forward, contributes in its summation with the residual stream in the transformer block depicted in Fig.
+The purpose of these two last metrics is to highlight where the main information of that block is coming from, whether from the Attention or Feed Forward component.
+The heatmap aims to provide the user with an interactive tool that highlights the iterative process that, through the whole stack of layers, transforms an internal state to the next token.
+    
+Thanks to this visualisation, the user is equipped with an overview of the model during generation, for example in Fig, by briefly inspecting the first output layers, one can clearly see a symbolic reasoning fashion taking place: in order to answer to the query (i.e. \textit{What is the capital of Italy?}) the model reached to correct answer (i.e. \textit{Rome}) already at the first generated token, by firstly encoding \textit{city} then \textit{capital} and finally \textit{Rome} into the embeddings.
+Just at the very last layer, the answer changed to stick to a more formally correct answer (i.e. starting the answer with \textit{The}), we remind to Section for further examples using the tool.
+    
+InTraVisTo is thought to be an interactive tool, so another feature that helps understanding the internal workings of transformers is the injection of embedding.
+It is in fact possible to substitute an embedding with a custom embedding and generate the output and all the visualisation forcing the model to have a specific embedding in a specific layer.
+By clicking on a cell in the grid-layout heatmap, the tool lets the user choose which of the four monitored embeddings to substitute.
+The target embedding to inject must be chosen by writing the corresponding token, the application automatically converts such token to the embedding using the inverse transformation of the decoder selected previously.
+For example, supposing in a layer, say layer \emph{28} the token decoded for the final embedding \emph{Residual + feed-forward} is \emph{\_Rome}, one may substitute such vector with the embedding representation of \emph{\_Paris} and see how the generated output and internal state change consequently.
+    
+The first visualisation introduced by InTraVisTo is an annotated heatmap of the decoded internal states (see Fig).The user can choose a particular decoder (linear interpolation is the default) and views a grid of decoded tokens shaded according to their likelihood for hidden states at each layer and token position of the network.
+The default hidden state displayed is the output of each transformer block layer (
+%${\mathbf{x}}^{(l)}$
+), but the user can choose instead to show the change caused by a self-attention block (
+%$\bm{\delta}_\textit{att}^{(l)}$
+), the change due to the feed-forward layer (
+%$\bm{\delta}_\textit{ff}^{(l)}$
+), or the residual connection between the self-attention and feed-forward components (
+%${\mathbf{x}'}^{(l)}$
+).
+The purpose of the visualisation is to inspect each step in the decoration process, whereby each column corresponds to a token position in the processed sequence and each row corresponds to a specific layer of the Transformer stack.
+For causal models, the input token is read in at the bottom of each column, and the next token in the sequence is predicted at the top, leading to darker blue cells denoting higher probabilities at both the bottom of each column -- where the input token is being ingested -- and at the top of the column where the model has become more certain of it's prediction for the next token.
+A vertical separator indicates the column where the model moves from processing the given input text to generating new output text.
+    
+In Fig, the LLM was prompted with the question \emph{``What is the capital of Italy?''}.
+The visualisation of decoded internal states helps us to follow the answer generation process, which appears to resemble some form of reasoning process.
+The model initially produces an embedding of the token \texttt{\_Rome} in layer 27 of position 10 (immediately following the input text), but then proceeds to generate a more complete response \emph{``The capital city of ...''}, with the token \texttt{\_Rome} postponed to position 16.
+    
+As noted above, the grid forms a heatmap, where the colour of each cell denotes the \emph{probability} of the displayed token, indicating how \emph{confident} the model is at that point.
+The user can instead choose to base the colour on the \emph{entropy} of the distribution, indicating how \emph{undecided} the model is.
+To further understand the internal mechanisms of the LLM and to enable some form of interaction and probing the model, we introduce \emph{embedding injection} functionality which allows the user to \emph{substitute} the hidden state vector at any position and depth with the embedding of a token chosen from the vocabulary.
+Referring again to the example in Fig, one could replace the first occurrence of the token \texttt{\_Rome} with the vector for the token \texttt{\_Paris} to see the consequences on the following internal states and the generated completion.
+(Doing so results in the model subsequently placing low probability on the injected embedding and ``stopping'' the generation with a placeholder, in order to be able to return to the generation of a correct response containing the token \texttt{\_Rome} instead of \texttt{\_Paris}).
+}
 
 \todo[green]{describe interface for decoding hidden states}
 
-\subsection{Experiment 2}
+\subsection{Flow Interface}\label{sec:exp_intravisto_exp2}
+
+\todo[purple!20]{
+The second visualisation introduced in InTraVisTo is a Sankey diagram that aims to depict the information flow through the transformer network (Fig).
+Edges in the diagram indicate the amount of influence that the nodes have on each other and show how the information accumulates from the bottom of the diagram to the top in order to generate the final prediction.
+The flow snakes its way through self-attention nodes (in green), which combine information from attended tokens in the level below, feed-forward networks nodes (in pink), which introduce information based on detected patterns in the state vector, and aggregation nodes (in blue), where updates from the other two types of nodes are added to the residual vector.
+A complete Sankey diagram containing 32 layers of Transformer blocks would be very tall, so only the last 5 layers of the network are shown in Fig.
+    
+In order to calculate the information flow, an attribution algorithm works backwards from the top layers of the network, recursively apportioning the incident flow from the components below based on their relative contributions to the internal state vector above (using the Equations).
+
+To plot this information flow we use a Sankey diagram.
+With the Sankey diagram we visualise the flow dividing it across the different nodes (the Transformer layers) and recursively computing the contribution of each previous node (input embedding) to each subsequent node (output embeddings) starting from the very last node (the last embeddings passed to the language modelling head).
+We show an example in Fig, where we can see how the contributions different embeddings at different layers accumulates up to the embedding to decode.
+    
+In the visualisation we control the width of the accumulated flow to track the amount of information.
+In self-attention nodes, we divide the flow according to attention weights and we scale it according to the relative norm of 
+%$\bm{\delta}_\textit{att}^{(l)}$ and ${\mathbf{x}'}^{(l)}$
+, as described by Eq.
+In feed-forward nodes we divide the flow according to the relative norm of 
+%$\bm{\delta}_\textit{ff}^{(l)}$ and $\mathbf{x}^{(l)}$
+, as described by Eq.
+
+    
+The aim of the diagram is to visualise the relative contributions of the self-attention and feed-forward networks to the residual connection between layers, and thus allow the user to track down the sources of the major contributions to the prediction of the output at the top of the diagram.
+    
+As an alternative to the attribution of importance based on the relative size of the vectors (given by Equations), we consider also enabling the scaling of the flows according to the similarity between the resulting term distributions, whereby similar distributions are apportioned more weight since they are more likely to have been the ``source of the information'' flowing upwards in the network.
+The \emph{KL-Divergence} is used to compute the similarity between the distributions on both branches and then normalised to be used as a node contribution weight.
+
+NEEDS EDITING: To do this, the \emph{KL-Divergence} of the distributions obtained decoding the embedding in output to the self-attention or feed-forward nodes from the distribution obtained decoding the embedding after the sum to the residual and the KL-Divergence of the distributions obtained decoding the residual before adding the contribution of the node from the distribution obtained decoding the embedding after the sum of the node contribution to the residual.
+We compute the proportion normalising on the sum of the two KL-Divergences.
+    
+Oftentimes, the complexity of the attention patterns can make the Sankey diagram difficult to read.
+To cope with this problem, we enable the filtering of the edges to show only the top 
+%$k$
+most significant contributions to the attention, discarding the remaining ones, making it easier to visually track the incoming information in the final embedding.
+Finally, we decorated the nodes showing the 
+%$k$
+most probable tokens obtained decoding the current embedding (to observe the neighborhood of the embedding) and the 
+%$k$
+most probable tokens obtained difference between the output embedding and the input embedding to that node (to observe the information being added to the flow by that node).
+As an alternatives, we also considered an \emph{iterative decoding strategy} consisting in iteratively removing the components of the most probable token from the hidden state, generating a new decoded embedding for each iteration until the norm of the state falls under a certain threshold or a fixed number of iterations is reached.
+}
 
 \todo[green]{describe flow of information interface}
 
-\subsection{Experiment 3}
+\subsection{Experiment 3}\label{sec:exp_intravisto_exp3}
 
-In each experiment we are going to provide various prompts to different models, and explore specific aspects of the extracted internal representations and information flows utilizing InTraVisTo.
+For each experiment we are going to provide various prompts to different models, and explore specific aspects of the extracted internal representations and information flows utilizing InTraVisTo.
 
-By directly experimenting with the proposed tool, we established a basic workflow that enables researchers to ultimately collect new insights about how LLMs generate tokens in a layer-by-layer fashion.  
+By directly experimenting with the proposed tool, we established a basic workflow that enables researchers to ultimately collect new insights about how LLMs generate tokens in a layer-by-layer fashion.
 The first step consists in exploring the secondary representations of internal states in order to find additional information relevant for the task at hand, as it is possible that the model is encoding it in the latent dimensions of hidden states alongside the main token, utilizing the residual stream as a communication channel between modules.
 
 Based on the information previously gathered, observing the \todo{overall influence} on hidden states of interest generated by the model is the next step of the inspection process.
@@ -139,38 +265,78 @@ Our focus at the moment is on providing better decoding and manipulation of hidd
 
 \section{Embedding Analysis}
 
-Following the path laid out in \cref{sec:rq_embeddings,sec:method_embeddings}, the experiments of this section will gravitate around the possibility of identifying linear properties modeling semantic relationships inside the input and output embedding spaces of LLMs.
+Following the path laid out in \cref{sec:rq_embeddings,sec:method_embeddings}, the experiments performed in this section will gravitate around the possibility of identifying linear properties modeling semantic, linguistic and factual relationships within the input and output embedding spaces of LLMs.
 
 To explore this inquiry, we have set up various experiments aimed at replicating some of the well-established embeddings properties~\cite{mikolov2013} in recent state-of-the-art architectures.
 Additionally, we expand upon these ideas and provide further explanations for the behaviors emerged from the performed experiments.
 
 \subsection{Dataset}
 
-The dataset used for all the experiments under this research question was created by \todo{including} the original analogy dataset employed by word2vec~\cite{mikolov2013} and the \textit{BATS (Bigger Analogy Test Set)}~\cite{drozd2016}.
+The dataset used for all the experiments under this research question was created by \todo{unifying} the original analogy dataset employed by word2vec~\cite{mikolov2013} and the \textit{BATS (Bigger Analogy Test Set)}~\cite{drozd2016}.
 The word2vec dataset (also known as Google analogy dataset) is structured in two main files: \textit{question-words} and \textit{question-phrases}.
 Question-words contains $14$ categories for a total of \todo{$x$} analogies spacing from linguistic relations to semantic relations, while question-phrases only features $5$ classes and a total of \todo{$x$} analogies regarding common-knowledge relations involving proper nouns.
 BATS features a more complex hierarchy since it is meant to be an improvement over the Google dataset: it covers $4$ main relation types (inflectional morphology, derivational morphology, lexicographic semantics and encyclopedic semantics), each one being subdivided into $10$ further sub-categories containing $50$ unique word pairs each.
 In addition, BATS provides multiple correct answers for word pairs when applicable. 
 
-Due to the different format in which the two datasets have been released (BATS containing word pairs, while Google analogy dataset being comprised of already constructed analogies), some work has been put into collecting, standardizing and unifying analogies.
+Due to the different format in which the two datasets have been released (BATS containing word pairs, while Google analogy dataset being comprised of already constructed analogies), \todo{some} work has been put into collecting, standardizing and unifying analogies.
 To this end, BATS word pairs have been combined into a total of $(50 \times 49) \times 10 \times 4 = 98000$ unique analogies to be combined with the \todo{$x + x = x$} analogies provided by the Google dataset.
 After the removal of duplicate entries, the final comprehensive total of unique analogies amounts to \todo{$x$}.
 
-\todo[green]{handling of multiple correct answers}
-\todo[green]{address possible selection of some sub-categories for some experiments}
-\todo[green]{address dataset reduction to single tokens for some experiments}
+A peculiarity of the BATS dataset is the presence of multiple correct answers for a subset of word pairs.
+These multiple correct answers include synonyms, alternative spellings or terms that are equivalent to the original answer.
+Given the computational constraints of the experiments, only the first correct answer for any given analogy was taken into consideration.
+Nonetheless, small empirical tests on a restricted set of models and a fraction of the dataset were performed using multiple answers \todo{in order to determine the impact of this choice}. \todo[green]{handling of multiple correct answers}
 
-% Some of the entries within the dataset that featured underscores to delimit compound words, where modified to use spaces instead.
+Additionally, a marginal set of entries belonging to the chosen datasets featured \todo{entities} composed of multiple words separated by the underscore character `\_'.
+In order to improve the parsing process for the models' tokenizers, these occurrences were changed to use the whitespace character (` ') instead.
 
 \subsection{Experiment 1}\label{ssec:exp_emb_exp1}
 
-As a starting point, we directly compare the performance of various state-of-the art models over the defined analogy task.
-We expect to observe similar results for architectures that are similar to one another, while accounting for the vocabulary and vector sizes of embeddings.
+As a starting point, we directly compare the performance of the input embeddings belonging to various state-of-the art and older models over the defined analogy task.
+The comparison between the embeddings of old and new models is crucial, since it allows us to make assessments over the effectiveness of newer architectural paradigms in creating meaningful embedding spaces.
+We expect to observe similar results for architectures that are \todo{similar} to one another, while also accounting for differences in vocabulary and vector sizes of embeddings.
 
 Interestingly, \citet{drozd2016} finds that scaling the vector size of embeddings has mixed effects in terms of performance when evaluating analogies with our chosen metrics.
-Whereas logically, an increase in vocabulary size should always constitute an improvement over analogy resolution.
-In this experiment we will verify the validity of these statements on the embeddings contained in large scale and newer models, while considering possible limitations in embedding expressiveness of these novel architectures.
-Therefore, we expect to see a clear distinction in the results achieved by newer models against older architectures used as a baseline, that is an inverse trend which favors the embeddings built and trained over old frameworks in analogy resolution.
+On the other hand, an increase in vocabulary size should always constitute an improvement over analogy resolution.
+However, as \citet{elhage2022} highlights, feature sparsity is the main cause for superposition, which can cause positive interference and negative biases, hindering the expressiveness of linear operations in the embedding space.
+Therefore, we also question if models with large vocabularies that are not backed by an appropriate embedding size may be at a disadvantage for the task at hand.
+
+\todo{In substance}, this experiment aims to verify the validity of the proposed inquiries, while taking into consideration possible limitations in embedding expressiveness for novel architectures.
+Therefore, we expect to see a clear distinction in the results achieved by newer models against older architectures, not necessarily by virtue of pure embedding quality but by sheer dimensional dissimilarities.
+
+\subsubsection{Experimental Setup}\label{sssec:exp_emb_exp1_expset}
+
+At its core, this class of experiments evaluates the resolution of analogies between sets of four terms utilizing the embedding layer of a model to encode words and compute distances.
+
+Once the dataset and model are loaded, each batch of word analogies is processed, treating every single analogy as an independent computation.
+All words that compose the input section of the analogy are appropriately encoded following \cref{eq:method_embeddings_multitok-in}, 
+Which words belong to the input for each batch of analogies \todo{are} determined by a hyperparameter containing the analogy layout (e.g. obtaining $w_1 - w_2 + w_4 = w_3$ from $w_1 : w_2 = w_3 : w_4$).
+The provided layout also defines the arithmetic operations to be performed on the encoded words in order to obtain the encoded output term.
+
+Afterwards, by following \cref{eq:method_embeddings_analogy}, we perform a search on the model's embedding space using a hyperparameter-defined distance metric as shown in \cref{eq:method_embeddings_distance}, obtaining the $k$ closest elements to the result of our embedding arithmetic.
+Finally, in order to extrapolate a concrete result, we compare the set of computed tokens with the set of tokens obtained through the application of \cref{eq:method_embeddings_multitok-out} to the output word defined by the layout.
+The comparison is performed through the use of the appropriate metrics formalized in \cref{eq:method_embeddings_topk-accuracy,eq:method_embeddings_rankscore}.
+
+The complete set of hyperparameters and their possible values is as follows:
+\begin{itemize}
+    \item $\gbm{k}$ with \textit{positive integer values greater than $0$}: represents the maximum numbers of tokens considered when computing the closest tokens to the embedding returned by the analogy computation.
+    \item \textbf{Distance metric} with values \textit{cosine}, \textit{L2}: spatial distance metric to measure element closeness inside the embedding space.
+    \item \textbf{Embedding strategy} with values \textit{first\_only}: strategy used to handle input words composed of multiple tokens.
+As it will be clarified later, this experiment only considers analogies where all words can be encoded using single tokens, therefore there is no need to define specific embedding strategies.
+    \item \textbf{Multitoken solution strategy} with values \textit{first\_only}, \textit{subdivide}: similar concept to the embedding strategy, but handles output multi-token words by either considering the first token or every token.
+Even with the assumption of single-token analogies, this hyperparameter is still relevant due to the addition of capitalized or non-capitalized alternatives to the output word, which may not result in a single-token word as their counterpart.
+    \item \textbf{Pre-normalize embeddings} with \textit{boolean values}: flag that controls the use of normalized embeddings for all computations and comparisons, referencing \cref{eq:method_embeddings_normalization}.
+    \item \textbf{Layout} with values $w_1 - w_2 + w_4 = w_3$, $w_2 - w_1 + w_3 = w_4$, $w_1 + \Delta(w_4 - w_3) = w_2$: analogy resolution templates considering both classic analogies, reverse analogies and delta analogies.
+Delta analogies follow a slightly different resolution process, illustrated in \cref{eq:method_embeddings_delta-analogy-function}.
+\end{itemize}
+
+As mentioned before, due to the fact that models of different nature and with \todo{different} tokenization strategies are being compared, a filtering operation over the dataset entries is applied.
+This operation takes place after the dataset preprocessing pipeline and removes all analogies which contain even a single word that cannot be encoded into a single token by the model's tokenizer.
+
+Additionally, it is possible to reduce the entire dataset to a common set of single-token analogies for all models by considering the tokenizers of multiple models at the same time.
+Although, by doing this, the total amount of entries is drastically reduced, hindering the reliability of experiments.
+Therefore, when applying single-token filtering, we compute a reduced dataset for each model separately.
+This approach comes at the cost of having to take into account the dataset support for each model when evaluating results obtained from the experiments.
 
 \subsubsection{Models}
 
@@ -208,6 +374,22 @@ Rather, we are interested in assessing the presence of high-level trends that ju
 
 \subsubsection{Results}
 
+\todo[cyan]{top-k llama2/mistral/llama3, gemma2/phi3/gpt2/bert, }
+
+By observing the preliminary set of results it is apparent that Llama 2 and Mistral present the best overall performance against other models; although their \todo{performance difference} against Gemma 2, Phi 3, and surprisingly, GPT 2 and BERT is minimal.
+The fact that Mistral and Llama 2 behave similarly is not surprising, given the fact that they share most of their architecture.
+However, despite the fact that Llama 2 and Llama 3 have also similar architectures, Llama 3 demonstrates an exceptionally low performance on the experiment.
+Lastly, Word2Vec and GloVe, the oldest models, share the worst performance overall.
+
+If we observe the accuracy trends of various models as $k$ grows, we can notice that the performance of some models grows in an abnormal way.
+For instance, while
+\todo[green]{trends along k}
+
+\todo[green]{vocabolary size}
+\todo[green]{dataset support}
+\todo[green]{hyperparameter discussion}
+
+
 \todo[purple!20]{
 It becomes apparent that the majority of LLMs seem to underperform with respect to GPT-2, this notable deviation in performance could stem from various factors.
 However, by inspecting Fig., which displays the same results, but for the single-token version of dataset, we can observe that the performance of GPT-2 alignes more closely with that of the other models.
@@ -237,10 +419,20 @@ Embedding interpolation, defined in \cref{ssec:method_intravisto_decoding} and f
 Logically, since we are performing linear interpolation operation, we expect to observe a trend in the analogy resolution accuracy of the interpolated embeddings that goes from the input embedding to the output one according to the interpolation percentage.
 However, it could be possible that the actual rate of change for the interpolated performance might not be constant between the two end points. \todo[green]{what does this imply?}
 
-\subsubsection{Models}
+\subsubsection{Experimental Setup}\label{sssec:exp_emb_exp2_expset}
+
+The experimental setup for this second experiment presents only few differences with respect to the previous one (\cref{ssec:exp_emb_exp1}).
+As a starting point, the core algorithm used to perform analogy resolution defined in \cref{sssec:exp_emb_exp1_expset} is left \todo{invariant}, as the fundamental task is the same between the two experiments.
+On the other hand, one of the main differences is the absence of any kind of filtering for the dataset, implying that all models share the same amount of test cases.
+This change \todo{also} sets some restrictions on the choice of models, which will be tackled in a dedicated section (\cref{sssec:exp_emb_exp2_models}).
+
+Due to the fact that models may encounter multi-token words, the \textbf{Embedding strategy} hyperparameter identified within the experimental setup of the previous experiment gains additional values to handle the encoding of multiple tokens converging inside a single word.
+These new values are \textit{average} and \textit{sum}, corresponding to taking respectively the mean and the sum of the embeddings belonging to the tokens that compose the multi-token word in question.  
+
+\subsubsection{Models}\label{sssec:exp_emb_exp2_models}
 
 For the experiment at hand we select a smaller set of models to compare due to the fact that we wish to observe the differences between input and output embeddings.
-All changes to the models will be made referencing \todo[orange]{model table in exp.1}, defined for \cref{ssec:exp_emb_exp1}.
+All changes to the models will be made referencing \cref{table:exp_emb_models}, defined for \cref{ssec:exp_emb_exp1}.
 
 As a first step, we are going to discard models without proper sub-word tokenization such as Word2Vec and GloVe.
 This allows us to also perform tests on the whole dataset, through the implementation of proper encoding strategies as defined in \cref{eq:method_embeddings_multitok-in,eq:method_embeddings_multitok-out}.
