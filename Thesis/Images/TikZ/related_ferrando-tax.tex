@@ -1,0 +1,55 @@
+\documentclass[crop, tikz, multi=false]{standalone}
+
+\usepackage{xcolor}
+\usepackage{tikzstyle}
+
+\usetikzlibrary{
+  arrows.meta, calc, decorations.pathreplacing, ext.paths.ortho, 
+  positioning, quotes, shapes, backgrounds, calligraphy, math
+}
+
+\tikzset{
+    taxblock/.style={
+        block,
+        minimum width = 8em,
+        minimum height = 4em,
+    },
+}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+    \node[taxblock, fill=green!20] (it) {Interpretability Taxonomy};
+
+    \node[below left = of it, taxblock, fill=yellow!20] (bl) {Behavior Localization};
+    \node[below right = of it, taxblock, fill=cyan!20] (id) {Information Decoding};
+
+    \node[below left = of bl, taxblock, fill=orange!20] (ia) {Input Attribution};
+    \node[below = of bl, taxblock, fill=red!20] (mca) {Model Component Attribution};
+
+    \node[below left = of mca, taxblock, fill=brown!20] (la) {Logit Attribution};
+    \node[below = of mca, taxblock, fill=magenta!20] (ci) {Causal Interventions};
+    \node[below right = of mca, taxblock, fill=purple!20] (ca) {Circuit Analysis};
+
+    \node[below left = of id, taxblock, fill=violet!20] (p) {Probing};
+    \node[below = of id, taxblock, fill=blue!20] (lrh) {Linear Representation Hypothesis};
+    \node[below right = of id, taxblock, fill=teal!20] (vsd) {Vocabulary Space Decoding};
+
+    \draw[arrow] (it.south) -- ++(0,-1.5em) -| (bl.north);
+    \draw[arrow] (it.south) -- ++(0,-1.5em) -| (id.north);
+
+    \draw[arrow] (bl.south) -- ++(0,-1.5em) -| (ia.north);
+    \draw[arrow] (bl.south) -- ++(0,-1.5em) -- (mca.north);
+
+    \draw[arrow] (mca.south) -- ++(0,-1.5em) -| (la.north);
+    \draw[arrow] (mca.south) -- ++(0,-1.5em) -- (ci.north);
+    \draw[arrow] (mca.south) -- ++(0,-1.5em) -| (ca.north);
+
+    \draw[arrow] (id.south) -- ++(0,-1.5em) -| (p.north);
+    \draw[arrow] (id.south) -- ++(0,-1.5em) -- (lrh.north);
+    \draw[arrow] (id.south) -- ++(0,-1.5em) -| (vsd.north);
+
+\end{tikzpicture}
+
+\end{document}
