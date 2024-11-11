@@ -37,7 +37,6 @@ In the next sections we will follow their insightful classification to provide a
     \caption{Taxonomy for transformer interpretability methods proposed by~\citet{ferrando2024}.}
     \label{fig:related_ferrando-tax}
 \end{figure}
-\todo[cyan]{Replace with handmade diagram, removing non-taxonomy sections from image}
 
 \section{Behavior localization}
 
@@ -138,7 +137,7 @@ Interestingly, \citet{wendler2024} apply linear properties of representation spa
 While the authors find no evidence of English fulfilling the role of an internal pivot directly, by analyzing latent embeddings as high-dimensional euclidean points, they observe that the middle layers of the transformer operate in an abstract concept space which is partially orthogonal to the language-specific concept space reached in the final layers.
 Consequently, the illusion of English pivoting can be pointed to an English bias in the abstract concept space, rather than a direct translation.
 
-\subsection{Vocabulary space decoding}
+\subsection{Vocabulary space decoding}\label{ssec:related_vocab}
 
 One of the most direct methods to comprehend a model's hidden representations is by employing its own vocabulary to derive plausible interpretations. \textbf{Vocabulary space decoding} techniques are founded on this principle, by utilizing the model's existing vocabulary they can generate outputs that are immediately understandable and may unveil hidden patterns inside the model's generation process.
 
