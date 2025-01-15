@@ -161,7 +161,7 @@ Other unrelated approaches based on vocabulary space decoding involve using maxi
 Additionally, other LMs have been used as zero-shot explainers to provide insights into possible shared features between input sequences that cause substantial activations of specific neurons in the target model~\cite{bills2023}.
 Unfortunately, the maximally-activating input analysis has been criticized for generating false positives~\cite{bolukbasi2021}, while the elicitation of natural language explanations from LMs approach has faced criticism for its general lack of causal influence between the identified concept-neuron pairs~\cite{huang2023}.
 
-\textit{LM Transparency Tool} (LM-TT)~\cite{tufanov2024} is an exceptional toolkit that offers interactive tools for analyzing the internal workings of transformer models.
+\emph{LM Transparency Tool} (LM-TT)~\cite{tufanov2024} is an exceptional toolkit that offers interactive tools for analyzing the internal workings of transformer models.
 LM-TT builds on top of the circuital interpretation of the transformer to visualize the information flow.
 As it is possible to observe from \cref{fig:related_lm-tt}, LM-TT tool focuses on the visualization of the most relevant attention paths leading to the production of an embedding in the internal states of the transformer.
 Additionally, it also provides useful information that can aid the interpretation of intermediate representations at varying degrees of granularity.

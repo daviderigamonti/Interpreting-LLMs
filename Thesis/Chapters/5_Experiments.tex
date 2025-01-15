@@ -60,7 +60,7 @@ The mathematical background for these selectors has been \todo{treated in depth}
 \todo{On the other hand}, users are given plenty of secondary controls to further explore the models' generation process.
 For example, the `Embedding normalization' control gives users the possibility of choosing the type of normalization to perform on hidden states before the decoding, as defined in \cref{eq:method_intravisto_normalization}.
 Whereas, another selector is dedicated to handling the strategy for decoding secondary tokens (referencing \cref{sssec:method_intravisto_decoding_tokens}), offering either a `top-5' approach or by using the iterative decoding algorithm, as illustrated in \cref{alg:method_intravisto_iter-dec}.
-In addition, users are given the option to ignore the column corresponding to the \textit{<start>} token from the visualization, as decoding it often does not provide meaningful results.
+In addition, users are given the option to ignore the column corresponding to the \emph{<start>} token from the visualization, as decoding it often does not provide meaningful results.
 Furthermore, users can affect the generation process by directly choosing a different model from a customizable selection pool or altering the number of generated tokens by using the appropriate selectors.
 
 InTraVisTo is thought to be an interactive tool, so another class of features to aid in the understanding of the internal workings of transformers is the embedding injection.
@@ -78,7 +78,7 @@ If the string contains multiple tokens, then all encoded representations are ave
 
 When a valid injection is compiled and added, a small card containing a summary of the injection is created and displayed in a dedicated section at the top of the interface.
 This operation prompts an immediate reload of the current generated result by the model in order to include the newly defined injection.
-When the heatmap visualization displays the result of a generation process which contained an injection, the cell location corresponding to the injection location is highlighted in \textit{green}.
+When the heatmap visualization displays the result of a generation process which contained an injection, the cell location corresponding to the injection location is highlighted in \emph{green}.
 Injections can be removed from the generation process at any time by pressing the appropriate `X' button on their card.
 
 \todo{subdivide in smaller sections}
@@ -120,7 +120,7 @@ As mention beforehand in \cref{sec:exp_intravisto_exp1}, it is also possible to 
 If the chosen node corresponds to a feed-forward \todo{node} or an attention node, there is an additional option that allows the user to remove the node, performing an ablation.
 Ablations are handled the same way as injections are, therefore a card is created in the top section of the interface, and the generation process is repeated to include the selected changes.
 Removing a node is handled by nullifying its contribution to the residual, therefore its hidden state is still properly decoded and can be analyzed from the heatmap, but does not influence the rest of the model.
-Similarly to injections, ablations are highlighted in \textit{red} inside the heatmap visualization.
+Similarly to injections, ablations are highlighted in \emph{red} inside the heatmap visualization.
 
 \todo{subdivide in smaller sections}
 \todo[green]{add images}
@@ -189,8 +189,8 @@ month names (i.e. ``July'' for 7 and ``February'' for 2), roman numerals, plain 
 
 \todo[purple!20]{
 
-Thanks to this visualisation, the user is equipped with an overview of the model during generation, for example in Fig, by briefly inspecting the first output layers, one can clearly see a symbolic reasoning fashion taking place: in order to answer to the query (i.e. \textit{What is the capital of Italy?}) the model reached to correct answer (i.e. \textit{Rome}) already at the first generated token, by firstly encoding \textit{city} then \textit{capital} and finally \textit{Rome} into the embeddings.
-Just at the very last layer, the answer changed to stick to a more formally correct answer (i.e. starting the answer with \textit{The}), we remind to Section for further examples using the tool.
+Thanks to this visualisation, the user is equipped with an overview of the model during generation, for example in Fig, by briefly inspecting the first output layers, one can clearly see a symbolic reasoning fashion taking place: in order to answer to the query (i.e. \emph{What is the capital of Italy?}) the model reached to correct answer (i.e. \emph{Rome}) already at the first generated token, by firstly encoding \emph{city} then \emph{capital} and finally \emph{Rome} into the embeddings.
+Just at the very last layer, the answer changed to stick to a more formally correct answer (i.e. starting the answer with \emph{The}), we remind to Section for further examples using the tool.
 
 Referring again to the example in Fig, one could replace the first occurrence of the token \texttt{\_Rome} with the vector for the token \texttt{\_Paris} to see the consequences on the following internal states and the generated completion.
 (Doing so results in the model subsequently placing low probability on the injected embedding and ``stopping'' the generation with a placeholder, in order to be able to return to the generation of a correct response containing the token \texttt{\_Rome} instead of \texttt{\_Paris}).
@@ -209,7 +209,7 @@ We are going to do a walkthrough of the main features of the tool by analyzing t
 %\citet{DBLP:conf/nips/LiuAGKZ23}
 claimed that some model reasoning errors could be tied back to \emph{attention glitches}, minor errors propagated throughout the attention pattern in the model, leading to imperfect state information transferred through the layers.
 They tested the model on the Flip-Flop language, but a simpler yet effective use case turned out to be \emph{reversing sequences}.
-Thus, the input prompt for our example is: \textit{Write numbers in reverse order. Number: 13843234 Reverse:}.
+Thus, the input prompt for our example is: \emph{Write numbers in reverse order. Number: 13843234 Reverse:}.
 
 As depicted in
 %\cref{fig:example_settings}
@@ -258,7 +258,7 @@ This could be expected since we are injecting an embedding that was not crafted 
 
 \todo[purple!20]{
 We presented InTraVisTo, a tool to visualize the internal states and the information flow of Transformer Neural Network, the core of LLMs.
-We developed InTraVisTo to provide a tool that NLP practitioners can use to understand the internal reasoning steps carried out by a LLM and, possibly, track down the causes of errors like hallucinations.
+We developed InTraVisTo to provide a tool that NLP practitioners can use to understand the internal reasoning steps carried out by an LLM and, possibly, track down the causes of errors like hallucinations.
 Ultimately, we hope our tool will help improve the reliability of LLMs.
 Our focus at the moment is on providing better decoding and manipulation of hidden states, with focus on information injection, and improving the interface, to make InTraVisTo more user-friendly.
 }
@@ -272,8 +272,8 @@ Additionally, we expand upon these ideas and provide further explanations for th
 
 \subsection{Dataset}
 
-The dataset used for all the experiments under this research question was created by \todo{unifying} the original analogy dataset employed by word2vec~\cite{mikolov2013} and the \textit{BATS (Bigger Analogy Test Set)}~\cite{drozd2016}.
-The word2vec dataset (also known as Google analogy dataset) is structured in two main files: \textit{question-words} and \textit{question-phrases}.
+The dataset used for all the experiments under this research question was created by \todo{unifying} the original analogy dataset employed by word2vec~\cite{mikolov2013} and the \emph{BATS (Bigger Analogy Test Set)}~\cite{drozd2016}.
+The word2vec dataset (also known as Google analogy dataset) is structured in two main files: \emph{question-words} and \emph{question-phrases}.
 Question-words contains $14$ categories for a total of \todo{$x$} analogies spacing from linguistic relations to semantic relations, while question-phrases only features $5$ classes and a total of \todo{$x$} analogies regarding common-knowledge relations involving proper nouns.
 BATS features a more complex hierarchy since it is meant to be an improvement over the Google dataset: it covers $4$ main relation types (inflectional morphology, derivational morphology, lexicographic semantics and encyclopedic semantics), each one being subdivided into $10$ further sub-categories containing $50$ unique word pairs each.
 In addition, BATS provides multiple correct answers for word pairs when applicable. 
@@ -319,13 +319,13 @@ The comparison is performed through the use of the appropriate metrics formalize
 
 The complete set of hyperparameters and their possible values is as follows:
 \begin{itemize}
-    \item $\gbm{k}$ with \textit{positive integer values greater than $0$}: represents the maximum numbers of tokens considered when computing the closest tokens to the embedding returned by the analogy computation.
-    \item \textbf{Distance metric} with values \textit{cosine}, \textit{L2}: spatial distance metric to measure element closeness inside the embedding space.
-    \item \textbf{Embedding strategy} with values \textit{first\_only}: strategy used to handle input words composed of multiple tokens.
+    \item $\gbm{k}$ with \emph{positive integer values greater than $0$}: represents the maximum numbers of tokens considered when computing the closest tokens to the embedding returned by the analogy computation.
+    \item \textbf{Distance metric} with values \emph{cosine}, \emph{L2}: spatial distance metric to measure element closeness inside the embedding space.
+    \item \textbf{Embedding strategy} with values \emph{first\_only}: strategy used to handle input words composed of multiple tokens.
 As it will be clarified later, this experiment only considers analogies where all words can be encoded using single tokens, therefore there is no need to define specific embedding strategies.
-    \item \textbf{Multitoken solution strategy} with values \textit{first\_only}, \textit{subdivide}: similar concept to the embedding strategy, but handles output multi-token words by either considering the first token or every token.
+    \item \textbf{Multitoken solution strategy} with values \emph{first\_only}, \emph{subdivide}: similar concept to the embedding strategy, but handles output multi-token words by either considering the first token or every token.
 Even with the assumption of single-token analogies, this hyperparameter is still relevant due to the addition of capitalized or non-capitalized alternatives to the output word, which may not result in a single-token word as their counterpart.
-    \item \textbf{Pre-normalize embeddings} with \textit{boolean values}: flag that controls the use of normalized embeddings for all computations and comparisons, referencing \cref{eq:method_embeddings_normalization}.
+    \item \textbf{Pre-normalize embeddings} with \emph{boolean values}: flag that controls the use of normalized embeddings for all computations and comparisons, referencing \cref{eq:method_embeddings_normalization}.
     \item \textbf{Layout} with values $w_1 - w_2 + w_4 = w_3$, $w_2 - w_1 + w_3 = w_4$, $w_1 + \Delta(w_4 - w_3) = w_2$: analogy resolution templates considering both classic analogies, reverse analogies and delta analogies.
 Delta analogies follow a slightly different resolution process, illustrated in \cref{eq:method_embeddings_delta-analogy-function}.
 \end{itemize}
@@ -405,7 +405,7 @@ In \todo[orange]{categories ...} we can observe a breakdown by dataset categorie
 By \todo{looking} at \todo[orange]{categories ...} it is possible to discern the reason for the underperformance of Word2Vec and GloVe with respect to newer models, as we can see that these older models offer a near complete support for all the dataset categories.
 This means that their vocabulary contains a great number of tokens encompassing single words, which drastically expands the number of analogies considered for the experiment, including analogies that are not easily solved by model in the process.
 On a more \todo{general scale}, we can also observe the fact that some certain categories never seem to have support for any model.
-These categories \todo{mostly represent} the additional portion of the original Google dataset called \textit{question-phrases} modeling analogies between entities that are described by multiple words, which intuitively do not fit the single-token constraint chosen for this experiment.
+These categories \todo{mostly represent} the additional portion of the original Google dataset called \emph{question-phrases} modeling analogies between entities that are described by multiple words, which intuitively do not fit the single-token constraint chosen for this experiment.
 Another general pattern observable in \todo[orange]{categories ...} concerns the fact that most models show better performance on the categories belonging to the original Google dataset.
 This behavior can be easily explained by both the simplistic nature of the dataset and the fact that, being a well-known dataset, most models have seen it during training.
 Lastly, \todo[orange]{categories ...} shows an exceptionally low support for all categories \todo{for} Llama 3, \todo{tying back into} our previous hypothesis of a fragmented vocabulary due to explicit multilingual training.
@@ -443,8 +443,8 @@ As a starting point, the core algorithm used to perform analogy resolution defin
 On the other hand, one of the main differences is the absence of any kind of filtering for the dataset, implying that all models share the same amount of test cases.
 This change \todo{also} sets some restrictions on the choice of models, which will be tackled in a dedicated section (\cref{sssec:exp_emb_exp2_models}).
 
-Due to the fact that models may encounter multi-token words, the \textit{Embedding strategy} hyperparameter identified within the experimental setup of the previous experiment gains additional values to handle the encoding of multiple tokens converging inside a single word.
-These new values are \textit{average} and \textit{sum}, which correspond to taking respectively the mean and the sum of the embeddings belonging to the tokens that compose the multi-token word in question.
+Due to the fact that models may encounter multi-token words, the \emph{Embedding strategy} hyperparameter identified within the experimental setup of the previous experiment gains additional values to handle the encoding of multiple tokens converging inside a single word.
+These new values are \emph{average} and \emph{sum}, which correspond to taking respectively the mean and the sum of the embeddings belonging to the tokens that compose the multi-token word in question.
 As previously mentioned, these techniques are formalized in \cref{eq:method_embeddings_multitok-in}.
 
 \subsubsection{Models}\label{sssec:exp_emb_exp2_models}
@@ -492,7 +492,7 @@ This result \todo{reconfirms} the findings \todo{obtained} by \todo[orange]{ref}
 On the other hand, we can see that the expected drop in performance of reverse analogies ($w_1 - w_2 + w_4 = w_3$) is much more accentuated when analyzing the complete dataset rather than when filtering for single-token analogies.
 This is noticeable to the point that the performance of most models seems to be \todo{equal or worse} than the baseline for some specific sets of hyperparameters that include reverse analogies in the specified format.
 In addition, by observing \todo[orange]{categories ...} we can notice that the drop in performance appears to be more generalized \todo{throughout} all dataset categories, rather than targeting the BATS analogies as found in the previous experiment.
-Newer models seem to be more susceptible to these \todo{types} of hyperparameter variations, whereas GPT2 gives the impression of being only marginally affected by them.
+Newer models seem to be more susceptible to these \todo{types} of hyperparameter variations, whereas GPT-2 gives the impression of being only marginally affected by them.
 On the topic of pre-normalization, the effects seem to be negligible and similar to what was already stated in \todo[orange]{ref}.
 \todo{Surprisingly}, pre-normalization appears to have slightly better results when considering the summation of embeddings as a strategy to resolve multi-token analogies.
 This behavior can be intuitively explained by considering the fact that directly summing dimensions without dividing by the variable number of elements (\todo{as for} the averaging case) returns inflated values, which get slightly mitigated by the pre-normalization operation.
@@ -541,18 +541,18 @@ Although past work has theorized and partially demonstrated on a restricted set 
 
 \subsection{Dataset}\label{ssec:exp_fom_dataset}
 
-The dataset employed for this set of experiments is \emph{WikiText 103} \todo[orange]{cite}, containing a total of $1.81M$ rows of full articles sourced from Wikipedia \todo[orange]{cite}.
+The dataset employed for this set of experiments is \emph{WikiText 103} \todo[orange]{cite} (hereby referred simply as \emph{WikiText}), containing a total of $1.81M$ rows of full articles sourced from Wikipedia \todo[orange]{cite}.
 This dataset is used to train the unigram Markov model and to perform additional tests on various models by using a separate validation+test split.
 
-In addition to \emph{WikiText 103}, we also use a set of $10000$ sentences randomly extracted from the training split of \emph{Open Web Text} \todo[orange]{cite}.
-This was \todo{done} in order to provide a less biased evaluation of models that were directly trained on \emph{WikiText 103}.
+In addition to \emph{WikiText}, we also use a set of $10000$ sentences randomly extracted from the training split of \emph{OpenWebText} \todo[orange]{cite}.
+This was \todo{done} in order to provide a less biased evaluation of models that were directly trained on \emph{WikiText}.
 
 \subsubsection{Models}
 
 Similarly to the models taken in consideration for \cref{ssec:exp_emb_exp2}, the main \todo{chosen} transformer architectures have different input and output embeddings.
 From these models we choose to analyze LLaMA-2-7B \todo[orange]{cite}, LLaMA-3-7B \todo[orange]{cite}, Mistral-7B \todo[orange]{cite} and Phi-3-small-8k-instruct \todo[orange]{cite}.
 
-Whereas, the unigram Markov model is trained utilizing the training split of \emph{WikiText 103} for a total of $1.81M$ rows.
+Whereas, the unigram Markov model is trained utilizing the training split of \emph{WikiText} for a total of $1.81M$ rows.
 The vocabulary of the unigram Markov model is constructed using the vocabulary of the transformer model that is currently being compared to, in order to enable 1-to-1 token comparisons for the transition matrices.
 This is achieved by parsing the training text for the Markov model and manually processing the frequencies using the tokenizer of the transformer model at hand.
 
@@ -577,7 +577,7 @@ The comparison is performed by quantifying the norm of the difference between tw
 
 On the other hand, \todo{set metrics} are computed starting from a probabilistic token-by-token view of transition matrices, meaning that each row is represented as a set containing the column indexes corresponding to the top-$k$ values.
 Starting from this representation we adopt set metrics to compute similarities between sets of distributions (transition matrices) as defined in \todo[orange]{}{cref}. \todo[green]{list of set metrics}
-Technically speaking, it is important to point out that for the experiments involving set metrics, comparing actual transition matrices modeling probabilities to logit matrices does not make any difference as both the \textit{softmax} and \textit{logarithm} operators are monotonic, thus they preserve the ordering of elements.
+Technically speaking, it is important to point out that for the experiments involving set metrics, comparing actual transition matrices modeling probabilities to logit matrices does not make any difference as both the \emph{softmax} and \emph{logarithm} operators are monotonic, thus they preserve the ordering of elements.
 
 \todo[green]{training text token counts for each tokenizer}
 
@@ -630,7 +630,7 @@ The second experiment still focuses on the evaluation of transition matrices gen
 For this experiment we decide to shift our view of the transition matrices from sets of elements corresponding to binary predictions to actual probability distributions.
 This approach enables a more accurate analysis, and considers the models for how they would concretely be used outside from these experimental scenarios.
 
-In \todo[orange]{ref} we defined the two main mathematical tools that we intend to use for this experiment, which are the Kullback-Leibler divergence \todo[orange]{ref} and the perplexity \todo[orange]{ref}.
+In \todo[orange]{ref} we defined the two main mathematical tools that we intend to use for this experiment, which are the KL divergence \todo[orange]{ref} and the perplexity \todo[orange]{ref}.
 These evaluations allow us to understand how similar or dissimilar \todo{are} two distributions over a vocabulary by either directly comparing them using the KL divergence or by measuring their \todo{surprise} over a corpus of text using the perplexity metric. 
 
 \subsubsection{Experimental Setup}

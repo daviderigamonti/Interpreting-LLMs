@@ -77,7 +77,7 @@ Nevertheless, our interest in decoding the model's hypothetical intermediate pre
 In order to extract this `leftover information', we devise two main approaches that \todo{sublimate} it into \emph{secondary tokens}.
 We define \emph{secondary tokens} as additional vocabulary tokens that are the result of a \emph{secondary decoding process}, aimed at obtaining tokens that hold less importance than the token obtained as a result of the \emph{primary decoding process} (as mentioned before) of the same hidden representation.
 
-The first secondary decoding approach is \emph{Top-K probability decoding} and consists of expanding the number of selected tokens from the probability distribution to $k$, thus obtaining $k-1$ secondary tokens ordered by their probability values.
+The first secondary decoding approach is \emph{Top-$k$ probability decoding} and consists of expanding the number of selected tokens from the probability distribution to $k$, thus obtaining $k-1$ secondary tokens ordered by their probability values.
 This is a rather simple and immediate technique, which is widely-used in many interpretability applications and non~\cite{belrose2023a,pal2023,tufanov2024}.
 The principal downside of this approach comes from the fact that the obtained secondary tokens might be overly similar to the primary token, resulting in redundant information.
 This is likely caused by the fact that a large part of the hidden representation is used to represent the primary token, often skewing the embedding vector in favor of tokens that are semantically similar~\cite{elhage2022}.
@@ -458,4 +458,4 @@ To this end we recorded the top-$k$ answers elicited using the FOM matrix $\gbm{
 Once we have the set of generated next tokens for each token inside the vocabulary we can compare them to our actual hypothesized reference tokens, obtained applying the identity function in the `inversion' hypothesis case, and in the `Markov' hypothesis case by querying the Markov model in the same way that we did with the FOM.
 As already done before in \cref{subsubsec:method_embeddings_evaluation} using \cref{eq:method_embeddings_topk-accuracy}, we employ the top-$k$ accuracy metric to establish the similarity between the predictions of the FOM against the two baselines defined by the identity function and the Markov model.
 The top-$k$ accuracy is computed by taking the $k$ tokens corresponding to the $k$ highest values between logits, and observing if the input token is present among them.
-\todo[green]{additional considerations, kl-div / perplexity analysis / }
+\todo[green]{additional considerations, kl div / perplexity analysis / }
