@@ -536,7 +536,7 @@ Then, tokens that are shared between languages but have different senses or are 
     \centering
     \includegraphics[width=\textwidth]{exp_emb_1C_cat_w2v-gv-l2-l3.pdf}
     \caption{\todo[red]{caption}}
-    \label{fig:exp_emb_1_D}
+    \label{fig:exp_emb_1_C}
 \end{figure}
 
 Another important fact that must be taken into consideration is the support of the resulting dataset for each model.
@@ -678,74 +678,74 @@ This effectively normalizes away instances of analogies where GPT-2 may have hel
 For the same reason, GPT-2 would have had both better representations encompassing semantic meanings of words without additional noise caused by multiple words sharing the same sub-word token, but also not having to be subject to the token-reconstruction previously mentioned strategies as ways to deal with multi-token words.
 }
 
-\section{First Order Prediction}
+\section{First Order Prediction}\label{sec:exp_fom}
 
-Building on the foundation established in \cref{sec:rq_fom}, the experiments in this section will focus on exploring the implications of creating a First Order Model (FOM).
-A FOM is obtained by removing all the intermediate architectural components from an LLM, leaving behind the input and output embedding layers, and the residual connections joining them.
-As explained in \cref{sec:method_fom}, this operation can be seen as the creation of a Markov model possessing a transition matrix formed by the product between the input and output embedding matrices.
+Building on the foundation established in \cref{sec:rq_fom}, the experiments in this section are focused on exploring the implications of constructing a First Order Model (FOM).
+A FOM is derived by removing all intermediate architectural components from an LLM, retaining only the input and output embedding layers along with the residual connections joining them.
+As described in \cref{sec:method_fom}, this transformation can be seen as the creation of a Markov whose transition matrix is given by the product of the input and output embedding matrices.
 
-Most of the experiments in this section are geared towards understanding if the FOM actually represents a faithful bigram Markov model over the original model's vocabulary.
-Although past work has theorized and partially demonstrated on a restricted set of models the possibility of this hypothesis being \todo{correct}~\cite{elhage2021}, we suspect that FOMs extracted from different LLMs may have different degrees of \todo{`Markovness'} and we strive to explore \todo{this} hypothesis in this section.
+Most of the experiments in this section are geared towards understanding whether the FOM accurately represents a bigram Markov model over the original model's vocabulary.
+Although past work has theorized and partially demonstrated this hypothesis for a restricted set of models~\cite{elhage2021}, we suspect that FOMs derived from different LLMs may exhibit varying degrees of Markovian behavior, and we aim to investigate this variation in this section.
 \todo[green]{Add part on weight tying}
 
-Following the normalization intuition that \todo{proved successful} for InTraVisTo in \todo[orange]{ref section}, we also want to explore an alternative of the basic FOM obtained from directly joining input and output embeddings.
-In fact, this alternative was introduced with the intention of circumventing one particular problem emerged during some experimental instances, which reflected similar complications already experienced and solved for the research question referenced in \todo[orange]{ref section research question}
-The main issue can be described as an excessive \todo{`flatness'} of the vocabulary distribution for decoded states, in this case referenced to the probability distribution for the next token in the FOM transition matrix.
-To mirror the previously proposed solution, the additional model (FOM with RMS) considers a single RMS normalization step between the standard FOM embeddings.
-As we will establish in this section, the proposed solution does not obtain satisfying results \todo{as opposed} to its previous iteration.
-Furthermore, the performance of FOM models with RMS normalization falls below their standard counterpart in the majority of tasks.
+Following on the normalization intuition that proved effective for InTraVisTo, as explored in \cref{sssec:method_intravisto_decoding_norm}, we also explore an alternative of the basic FOM obtained from directly joining input and output embeddings.
+In fact, this alternative was introduced with the intention of addressing one particular issue observed in certain experimental instances, which exhibited similarities to challenges previously encdountered and resolved in relation to the research question referenced in \cref{sec:rq_intravisto}.
+The main issue can be described as an excessive flattening of the vocabulary distribution for decoded states, specifically referring to the probability distribution for the next token in the FOM transition matrix.
+To mirror the previously proposed solution, the alternative model (FOM with RMS) incorporates a single RMS normalization step between the standard FOM embeddings.
+As we will establish in this section, the proposed solution does not yield satisfactory results compared to its previous iteration.
+Moreover, the performance of FOM models with RMS normalization falls below to that of their standard counterparts across the majority of tasks.
 
 \subsection{Dataset}\label{ssec:exp_fom_dataset}
 
-The dataset employed for this set of experiments is \emph{WikiText 103} \todo[orange]{cite} (hereby referred simply as \emph{WikiText}), containing a total of $1.81M$ rows of full articles sourced from Wikipedia \todo[orange]{cite}.
-This dataset is used to train the unigram Markov model and to perform additional tests on various models by using a separate validation+test split.
+The dataset employed for this set of experiments is \emph{WikiText 103}~\cite{merity2017} (hereafter referred to as \emph{WikiText}), which consists of $1.81M$ rows of full articles sourced from Wikipedia.
+This dataset is used to train the unigram Markov model and to conduct additional tests on various models by using a separate validation and test split.
 
-In addition to \emph{WikiText}, we also use a set of $10000$ sentences randomly extracted from the training split of \emph{OpenWebText} \todo[orange]{cite}.
-This was \todo{done} in order to provide a less biased evaluation of models that were directly trained on \emph{WikiText}.
+In addition to \emph{WikiText}, we also utilize a set of $10000$ sentences randomly extracted from the training split of \emph{OpenWebText}~\cite{gokaslan2019}.
+This extraction was performed in order to provide a less biased evaluation of models that were directly trained on \emph{WikiText}.
 
 \subsubsection{Models}
 
-Similarly to the models taken in consideration for \cref{ssec:exp_emb_exp2}, the main \todo{chosen} transformer architectures have different input and output embeddings.
-From these models we choose to analyze LLaMA-2-7B \todo[orange]{cite}, Mistral-7B \todo[orange]{cite} and Phi-3-small-8k-instruct \todo[orange]{cite}.
-LLaMA-3-7B \todo[orange]{cite} was also considered in addition to the other models.
-However, its large vocabulary dimensionality (\todo[orange]{voc size}) entailed a \todo{size explosion} for the transition matrix.
-Thus, \todo{it} was discarded due to computational unfeasibility reasons.
+Similarly to the models taken in consideration for \cref{ssec:exp_emb_exp2}, the primary selected transformer architectures feature distinct input and output embeddings.
+From these models, we choose to analyze LLaMA-2-7B~\cite{touvron2023}, Mistral-7B~\cite{jiang2023} and Phi-3.5-mini-instruct~\cite{abdin2024}.
+In addition, LLaMA-3-7B~\cite{dubey2024} was initially considered.
+However, its large vocabulary size ($128K$ tokens) resulted in a combinatorial explosion for the computation of its transition matrix, rendering it a computationally infeasible choice and leading to its exclusion.
 
-Whereas, the unigram Markov model is trained utilizing the training split of \emph{WikiText} for a total of $1.81M$ rows.
-The vocabulary of the unigram Markov model is constructed using the vocabulary of the transformer model that is currently being compared to, in order to enable 1-to-1 token comparisons for the transition matrices.
-This is achieved by parsing the training text for the Markov model and manually processing the frequencies using the tokenizer of the transformer model at hand.
-The resulting training token counts used to train Markov models are generally similar for all the considered reference models, being around $140M$ for Llama 2, $135M$ for Mistral and $137M$ for Phi 3.5.
+The unigram Markov model is trained utilizing the training split of \emph{WikiText} for a total of $1.81M$ rows.
+Its vocabulary is derived from that of the transformer model being evaluated, ensuring 1-to-1 token comparisons for the transition matrices.
+This is achieved by parsing the Markov model's training text and computing the frequencies using the tokenizer of the corresponding transformer model.
+The resulting token counts used for training Markov models are generally comparable across all selected reference models, amounting to approximately $140M$ for Llama 2, $135M$ for Mistral and $137M$ for Phi 3.5.
 
-\subsection{Experiment 1}
+\subsection{Experiment 1}\label{ssec:exp_fom_exp1}
 
-The first experiment explores the main inquiry by means of direct matrix comparison, implying the computation of immediate metrics starting from the FOM and Markov model transition matrices.
+The first experiment explores the main inquiry by means of direct matrix comparison, involving the computation of immediate metrics starting from the FOM and Markov model transition matrices.
 This rather simplistic approach still provides surprising experimental results despite not being conventionally used for the comparison of probability distributions.
 
-In order to provide a more reliable estimate we also choose to use set similarity metrics as an alternate way to evaluate similarity between approaches.
-As it will be discussed \todo{further} in later sections, these metrics are based on the comparison between sets of top-k model predictions over all vocabulary terms.
-Despite \todo{this approach} not taking into consideration the nuances of probability distributions, it still provides insight on the comparison of greedy estimates between \todo{model predictions}.
+To obtain a more reliable estimate, we also use set similarity metrics as an alternative means of evaluating similarity between approaches.
+As will be discussed in later sections, these metrics compare sets of top-$k$ model predictions across all vocabulary terms.
+While this method does not account for the nuances of probability distributions, it still provides valuable insight into the comparison of greedy estimates between model predictions.
 
 \subsubsection{Experimental Setup}
 
-As introduced before, the FOM transition matrix is computed by merging input and output embeddings of the inspected models following \cref{eq:method_fom_fom-matrix}.
-On the other hand, the Markov model equivalent is obtained by computing bigram statistics of tokens over the training dataset referenced in \cref{ssec:exp_fom_dataset}.
-In order to make the models comparable, we directly use the LLM's tokenizer to encode the corpus of text used to train the Markov model, in this way both models share the same vocabulary.
-As previously mentioned in \todo[orange]{ref section}, we define a auxiliary class of FOMs which utilizes the RMS normalization in the transition matrix formulation.
-The specific approach is formalized in \todo[orange]{ref method}, splitting the computation between input and output embeddings.
+As previously introduced, the FOM transition matrix is computed by merging the input and output embeddings of the inspected models, following \cref{eq:method_fom_fom-matrix}.
+Conversely, the Markov model equivalent is derived by computing bigram statistics of tokens over the training dataset referenced in \cref{ssec:exp_fom_dataset}.
+To ensure comparability, we directly use the LLM's tokenizer to encode the text corpus used for trainining the Markov model, ensuring that both models share the same vocabulary.
+As discussed in \cref{sec:exp_fom} we also define an auxiliary class of FOMs that incorporates RMS normalization in the transition matrix formulation.
+The specific approach is formalized in \todo[orange]{ref methodology}, where the computation is divided between input and output embeddings.
 
-In addition, there is one important detail about the construction of the FOM transition matrix \todo{which} needs to be mentioned.
-When the model performs a prediction, given how the unembedding matrix is structured, there needs to be a softmax operation to obtain a meaningful probability distribution, as already specified in \todo[orange]{ref section 2}.
-Thus, in most scenarios, it is not possible to directly compare the FOM transition matrix against other transition matrices without \todo{carrying out} the conversion operation specified in  first.
-As already explained in \todo[orange]{ref methodology}, the conversion from logit transition matrix to actual transition matrix is not performed on experiments that operate on \todo{aggregations of most likely results}.
+In addition, an important detail regarding the construction of the FOM transition matrix that needs to be noted.
+When the model makes a prediction, the structure of the unembedding matrix requires a softmax operation to produce a meaningful probability distribution, as already specified in \cref{ssec:background_transf_structure}.
+Consequently, in most scenarios, the FOM transition matrix cannot be directly compared against other transition matrices without first applying the specified conversion operation.
+As explained in \todo[orange]{ref methodology}, the conversion from a logit transition matrix to an actual transition matrix is not performed in experiments that operate on greedy aggregations of most likely results.
 
-Once the two main models are loaded as transition matrices, we proceed to compare them \todo{between each other} and against the identity matrix.
-As mentioned before, the identity matrix represents the transition matrix of a FOM extracted from a transformer-based language model with different input and output embeddings.
-The comparison is performed by quantifying the norm of the difference between two matrices as indicated in \cref{eq:method_fom_fom-i-comp,eq:method_fom_fom-markov-comp}.
+Once the two main models are loaded as transition matrices, we compare them with each other and against the identity matrix.
+As mentioned before, the identity matrix represents the transition matrix of a FOM derived from a transformer-based language model with distinct input and output embeddings.
+The comparison is conducted by quantifying the norm of the difference between two matrices as specified in \cref{eq:method_fom_fom-i-comp,eq:method_fom_fom-markov-comp}.
 
-On the other hand, \todo{set metrics} are computed starting from a probabilistic token-by-token view of transition matrices, meaning that each row is represented as a set containing the column indexes corresponding to the top-$k$ values.
-Starting from this representation we adopt set metrics to compute similarities between sets of distributions (transition matrices) as defined in \todo[orange]{cref}.
-The chosen set metrics include the Overlap coefficient, the Jaccard index and the S\o{}rensen index.
-As pointed out before, for experiments involving set metrics, the comparison between actual transition matrices modeling probabilities and logit matrices does not make any difference as both \emph{softmax} and \emph{logarithm} operators are monotonic, thus they preserve the ordering of elements.
+On the other hand, set-based metrics are computed starting from a probabilistic token-by-token interpretation of transition matrices, where each row is represented as a set containing the column indexes corresponding to the top-$k$ values.
+Based on this representation, we adopt set metrics to compute and compare similarities between sets of distributions (transition matrices), as defined in \todo[orange]{ref methodology}.
+The selected metrics include the Overlap coefficient and the Jaccard index.
+As pointed out before, in experiments involving set-based metrics, the distinction between  transition matrices modeling probabilities and logit matrices is irrelevant.
+This is beacause both the \emph{softmax} and \emph{logarithm} operators are monotonic, preserving the relative ordering of elements.
 
 \subsubsection{Results}
 
@@ -775,13 +775,13 @@ As pointed out before, for experiments involving set metrics, the comparison bet
     \label{fig:exp_fom_1_A}
 \end{figure}
 
-We can begin our analysis by observing \todo[orange]{fig}, which depicts Llama 2's performance on the self-regression and unigram-regression tasks using the top-$k$ accuracy metric.
-It is possible to notice how, for any given value of $k$, the accuracy of the model in predicting the identity matrix appears to be lower than any of the values reported for the unigram Markov model accuracy comparison.
-This trend is followed by most other analyzed models, except for Mistral.
-In Mistral's case, depicted in \todo[orange]{fig}, the predictions generated by the FOM appear to align more closely with the inputs of the model rather than the most probable outputs generated by the unigram Markov model ($k_2 = 1$).
-This series of observations for Mistral seems to hold even when considering all traces corresponding to more lenient variants that compute the accuracy by comparing the top-$k_1$ predictions of the FOM against the top-$k_2$ predictions of the Markov model.
-On the other hand, by observing \todo[orange]{fig} depicting Phi 3.5's performance, we can observe that the general trend follows Llama 2's performance \todo{between} both top-$k$ tasks.
-The only surprising behavior displayed by Phi is the exceptionally low accuracy in predicting the identity matrix as shown in \todo[orange]{fig}.
+We begin our analysis by examining \todo[orange]{fig}, which depicts Llama 2's performance on the self-regression and unigram-regression tasks using the top-$k$ accuracy metric.
+It is possible to notice how, for any given value of $k$, the model's accuracy in predicting the identity matrix appears to be lower than any of the reported values for the unigram Markov model accuracy comparison.
+This trend is consistent across most other analyzed models, with the exception of Mistral.
+In Mistral's case, shown in \todo[orange]{fig}, the predictions generated by the FOM appear to align more closely with the model's inputs rather than with the most probable outputs of the unigram Markov model ($k_2 = 1$).
+This series of observations seems to persist for Mistral, even when considering all the more lenient variations that compute accuracy by comparing the top-$k_1$ predictions of the FOM with the top-$k_2$ predictions of the Markov model.
+On the other hand, \todo[orange]{fig}, which depicts Phi 3.5's performance, reveals that its general is similar to that of Llama 2 across both top-$k$ tasks.
+The only notable deviation in Phi 3.5's behavior is its exceptionally low accuracy in predicting the identity matrix, as highlighted in \todo[orange]{fig}.
 
 \begin{table}[t!]
     \centering
@@ -802,18 +802,18 @@ The only surprising behavior displayed by Phi is the exceptionally low accuracy 
     \label{table:exp_fom_distance}
 \end{table}
 
-The previous observations seem to suggest that for some specific models the embeddings may exhibit a closer relationship to their inverse, rather than serving as representations of the subsequent token prediction based on the input. 
-Unfortunately this observation appears to contradict the recorded matrix distances, observable in \todo[orange]{table}.
-The matrix distance metric seems to indicate that the FOM based on Mistral is actually better at representing its Markov model than any of the other models since it has the lowest FOM/Markov distance and one of the highest FOM/identity distances out of all the analyzed models.
-However, direct comparative statements over the matrix distance should be taken with a grain of salt as it is not a reliable or commonly used metric in itself.
+The previous observations seem to suggest that, for certain models, embeddings may exhibit a closer relationship to their inverse rather than serving as representations for predicting the next token based on the previous one. 
+However, this interpretation appears to conflict the recorded matrix distances shown in \todo[orange]{table}.
+The matrix distance metric indicates that the FOM based on Mistral more accurately represents its corresponding Markov model than any other analyzed model, as it exhibits the lowest FOM/Markov distance and one of the highest FOM/identity distances.
+Nonetheless, direct comparative statements based on the matrix distance should be appraoched with caution as this metric is neither widely used nor inherently reliable.
 
-In fact, we can notice that all LLMs present the same trend regarding their matrix distance experiments, which is most likely caused by the noise present in their large matrices, making them unfit for direct comparison through a distance metric.
-This observation confirms a potential bias towards lower distance estimates in the FOM/Markov case, possibly due to a smaller quantity of null values present in the Markov transition matrix \todo{with regard to} the identity matrix.
-However, some slight differences between models emerge when considering the FOM variants that include RMS normalization.
-In particular, \todo[orange]{table} shows that the FOMs with RMS obtained from Llama 2 and Mistral display a discrete bias towards the results found at the previous point concerning \todo[orange]{previous images}.
-We can speculate that this percieved trend is able to emerge only due to the fact that RMS normalization aligns internal representations in a way that probabilities appear to be more \todo{`skewed'}, thus providing a better fit for their actual reference distribution.
-Nonetheless, the obtained results still contain a vast amount of noise and cannot be considered a reliable comparison for FOM behavior.
-Furthermore, the FOM with RMS obtained from Phi 3.5 is a clear outlier as its performance is significantly worse with respect to its counterpart without RMS than any other model, and \todo{for both} considered comparisons.
+In fact, we can notice that all LLMs present the same trend regarding their matrix distance experiments, likely due to the noise present in their large matrices, which makes them unsuitable for direct comparison through a distance metric.
+This finding confirms a potential bias towards lower distance estimates in the FOM/Markov case, possibly resulting from a lower proportion of null values present in the Markov transition matrix compared to the identity matrix.
+However, slight differences between models emerge when considering FOM variants that incorporate RMS normalization.
+In particular, \todo[orange]{table} shows that the FOMs with RMS derived from Llama 2 and Mistral exhibit a subtle bias toward the results previously observed in \todo[orange]{previous images}.
+We speculate that this percieved trend arises because RMS normalization aligns internal representations in a way that makes probabilities appear more skewed, thus providing a better fit for their actual reference distribution.
+Nonetheless, the obtained results still contain a vast amount of noise and cannot offer a reliable basis for directly comparing FOM behavior.
+Furthermore, the FOM with RMS based on Phi 3.5 is a clear outlier, as its performance is significantly worse than its counterpart without RMS across other models and both considered comparisons.
 
 \begin{table}
     \centering
@@ -835,30 +835,32 @@ Furthermore, the FOM with RMS obtained from Phi 3.5 is a clear outlier as its pe
     \end{tabular}}
     \end{table}
 
-On the other hand, in \todo[orange]{table} we show the most likely token predicted by models for a restricted set of randomly chosen common input words.
-This gives an approximate but immediate view on the kind of predictions that extracted FOMs and their respective trained Markov models tend to \todo{make}.
-In this case, Markov model predictions are aggregated into a single entry since they perfectly overlap for the chosen set of words.
-As it is possible to observe, most next token predictions obtained from FOMs and Markov models can be contextualized to make sense in a natural language scenario.
-However, we can still notice some minor patterns that differentiate how well FOMs extracted from distinct models approximate their respective Markov models.
-For example, there are multiple instances where Llama 2 and Phi 3.5 manage to return a prediction aligned with Markov models.
-Conversely, Mistral is shown to repeat the input token for multiple entries mimicking the identity transition matrix, and occasionally predicting tokens that do not appear to make sense when combined with the input token.
-In addition, it is also possible to notice how the alternate version of the FOM that includes RMS normalization almost always returns the same prediction as its counterpart without normalization.
+On the other hand, \todo[orange]{table} presents the most likely token predicted by models for a restricted set of randomly selected common input words.
+This provides an approximate yet immediate view into the types of predictions generated by the extracted FOMs and their corresponding trained Markov models.
+In this case, Markov model predictions are aggregated into a single entry, since they perfectly overlap for the chosen set of words.
+As it is possible to observe, most next token predictions from both FOMs and Markov models can be contextualized to make sense within a natural language setting.
+However, minor patterns emerge that differentiate how well FOMs extracted from different models approximate their respective Markov models.
+For example, Llama 2 and Phi 3.5 frequently produce predictions aligned with Markov models.
+Conversely, Mistral often repeats the input token across multiple entries, mimicking the identity transition matrix, and occasionally predicts tokens that do not appear meaningful when combined with the input token.
+In addition, it is also possible to notice how FOM variants that include RMS normalization almost always return the same prediction as their counterpart without normalization.
 
 \todo[cyan]{overlap/sorensen/jaccard llama2}
 \todo[cyan]{overlap llama2 FOM / FOM + RMS}
 
-As mentioned before, we also introduce set metrics as a more reliable measure for transition matrix comparison.
-Considering \todo[orange]{figure (1)}, it is possible to notice that the three chosen set metrics seem roughly equivalent at assessing comparison between models.
-Although the graph only includes Llama 2, set metrics display the same general behavior across all analyzed models.
-The only substantial difference between metrics can be appreciated for extremely low values of $k$.
+As previously mentioned, we introduce set metrics as a more reliable measure for comparing transition matrices.
+Considering \todo[orange]{figure (1)}, it is possible to notice that the two chosen set metrics appear to be roughly equivalent in assessing model comparisons.
+Although the graph only includes Llama 2, set metrics exhibit the same general behavior across all analyzed models.
+Substantial differences among metrics can be appreciated only for extremely low values of $k$.
 \todo[green]{maybe expand}
-We also consider the effect of RMS normalization on FOMs in the context of this experiment: as it is possible to discern from \todo[orange]{figure (2)}, there does not seem to be any \todo{major} difference between the overlap coefficient of a FOM and its counterpart with RMS for Llama 2.
-This is also the case for other models and metrics and can be attributed to the fact that, in this case, RMS only causes noticeable changes in the underlying probabily distribution, leaving the ordering of \todo{elements} mostly unaltered.
+We also examine the effects of RMS normalization on FOMs within the context of this experiment.
+As it is possible to discern from \todo[orange]{figure (2)}, there does not appear to be any significant difference between the overlap coefficient of a FOM and its counterpart with RMS for Llama 2.
+This observation holds for other models and metrics as well, likely because, in this case, RMS primarily causes noticeable changes in the underlying probabily distribution while leaving the internal ordering of predictions mostly unaltered.
 
 \todo[cyan]{overlap llama2}
 \todo[cyan]{overlap mistral}
 \todo[cyan]{overlap phi}
 
+\todo[red]{FIX PARAGRAPH WRITTEN WITH WRONG GRAPH}
 On the other hand, \todo{looking at the models comparatively tells us that} while Llama 2 and Phi 3.5 seem to exhibit similar overall trends for their FOM/Markov equivalence, Mistral shows an entirely different profile.
 As we can observe in \todo[orange]{fig (1), fig (3)}, ignoring the raw accuracy, Llama 2 and Phi 3.5 present a high average overlap coefficient for low values of $k$, clearly outperforming both random baselines.
 This value slowly decreases until $k$ reaches a value \todo{just shy} of $200$, then it start growing asymptotically, matching the pace of the random baselines.
@@ -867,6 +869,7 @@ On the other hand, by observing \todo[orange]{fig (2)} we can Mistral's average 
 In addition, its growth rate is noticeably lower than \todo{the one of the} baselines, meaning that the overlap coefficient associated to the FOM/Markov comparison is eventually surpassed by the baselines themselves as $k$ grows.
 This holds true until $k$ is around $1000$, at that point the FOM/Markov comparison has approximately the same pace as the random baselines.
 
+\todo[red]{FIX PARAGRAPH WRITTEN WITH WRONG GRAPH}
 Analyzing the obtained results, it is possible to infer the reason for 
 The first values of $k$ hold \todo{the most} significance to the experiment as they are the primary next token predictions for the model, and after a certain value of $k$ every model regresses to the random baseline performance.
 In particular, this means that there is a depth of $k$ for which the FOM is just modeling random noise.
@@ -876,16 +879,16 @@ Whereas, the FOMs extracted from Llama 2 and Phi 3.5 can almost be considered fa
 
 \subsection{Experiment 2}
 
-The second experiment still focuses on the evaluation of transition matrices generated by concatenating input and output embeddings from transformer models with respect to actual unigram Markov models, but via deeper means of analysis.
-For this experiment we decide to shift our view of the transition matrices from sets of elements corresponding to binary predictions to actual probability distributions.
-This approach enables a more accurate analysis, and considers the models for how they would concretely be used outside from these experimental scenarios.
+The second experiment expands upon the evaluation of transition matrices generated by concatenating input and output embeddings from transformer models with respect to actual unigram Markov models, but via deeper means of analysis.
+For this experiment, we shift our perspective on transition matrices from sets of elements generating binary predictions to actual probability distributions.
+This approach enables a more precise evaluation by considering how models would concretely be utilized beyond these experimental scenarios.
 
-In \todo[orange]{ref} we defined the two main mathematical tools that we intend to use for this experiment, which are the KL divergence \todo[orange]{ref} and the perplexity \todo[orange]{ref}.
-These evaluations allow us to understand how similar or dissimilar \todo{are} two distributions over a vocabulary by either directly comparing them using the KL divergence or by measuring their \todo{surprise} over a corpus of text using the perplexity metric. 
+In \cref{sec:method_fom} we define the two primary mathematical tools used in this experiment: KL divergence \todo[orange]{ref methodology} and perplexity \todo[orange]{ref methodology}.
+These metrics allow us to determine the similarity or dissimilarity between two distributions over a vocabulary, either by directly comparing them using the KL divergence or by measuring their `surprise' over a text corpus using the perplexity metric. 
 
 \subsubsection{Experimental Setup}
 
-On the other hand, overall perplexity for a model is obtained by averaging the perplexity computed following \todo[orange]{ref} over all sentences \todo{present} in the test dataset.
+On the other hand, overall perplexity for a model is obtained by averaging the perplexity computed following \todo[orange]{ref methodology} over all sentences \todo{present} in the test dataset.
 As already \todo{indicated} in the related equation, the perplexity of each sentence is calculated by cumulating \todo{for all tokens} the perplexity obtained by comparing the model's \todo{prediction} logits to the one-hot encoded identifier of the following token.
 
 For this experiment we take into consideration four perplexity scores for each model choice.
@@ -964,7 +967,7 @@ Lastly, the FOM based on Phi 3.5 reflects the same overall pattern of Mistral, b
 \todo[cyan]{perplexity openwebtext graph mistral rms}
 
 Regarding the alternative FOM formulation that includes the RMS normalization, we can clearly see a drastic and generalized drop in performance.
-Even by comparing the gathered results with the previous experiment described in \todo[orange]{ref}, we can obvserve a severe underperformance of FOMs with RMS normalization as their average perplexity appears to be \todo{orders of magnitude} higher than both their standard FOM counterpart and the uniform baseline as noted in \todo[orange]{table 1, table 2}.
+Even by comparing the gathered results with the previous experiment described in \cref{ssec:exp_fom_exp1}, we can obvserve a severe underperformance of FOMs with RMS normalization as their average perplexity appears to be \todo{orders of magnitude} higher than both their standard FOM counterpart and the uniform baseline as noted in \todo[orange]{table 1, table 2}.
 One particular case is the FOM with RMS tied to Mistral, since its drop in performance is moderate with respect to FOMs obtained from other models.
 In addition, by observing \todo[orange]{perplexity owt mistral rms} we can see an interesting phenomenon consisting \todo{of} an apparent fragmentation of the two perplexity groups shown in \todo[orange]{perplexity owt mistral} into multiple groups with increasing perplexity.
 \todo{Generally speaking}, it is possible that the worsened performance unveiled by the RMS normalization is indicative of actual model performance, as it removes the uniform correlation by skewing the probability distributions.
@@ -978,7 +981,7 @@ The distribution dissimilarity between FOM and Markov model is \todo{clearly} su
 We can also notice that $KL(Markov||FOM)$ \todo{formula} is consistently smaller than the reverse ($KL(FOM||Markov)$ \todo{formula}) for all LLMs, implying that FOMs are a better approximation of Markov models than \todo{the opposite}.
 This result is likely tied to the difference in probability magnitude over the majority of the vocabulary terms.
 Since the Markov model was trained by analyzing a restricted dataset with a set of terms smaller than the vocabulary, we believe that its distribution neglects tokens that were never seen during training, even despite the smoothing coefficient applied to token counts.
-On the other hand, the FOM possesses a much more uniform-like baseline as already shown in previous experiments (\todo[orange]{ref}), thus it \todo{acts better at being considered} the reference distribution in the KL divergence computation.
+On the other hand, the FOM possesses a much more uniform-like baseline as already shown in previous experiments, thus it \todo{acts better at being considered} the reference distribution in the KL divergence computation.
 
 Although the results are much more aligned between models with regard to previous experiments, it is still possible to partially observe the same properties tied to the FOM approximations of specific LLMs underlined in previous experiments.
 For instance, in \todo[orange]{kl table 2} we can notice a slightly higher $KL(Markov||FOM)$ \todo{formula} value and a slightly lower $KL(FOM||Markov)$ \todo{formula} value for the Mistral FOM compared against other models.
@@ -998,7 +1001,7 @@ Additionally, KL divergence values related to comparisons between identity matri
         \hhline{-||----}
     \end{tabular}
     \caption{\todo[red]{complete table}}
-    \label{table:kld}
+    \label{table:exp_fom_llama-kl}
 \end{table}
 
 \begin{table}[t!]
@@ -1015,7 +1018,7 @@ Additionally, KL divergence values related to comparisons between identity matri
         \hhline{-||----}
     \end{tabular}
     \caption{\todo[red]{complete table}}
-    \label{table:kld}
+    \label{table:exp_fom_mistral-kl}
 \end{table}
 
 \begin{table}[t!]
@@ -1032,7 +1035,7 @@ Additionally, KL divergence values related to comparisons between identity matri
         \hhline{-||----}
     \end{tabular}
     \caption{\todo[red]{complete table}}
-    \label{table:kld}
+    \label{table:exp_fom_phi-kl}
 \end{table}
 
 As far as FOMs that include RMS normalization are concerned, there are some meaningful differencens brought to light by the performed experiment.
@@ -1048,7 +1051,7 @@ Conversely, \todo[orange]{table 3} shows the \todo{immense} impact on KL diverge
 Overall, the feasibility of using a FOM as a Markov model approximation seems to be promising, although it might vary according to the specific choice of LLM, as some appear to be \todo{more predisposed} than others.
 Nevertheless, every analyzed FOM seems to exhibit a slight bias towards trying to approximate an actual unigram Markov model rather than the identity matrix.
 
-This collection of results provides partial empirical confirmation of what was initially theorized by \todo[orange]{cite} and extends \todo[green]{?}.
+This collection of results provides partial empirical confirmation of what was initially theorized by~\citet{elhage2021} and extends \todo[green]{?}.
 Additionally, it provides solid evidence that the output embeddings do not naturally tend to drift towards modeling input embeddings.
 This implies that current transformer-based LLMs might not benefit as much from weight tying as some older language models, reducing the quantifiable improvements to a marginal reduction in the number of parameters.
 

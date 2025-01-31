@@ -25,7 +25,7 @@ Decoding the meaning of hidden state vectors at various depths of a transformer 
 We pose our focus on causal models, and assume the state-of-the-art LLM architecture, which involves a continuous \emph{decoration process} where each transformer layer adds the results of its computations to a residual embedding vector from the layer below.
 InTraVisTo provides a human-interpretable representation of this internal decoration pipeline by decoding each hidden state with a specific decoder and displaying the most likely token from the model's vocabulary.
 
-\subsubsection{Decoders and Normalization}
+\subsubsection{Decoders and Normalization}\label{sssec:method_intravisto_decoding_norm}
 
 As for the decoding process, we compute the probability distribution over the vocabulary space for a hidden state $\gbm{x}$ in the following way:
 \begin{equation}
