@@ -401,7 +401,7 @@ After the removal of duplicate entries, the final comprehensive total of unique 
 A peculiarity of the BATS dataset is the presence of multiple correct answers for a subset of word pairs.
 These multiple correct answers include synonyms, alternative spellings or terms that are equivalent to the original answer.
 Given the computational constraints of the experiments, only the first correct answer for any given analogy was taken into consideration.
-Nonetheless, small empirical tests on a restricted set of models and a fraction of the dataset were performed using multiple answers \todo{in order to determine the impact of this choice}. \todo[green]{handling of multiple correct answers}
+Nonetheless, small empirical tests on a restricted set of models and a fraction of the dataset were performed using multiple answers \todo{in order to determine the impact of this choice}.
 
 Additionally, a marginal set of entries belonging to the chosen datasets featured \todo{entities} composed of multiple words separated by the underscore character `\_'.
 In order to improve the parsing process for the models' tokenizers, these occurrences were changed to use the whitespace character (` ') instead.
@@ -488,7 +488,12 @@ More specifically, no effort has been made to align the datasets \todo{with whic
 The chosen approach has clear limitations, but it is not within our scope to evaluate these models with the intention of finding the \todo{best performing one}.
 Rather, we are interested in assessing the presence of high-level trends which justifies the employment of an approach of less granular nature.
 
-\subsubsection{Results}
+\subsubsection{Results}\label{sssec:exp_emb_exp1_results}
+
+By observing the preliminary set of results in \cref{fig:exp_emb_1_A1} it is apparent that Llama 2 and Mistral present the best overall performance against other models; although their \todo{performance difference} against Gemma 2, Phi 3, and surprisingly, GPT 2 and BERT is minimal as shown in \cref{fig:exp_emb_1_A2}.
+The fact that Mistral and Llama 2 behave similarly is not \todo{surprising}, given the fact that they share most of their architecture.
+However, despite the fact that Llama 2 and Llama 3 have also similar architectures, Llama 3 demonstrates an exceptionally low performance on the experiment.
+Lastly, Word2Vec and GloVe, the oldest models, share the worst performance overall as it is possible to observe in \cref{fig:exp_emb_1_A3}.
 
 \begin{figure}[t!]
     \centering
@@ -506,10 +511,12 @@ Rather, we are interested in assessing the presence of high-level trends which j
     \label{fig:exp_emb_1_A}
 \end{figure}
 
-By observing the preliminary set of results it is apparent that Llama 2 and Mistral present the best overall performance against other models; although their \todo{performance difference} against Gemma 2, Phi 3, and surprisingly, GPT 2 and BERT is minimal.
-The fact that Mistral and Llama 2 behave similarly is not \todo{surprising}, given the fact that they share most of their architecture.
-However, despite the fact that Llama 2 and Llama 3 have also similar architectures, Llama 3 demonstrates an exceptionally low performance on the experiment.
-Lastly, Word2Vec and GloVe, the oldest models, share the worst performance overall.
+If we observe the accuracy trends of various models as $k$ increases, we can notice that the performance of some models grows in an abnormal way.
+\todo{For instance:} while Llama 3, Mistral, Phi and other newer models demonstrate an exceptional growth rate for increasing values of $k$, this behavior is not found for some older models such as GloVe and Word2Vec.
+On the other hand, most models seem to present a plateau in performance around $k = 30$ except for Llama 3, which accuracy appears to be steadily increasing even at $k = 50$.
+This patterns can be interpreted according to the vocabulary dimension the analyzed models, excluding older ones.
+In fact, it is possible observe a direct correlation between model vocabulary size and jump in performance between $k$ values from $1$ to $50$, which can be explained by virtue of exact tokens being more difficult to find in a more ``populated'' embedding space.
+As directly shown in \cref{fig:exp_emb_1_B}, some extreme examples are Llama 3 and Gemma with the largest vocabularies resulting in the widest accuracy jumps, and BERT with the smallest vocabulary inducing the narrowest accuracy jump.
 
 \begin{figure}[t!]
     \centering
@@ -518,19 +525,16 @@ Lastly, Word2Vec and GloVe, the oldest models, share the worst performance overa
     \label{fig:exp_emb_1_B}
 \end{figure}
 
-If we observe the accuracy trends of various models as $k$ increases, we can notice that the performance of some models grows in an abnormal way.
-\todo{For instance:} while Llama 3, Mistral, Phi and other newer models demonstrate an exceptional growth rate for increasing values of $k$, this behavior is not found for some older models such as GloVe and Word2Vec.
-On the other hand, most models seem to present a plateau in performance around $k = 30$ except for Llama 3, which accuracy appears to be steadily increasing even at $k = 50$.
-This patterns can be interpreted according to the vocabulary dimension the analyzed models, excluding older ones.
-In fact, it is possible observe a direct correlation between model vocabulary size and jump in performance between $k$ values from $1$ to $50$, which can be explained by virtue of exact tokens being more difficult to find in a more ``populated'' embedding space.
-As directly shown in \todo[orange]{top-k llama3/gemma2/bert}, some extreme examples are Llama 3 and Gemma with the largest vocabularies resulting in the widest accuracy jumps, and BERT with the smallest vocabulary inducing the narrowest accuracy jump.
-
 As previously noted, Llama 3 constitutes a performance outlier for newer models, since its accuracy does not hold up to other similar models.
 This surprising result cannot be completely blamed upon the \todo{vocabulary dimension nor the embedding size}, since Gemma 2 shows results comparable with the remaining models while having a vocabulary that is two times bigger and an embedding size slightly smaller than Llama 3.
 We suggest that this is a direct consequence of the explicit multilingual training performed on Llama 3, which resulted in the creation of a token vocabulary that does not only reflect English language statistics, but also a \todo{meaningful portion of a variety of other languages}.
 This property negatively impacts the embedding space expressiveness in two main ways.
 \todo{For once}, tokens representing concepts in other languages are present in the vocabulary, resulting in a noisier embedding space and possibly fragmenting longer English words that contain them as sub-tokens.
 Then, tokens that are shared between languages but have different senses or are part of words with different definitions determine the presence of embeddings that are in direct competition to give additional separate meanings to the same tokens.
+
+Another important fact that must be taken into consideration is the support of the resulting dataset for each model.
+As anticipated in \cref{sssec:exp_emb_exp1_expset}, models have been evaluated on different subsets of the overall dataset in order to extract analogies that could be expressed solely using single-token words.
+In \cref{fig:exp_emb_1_C} we can observe a breakdown by dataset categories of model performance represented by colored bars, with the additional information provided by dots constituting an indication for the percentage of dataset considered by the model for each category.
 
 \begin{figure}[t!]
     \centering
@@ -539,17 +543,19 @@ Then, tokens that are shared between languages but have different senses or are 
     \label{fig:exp_emb_1_C}
 \end{figure}
 
-Another important fact that must be taken into consideration is the support of the resulting dataset for each model.
-As anticipated in \todo[orange]{ref}, models have been evaluated on different subsets of the overall dataset in order to extract analogies that could be expressed solely using single-token words.
-In \todo[orange]{categories ...} we can observe a breakdown by dataset categories of model performance represented by colored bars, with the additional information provided by dots constituting an indication for the percentage of dataset considered by the model for each category.
-
-By \todo{looking} at \todo[orange]{categories ...} it is possible to discern the reason for the underperformance of Word2Vec and GloVe with respect to newer models, as we can see that these older models offer a near complete support for all the dataset categories.
+By \todo{looking} at \cref{fig:exp_emb_1_C} it is possible to discern the reason for the underperformance of Word2Vec and GloVe with respect to newer models, as we can see that these older models offer a near complete support for all the dataset categories.
 This means that their vocabulary contains a great number of tokens encompassing single words, which drastically expands the number of analogies considered for the experiment, including analogies that are not easily solved by model in the process.
 On a more \todo{general scale}, we can also observe the fact that some certain categories never seem to have support for any model.
 These categories \todo{mostly represent} the additional portion of the original Google dataset called \emph{question-phrases} modeling analogies between entities that are described by multiple words, which intuitively do not fit the single-token constraint chosen for this experiment.
-Another general pattern observable in \todo[orange]{categories ...} concerns the fact that most models show better performance on the categories belonging to the original Google dataset.
+Another general pattern observable in \cref{fig:exp_emb_1_C,fig:exp_emb_1_D1} concerns the fact that most models show better performance on the categories belonging to the original Google dataset.
 This behavior can be easily explained by both the simplistic nature of the dataset and the fact that, being a well-known dataset, most models have seen it during training.
-Lastly, \todo[orange]{categories ...} shows an exceptionally low support for all categories \todo{for} Llama 3, \todo{tying back into} our previous hypothesis of a fragmented vocabulary due to explicit multilingual training.
+Lastly, \cref{fig:exp_emb_1_C} shows an exceptionally low support for all categories \todo{for} Llama 3, \todo{tying back into} our previous hypothesis of a fragmented vocabulary due to explicit multilingual training.
+
+As a final note, we are going to discuss the effect of hyperparameters on this experiment.
+The hyperparameter that causes the most visible effects is the analogy layout, representing \todo{the methodology} used to combine words present in analogies.
+In \cref{fig:exp_emb_1_D2} we can notice that analogies of the type $w_1 - w_2 + w_4 = w_3$, seem to always return worst results than default ones: $w_2 - w_1 + w_3 = w_4$; this is likely the result of most analogies being created with a specific directionality in mind.
+Nonetheless, by observing \cref{fig:exp_emb_1_D1} we can see that this effect is mostly limited to categories that belong to the BATS dataset, as the performance for the Google dataset appears to be mostly unaffected by hyperparameter combinations.
+On the other hand, the pre-normalization of embeddings does not seem to have any major effect on any of the models, besides a slight generalized increase in performance.
 
 \begin{figure}[t!]
     \centering
@@ -564,12 +570,28 @@ Lastly, \todo[orange]{categories ...} shows an exceptionally low support for all
     \label{fig:exp_emb_1_D}
 \end{figure}
 
-As a final note, we are going to discuss the effect of hyperparameters on this experiment.
-The hyperparameter that causes the most visible effects is the analogy layout, representing \todo{the methodology} used to combine words present in analogies.
-In \todo[orange]{top-k ...} we can notice that analogies of the type $w_1 - w_2 + w_4 = w_3$, seem to always return worst results than default ones: $w_2 - w_1 + w_3 = w_4$; this is likely the result of most analogies being created with a specific directionality in mind.
-Nonetheless, by observing \todo[orange]{categories ...} we can see that this effect is mostly limited to categories that belong to the BATS dataset, as the performance for the Google dataset appears to be mostly unaffected by hyperparameter combinations.
-On the other hand, the pre-normalization of embeddings does not seem to have any major effect on any of the models, besides a slight generalized increase in performance.
-\todo[green]{delta analogies}
+By examining \cref{fig:exp_emb_1_E}, it is possible to notice that delta analogies offer some interesting insight into the behavior of models.
+From a general perspective, most models experience an overall minor decrease in performance when resolving analogies using the delta formulation.
+Additionally, the growth rate according to $k$ appears to be flatter \todo{overall}, implying that meaningful predictions are gathered around low values of $k$, and that models are less likely to come up with the correct answer \todo{if it is not found} immediately.
+This behavior can be ascribed to the analogy contribution of the delta embedding term, which is \todo{likely} to present a \todo{handful} of dimensions that transport the resulting embedding toward a section of the space containing terms not directly related to the analogy.
+The most \todo{likely} reason behind the aforementioned behavior is the fact that the averaging operation referenced in \cref{eq:method_embeddings_delta-analogy-function} might not be enough to remove noise or \todo{underlying} correlations from a set of \todo{bi-word comparisons} sourced from the same set of analogies.
+One particular case for delta analogies is Llama 3, which seems to present significant dissimilarities with regards to its standard counterpart.
+For instance, in \cref{fig:exp_emb_1_E2} we can observe that Llama 3's baseline in the delta analogies case remains mostly unaltered and follows the performance pattern of most models.
+Conversely, \todo{the} performance of the actual model sees a significant increase for low values of $k$, and a slight decrease for high values of $k$, which matches the previously identified flattening pattern.
+However, the extreme improvement over the baseline \todo{hints} at the fact that most of the embedding contribution that leads to correct answers is given by the delta term.
+Consequently, given the flat trends shown by most models, we can even speculate that most of the overall contribution depends on the delta term.
+
+\begin{figure}[t!]
+    \centering
+    \subfloat[E1.\label{fig:exp_emb_1_E1}]{
+        \includegraphics[width=0.5\textwidth]{exp_emb_1E_topk_w2v-bd-m-dnd.pdf}
+    }%
+    \subfloat[E2.\label{fig:exp_emb_1_E2}]{
+        \includegraphics[width=0.5\textwidth]{exp_emb_1E_topk_l2-l3-dnd.pdf}
+    }%
+    \caption{\todo[red]{caption}}
+    \label{fig:exp_emb_1_E}
+\end{figure}
 
 \subsection{Experiment 2}\label{ssec:exp_emb_exp2}
 
@@ -585,7 +607,7 @@ Consequently, in this experiment we will also observe the differences between th
 Additionally, inspired by the decoding approach introduced for the first research question (\cref{sec:rq_intravisto}), we are also going to take into consideration interpolated embeddings.
 Embedding interpolation, defined in \cref{ssec:method_intravisto_decoding} and formalized through \cref{eq:method_intravisto_linear-interp,eq:method_intravisto_quadratic-interp}, is a novel technique that exploits linear properties of embedding spaces and hidden representations~\cite{park2023, mikolov2013, drozd2016} to generate intermediate unembedding matrices with the purpose of decoding said intermediate states.
 Logically, since we are performing a linear interpolation operation, we expect to observe a trend in the analogy resolution accuracy of the interpolated embeddings that goes from the input embedding to the output one according to the interpolation percentage.
-However, it could be possible that the actual rate of change for the interpolated performance might not be constant between the two end points. \todo[green]{what does this imply?}
+However, it could be possible that the actual rate of change for the interpolated performance might not be constant between the two end points, undermining the linearity assumption of linear interpolation, and opening up different approaches to interpolation-based decoding as shown in \cref{eq:method_intravisto_quadratic-interp,eq:method_intravisto_max-p}.
 
 \subsubsection{Experimental Setup}\label{sssec:exp_emb_exp2_expset}
 
@@ -603,22 +625,32 @@ As previously mentioned, these techniques are formalized in \cref{eq:method_embe
 For the experiment at hand we select a smaller set of models to compare due to the fact that we wish to observe the differences between input and output embeddings.
 All changes to the models will be made referencing \cref{table:exp_emb_models}, defined for \cref{ssec:exp_emb_exp1}.
 
-As a first step, we are going to discard models without proper sub-word tokenization such as Word2Vec and GloVe. \todo[green]{BERT?}
+As a first step, we are going to discard models without proper sub-word tokenization such as Word2Vec, GloVe and BERT.
 This allows us to also perform tests on the whole dataset, through the implementation of proper encoding strategies as defined in \cref{eq:method_embeddings_multitok-in,eq:method_embeddings_multitok-out}.
 In addition, we are not going to focus on models without distinct input and output embeddings such as GPT-2 and Gemma-2, therefore only GPT-2 will be included in order to provide a baseline evaluation.
 
 \subsubsection{Results}
 
-\todo[cyan]{top-k gpt/mistral.in/mistral.out/phi.in/phi.out, top-k gpt/llama2.in/llama2.out/llama3.in/llama3.out}
-
-By a preliminary observation of the results we can grasp that there are some slight difference in performance between input and output embeddings across all models.
+By a preliminary observation of the results in \cref{fig:exp_emb_2_A} we can grasp that there are some slight difference in performance between input and output embeddings across all models.
 More specifically, our analysis reveals that for increasing values of $k$, output embeddings seem to consistently outperform input embeddings (contextually to overall model performance), while for smaller $k$ values input embeddings demonstrate greater accuracy.
 This phenomenon suggests that input embeddings provide more reliable estimates for analogies results, but their vectors are laying in a sparser latent spaces, thus making it less likely to accidentally include the correct vector out of a wrong prediction by extending the range given by $k$.
 Whereas output embeddings latent spaces are more compressed and benefit more from greater $k$ values.
 Finally, we show that input and output embedding pairs belonging to the same model tend to have the same trend, and are generally more prone to end up having similar accuracies.
 This is not a completely trivial result since, despite having the same dimensionality and possibly sharing some of the datasets used to train them (depending on the training setup and initialization values), they still operate with completely different weight matrices and carry out different tasks inside models.
 
-By comparing the performance of Llama 3 against the previous experiment it is possible to notice an outstanding increase in accuracy, which is now comparable to \todo{that} of the other analyzed models.
+\begin{figure}[t!]
+    \centering
+    \subfloat[A1.\label{fig:exp_emb_2_A1}]{
+        \includegraphics[width=0.5\textwidth]{exp_emb_2A_topk_gpt-m-p3-io.pdf}
+    }%
+    \subfloat[A2.\label{fig:exp_emb_2_A2}]{
+        \includegraphics[width=0.5\textwidth]{exp_emb_2A_topk_gpt-l2-l3-io.pdf}
+    }%
+    \caption{\todo[red]{caption}}
+    \label{fig:exp_emb_2_A}
+\end{figure}
+
+By comparing the performance of Llama 3 against the previous experiment it is possible to notice an outstanding increase in accuracy, which is now comparable to \todo{that} of the other analyzed models as shown in \cref{fig:exp_emb_2_A2}.
 \todo[green]{revise}
 This result is in clear contrast with the trends displayed by \todo{other models} between the two experiments, as they tend to have a slightly worse performance when considering the whole dataset.
 We can still speculate that the reason for this surprising behavior resides in the multilingual nature of Llama 3, and how it affected its tokenization process.
@@ -626,30 +658,82 @@ In fact, it is very possible that a part of the analogies easily solvable by the
 Another perspective which corroborates this theory is the fact that the Llama 3's baseline also grows in accordance with its recorded performance, implying that the positive impact of the new dataset is not necessarily tied with the analogy resolution \todo{in} itself.
 Nonetheless, Llama 3's accuracy still \todo{scores as the worst} between all considered models. 
 
-\todo[cyan]{top-k ...}
-
 Another interesting result that can be garnered from the performed experiments relates to the effects of interpolation on the semantic expressiveness of embeddings.
-As it is possible to observe in \todo[orange]{top-k ...}, we can say that our expectations on the general layout of the results for interpolated test are indeed met, since they always score between the two extremes that produced the interpolated variations.
-In addition, it is also possible to spot an interesting diverging pattern in
-\todo[green]{interpolation}
+As it is possible to observe in \cref{fig:exp_emb_2_B1}, we can say that our expectations on the general layout of the results for interpolation tests on Mistral are indeed met, \todo{since they} always score between the two extremes that produced the interpolated variations.
+In addition, it is also possible to spot an interesting diverging pattern in how the interpolated traces are placed along the graph.
+In Mistral's case, the performance of the interpolation at layers $7$ and $25$ is much closer to that of their respective input and output references models than the interpolation at layer $15$.
+This is surprising since we are performing linear operations, and the chosen interpolation layers are all equally spaced, suggesting that the representation shift happening inside the model might not follow a linear pace through the layers.
+However, the \todo{unveiled} collection of results is evident only for Mistral in \cref{fig:exp_emb_2_B1}, as for Llama 2, by observing \cref{fig:exp_emb_2_B2} we can spot the same patterns only for small values of $k$.
+This behavior is likely due to the minimal performance difference present between Llama 2's input and output embeddings, and noise, which even lets some interpolated models surpass the two original embeddings for high values of $k$.
 
-\todo[cyan]{top-k ...}
-\todo[cyan]{categories ...}
+\begin{figure}[t!]
+    \centering
+    \subfloat[B1.\label{fig:exp_emb_2_B1}]{
+        \includegraphics[width=0.5\textwidth]{exp_emb_2B_topk_m-7-15-8-io.pdf}
+    }%
+    \subfloat[B2.\label{fig:exp_emb_2_B2}]{
+        \includegraphics[width=0.5\textwidth]{exp_emb_2B_topk_l2-7-15-8-io.pdf}
+    }%
+    \caption{\todo[red]{caption}}
+    \label{fig:exp_emb_2_B}
+\end{figure}
 
 \todo{Conversely}, we can appreciate some particular model behaviors regarding the choice of hyperparameters, especially those defining the multi-token embedding strategy.
-By observing \todo[orange]{top-k ...} we can see that for the classic analogy resolution pattern ($w_2 - w_1 + w_3 = w_4$) taking the average of embeddings seems the overall best way to encode multi-token elements, followed by considering only the embedding of the first token and directly summing the embeddings.
-This result \todo{reconfirms} the findings \todo{obtained} by \todo[orange]{ref} for newer model paradigms and is in accordance with the hypothesis of a linear embedding space.
-\todo[green]{hyperparameters sum/average/first}
+By observing \cref{fig:exp_emb_2_C} we can see that for the classic analogy resolution pattern ($w_2 - w_1 + w_3 = w_4$) taking the average of embeddings seems the overall best way to encode multi-token elements, followed by considering only the embedding of the first token and directly summing the embeddings.
+This result \todo{reconfirms} the findings \todo{obtained} by~\citet{drozd2016} for newer model paradigms and is in accordance with the hypothesis of a linear embedding space.
 
-On the other hand, we can see that the expected drop in performance of reverse analogies ($w_1 - w_2 + w_4 = w_3$) is much more accentuated when analyzing the complete dataset rather than when filtering for single-token analogies.
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{exp_emb_2C_topk_l2-p3-afs.pdf}
+    \caption{\todo[red]{caption}}
+    \label{fig:exp_emb_2_C}
+\end{figure}
+
+On the other hand, in \cref{fig:exp_emb_2_D2}, we can see that the expected drop in performance of reverse analogies ($w_1 - w_2 + w_4 = w_3$) is much more accentuated when analyzing the complete dataset rather than when filtering for single-token analogies.
 This is noticeable to the point that the performance of most models seems to be \todo{equal or worse} than the baseline for some specific sets of hyperparameters that include reverse analogies in the specified format.
-In addition, by observing \todo[orange]{categories ...} we can notice that the drop in performance appears to be more generalized \todo{throughout} all dataset categories, rather than targeting the BATS analogies as found in the previous experiment.
+In addition, by observing \cref{fig:exp_emb_2_D1} we can notice that the drop in performance appears to be more generalized \todo{throughout} all dataset categories, rather than targeting the BATS analogies as found in the previous experiment.
 Newer models seem to be more susceptible to these \todo{types} of hyperparameter variations, whereas GPT-2 gives the impression of being only marginally affected by them.
-On the topic of pre-normalization, the effects seem to be negligible and similar to what was already stated in \todo[orange]{ref}.
-\todo{Surprisingly}, pre-normalization appears to have slightly better results when considering the summation of embeddings as a strategy to resolve multi-token analogies.
+On the topic of pre-normalization, the effects seem to be negligible and similar to what was already stated in \cref{sssec:exp_emb_exp1_results}.
+\todo{Surprisingly}, pre-normalization appears to have slightly better results when considering the summation of embeddings as a strategy to resolve multi-token analogies, as shown in \cref{fig:exp_emb_2_D3}.
 This behavior can be intuitively explained by considering the fact that directly summing dimensions without dividing by the variable number of elements (\todo{as for} the averaging case) returns inflated values, which get slightly mitigated by the pre-normalization operation.
 
-\todo[green]{delta analogies}
+\begin{figure}[t!]
+    \centering
+    \subfloat[D1.\label{fig:exp_emb_2_D1}]{
+        \includegraphics[width=\textwidth]{exp_emb_2D_cat_m-l3-i-e3e4.pdf}
+    }%
+    \quad
+    \subfloat[D2.\label{fig:exp_emb_2_D2}]{
+        \includegraphics[width=0.5\textwidth]{exp_emb_2D_topk_m-l3-i-e3e4.pdf}
+    }%
+    \subfloat[D3.\label{fig:exp_emb_2_D3}]{
+        \includegraphics[width=0.5\textwidth]{exp_emb_2D_topk_m-l3-io-norm.pdf}
+    }%
+    \caption{\todo[red]{caption}}
+    \label{fig:exp_emb_2_D}
+\end{figure}
+
+On the topic of delta analogies, observing \cref{fig:exp_emb_2_E1,fig:exp_emb_2_E2} unveils a significant different trend with respect to the one identified for the single-token analogies in \cref{sssec:exp_emb_exp1_results}.
+Even if the overall curve flattening tendency seems to carry over between experiments, in the current case we also observe an overall performance drop across all values of $k$.
+Conversely, we also experience a \todo{tendency} for the input and output embeddings of some models to obtain closer results \todo{as opposed to} their standard analogy experiment, observable in \cref{fig:exp_emb_2_E3}.
+The reason behind this \todo{collection} of incongruences between experiments is likely tied to the double average computation performed over the tokens that form analogy components: the first in order to optimally aggregate multi-token words into a single embedded representation as \cref{eq:method_embeddings_multitok-in}, and the second as prescribed by the delta analogies experiment referenced in \cref{eq:method_embeddings_delta-analogy-function}.
+This conjecture is furtherly reinforced by the fact that the performance gain over the baselines is less \todo{prominent} for this instance of the delta analogies experiment which considers the whole dataset, \todo{rather than} the one filtering for single-token analogies, as observable in \cref{fig:exp_emb_2_E1,fig:exp_emb_2_E2}.
+
+\begin{figure}[t!]
+    \centering
+    \subfloat[E1.\label{fig:exp_emb_2_E1}]{
+        \includegraphics[width=0.5\textwidth]{exp_emb_2E_topk_gpt-l2-l3-m-p3-i.pdf}
+    }%
+    \subfloat[E2.\label{fig:exp_emb_2_E2}]{
+        \includegraphics[width=0.5\textwidth]{exp_emb_2E_topk_gpt-l2-l3-m-p3-o.pdf}
+    }%
+    \quad
+    \subfloat[E3.\label{fig:exp_emb_2_E3}]{
+        \includegraphics[width=0.5\textwidth]{exp_emb_2E_topk_p3-io-dnd.pdf}
+    }%
+    \caption{\todo[red]{caption}}
+    \label{fig:exp_emb_2_E}
+\end{figure}
 
 \subsection{Discussion}
 
@@ -686,7 +770,7 @@ As described in \cref{sec:method_fom}, this transformation can be seen as the cr
 
 Most of the experiments in this section are geared towards understanding whether the FOM accurately represents a bigram Markov model over the original model's vocabulary.
 Although past work has theorized and partially demonstrated this hypothesis for a restricted set of models~\cite{elhage2021}, we suspect that FOMs derived from different LLMs may exhibit varying degrees of Markovian behavior, and we aim to investigate this variation in this section.
-\todo[green]{Add part on weight tying}
+Another perspective taken in consideration, is the possibility of the FOM transition matrix reflecting an identity matrix, thus \todo{implying} that input and output embeddings tend to \todo{stray} towards equality during training, effectively modeling a form of natural weight tying~\cite{inan2017,press2017}.
 
 Following on the normalization intuition that proved effective for InTraVisTo, as explored in \cref{sssec:method_intravisto_decoding_norm}, we also explore an alternative of the basic FOM obtained from directly joining input and output embeddings.
 In fact, this alternative was introduced with the intention of addressing one particular issue observed in certain experimental instances, which exhibited similarities to challenges previously encdountered and resolved in relation to the research question referenced in \cref{sec:rq_intravisto}.
@@ -747,7 +831,15 @@ The selected metrics include the Overlap coefficient and the Jaccard index.
 As pointed out before, in experiments involving set-based metrics, the distinction between  transition matrices modeling probabilities and logit matrices is irrelevant.
 This is beacause both the \emph{softmax} and \emph{logarithm} operators are monotonic, preserving the relative ordering of elements.
 
-\subsubsection{Results}
+\subsubsection{Results}\label{sssec:exp_fom_exp1_results}
+
+We begin our analysis by examining \cref{fig:exp_fom_1_A2,fig:exp_fom_1_A1}, which depicts Llama 2's performance on the self-regression and unigram-regression tasks respectively, using the top-$k$ accuracy metric.
+It is possible to notice how, for any given value of $k$, the model's accuracy in predicting the identity matrix appears to be lower than any of the reported values for the unigram Markov model accuracy comparison.
+This trend is consistent across most other analyzed models, with the exception of Mistral.
+In Mistral's case, shown in \cref{fig:exp_fom_1_A4,fig:exp_fom_1_A3}, the predictions generated by the FOM appear to align more closely with the model's inputs rather than with the most probable outputs of the unigram Markov model ($k_2 = 1$).
+This series of observations seems to persist for Mistral, even when considering all the more lenient variations that compute accuracy by comparing the top-$k_1$ predictions of the FOM with the top-$k_2$ predictions of the Markov model.
+On the other hand, \cref{fig:exp_fom_1_A5,fig:exp_fom_1_A4}, which depict Phi 3.5's performance, reveals that its general is similar to that of Llama 2 across both top-$k$ tasks.
+The only notable deviation in Phi 3.5's behavior is its exceptionally low accuracy in predicting the identity matrix, as highlighted in \cref{fig:exp_fom_1_A5}.
 
 \begin{figure}[t!]
     \centering
@@ -775,13 +867,10 @@ This is beacause both the \emph{softmax} and \emph{logarithm} operators are mono
     \label{fig:exp_fom_1_A}
 \end{figure}
 
-We begin our analysis by examining \todo[orange]{fig}, which depicts Llama 2's performance on the self-regression and unigram-regression tasks using the top-$k$ accuracy metric.
-It is possible to notice how, for any given value of $k$, the model's accuracy in predicting the identity matrix appears to be lower than any of the reported values for the unigram Markov model accuracy comparison.
-This trend is consistent across most other analyzed models, with the exception of Mistral.
-In Mistral's case, shown in \todo[orange]{fig}, the predictions generated by the FOM appear to align more closely with the model's inputs rather than with the most probable outputs of the unigram Markov model ($k_2 = 1$).
-This series of observations seems to persist for Mistral, even when considering all the more lenient variations that compute accuracy by comparing the top-$k_1$ predictions of the FOM with the top-$k_2$ predictions of the Markov model.
-On the other hand, \todo[orange]{fig}, which depicts Phi 3.5's performance, reveals that its general is similar to that of Llama 2 across both top-$k$ tasks.
-The only notable deviation in Phi 3.5's behavior is its exceptionally low accuracy in predicting the identity matrix, as highlighted in \todo[orange]{fig}.
+The previous observations seem to suggest that, for certain models, embeddings may exhibit a closer relationship to their inverse rather than serving as representations for predicting the next token based on the previous one. 
+However, this interpretation appears to conflict the recorded matrix distances shown in \cref{table:exp_fom_distance}.
+The matrix distance metric indicates that the FOM based on Mistral more accurately represents its corresponding Markov model than any other analyzed model, as it exhibits the lowest FOM/Markov distance and one of the highest FOM/identity distances.
+Nonetheless, direct comparative statements based on the matrix distance should be appraoched with caution as this metric is neither widely used nor inherently reliable.
 
 \begin{table}[t!]
     \centering
@@ -802,18 +891,22 @@ The only notable deviation in Phi 3.5's behavior is its exceptionally low accura
     \label{table:exp_fom_distance}
 \end{table}
 
-The previous observations seem to suggest that, for certain models, embeddings may exhibit a closer relationship to their inverse rather than serving as representations for predicting the next token based on the previous one. 
-However, this interpretation appears to conflict the recorded matrix distances shown in \todo[orange]{table}.
-The matrix distance metric indicates that the FOM based on Mistral more accurately represents its corresponding Markov model than any other analyzed model, as it exhibits the lowest FOM/Markov distance and one of the highest FOM/identity distances.
-Nonetheless, direct comparative statements based on the matrix distance should be appraoched with caution as this metric is neither widely used nor inherently reliable.
-
 In fact, we can notice that all LLMs present the same trend regarding their matrix distance experiments, likely due to the noise present in their large matrices, which makes them unsuitable for direct comparison through a distance metric.
 This finding confirms a potential bias towards lower distance estimates in the FOM/Markov case, possibly resulting from a lower proportion of null values present in the Markov transition matrix compared to the identity matrix.
 However, slight differences between models emerge when considering FOM variants that incorporate RMS normalization.
-In particular, \todo[orange]{table} shows that the FOMs with RMS derived from Llama 2 and Mistral exhibit a subtle bias toward the results previously observed in \todo[orange]{previous images}.
+In particular, \cref{table:exp_fom_distance} shows that the FOMs with RMS derived from Llama 2 and Mistral exhibit a subtle bias toward the results previously observed in \cref{fig:exp_fom_1_A}.
 We speculate that this percieved trend arises because RMS normalization aligns internal representations in a way that makes probabilities appear more skewed, thus providing a better fit for their actual reference distribution.
 Nonetheless, the obtained results still contain a vast amount of noise and cannot offer a reliable basis for directly comparing FOM behavior.
 Furthermore, the FOM with RMS based on Phi 3.5 is a clear outlier, as its performance is significantly worse than its counterpart without RMS across other models and both considered comparisons.
+
+On the other hand, \cref{table:exp_fom_predictions} presents the most likely token predicted by models for a restricted set of randomly selected common input words.
+This provides an approximate yet immediate view into the types of predictions generated by the extracted FOMs and their corresponding trained Markov models.
+In this case, Markov model predictions are aggregated into a single entry, since they perfectly overlap for the chosen set of words.
+As it is possible to observe, most next token predictions from both FOMs and Markov models can be contextualized to make sense within a natural language setting.
+However, minor patterns emerge that differentiate how well FOMs extracted from different models approximate their respective Markov models.
+For example, Llama 2 and Phi 3.5 frequently produce predictions aligned with Markov models.
+Conversely, Mistral often repeats the input token across multiple entries, mimicking the identity transition matrix, and occasionally predicts tokens that do not appear meaningful when combined with the input token.
+In addition, it is also possible to notice how FOM variants that include RMS normalization almost always return the same prediction as their counterpart without normalization.
 
 \begin{table}
     \centering
@@ -833,47 +926,63 @@ Furthermore, the FOM with RMS based on Phi 3.5 is a clear outlier, as its perfor
     hear    & ings  & ings  & Pyx    & Pyx    & thy        & thy        & ings   \\ 
     \hline
     \end{tabular}}
-    \end{table}
-
-On the other hand, \todo[orange]{table} presents the most likely token predicted by models for a restricted set of randomly selected common input words.
-This provides an approximate yet immediate view into the types of predictions generated by the extracted FOMs and their corresponding trained Markov models.
-In this case, Markov model predictions are aggregated into a single entry, since they perfectly overlap for the chosen set of words.
-As it is possible to observe, most next token predictions from both FOMs and Markov models can be contextualized to make sense within a natural language setting.
-However, minor patterns emerge that differentiate how well FOMs extracted from different models approximate their respective Markov models.
-For example, Llama 2 and Phi 3.5 frequently produce predictions aligned with Markov models.
-Conversely, Mistral often repeats the input token across multiple entries, mimicking the identity transition matrix, and occasionally predicts tokens that do not appear meaningful when combined with the input token.
-In addition, it is also possible to notice how FOM variants that include RMS normalization almost always return the same prediction as their counterpart without normalization.
-
-\todo[cyan]{overlap/sorensen/jaccard llama2}
-\todo[cyan]{overlap llama2 FOM / FOM + RMS}
+    \caption{\todo[red]{complete table}}
+    \label{table:exp_fom_predictions}
+\end{table}
 
 As previously mentioned, we introduce set metrics as a more reliable measure for comparing transition matrices.
-Considering \todo[orange]{figure (1)}, it is possible to notice that the two chosen set metrics appear to be roughly equivalent in assessing model comparisons.
+Considering \cref{fig:exp_fom_1_B1}, it is possible to notice that the two chosen set metrics appear to be roughly equivalent in assessing model comparisons.
 Although the graph only includes Llama 2, set metrics exhibit the same general behavior across all analyzed models.
 Substantial differences among metrics can be appreciated only for extremely low values of $k$.
-\todo[green]{maybe expand}
 We also examine the effects of RMS normalization on FOMs within the context of this experiment.
-As it is possible to discern from \todo[orange]{figure (2)}, there does not appear to be any significant difference between the overlap coefficient of a FOM and its counterpart with RMS for Llama 2.
+As it is possible to discern from \cref{fig:exp_fom_1_B2,fig:exp_fom_1_B3}, there does not appear to be any significant difference between the overlap coefficient of a FOM and its counterpart with RMS for Llama 2.
 This observation holds for other models and metrics as well, likely because, in this case, RMS primarily causes noticeable changes in the underlying probabily distribution while leaving the internal ordering of predictions mostly unaltered.
 
-\todo[cyan]{overlap llama2}
-\todo[cyan]{overlap mistral}
-\todo[cyan]{overlap phi}
+\begin{figure}[t!]
+    \centering
+    \subfloat[B1.\label{fig:exp_fom_1_B1}]{
+        \includegraphics[width=0.5\textwidth]{exp_fom_1B_l2-opmetrics.pdf}
+    }%
+    \quad
+    \subfloat[B2.\label{fig:exp_fom_1_B2}]{
+        \includegraphics[width=0.5\textwidth]{exp_fom_1B_l2-jc.pdf}
+    }%
+    \subfloat[B3.\label{fig:exp_fom_1_B3}]{
+        \includegraphics[width=0.5\textwidth]{exp_fom_1B_l2rms-jc.pdf}
+    }%
+    \caption{\todo[red]{caption}}
+    \label{fig:exp_fom_1_B}
+\end{figure}
 
 \todo[red]{FIX PARAGRAPH WRITTEN WITH WRONG GRAPH}
 On the other hand, \todo{looking at the models comparatively tells us that} while Llama 2 and Phi 3.5 seem to exhibit similar overall trends for their FOM/Markov equivalence, Mistral shows an entirely different profile.
-As we can observe in \todo[orange]{fig (1), fig (3)}, ignoring the raw accuracy, Llama 2 and Phi 3.5 present a high average overlap coefficient for low values of $k$, clearly outperforming both random baselines.
+As we can observe in \cref{fig:exp_fom_1_C1,fig:exp_fom_1_C3}, ignoring the raw accuracy, Llama 2 and Phi 3.5 present a high average overlap coefficient for low values of $k$, clearly outperforming both random baselines.
 This value slowly decreases until $k$ reaches a value \todo{just shy} of $200$, then it start growing asymptotically, matching the pace of the random baselines.
 In particular, the FOM/Markov overlap coefficient is not outperformed by the baselines for any value of $k$.
-On the other hand, by observing \todo[orange]{fig (2)} we can Mistral's average overlap coefficient is just slightly above the baselines for low values of $k$.
+On the other hand, by observing \cref{fig:exp_fom_1_C2} we can Mistral's average overlap coefficient is just slightly above the baselines for low values of $k$.
 In addition, its growth rate is noticeably lower than \todo{the one of the} baselines, meaning that the overlap coefficient associated to the FOM/Markov comparison is eventually surpassed by the baselines themselves as $k$ grows.
 This holds true until $k$ is around $1000$, at that point the FOM/Markov comparison has approximately the same pace as the random baselines.
+
+\begin{figure}[t!]
+    \centering
+    \subfloat[C1.\label{fig:exp_fom_1_C1}]{
+        \includegraphics[width=0.33\textwidth]{exp_fom_1C_l2-op.pdf}
+    }%
+    \subfloat[C2.\label{fig:exp_fom_1_C2}]{
+        \includegraphics[width=0.33\textwidth]{exp_fom_1C_m-op.pdf}
+    }%
+    \subfloat[C3.\label{fig:exp_fom_1_C3}]{
+        \includegraphics[width=0.33\textwidth]{exp_fom_1C_p3-op.pdf}
+    }%
+    \caption{\todo[red]{caption}}
+    \label{fig:exp_fom_1_C}
+\end{figure}
 
 \todo[red]{FIX PARAGRAPH WRITTEN WITH WRONG GRAPH}
 Analyzing the obtained results, it is possible to infer the reason for 
 The first values of $k$ hold \todo{the most} significance to the experiment as they are the primary next token predictions for the model, and after a certain value of $k$ every model regresses to the random baseline performance.
 In particular, this means that there is a depth of $k$ for which the FOM is just modeling random noise.
-By looking at Mistral's performance in \todo[orange]{fig (2)}, since the overlap coefficient corresponding to the FOM/Markov comparison \todo{dips} under the random baselines, we can infer that its FOM is not actually modeling noise, but a function that is completely separate from the next token prediction, \todo{namely self-regression}.
+By looking at Mistral's performance in \cref{fig:exp_fom_1_C2}, since the overlap coefficient corresponding to the FOM/Markov comparison \todo{dips} under the random baselines, we can infer that its FOM is not actually modeling noise, but a function that is completely separate from the next token prediction, \todo{namely self-regression}.
 From this direct comparison we can clearly observe the patterns already found in previous experiments, identifying Mistral as the model which FOM has the lowest affinity with a Markov model, while still being able to \todo{approximate it to a lower degree} of accuracy.
 Whereas, the FOMs extracted from Llama 2 and Phi 3.5 can almost be considered faithful approximations of their respective Markov models.
 
@@ -888,19 +997,24 @@ These metrics allow us to determine the similarity or dissimilarity between two 
 
 \subsubsection{Experimental Setup}
 
-On the other hand, overall perplexity for a model is obtained by averaging the perplexity computed following \todo[orange]{ref methodology} over all sentences \todo{present} in the test dataset.
-As already \todo{indicated} in the related equation, the perplexity of each sentence is calculated by cumulating \todo{for all tokens} the perplexity obtained by comparing the model's \todo{prediction} logits to the one-hot encoded identifier of the following token.
+Overall model perplexity for a model is determined by averaging the perplexity values computed according to \todo[orange]{ref methodology} over all sentences in the test dataset.
+As already stated in the corresponding equation, the perplexity of each sentence is calculated by cumulating, over all tokens, the perplexity obtained by comparing the model's output logits with the one-hot encoded identifier of the subsequent token.
 
-For this experiment we take into consideration four perplexity scores for each model choice.
-The main two results which are used for the central comparisons are the FOM and Markov model perplexity scores, while results obtained using a uniform distribution over the model's vocabulary and the identity matrix model are also taken into account as baselines.
+In this experiment, four perplexity scores are taken into consideration for each model variant.
+The two main results used for central comparisons are the FOM and Markov model perplexity scores, while baseline comparisons are also made using results obtained from a uniform distribution over the model's vocabulary and the identity matrix model.
 
-Additionally, we also compute the Kullback-Leibler divergence (KL divergence) between pairs of relevant distributions in order to understand their similarity from a statistical standpoint.
-The KL divergence is computed according to \todo[orange]{ref} and, as already mentioned, is an asymmetric dissimilarity distance which measures how much a given distribution differs from \todo{another}.
-In practice, given a token, we compute point-wise contributions for each vocabulary token and we aggregate \todo{them} through summation.
-Then, we \todo{furtherly} aggregate the KL divergences obtained this way by averaging them, thus obtaining the average KL divergence over the entire vocabulary for each model.
-Similarly to what was done for the computation of perplexity, we take into consideration the KL divergence for all combinations and reverse combinations of FOM, Markov model and identity matrix. 
+We also compute the Kullback-Leibler divergence (KL divergence) between pairs of relevant distributions in order to assess their similarity from a statistical standpoint.
+The KL divergence is calculated according to \todo[orange]{ref methodology} and, as noted, is an asymmetric distance which measures how much a given distribution differs from another.
+In practice, for each token, we compute point-wise contributions for every vocabulary item and then aggregate these contributions by summing them.
+Subsequently, we average the computed KL divergences to obtain the average KL divergence over the entire vocabulary for each model.
+Similarly to the perplexity computation, we evaluate the KL divergence for all combinations and reverse combinations of FOM, Markov model and identity matrix. 
 
 \subsubsection{Results}
+
+Based on a preliminary analysis of the average perplexities presented in \cref{table:exp_fom_wikitext}, we immediately note that all models exhibit similar trends in in the performance of their FOM relative to the uniform baseline and the computed Markov model counterpart.
+In fact, we observe that the average perplexity from the FOM is consistently slightly lower than that of the uniform baseline while remaining considerably higher than the performance of the Markov model.
+We hypothesize that this behavior is caused by a combination between the improper nature of the FOM and potential biases in the training set of the Markov model.
+This last point is only marginally mitigated by the usage of a different test set, as \cref{table:exp_fom_openwebtext} shows a significant increase in the perplexity for Markov models, although their performance remains markedly distinct from that of the FOMs.
 
 \begin{table}[t!]
     \centering
@@ -938,54 +1052,56 @@ Similarly to what was done for the computation of perplexity, we take into consi
     \label{table:exp_fom_openwebtext}
 \end{table}
 
-By performing a preliminary analysis of the average perplexities in \todo[orange]{table 1} we can immediately notice that all models present similar trends in how their FOM performs with respect to the uniform baseline and the computed Markov model counterpart.
-In fact, we observe that the average perplexity from the FOM is consistently \todo{slightly lower} than the uniform baseline while being greatly higher than the Markov model's performance.
-We hypothesize that this tendency is caused by a mixture between the improper nature of the FOM and the possible biases in the training set of the Markov model.
-This last point is only marginally circumvented by the usage of a different test set, as by observing \todo[orange]{table 2} we can detect a meaningful raise in perplexity for Markov models, while still being significantly distant from the perplexity gathered by the FOMs.
+Unsurprisingly, we observe the perplexity results of the identity matrix predictions being disproportionately higher than that of all other models, as it reflects a scenario where each token is predicted to repeat with complete certainty: a behavior that does not constitute a meaningful Markov model.
+However, we still value this outcome since it provides a baseline for comparison for the FOM derived from each LLM, thereby confirming the findings from the previous experiment (\cref{ssec:exp_fom_exp1}) that FOMs are generally closer to being approximations of the actual Markov model rather than the identity matrix.
+Nonetheless, we can speculate that the pattern unveiled in \cref{sssec:exp_fom_exp1_results} appears to persist in \cref{table:exp_fom_wikitext,table:exp_fom_openwebtext}, as the perplexity tied to the FOM based on Mistral is slightly higher than that for its LLama 2 and Phi 3.5 counterparts, possibly suggesting that it incorporates similarities to the uniform and identity matrix distributions.
 
-Unsurprisingly we observe the perplexity results of the identity matrix predictions being disproportionately higher than all other models, as it \todo{represents} the certainty of all tokens repeating and is not fit to actually represent a meaningful Markov transition matrix.
-However, we still value this outcome since it provides a \todo{ground of comparison} for the FOM extracted from each LLM, indeed confirming the results obtained in the previous experiment (\todo[orange]{ref}) implying that FOMs are generally closer to the actual Markov model rather than the identity matrix.
-Nonetheless, we can speculate that the pattern unveiled in \todo[orange]{previous section} is still present in \todo[orange]{table 1, table 2} as the perplexity tied to the FOM based on Mistral is slightly higher than its LLama 2 and Phi 3.5 counterparts, possibly hinting at the fact that it might include similarities to the uniform and identity matrix distributions.
+One notable trend observable in \cref{fig:exp_fom_2_A} is that when plotting perplexity over multiple sentences in the test dataset, a clear pattern of several horizontal lines emerges for the FOM version of most LLMs.
+These lines vary in density and are located in the loose proximity of the perplexity level of the uniform model.
+The number and position of the lines appears to be dependent on both the underlying LLM and the test dataset, although they generally tend to align with the uniform prediction.
+The observed consistencies imply the existence of macro-groups of sentences for which a model consistently scores perplexity values that are marginally inferior or superior to random guessing.
 
-\todo[cyan]{perplexity openwebtext graph llama}
-\todo[cyan]{perplexity openwebtext graph mistral}
-\todo[cyan]{perplexity openwebtext graph phi}
+\begin{figure}[t!]
+    \centering
+    \subfloat[C1.\label{fig:exp_fom_2_A1}]{
+        \includegraphics[width=0.5\textwidth]{exp_fom_2A_l2-perp-owt.pdf}
+    }%
+    \subfloat[C2.\label{fig:exp_fom_2_A2}]{
+        \includegraphics[width=0.5\textwidth]{exp_fom_2A_m-perp-owt.pdf}
+    }%
+    \quad
+    \subfloat[C3.\label{fig:exp_fom_2_A3}]{
+        \includegraphics[width=0.5\textwidth]{exp_fom_2A_p3-perp-owt.pdf}
+    }%
+    \caption{\todo[red]{caption}}
+    \label{fig:exp_fom_2_A}
+\end{figure}
 
-One peculiar trend observable in \todo[orange]{image (1), (2), (3)} is the fact that, when plotting the perplexity over multiple sentences in a test dataset, a clear pattern with the shape of multiple `horizontal lines' emerges for the FOM version of most LLMs.
-The lines vary in density and are placed in the loose proximity of the perplexity \todo{of the} uniform model.
-The number and position of lines \todo{in which} the FOM perplexity splits seems dependent on both the underlying LLM and the test dataset, while in general it appears to be in line with the uniform prediction.
-However, the \todo{found} consistencies imply the existence of macro-groups of sentences to which a model \todo{punctually} scores a perplexity that is either marginally \todo{worse or better} than random guessing.
+Examining the proposed perplexity graphs reveals some interesting differences between models.
+For instance, the FOM based on Llama 2 (\cref{fig:exp_fom_2_A1}) clusters most sentences around the perplexity value corresponding to the uniform baseline, while a signifcant minority of sentences exhibits a consistently lower perplexity.
+On the other hand, most sentences evaluated with the FOM derived from Mistral (\cref{fig:exp_fom_2_A2}) lie on a slightly lower perplexity value than the uniform baseline; however, two sizeable subsets of sentences perform considerably better and worse, respectively.
+Lastly, the FOM based on Phi 3.5 (\cref{fig:exp_fom_2_A3}) reflects the same overall pattern to that of Mistral, but with notably lower perplexity values, such that only a small fraction of sentences have perplexity close to the uniform baseline.
 
-By observing the proposed perplexity graphs we can notice some interesting differences between models. 
-For instance, the FOM based on Llama 2 aggregates the majority of sentences on the perplexity value that corresponds to the uniform baseline and a minority, \todo{albeit substantial}, of sentences on a consistently lower perplexity value than the uniform baseline.
-On the other hand, most of the sentences analyzed by the FOM based on Mistral lie on a slightly lower perplexity value than the uniform baseline, but there also exist two sizeable subsets of sentences that perform considerably better and worse respectively.
-Lastly, the FOM based on Phi 3.5 reflects the same overall pattern of Mistral, but with exceptionally low values of perplexity, where only a fragment of sentences manifests a perplexity close to the uniform baseline.
-
-\todo{Summarily} we can affirm that the difference between FOM and uniform performance is much more \todo{definite} when looking at the plotted results rather than numerical averages, as it is possible to better identify outliers present in the datasets from the plots.
+In summary, we can affirm that the difference between FOM and uniform performance is more pronounced in the plotted results than numerical averages, as the plots more clearly reveal the outliers present in the datasets.
 \todo[green]{explore some sentences}
 
-\todo[cyan]{perplexity openwebtext graph mistral rms}
+Regarding the alternative FOM formulation that incorporates RMS normalization, we can clearly see a drastic and widespread drop in performance.
+Even when comparing the gathered results from the previous experiment described in \cref{ssec:exp_fom_exp1}, FOMs with RMS normalization exhibit severe underperformance, with their average perplexity appearing to be several orders of magnitude higher than both their standard FOM counterparts and the uniform baseline, as noted in \cref{table:exp_fom_llama-kl,table:exp_fom_mistral-kl}.
+One notable exception is the FOM with RMS tied to Mistral, which shows only a moderate drop in performance compared to FOMs obtained from other models.
+Moreover, \cref{fig:exp_fom_2_B} reveals an interesting phenomenon: the two perplexity groups observed in \cref{fig:exp_fom_2_A2} appear to fragment into multiple groups with progressively increasing perplexity.
+In general, it is possible that the degraded performance unveiled by the RMS normalization is indicative of actual model performance by eliminating the uniform correlation and skewing the probability distributions.
+However, we consider this hypothesis unlikely, as the effect varies across models, in contrast to the findings shown in \cref{sssec:exp_fom_exp1_results}.
 
-Regarding the alternative FOM formulation that includes the RMS normalization, we can clearly see a drastic and generalized drop in performance.
-Even by comparing the gathered results with the previous experiment described in \cref{ssec:exp_fom_exp1}, we can obvserve a severe underperformance of FOMs with RMS normalization as their average perplexity appears to be \todo{orders of magnitude} higher than both their standard FOM counterpart and the uniform baseline as noted in \todo[orange]{table 1, table 2}.
-One particular case is the FOM with RMS tied to Mistral, since its drop in performance is moderate with respect to FOMs obtained from other models.
-In addition, by observing \todo[orange]{perplexity owt mistral rms} we can see an interesting phenomenon consisting \todo{of} an apparent fragmentation of the two perplexity groups shown in \todo[orange]{perplexity owt mistral} into multiple groups with increasing perplexity.
-\todo{Generally speaking}, it is possible that the worsened performance unveiled by the RMS normalization is indicative of actual model performance, as it removes the uniform correlation by skewing the probability distributions.
-However, we \todo{deem} this conjecture as unlikely, since it seems to have different effects on models, in contrast with the findings shown in \todo[orange]{previous section}.
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{exp_fom_2B_m-rms-perp-owt.pdf}
+    \caption{\todo[red]{caption}}
+    \label{fig:exp_fom_2_B}
+\end{figure}
 
-\todo{Conversely with the perplexity}, results obtained by computing the KL divergence metric over the vocabulary can be considered more straightforward to interpret as we can observe \todo{that there is} a clearer difference between the performance of models.
-Interestingly, we notice that this series of outcomes is not necessarily in line with previous observations, however, we can ascribe discrepancies in the results to \todo{the direct} similarity between FOM probabilities and the uniform distribution.
-Following this idea, we also experience interesting behaviors when considering the FOM variant which includes RMS normalization due to its direct effects on the \todo{uniformity} of FOM probabilities.
-
-The distribution dissimilarity between FOM and Markov model is \todo{clearly} substantially lower than \todo{that of} any other pair of model distributions for all analyzed LLMs as shown in \todo[orange]{kl tables 1,2,3}.
-We can also notice that $KL(Markov||FOM)$ \todo{formula} is consistently smaller than the reverse ($KL(FOM||Markov)$ \todo{formula}) for all LLMs, implying that FOMs are a better approximation of Markov models than \todo{the opposite}.
-This result is likely tied to the difference in probability magnitude over the majority of the vocabulary terms.
-Since the Markov model was trained by analyzing a restricted dataset with a set of terms smaller than the vocabulary, we believe that its distribution neglects tokens that were never seen during training, even despite the smoothing coefficient applied to token counts.
-On the other hand, the FOM possesses a much more uniform-like baseline as already shown in previous experiments, thus it \todo{acts better at being considered} the reference distribution in the KL divergence computation.
-
-Although the results are much more aligned between models with regard to previous experiments, it is still possible to partially observe the same properties tied to the FOM approximations of specific LLMs underlined in previous experiments.
-For instance, in \todo[orange]{kl table 2} we can notice a slightly higher $KL(Markov||FOM)$ \todo{formula} value and a slightly lower $KL(FOM||Markov)$ \todo{formula} value for the Mistral FOM compared against other models.
-Additionally, KL divergence values related to comparisons between identity matrix and FOM for the Mistral model seem to present the same behavior with respect to Llama 2 and Phi 3.5.
+In contrast to the perplexity results, outcomes obtained by computing KL divergence over the vocabulary can be considered more straightforward to interpret, as they reveal a clearer difference between the performance of models.
+Interestingly, we notice that this series of outcomes does not necessarily align with previous observations; however, we can ascribe discrepancies in the results to the inherent similarity between FOM probabilities and the uniform distribution.
+Following this idea, we also experience interesting behaviors when considering the FOM variant which includes RMS normalization due to its direct influence on the uniformity of FOM probabilities.
 
 \begin{table}[t!]
     \centering
@@ -1038,13 +1154,23 @@ Additionally, KL divergence values related to comparisons between identity matri
     \label{table:exp_fom_phi-kl}
 \end{table}
 
+The distribution dissimilarity between FOM and Markov model is \todo{clearly} substantially lower than \todo{that of} any other pair of model distributions for all analyzed LLMs as shown in \cref{table:exp_fom_llama-kl,table:exp_fom_mistral-kl,table:exp_fom_phi-kl}.
+We can also notice that $KL(Markov||FOM)$ \todo{formula} is consistently smaller than the reverse ($KL(FOM||Markov)$ \todo{formula}) for all LLMs, implying that FOMs are a better approximation of Markov models than \todo{the opposite}.
+This result is likely tied to the difference in probability magnitude over the majority of the vocabulary terms.
+Since the Markov model was trained by analyzing a restricted dataset with a set of terms smaller than the vocabulary, we believe that its distribution neglects tokens that were never seen during training, even despite the smoothing coefficient applied to token counts.
+On the other hand, the FOM possesses a much more uniform-like baseline as already shown in previous experiments, thus it \todo{acts better at being considered} the reference distribution in the KL divergence computation.
+
+Although the results are much more aligned between models with regard to previous experiments, it is still possible to partially observe the same properties tied to the FOM approximations of specific LLMs underlined in previous experiments.
+For instance, in \cref{table:exp_fom_mistral-kl} we can notice a slightly higher $KL(Markov||FOM)$ \todo{formula} value and a slightly lower $KL(FOM||Markov)$ \todo{formula} value for the Mistral FOM compared against other models.
+Additionally, KL divergence values related to comparisons between identity matrix and FOM for the Mistral model seem to present the same behavior with respect to Llama 2 and Phi 3.5.
+
 As far as FOMs that include RMS normalization are concerned, there are some meaningful differencens brought to light by the performed experiment.
-Firstly, in \todo[orange]{table 1} we can observe that the FOM based on Llama 2 performs slightly better than its alternate version including RMS.
+Firstly, in \cref{table:exp_fom_llama-kl} we can observe that the FOM based on Llama 2 performs slightly better than its alternate version including RMS.
 This finding is unsurprising \todo{in it of itself}, since it follows the general performance pattern established and already mentioned in previous experiments.
-However, if we also consider \todo[orange]{table 2} it is possible to notice that the performance drop tied to the FOM with RMS based on Mistral is actually much less noticeable than \todo{its} Llama 2 counterpart.
+However, if we also consider \cref{table:exp_fom_mistral-kl} it is possible to notice that the performance drop tied to the FOM with RMS based on Mistral is actually much less noticeable than \todo{its} Llama 2 counterpart.
 Mistral's \todo{impact is amplified} by the fact that the KL divergence between FOM with RMS and identity matrix is actually lower than the KL divergence considering the original FOM.
 This underlines the apparent affinity that the FOM based on Mistral displays towards self-regression,
-Conversely, \todo[orange]{table 3} shows the \todo{immense} impact on KL divergence that RMS normalization has on the FOM based \todo{specifically} on Phi 3.5, resulting in a significant decrease of performance across all comparisons that include the FOM and reflecting the results of \todo{the} previous experiment on perplexity.
+Conversely, \cref{table:exp_fom_phi-kl} shows the \todo{immense} impact on KL divergence that RMS normalization has on the FOM based \todo{specifically} on Phi 3.5, resulting in a significant decrease of performance across all comparisons that include the FOM and reflecting the results of \todo{the} previous experiment on perplexity.
 
 \subsection{Discussion}
 

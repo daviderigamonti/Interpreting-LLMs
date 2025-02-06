@@ -5,8 +5,6 @@ To do so, we are going to subdivide our analysis into three main sections, where
 
 The first section is dedicated to the exploration of the main features pertaining the proposed interactive tool for the exploration of autoregressive transformer architectures, \emph{InTraVisTo} (Inside Transformer Visualization Tool).
 
-\todo[purple!20]{Start of paper section}
-
 \emph{InTraVisTo} is an open-source visualization tool depicting the internal computations performed within a Transformer.
 The tool provides visualizations of both the internal state of the LLM, using a heatmap of decoded embedding vectors for all layer/token positions, and the information flow between components of the LLM, using a Sankey diagram to depict paths through which information accumulates to produce next-token predictions.
 
@@ -30,7 +28,7 @@ InTraVisTo provides a human-interpretable representation of this internal decora
 As for the decoding process, we compute the probability distribution over the vocabulary space for a hidden state $\gbm{x}$ in the following way:
 \begin{equation}
     \label{eq:method_intravisto_decoding}
-    P(\ \cdot \mid \gbm{x}, d_\textit{dec}, n_\textit{norm}) = \mathrm{softmax}\left(N_{n_\textit{norm}}(\gbm{x}) \cdot \gbm{W}_{d_\textit{dec}}\right)
+    P(\ \cdot \mid \gbm{x}, d_\textit{dec}, n_\textit{norm}) = \operatorname{softmax}\Bigl(N_{n_\textit{norm}}(\gbm{x}) \cdot \gbm{W}_{d_\textit{dec}}\Bigr)
 \end{equation}
 Where $\gbm{W}_{d_\textit{dec}}$ represents the matrix of decoder weights according to the user decoder choice $d_\textit{dec}$, and $N_{n_\textit{norm}}$ is used to identify the normalization operation selected by the user through $n_\textit{norm}$:
 \begin{equation}
@@ -44,7 +42,6 @@ Where $\gbm{W}_{d_\textit{dec}}$ represents the matrix of decoder weights accord
     \end{array}
     \right.
 \end{equation}
-\todo[cyan]{Fix notation}
 Considering $\mathcal{N}{(\gbm{x})}$ the normalization component of the model's final normalization layer, being reliant on $\mu$ and $\sigma$ for LayerNorm implementations as defined in \cref{eq:background_layernorm,eq:background_layernorm_extra}, and $RMS(\gbm{x})$ for RMSNorm implementations as defined in \cref{eq:background_rmsnorm}
 
 Two natural choices of decoders to use are the transpose of the \emph{input embedding matrix} $\gbm{W}_\textit{in}^\T$ used by the model to convert tokens to vectors on input, and the \emph{output decoder} $\gbm{W}_\textit{out}$ used upon output within the language modeling head.
@@ -53,18 +50,19 @@ This structural weight difference will be analyzed more in depth in later sectio
 
 Previous work has looked to \emph{train specialized decoders}~\cite{belrose2023a,sakarvadia2023,pal2023} for generating meaningful vocabulary distributions at any point in a model, at the cost of introducing a great deal of additional complexity and potential errors.
 InTraVisTo employs a simpler and elegant alternative, by \emph{interpolating} the input and output decoders based on the depth $\ell\in\{0,\ldots,L\}$ of the model layer we wish to decode, we obtain a `hybrid' decoding weight matrix that acts as an equilibrium point calibrated on the current model depth.
-We define various alternatives for decoder interpolation mainly focusing on \emph{linear interpolation} and \emph{quadratic interpolation}, defined as follows:
+We define various alternatives for decoder interpolation mainly focusing on \emph{linear interpolation}, \emph{quadratic interpolation} and \emph{max-probability interpolation}, defined as follows:
 \begin{subequations}
     \begin{align}
         \gbm{W}_\textit{linear}^{(\ell)} =\left(1-\frac{\ell}{L}\right) \cdot \gbm{W}_\textit{in}^\T + \frac{\ell}{L} \cdot \gbm{W}_\textit{out} \label{eq:method_intravisto_linear-interp} \\
-        \gbm{W}_\textit{quadratic}^{(\ell)} =\frac{{(L - \ell)}^2 \cdot \gbm{W}_\textit{in}^\T + \ell^2 \cdot \gbm{W}_\textit{out}}{L^2 - 2 \ell L + 2\ell^2} \label{eq:method_intravisto_quadratic-interp}
+        \gbm{W}_\textit{quadratic}^{(\ell)} =\frac{{(L - \ell)}^2 \cdot \gbm{W}_\textit{in}^\T + \ell^2 \cdot \gbm{W}_\textit{out}}{L^2 - 2 \ell L + 2\ell^2} \label{eq:method_intravisto_quadratic-interp} \\
+        \gbm{W}_\textit{max\_p} =\operatornamewithlimits{argmax}_{\gbm{W} \in \{\gbm{W}_\textit{in}^\T, \gbm{W}_\textit{out}\}} f(\gbm{W}) \label{eq:method_intravisto_max-p}
     \end{align}
 \end{subequations}
 \todo[cyan]{check again quadratic interpolation}
 \todo[cyan]{It is important to note that the term `quadratic interpolation' comprises a small abuse of terminology, as it refers to a specific class of possible quadratic interpolations between the two decoders.
 More specifically, the contributions given by the joint }
 
-Any of the matrices $\gbm{W}_\textit{in}$, $\gbm{W}_\textit{out}$, $\gbm{W}_\textit{linear}$ and $\gbm{W}_\textit{quadratic}$ can be used as the decoder matrix $\gbm{W}_{d_\textit{dec}}$ to decode an embedding $\gbm{x}$ into a probability distribution over $\mathcal{V}$ as described in \cref{eq:method_intravisto_decoding}.
+Any of the matrices $\gbm{W}_\textit{in}^\T$, $\gbm{W}_\textit{out}$, $\gbm{W}_\textit{linear}$ and $\gbm{W}_\textit{quadratic}$ can be used as the decoder matrix $\gbm{W}_{d_\textit{dec}}$ to decode an embedding $\gbm{x}$ into a probability distribution over $\mathcal{V}$ as described in \cref{eq:method_intravisto_decoding}.
 As previously mentioned, this behavior selection is controlled by specifying $d_\textit{dec}$.
 
 \subsubsection{Secondary Tokens}\label{sssec:method_intravisto_decoding_tokens}
@@ -358,7 +356,7 @@ Thus, for simplicity, we can assume to \todo{follow} the \todo{renowed} `$king -
         &\color{gray} \approx {\textit{encode}}_{\textit{enc\_strat}}^{out}(w_3) 
     \end{aligned}
 \end{equation}
-Where the ${\textit{encode}}_{\textit{enc\_strat}}$ functions follows the definitions laid out in \cref{eq:method_embeddings_multitok-in,eq:method_embeddings_multitok-out}.
+Where the ${\textit{encode}}_{\textit{enc\_strat}}$ function follows the definitions laid out in \cref{eq:method_embeddings_multitok-in,eq:method_embeddings_multitok-out}.
 
 Another perspective over the classic word analogies task consists in the ``delta analogies'' task where the premise is similar, and the input words are the same.
 However, we perform a further subdivision of the dataset, assigning each word analogy into a bigger group based on the actual relationship that is modeled by the analogy (such as `gender', `capital of', `royalty', \todo{etc.}).
