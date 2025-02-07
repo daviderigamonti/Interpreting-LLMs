@@ -28,7 +28,7 @@ InTraVisTo provides a human-interpretable representation of this internal decora
 As for the decoding process, we compute the probability distribution over the vocabulary space for a hidden state $\gbm{x}$ in the following way:
 \begin{equation}
     \label{eq:method_intravisto_decoding}
-    P(\ \cdot \mid \gbm{x}, d_\textit{dec}, n_\textit{norm}) = \operatorname{softmax}\Bigl(N_{n_\textit{norm}}(\gbm{x}) \cdot \gbm{W}_{d_\textit{dec}}\Bigr)
+    P(\ \cdot \mid \gbm{x}, d_\textit{dec}, n_\textit{norm}) = P(\ \cdot \mid \gbm{x}, \gbm{W}_{d_\textit{dec}}, N_{n_\textit{norm}}) = \operatorname{softmax}\Bigl(N_{n_\textit{norm}}(\gbm{x}) \cdot \gbm{W}_{d_\textit{dec}}\Bigr)
 \end{equation}
 Where $\gbm{W}_{d_\textit{dec}}$ represents the matrix of decoder weights according to the user decoder choice $d_\textit{dec}$, and $N_{n_\textit{norm}}$ is used to identify the normalization operation selected by the user through $n_\textit{norm}$:
 \begin{equation}
@@ -53,17 +53,15 @@ InTraVisTo employs a simpler and elegant alternative, by \emph{interpolating} th
 We define various alternatives for decoder interpolation mainly focusing on \emph{linear interpolation}, \emph{quadratic interpolation} and \emph{max-probability interpolation}, defined as follows:
 \begin{subequations}
     \begin{align}
-        \gbm{W}_\textit{linear}^{(\ell)} =\left(1-\frac{\ell}{L}\right) \cdot \gbm{W}_\textit{in}^\T + \frac{\ell}{L} \cdot \gbm{W}_\textit{out} \label{eq:method_intravisto_linear-interp} \\
-        \gbm{W}_\textit{quadratic}^{(\ell)} =\frac{{(L - \ell)}^2 \cdot \gbm{W}_\textit{in}^\T + \ell^2 \cdot \gbm{W}_\textit{out}}{L^2 - 2 \ell L + 2\ell^2} \label{eq:method_intravisto_quadratic-interp} \\
-        \gbm{W}_\textit{max\_p} =\operatornamewithlimits{argmax}_{\gbm{W} \in \{\gbm{W}_\textit{in}^\T, \gbm{W}_\textit{out}\}} f(\gbm{W}) \label{eq:method_intravisto_max-p}
+        \gbm{W}_\textit{linear}^{(\ell)} &=\left(1-\frac{\ell}{L}\right) \cdot \gbm{W}_\textit{in}^\T + \frac{\ell}{L} \cdot \gbm{W}_\textit{out} \label{eq:method_intravisto_linear-interp} \\
+        \gbm{W}_\textit{quadratic}^{(\ell)} &=\left(1-\left(\frac{\ell}{L}\right)^2\right) \cdot \gbm{W}_\textit{in}^\T + \left(\frac{\ell}{L}\right)^2 \cdot \gbm{W}_\textit{out} \label{eq:method_intravisto_quadratic-interp} \\
+        \gbm{W}_\textit{max\_p} &=\operatornamewithlimits{argmax}_{\gbm{W} \in \{\gbm{W}_\textit{in}^\T, \gbm{W}_\textit{out}\}} \operatornamewithlimits{max}_{v \in \mathcal{V}} P(v \mid \gbm{x}, \gbm{W}, N_{n_\textit{norm}}) \label{eq:method_intravisto_max-p}
     \end{align}
 \end{subequations}
-\todo[cyan]{check again quadratic interpolation}
-\todo[cyan]{It is important to note that the term `quadratic interpolation' comprises a small abuse of terminology, as it refers to a specific class of possible quadratic interpolations between the two decoders.
-More specifically, the contributions given by the joint }
 
-Any of the matrices $\gbm{W}_\textit{in}^\T$, $\gbm{W}_\textit{out}$, $\gbm{W}_\textit{linear}$ and $\gbm{W}_\textit{quadratic}$ can be used as the decoder matrix $\gbm{W}_{d_\textit{dec}}$ to decode an embedding $\gbm{x}$ into a probability distribution over $\mathcal{V}$ as described in \cref{eq:method_intravisto_decoding}.
+Any of the matrices $\gbm{W}_\textit{in}^\T$, $\gbm{W}_\textit{out}$, $\gbm{W}_\textit{linear}$, $\gbm{W}_\textit{quadratic}$ and $\gbm{W}_\textit{max\_p}$ can be used as the decoder matrix $\gbm{W}_{d_\textit{dec}}$ to decode an embedding $\gbm{x}$ into a probability distribution over $\mathcal{V}$ as described in \cref{eq:method_intravisto_decoding}.
 As previously mentioned, this behavior selection is controlled by specifying $d_\textit{dec}$.
+It is important to note that the term `quadratic interpolation' can be misleading, as the interpolation between decoding matrices is still linear and \todo{it is the} layer index ratio $\frac{\ell}{L}$ that scales quadratically through the models' layers.
 
 \subsubsection{Secondary Tokens}\label{sssec:method_intravisto_decoding_tokens}
     
@@ -71,12 +69,12 @@ As previously illustrated, each hidden representation is decoded by performing a
 At this point we utilize the same \emph{sampling policy} of the model in order to extract the `predicted' vocabulary token ID from the computed distribution.
 We assume the policy to always be \emph{greedy decoding}, both as a simplifying factor and to reflect the default settings for causal models provided by Hugging Face's transformers library~\cite{wolf2020}.
 
-Nevertheless, our interest in decoding the model's hypothetical intermediate predictions doesn't extend only to the first token, as important information that cannot be condensed into a single vocabulary token is usually withheld inside the hidden representation~\cite{elhage2022,henighan2023,elhage2023}.
+Nevertheless, our interest in decoding the model's hypothetical intermediate predictions does not only extend to the first token, as important information that cannot be condensed into a single vocabulary token is usually withheld inside the hidden representation~\cite{elhage2022,henighan2023,elhage2023}.
 In order to extract this `leftover information', we devise two main approaches that \todo{sublimate} it into \emph{secondary tokens}.
 We define \emph{secondary tokens} as additional vocabulary tokens that are the result of a \emph{secondary decoding process}, aimed at obtaining tokens that hold less importance than the token obtained as a result of the \emph{primary decoding process} (as mentioned before) of the same hidden representation.
 
 The first secondary decoding approach is \emph{Top-$k$ probability decoding} and consists of expanding the number of selected tokens from the probability distribution to $k$, thus obtaining $k-1$ secondary tokens ordered by their probability values.
-This is a rather simple and immediate technique, which is widely-used in many interpretability applications and non~\cite{belrose2023a,pal2023,tufanov2024}.
+This is a rather simple and immediate technique, which is widely-used in many interpretability applications \todo{and non}~\cite{belrose2023a,pal2023,tufanov2024}.
 The principal downside of this approach comes from the fact that the obtained secondary tokens might be overly similar to the primary token, resulting in redundant information.
 This is likely caused by the fact that a large part of the hidden representation is used to represent the primary token, often skewing the embedding vector in favor of tokens that are semantically similar~\cite{elhage2022}.
 
@@ -84,6 +82,7 @@ To alleviate this issue we propose a novel way to extract secondary representati
 The rationale behind the proposed approach is that hidden representations contain an overlap of concepts in an embedding space that is loosely related to both the input and output embedding spaces.
 As a consequence, we postulate that hidden representations existing in these intermediate embedding spaces should retain the linear properties that have been ascertained to exist in the input and output embedding spaces of transformer architectures~\cite{mikolov2013,park2023}.
 Iterative decoding exploits these linear properties by performing a sequence of subtractions from the main hidden representation, removing the embedding of the most probable representation during each iteration.
+
 \begin{algorithm}
     \caption{Iterative decoding algorithm}\label{alg:method_intravisto_iter-dec}
     \begin{algorithmic}
@@ -105,10 +104,10 @@ Iterative decoding exploits these linear properties by performing a sequence of 
         \RETURN tokens
     \end{algorithmic}
 \end{algorithm}
-\todo[cyan]{check algorithm}
+
 As it is possible to observe in \cref{alg:method_intravisto_iter-dec}, we perform at most ${rep}_{max}$ iterations obtaining one primary token and between $0$ to ${rep}_{max} - 1$ secondary tokens.
 This is due to the fact that a secondary token that is found in two separate iterations is recorded only on the first one, and the presence of a stopping condition that triggers in case the norm of the resulting hidden representation is under a certain threshold ${norm}_{min}$ or is higher than the norm found at the previous iteration.
-This last condition is used to avoid situations where the embedding vector of the hidden state `flips' after the computation of the difference with the most probable representation, resulting in a vector that is not informative and can possibly reiterate the effect until ${rep}_{max}$ is reached, thus generating predictions based purely on noise. \todo[cyan]{check if necessary}
+This last condition is used to avoid situations where the embedding vector of the hidden state `flips' after the computation of the difference with the most probable representation, resulting in a vector that is not informative and can possibly reiterate the effect until ${rep}_{max}$ is reached, thus generating predictions based purely on noise.
 
 One downside of this approach, besides the linearity assumption of the intermediate embedding spaces \todo{which is based upon}, is the fact that there exists a notable shift in representation magnitudes throughout the layers of most state-of-the-art transformer models~\cite{heimersheim2023}.
 This typically results in a steady increase in the norms of the embedding vectors, proportional to the layer number.
@@ -125,7 +124,6 @@ Entropy for an embedding $\gbm{x}$ is computed in the following way:
     \label{eq:method_intravisto_entropy}
     H_{\gbm{x}} = -\sum{P_{\gbm{x}} \cdot \log{P_{\gbm{x}}}}
 \end{equation*}
-\todo[cyan]{check}
 Where $P_{\gbm{x}} = P(\ \cdot \mid \gbm{x}, d_\textit{dec}, n_\textit{norm})$ as computed in \cref{eq:method_intravisto_decoding}.
 
 Other showcased metrics are the \emph{attention contribution} and \emph{feedforward contribution}, which measure respectively how much the output of the attention block, or feed forward, contributes in its summation with the residual stream of a transformer block.
@@ -192,7 +190,6 @@ In practice, we compute the following quantity for five different state combinat
         \Bigr\}
     \end{gathered}
 \end{equation}
-\todo[cyan]{check KL order}
 Where $P_{\gbm{x}} = P(\ \cdot \mid \gbm{x}, d_\textit{dec}, n_\textit{norm})$ as computed in \cref{eq:method_intravisto_decoding}, $D_{\text{KL}}$ is the Kullback-Liebler divergence between two distributions, and the notation of hidden states (such as $\gbm{x}^{(\ell)}$, $\gbm{\delta}_\textit{att}^{(\ell)}$, \ldots) references the distinctions made at \cref{ssec:method_intravisto_decoding}.
 Whereas, the second approach compares the residual stream states at the input and output location for each layer in the transformer stack.
 It does so by calculating the difference between the two hidden states, and performing the decoding operation defined in \cref{eq:method_intravisto_decoding} as to generate primary and secondary tokens for the resulting quantity.
@@ -213,24 +210,40 @@ In fact, the main purpose of injections is to give the user the possibility to e
 Being a type of intervention, it is possible to express an injection utilizing the \emph{do-operator} as defined by~\citet{pearl2009}.
 Assuming that we would like to inject an embedding $\gbm{\hat x}$ into the hidden state obtained as a result of the transformation $f_c^{(\ell)}$ of a component $c^{(\ell)}$ during the $i$-th token of the model's forward pass expressed as $f$, we can notate our injection utilizing the do-operator as:
 \begin{equation}
-    \label{eq:method_intravisto_injection}
+    \label{eq:method_intravisto_inj_complete}
     f\Bigl(\gbm{x}_i \, \Big| \, \text{do}\bigl(f_c^{(\ell)}(\gbm{x}_i) = \gbm{\hat x}\bigr)\Bigr)
-    \; \text{where}\ \gbm{\hat x} = \textit{encode}(\textit{id}_{\textit{inject}} \,|\, n_\textit{norm}, d_{dec})
+    \;\; \text{where} \;\; \gbm{\hat x} = \textit{encode}(\textit{id}_{\textit{inject}} \,|\, n_\textit{norm}, d_{dec})
 \end{equation}
 As previously noted for similar approaches, it is important to specify that there might be some problems with the nature of $\gbm{\hat x}$, as it is a representation that is generated from an encoded user-defined textual input ${id}_{\textit{inject}}$, which undergoes an embedding and normalization process utilizing $\gbm{W}_{d_{dec}}$ and $N_{n_\textit{norm}}$ following \cref{eq:method_intravisto_linear-interp,eq:method_intravisto_quadratic-interp,eq:method_intravisto_normalization}.
 This results in the injection of a `clean' embedding that is unexpected by the model, \todo{and thus} may destabilize the generation process.
 In most causal intervention scenarios, this problem is not present when performing activation patching using counterfactual examples, due to the fact that patches are generated utilizing resampling or averaging approaches~\cite{hanna2023,conmy2023,wang2023}.
 We choose to avoid these techniques since our main focus is directed towards giving the user complete control over the injected information, which is achieved by directly inserting the wanted embedding vector in the hidden state without letting the model elaborate it to create a plausible representation.
+We \todo{refer to} this approach as \emph{complete replacement injection}.
 
-Another noteworthy step in the injection process is the actual encoding of the injected embedding, since the formula used to compute $\gbm{\hat x}$ that has been broadly mentioned in \cref{eq:method_intravisto_injection} is used considering an injection input that is composed by a single token.
+Given the shortcomings of completely replacing an internal representation belonging to the model, we also devise a novel alternative to perform injections in a less destructive \todo{way}.
+This idea stems from an interpretation of internal states as linear combinations of token embeddings, akin to the approach taken for the iterative decoding algorithm illustrated in \cref{alg:method_intravisto_iter-dec}.
+In practice, we directly modify the hidden state by computing a term consisting of the difference between the embedding representations of our injection $\gbm{\hat x}$ and the most likely token $\gbm{e}_{\gbm{h}}^{\textit{max}}$ obtained by decoding the internal state following \cref{eq:method_intravisto_decoding}.
+The additional term is weighted by a singleton scaling factor, computed as the dot product between the original hidden state and the embedding of the most likely decoded token $\gbm{e}_{\gbm{h}}^{\textit{max}}$.
+We \todo{refer to} this approach as \emph{main component replacement injection}, and we \todo{it as}:
+\begin{equation}
+    \label{eq:method_intravisto_inj_main}
+    \begin{aligned}
+    \gbm{h'} = \gbm{h} + (\gbm{h} \cdot \gbm{e}_{\gbm{h}}^{\textit{max}})(\gbm{\hat x} - \gbm{e}_{\gbm{h}}^{\textit{max}})
+    \;\; \text{where} \;\; &\gbm{e}_{\gbm{h}}^{\textit{max}} = {(\gbm{W}_{d_{dec}})}_{v_{\gbm{h}}^{\textit{max}},\cdot} \; , \\
+    &v_{\gbm{h}}^{\textit{max}} = \operatornamewithlimits{argmax}_{v \in \mathcal{V}} P(v \mid \gbm{h}, d_\textit{dec}, N_{n_\textit{norm}})
+    \end{aligned}
+\end{equation}
+In this case, referencing \cref{eq:method_intravisto_inj_complete}, $\gbm{h}$ corresponds to the target hidden state $f_c^{(\ell)}(\gbm{x}_i)$, which gets \todo{modified} into $\gbm{h'}$ by $\gbm{\hat x}$.
+
+Another noteworthy step in the injection process is the actual encoding of the injected embedding, since the formula used to compute $\gbm{\hat x}$ that has been broadly mentioned in \cref{eq:method_intravisto_inj_complete,eq:method_intravisto_inj_main} is used considering an injection input that is composed by a single token.
 However, InTraVisTo's interface offers the possibility of injecting an embedding representation that contains more than one token, thus we would like to generalize the aforementioned formula to actually handle multiple tokens at once.
-\todo[cyan]{check if true} This behavior is modeled by averaging the embedding representations of all tokens that compose the sentence, always under the assumption of a linear embedding space~\cite{mikolov2013,park2023}. \todo[green]{remarks for sentence embedding?}
+This behavior is modeled by averaging the embedding representations of all tokens that compose the sentence, always under the assumption of a linear embedding space~\cite{mikolov2013,park2023}.
 Considering a total of $id_1,\ldots,id_t$ tokens to be encoded, this averaging operation can be represented in the following way:
 \begin{equation}
     \label{eq:method_intravisto_emb-avg}
     \gbm{\hat x} = N_{n_\textit{norm}}\Bigl(\frac{1}{t} \sum_{i=1}^{t}{{(\gbm{W}_{d_{dec}})}_{\textit{id}_{i},\cdot}}\Bigr)
 \end{equation}
-The soundness of this approach, including possible variants based on the same or different assumptions, will be analyzed more in depth in the next section (\cref{sec:method_embeddings}).
+The soundness of this approach, including possible variants based on the same or different assumptions is \todo{tackled} in the following section (\cref{sec:method_embeddings}).
 
 
 \section{Embedding Analysis}\label{sec:method_embeddings}
@@ -253,12 +266,11 @@ To this end, we define two main distance metrics that will be used to compare em
     \label{eq:method_embeddings_distance}
     \left\{
     \begin{array}{cl}
-        \sqrt{\sum_{i=1}^{n}{{(x_i - y_i)}^2}} &\ \text{if}\ \textit{dist} = \text{`euclidean'} \\
-        1 - \frac{\sum_{i=1}^{n}{x_i y_i}}{\sqrt{\sum_{i=1}^{n}{x_i^2}} \cdot \sqrt{\sum_{i=1}^{n}{y_i^2}}} &\ \text{if}\ \textit{dist} = \text{`cosine'}
+        \sqrt{\sum_{i=1}^{D}{{(x_i - y_i)}^2}} &\ \text{if}\ \textit{dist} = \text{`euclidean'} \\
+        1 - \frac{\sum_{i=1}^{D}{x_i y_i}}{\sqrt{\sum_{i=1}^{D}{x_i^2}} \cdot \sqrt{\sum_{i=1}^{D}{y_i^2}}} &\ \text{if}\ \textit{dist} = \text{`cosine'}
     \end{array}
     \right.
 \end{equation}
-\todo[cyan]{check dimension}
 The \emph{cosine similarity/distance} metric is the most immediate and widely used approach to compare embeddings since it utilizes the angle between two vectors to determine their similarity, its inherent normalization means that the magnitude of the vectors is not taken into consideration and only their directionality is compared.
 On the other hand, the \emph{euclidean distance} is a less common distance metric that we decided to include to lay out an alternate interpretation option, which can provide a different geometric perspective over the embedding space.
 Unfortunately, in order to make the euclidean distance an effective metric we need to normalize it separately.
@@ -271,16 +283,17 @@ Although it is also possible for it to have detrimental effects in some specific
 In practice, the `pre-normalization' step includes the normalization of all embedding vectors using the euclidean norm as follows:
 \begin{equation}
     \label{eq:method_embeddings_normalization}
-    \gbm{W}_{\textit{emb}} = (\bar w_{ij})_{\textit{vocab} \times n}
+    \gbm{W}_{\textit{emb}} = (\bar w_{ij})_{V \times D}
     \ \ \text{where}\ \bar w_{ij} = \frac{w_{ij}}{{\| w_{ij} \|}_2}
 \end{equation}
-\todo[cyan]{check dimension}
 
 \subsubsection{Multi-token Words}
 
 Handling multi-token words is a vital aspect of our analysis, as we may encounter words that are split into multiple sub-word tokens by the model's tokenization process.
 As we will see later in \cref{ssec:method_embeddings_analogies}, our main experiments for this section will concern the evaluation of analogies and similarities between word groups.
+As anticipated in \cref{ssec:method_intravisto_injection}, the main choice of computing multi-token falls towards the usage of linear operations from the supposed preservation of linear features in the embedding space~\cite{mikolov2013,park2023}.
 Therefore, we devised three main strategies to address multi-token words when they are fed into the embedding as inputs of analogies, along with two additional strategies to handle them as valid outputs of analogies.
+
 Strategies applicable to both cases involve considering only the first token of a multi-token word (this causes results to be slightly worse on average, but the impact seems to be negligible in most cases).
 For multi-token words as inputs, other approaches include calculating the average as already done in \cref{eq:method_intravisto_emb-avg} or the sum over all the embedded tokens that form the multi-token word.
 Conversely, for output multi-token words, we subdivide them into their token components, to then consider all tokens as targets for assessing the top-$k$ accuracy of an analogy result in the embedding space.
@@ -317,11 +330,8 @@ The first preliminary transformations performed on $w$ is tokenization, modeled 
 After tokenization, tokens get transformed into embedding vectors $\gbm{e}_1^w, \ldots, \gbm{e}_{t}^w$ by selecting the corresponding row from the embedding matrix $\gbm{W}_{emb}$.
 The role of the embedding matrix $\gbm{W}_{emb}$ can be fulfilled by either the input and output embedding matrices, as already seen previously.
 
-As anticipated before in \cref{ssec:method_intravisto_injection}, the main choice of computing multi-token representations using linear operations comes from the supposed preservation of linear features in the embedding space~\cite{mikolov2013,park2023}.
-Additionally, \todo[green]{add}.
-
-Another approach that will be used to completely set aside the issues tied with multi-token words consists in reducing the dataset to exclusively consider analogies composed of single-token words, at the cost of less overall valid samples
-This will be discussed more in depth in the section dedicated to the dataset of the experiment \todo[orange]{insert reference}.
+Another approach that will be used to completely set aside issues tied with multi-token words consists in reducing the dataset to exclusively consider analogies composed of single-token words, at the cost of less overall valid samples.
+This topic is discussed more in depth in the experimental setup section dedicated to the related set of experiments (\cref{sssec:exp_emb_exp1_expset}).
 
 \subsection{Word Analogies}\label{ssec:method_embeddings_analogies}
 
