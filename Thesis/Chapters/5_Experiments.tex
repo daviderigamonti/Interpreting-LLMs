@@ -18,7 +18,7 @@ Furthermore, each research question has a final discussion section, which is aim
 
 \section{Transformer Visualization}\label{sec:exp_intravisto}
 
-As anticipated in \cref{sec:rq_intravisto} and explored in \cref{sec:method_intrvisto}, the experiments tied to this research question are centered around the InTraVisTo tool.
+As anticipated in \cref{sec:rq_intravisto} and explored in \cref{sec:method_intravisto}, the experiments tied to this research question are centered around the InTraVisTo tool.
 The first points (\cref{sec:exp_intravisto_exp1,sec:exp_intravisto_exp2,sec:exp_intravisto_exp3}) within this section provide an exhaustive overview of the interface, diving into the technical aspects and explaining the role of components that are present in the application.
 Consequently, these points do not present the experimental structure defined in the introductory section of this chapter.
 Whereas, the last point (\cref{sec:exp_intravisto_exp4}) is dedicated to the exploration of the proposed tool's actual capabilities, taking into consideration specific use cases and small investigations to provide concrete examples of possible usage scenarios.
@@ -160,7 +160,7 @@ It is a well known fact that current general-purpose language models have \todo{
 Thus, significant focus is placed on this particular topic, \todo{resulting} in part of the prompts being specifically set up to induce models \todo{to perform} computations of numerical nature.
 Nonetheless, we explore a great variety of prompts \todo{and} we collect valuable insight from different perspectives, with the overall goal of demonstrating the potential of the proposed tool.
 
-\subsubsection{Experimental Setup}
+\subsubsection{Experimental Setup}\label{sssec:exp_intravisto_exp4_expset}
 
 By directly experimenting with the proposed tool, we establish a basic workflow that enables researchers to ultimately collect new insights about how LLMs generate tokens in a layer-by-layer fashion.
 The first step consists in exploring the secondary representations of internal states in order to find additional information relevant for the task at hand, \todo{as it} is possible that the model is encoding it in the latent dimensions of hidden states alongside the main token, utilizing the residual stream as a communication channel between modules.
@@ -372,12 +372,15 @@ Thus, by ending the number with a newline character, the model is able to give t
 
 \subsection{Discussion}
 
-\todo[purple!20]{
-We presented InTraVisTo, a tool to visualize the internal states and the information flow of Transformer Neural Network, the core of LLMs.
-We developed InTraVisTo to provide a tool that NLP practitioners can use to understand the internal reasoning steps carried out by an LLM and, possibly, track down the causes of errors like hallucinations.
-Ultimately, we hope our tool will help improve the reliability of LLMs.
-Our focus at the moment is on providing better decoding and manipulation of hidden states, with focus on information injection, and improving the interface, to make InTraVisTo more user-friendly.
-}
+At its core, InTraVisTo is a tool that can be used to envision internal states and the information flow through transformer-based neural networks, at the core of LLMs.
+InTraVisTo offers a wide array of functionalities and visualizations to NLP practicioners, which they can utilize to understand internal reasoning steps carried out by LLMs and, possibly, track down the causes of generation errors such as hallucinations.
+As an interactive tool, InTraVisTo is equipped with additional tools to modify and manipulate internal representations in a user-friendly way, in order to enable small-scale causal investigations.
+Moreover, InTraVisTo's implementation supports simultaneous \todo{usage} by different users loading multiple distinct LLMs at the same time, making it a flexible application capable of being deployed in a reproducible \todo{way} \todo{targeted} towards NLP researchers and practicioners.
+
+\todo{As extensively shown} in the proposed examples and experiments, InTraVisTo can be used methodically to extract \todo{considerations} from the generation process of language models.
+From the results obtained in \cref{sec:exp_intravisto_exp4}, we show how specific models encode numerical tokens and how these representations affect the contents of states belonging the residual flow.
+We also utilize the injection mechanism to investigate how anomalies in the generation process of models affect their outputs, uncovering common patterns and speculating on the probabilistic significance of internal states \todo{in function of} the generated tokens. 
+By proposing a technique for performing experiments using InTraVisTo in \cref{sssec:exp_intravisto_exp4_expset}, we also wish to create a workflow that acts as a guideline to users, in order to streamline the process of research and \todo{generalizability of its findings}.
 
 \section{Embedding Analysis}
 
@@ -738,29 +741,25 @@ This conjecture is furtherly reinforced by the fact that the performance gain ov
 \subsection{Discussion}
 
 In the end, we can affirm that LLMs are able to retain a surprising amount of semantic relationships inside their embeddings, despite the fact that sub-word tokenization actively works against the accumulation of meaning for token representations.
+Their performance on the selected tasks is \todo{on par}, if not greater than less recent models used as baselines.
+In particular, by comparing \cref{table:exp_emb_models} and other graphs displaying the results of experiments (\todo[orange]{ref}), we can almost observe a slight correlation between vocabulary size and overall performance on tasks where models with a smaller vocabulary seem to outperform \todo{others with larger ones}.
+From this, we can observe that \todo{massive recent models} such as Llama 3 and Gemma might be \todo{moving} towards a direction of semantic empoverishment of the embedding space, whereas slightly older LLMs such as Llama 2 and Mistral, or LLMs \todo{aimed at being small and portable} such as Phi 3.5 still preserve \todo{much} of the original embedding space properties.
 
-Interestingly, we observed that the only LLM that clearly underperformed on the proposed task was the only one that had an explicit multilingual training.
+Interestingly, we observe that the only LLM \todo{that} clearly underperformed on the proposed tasks was the only one that had an explicit multilingual training.
 As previously stated, this finding suggests that multiple languages compete in giving different meaning to the same tokens, resulting in worse overall performance for the given tasks.
 We must acknowledge the fact that these results do not constitute the focal point of our analysis, and most definitely require further experimentation to provide meaningful answers by expanding upon the provided conjectures.
 Nonetheless, our observations still \todo{hold importance} for the defined research question as we observed that an increase in scale of the model does not directly influence the performance on the proposed tasks and, by extension, the expressiveness of the embeddings.
 
-On the topic of input and outupt embeddings, we can conclude that \todo[green]{conclude}.
+On the topic of input and outupt embeddings, we can conclude that input embeddings are generally more \todo{indicated} to resolve analogies and, by extension, inherently contain a greater amount of semantic information with respect to output embeddings.
+However, we also notice that Llama 3 displays an inverse pattern regarding this type of relationship.
+We speculate that, since output embeddings display a minor amount of semantic \todo{affinity}, in Llama 3's case they also retain a \todo{smaller} portion of the multilingual information which we identify as the \todo{main reason} for Llama 3's underperformance.
+The model's vocabulary is still \todo{the same} between input and output embeddings, thus issues inherently tied with the tokenization process itself are still present.
 
-\todo[green]{insert}
-In fact, these outcomes were fundamental in the development of the embedding interpretation portions of InTraVisTo, presented in \todo[orange]{ref} for the first research question, as they served as an intuitive way to group multiple...
-
-\todo[purple!20]{
-It becomes apparent that the majority of LLMs seem to underperform with respect to GPT-2, this notable deviation in performance could stem from various factors.
-However, by inspecting Fig., which displays the same results, but for the single-token version of dataset, we can observe that the performance of GPT-2 aligns more closely with that of the other models.
-This mismatch in performance may be attributed on the tokenization strategy and vocabulary size of the chosen models, in fact all three models employ a Byte-Pair Encoding (BPE) tokenizer 
-%\cite{DBLP:conf/aaai/WangCG20}
-, however the tokenizers utilized by both Mistral and LLaMA are based on SentencePiece 
-%\cite{DBLP:conf/emnlp/KudoR18}
-, presenting a smaller overall vocabulary (32,000 tokens against GPT-2's 50,257 tokens), thus possibly implying a reduced selection of full-word tokens in favor of an increased number of sub-word tokens.
-By analyzing results on the single-only dataset in Fig., we are able to infer that the exclusion of multi-token words from the dataset also mitigates differences arising from how tokenizers segment words.
-This effectively normalizes away instances of analogies where GPT-2 may have held an advantage over other LLMs by being able to fully encode certain words.
-For the same reason, GPT-2 would have had both better representations encompassing semantic meanings of words without additional noise caused by multiple words sharing the same sub-word token, but also not having to be subject to the token-reconstruction previously mentioned strategies as ways to deal with multi-token words.
-}
+With the hyperparameter search performed on multiple experiments, we unveil that indeed averaging embeddings appears to be a relatively robust way to aggregate multiple embeddings into a single representation.
+In fact, these outcomes are fundamental in the development of the embedding interpretation logic of InTraVisTo presented in \cref{ssec:method_intravisto_decoding} for the first research question, as they lie on the same embedding space linearity assumptions as the interpolation, but also offer an intuitive way to group multiple token representations for the purpose of injection as shown in \cref{ssec:method_intravisto_injection} and formalized through \cref{eq:method_intravisto_emb-avg}.
+Another important \todo{finding from} the current experiments that also sees \todo{application} in InTraVisTo concerns the interpolation of embedding spaces.
+\todo{In fact}, from the experimental results emerges the soundness of our proposed approach from a semantic point of view, meaning that the resulting interpolated embedding spaces carry \todo{at least}  the same amount of information as the original embeddings.
+Additionally, the highlighting of nonlinearities between interpolation layer and performance offset from the original embedding spaces in related experiments, heavily inspired the creation of alternative interpolation \todo{options} such as \cref{eq:method_intravisto_quadratic-interp,eq:method_intravisto_max-p}
 
 \section{First Order Prediction}\label{sec:exp_fom}
 
@@ -954,14 +953,12 @@ This observation holds for other models and metrics as well, likely because, in 
     \label{fig:exp_fom_1_B}
 \end{figure}
 
-\todo[red]{FIX PARAGRAPH WRITTEN WITH WRONG GRAPH}
 On the other hand, \todo{looking at the models comparatively tells us that} while Llama 2 and Phi 3.5 seem to exhibit similar overall trends for their FOM/Markov equivalence, Mistral shows an entirely different profile.
 As we can observe in \cref{fig:exp_fom_1_C1,fig:exp_fom_1_C3}, ignoring the raw accuracy, Llama 2 and Phi 3.5 present a high average overlap coefficient for low values of $k$, clearly outperforming both random baselines.
 This value slowly decreases until $k$ reaches a value \todo{just shy} of $200$, then it start growing asymptotically, matching the pace of the random baselines.
 In particular, the FOM/Markov overlap coefficient is not outperformed by the baselines for any value of $k$.
-On the other hand, by observing \cref{fig:exp_fom_1_C2} we can Mistral's average overlap coefficient is just slightly above the baselines for low values of $k$.
-In addition, its growth rate is noticeably lower than \todo{the one of the} baselines, meaning that the overlap coefficient associated to the FOM/Markov comparison is eventually surpassed by the baselines themselves as $k$ grows.
-This holds true until $k$ is around $1000$, at that point the FOM/Markov comparison has approximately the same pace as the random baselines.
+On the other hand, by observing \cref{fig:exp_fom_1_C2} we can see that Mistral's average overlap coefficient is just slightly above the baselines for low values of $k$.
+In addition, its growth rate is almost equal \todo{to that of the} baselines, meaning that the overlap coefficient associated to the FOM/Markov comparison is already at full capacity after the small positive jump for $k$ around $10$.
 
 \begin{figure}[t!]
     \centering
@@ -978,11 +975,9 @@ This holds true until $k$ is around $1000$, at that point the FOM/Markov compari
     \label{fig:exp_fom_1_C}
 \end{figure}
 
-\todo[red]{FIX PARAGRAPH WRITTEN WITH WRONG GRAPH}
-Analyzing the obtained results, it is possible to infer the reason for 
 The first values of $k$ hold \todo{the most} significance to the experiment as they are the primary next token predictions for the model, and after a certain value of $k$ every model regresses to the random baseline performance.
 In particular, this means that there is a depth of $k$ for which the FOM is just modeling random noise.
-By looking at Mistral's performance in \cref{fig:exp_fom_1_C2}, since the overlap coefficient corresponding to the FOM/Markov comparison \todo{dips} under the random baselines, we can infer that its FOM is not actually modeling noise, but a function that is completely separate from the next token prediction, \todo{namely self-regression}.
+By looking at Mistral's performance in \cref{fig:exp_fom_1_C2}, since the overlap coefficient corresponding to the FOM/Markov comparison is parallel to that of the random baselines, we can infer that its FOM is actually modeling noise from the start, with the addition of some related terms that determine a slight improvement over the baseline nonetheless.
 From this direct comparison we can clearly observe the patterns already found in previous experiments, identifying Mistral as the model which FOM has the lowest affinity with a Markov model, while still being able to \todo{approximate it to a lower degree} of accuracy.
 Whereas, the FOMs extracted from Llama 2 and Phi 3.5 can almost be considered faithful approximations of their respective Markov models.
 
@@ -1064,14 +1059,14 @@ The observed consistencies imply the existence of macro-groups of sentences for 
 \begin{figure}[t!]
     \centering
     \subfloat[C1.\label{fig:exp_fom_2_A1}]{
-        \includegraphics[width=0.5\textwidth]{exp_fom_2A_l2-perp-owt.pdf}
+        \includegraphics[width=0.5\textwidth]{exp_fom_2A_l2-perp-owt.png}
     }%
     \subfloat[C2.\label{fig:exp_fom_2_A2}]{
-        \includegraphics[width=0.5\textwidth]{exp_fom_2A_m-perp-owt.pdf}
+        \includegraphics[width=0.5\textwidth]{exp_fom_2A_m-perp-owt.png}
     }%
     \quad
     \subfloat[C3.\label{fig:exp_fom_2_A3}]{
-        \includegraphics[width=0.5\textwidth]{exp_fom_2A_p3-perp-owt.pdf}
+        \includegraphics[width=0.5\textwidth]{exp_fom_2A_p3-perp-owt.png}
     }%
     \caption{\todo[red]{caption}}
     \label{fig:exp_fom_2_A}
@@ -1094,7 +1089,7 @@ However, we consider this hypothesis unlikely, as the effect varies across model
 
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=0.5\textwidth]{exp_fom_2B_m-rms-perp-owt.pdf}
+    \includegraphics[width=0.5\textwidth]{exp_fom_2B_m-rms-perp-owt.png}
     \caption{\todo[red]{caption}}
     \label{fig:exp_fom_2_B}
 \end{figure}
@@ -1178,15 +1173,14 @@ Overall, the feasibility of using a FOM as a Markov model approximation seems to
 Nevertheless, every analyzed FOM seems to exhibit a slight bias towards trying to approximate an actual unigram Markov model rather than the identity matrix.
 
 This collection of results provides partial empirical confirmation of what was initially theorized by~\citet{elhage2021} and extends \todo[green]{?}.
-Additionally, it provides solid evidence that the output embeddings do not naturally tend to drift towards modeling input embeddings.
+Additionally, it provides solid evidence that output embeddings do not naturally tend to drift towards modeling input embeddings.
 This implies that current transformer-based LLMs might not benefit as much from weight tying as some older language models, reducing the quantifiable improvements to a marginal reduction in the number of parameters.
 
-It is possible to \todo{further contextualize} the results obtained in the current section into the InTraVisTo framework since it is based around the concept of residual flow as previously mentioned in \todo[orange]{ref}.
+It is possible to \todo{further contextualize} the results obtained in the current section into the InTraVisTo framework since it is based around the concept of residual flow as previously mentioned in \cref{sec:exp_intravisto_exp2}.
 The tendency of the FOM to act as a Markov model fits perfectly into the perspective of a residual flow that, starting from the current token, reaches a probability distribution over the vocabulary for the next token through a process of continuous refinement enacted by various modules \todo{that comprise} transformer architectures.
 If we strip the model of its modules, we are left with a direct communication channel that provides the simplest possible prediction given the available transformations.
 By extending this interpretation and capitalizing on the fact that operations on the residual stream are performed additively, we can rationalize the purpose of InTraVisTo as a tool that can be utilized to extract partial interpretations of a state that is progressively drifting towards a final prediction.
 
 \todo{In addition}, we theorize the possibility of extracting unembedding weights from the transition matrix of a unigram Markov model.
 These weights could see use as initialization values for the decoder weights of an LLM at training time.
-This is one of the possibly interesting potential developments stemming from the findings of the current section, which may be explored in future work.
-This as an interesting potential development of this idea in future work.
+This is one of the possibly interesting potential developments \todo{stemming} from the findings of the current section, which may be explored in future work.
