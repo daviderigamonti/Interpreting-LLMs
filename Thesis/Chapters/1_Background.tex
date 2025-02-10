@@ -38,13 +38,6 @@ Machine Learning is commonly considered a subfield of Artificial Intelligence, a
 The term `past experience' is often used loosely in this scenario: it is not necessarily tied with information directly perceived by an agent within a specific environment.
 Instead, it commonly denotes the entirety of accumulated data, often referred to as the dataset, which may have been collected heterogeneously and asynchronously, and that is fed to the model in order to learn.
 
-\begin{figure}[t!]
-    \centering
-    \includegraphics[width=\textwidth]{background_ml-para.pdf}
-    \caption{\todo[red]{placeholder image: Machine Learning Paradigms.}}
-    \label{fig:background_ml-paradigm}
-\end{figure}
-
 There exist three main learning paradigms for machine learning (see \cref{fig:background_ml-paradigm}):
 \begin{itemize}
     \item \textbf{Supervised learning}: in supervised learning, the data that we feed to the model is labeled, meaning that each data point is associated to a specific label representing the ground truth.
@@ -61,6 +54,13 @@ The inputs of a reinforcement learning algorithm are represented by the environm
 In this paradigm we are trying to discover the optimal policy to navigate the environment, balancing both the exploration of new states, and the exploitation of the current maximally rewarding actions.
 \end{itemize}
 
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=\textwidth]{background_ml-para.pdf}
+    \caption{Machine learning paradigms.}
+    \label{fig:background_ml-paradigm}
+\end{figure}
+
 \subsection{Neural Networks}
 
 Neural networks are one of the most popular machine learning techniques.
@@ -70,14 +70,14 @@ As \cref{fig:background_nn-arch} shows, a neural network typically consists of a
 
 \begin{figure}[t!]
     \centering
-    \subfloat[Neural Network Architecture.\label{fig:background_nn-arch}]{
+    \subfloat[Neural network architecture.\label{fig:background_nn-arch}]{
         \includegraphics[width=0.8\textwidth]{background_nn-arch.pdf}
     }
     \quad
     \subfloat[Neuron.\label{fig:background_neuron}]{
         \includegraphics[width=0.4\textwidth]{background_neuron.pdf}
     }
-    \caption{\todo[red]{placeholder image: Neural Network Architecture + Neuron.}}
+    \caption{Architectural overview of a neural network and its base component: the neuron.}
     \label{fig:background_nn-arch_neuron}
 \end{figure}
 
@@ -97,23 +97,23 @@ The `deep' adjective refers to the high number of hidden layers that compose the
 
 The most important property obtained through the dimensional scale-up is the hierarchical feature extraction capability, which consists in obtaining rich condensed representations that follow a semantic hierarchy from the latent spaces defined by the network's layer projections.
 
-\begin{figure}[t!]
-    \centering
-    \subfloat[Classic Machine Learning.\label{fig:background_fex}]{
-        \raisebox{2.65em}{\includegraphics[width=0.46\textwidth]{background_fex.pdf}}
-    }
-    \quad
-    \subfloat[Deep Learning.\label{fig:background_deep-fex}]{
-        \includegraphics[width=0.46\textwidth]{background_deep-fex.pdf}
-    }
-    \caption{\todo[red]{placeholder image: Deep Learning Hierarchical Feature Extraction.}}
-    \label{fig:background_fex_deep-fex}
-\end{figure}
-
 This is not a property that is exclusive to deep architectures, even classic neural networks present the same hierarchical feature patterns.
 However, the sheer scale of deep neural networks makes the exploitation of these condensed representations a viable option to build an artificial feature base that has many upsides with respect to human-defined features.
 For instance, we may require expert knowledge in order to craft an appropriate dataset containing meaningful features, while this would be done automatically in a deep learning scenario.
 \Cref{fig:background_fex_deep-fex} illustrates the difference of approach between these two paradigms, focusing on the topic of feature extraction.
+
+\begin{figure}[t!]
+    \centering
+    \subfloat[Classical machine learning framework.\label{fig:background_fex}]{
+        \raisebox{2.65em}{\includegraphics[width=0.46\textwidth]{background_fex.pdf}}
+    }
+    \quad
+    \subfloat[Deep learning framework.\label{fig:background_deep-fex}]{
+        \includegraphics[width=0.46\textwidth]{background_deep-fex.pdf}
+    }
+    \caption{Feature extraction operation for classical machine learning and deep learning frameworks.}
+    \label{fig:background_fex_deep-fex}
+\end{figure}
 
 The main drawback of the deep learning approach comes from the fact that learned features are not directly human-understandable, as they are the result of mathematical optimization.
 Consequently, the process of explaining a model's prediction is not as straightforward as with classical machine learning techniques.
@@ -131,14 +131,14 @@ In practice, each RNN module is fed the inputs at the current time instant and i
 
 \begin{figure}[t!]
     \centering
-    \subfloat[Recurrent Neural Networks Architecture.\label{fig:background_rnn}]{
+    \subfloat[Recurrent neural network module with unrolling.\label{fig:background_rnn}]{
         \includegraphics[width=0.95\textwidth]{background_rnn.pdf}
     }
     \quad
-    \subfloat[LSTMs.\label{fig:background_lstm}]{
+    \subfloat[LSTM module internal architecture.\label{fig:background_lstm}]{
         \includegraphics[width=0.8\textwidth]{background_lstm.pdf}
     }
-    \caption{\todo[red]{placeholder image: Recurrent Neural Networks Architectures + LSTMs.}}
+    \caption{Basic modules from recurrent architectures.}
     \label{fig:background_rnn_lstm}
 \end{figure}
 
@@ -171,7 +171,7 @@ In fact, Markov models are a broader categorization of stochastic models charact
 \begin{figure}[t!]
     \centering
     \includegraphics[width=0.8\textwidth]{background_markov.pdf}
-    \caption{\todo[red]{placeholder image: Word Embedding Space Visualization.}}
+    \caption{Graph representation of a Markov Model expressing a sentence about the weather.}
     \label{fig:background_markov}
 \end{figure}
 
@@ -197,13 +197,6 @@ One of the most relevant and groundbreaking developments in the field of NLP was
 Word embeddings came as a straightforward application of deep learning concepts and approaches to the world of NLP.
 Their introduction not only determined an improvement in most text-based applications, but also motivated a shift in text representation techniques, incentivizing a word-centric approach rather than focusing on documents.
 
-\begin{figure}[t!]
-    \centering
-    \includegraphics[width=0.5\textwidth]{background_embeddings.pdf}
-    \caption{\todo[red]{placeholder image: Word Embedding Space Visualization.}}
-    \label{fig:background_embeddings}
-\end{figure}
-
 The main appeal of word embeddings is their dimensionality reduction effect, since the original vocabulary representation (bag of words) suffers from the curse of dimensionality to a great extent.
 The `curse of dimensionality' commonly refers to feature spaces that present numerous dimensions in conjunction with high data sparsity.
 In a feature space affected by the curse of dimensionality, such as the vocabulary space, we can observe the fact that certain similarity measures and distances between data points (such as the Euclidean distance) almost lose meaning due to the predominance of irrelevant dimensions, which suppress comparisons along the few meaningful dimensions.
@@ -217,24 +210,18 @@ Word embeddings are generally created by extrapolating the intermediate latent r
 In practice, word embeddings are mappings from the vocabulary space to an embedding space which features a reduced number of dense dimensions devoid of any human-understandable meaning, characteristic of deep learning methodologies.
 A $3$-dimensional approximation of the embedding spatial structure can be observed in \cref{fig:background_embeddings}.
 
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{background_embeddings.pdf}
+    \caption{Embedding space visualization for a Word2Vec model. The dimensionality of the space is reduced to $3$ \todo{through} the t-SNE algorithm and the overall number of shown embeddings is limited. Embeddings belonging to certain semantic fields (e.g. animals, colors,\dots) are colored in order to highlight their proximity in the space.}
+    \label{fig:background_embeddings}
+\end{figure}
+
 The concept of using distributed word representations was anticipated by \citet{bengio2000} with the Neural Network Language Model (NNLM) in the early 2000s.
 The first real successful implementation of word embeddings was Word2Vec by \citet{mikolov2013}, greatly inspired by Bengio's previous work.
 The main purpose of Word2Vec is to create word embeddings, it is composed by a single hidden layer and is trained discriminatively by using both positive and negative examples.
 
 \blockquote[J.R. Firth]{You Shall Know a Word by the Company It Keeps}
-
-\begin{figure}[t!]
-    \centering
-    \subfloat[CBoW.\label{fig:background_word2vec-cbow}]{
-        \includegraphics[width=\textwidth]{background_word2vec-cbow.pdf}
-    }
-    \quad
-    \subfloat[Skip-gram.\label{fig:background_word2vec-skipg}]{
-        \includegraphics[width=0.9\textwidth]{background_word2vec-skipg.pdf}
-    }
-    \caption{\todo[red]{placeholder image: Skip-gram and CBoW Word2Vec.}}
-    \label{fig:background_word2vec-cbow_word2vec-skipg}
-\end{figure}
 
 Mikolov's original work introduces two primary training paradigms for Word2Vec (see \cref{fig:background_word2vec-cbow_word2vec-skipg}):
 \begin{itemize}
@@ -245,6 +232,19 @@ Single context words are predicted one at a time, modeling a 1-to-1 prediction (
 \end{itemize}
 The results are generally comparable between the two techniques.
 The key aspect is that the full context of each word is integrated into the word representation itself.
+
+\begin{figure}[t!]
+    \centering
+    \subfloat[Continuous Bag of Words (CBoW) many-to-1 prediction.\label{fig:background_word2vec-cbow}]{
+        \includegraphics[width=\textwidth]{background_word2vec-cbow.pdf}
+    }
+    \quad
+    \subfloat[Skip-gram 1-to-1 prediction.\label{fig:background_word2vec-skipg}]{
+        \includegraphics[width=0.9\textwidth]{background_word2vec-skipg.pdf}
+    }
+    \caption{Word2Vec training paradigms.}
+    \label{fig:background_word2vec-cbow_word2vec-skipg}
+\end{figure}
 
 \subsubsection*{Word Embeddings Semantic Properties}
 
@@ -333,19 +333,6 @@ The original transformer architecture mentioned in ``Attention Is All You Need''
 \end{equation}
 Where $Q$, $K$ and $V$ represent the \emph{query}, \emph{key} and \emph{value} components of attention which are obtained by multiplying the hidden state vectors to their respective projection matrices $W_Q$, $W_K$ and $W_V$, which are composed of learnable model parameters.
 
-\begin{figure}[!htp]
-    \centering
-    \subfloat[Encoder-Decoder.\label{fig:background_enc-dec-attention}]{
-        \includegraphics[width=\textwidth]{background_enc-dec-attention.pdf}
-    }
-    \quad
-    \subfloat[Self.\label{fig:background_self-attention}]{
-        \includegraphics[width=\textwidth]{background_self-attention.pdf}
-    }
-    \caption{\todo[red]{placeholder image: Attention Blocks (Encoder-Decoder / Self).}}
-    \label{fig:background_enc-dec-attention_self-attention}
-\end{figure}
-
 The transformer architecture implements three different types of attention:
 \begin{itemize}
     \item An \textbf{encoder-decoder attention} (or \textbf{cross-attention}), which is found inside the decoder block, and attends to the encoder blocks' hidden states using its current state as the \emph{query} (\cref{fig:background_enc-dec-attention}).
@@ -368,6 +355,19 @@ The masked self-attention formula can be summarized as follows:
 \end{equation}
 \todo[cyan]{check M definition equation}
 \end{itemize}
+
+\begin{figure}[!htp]
+    \centering
+    \subfloat[Encoder-decoder attention computation.\label{fig:background_enc-dec-attention}]{
+        \includegraphics[width=\textwidth]{background_enc-dec-attention.pdf}
+    }
+    \quad
+    \subfloat[Self-attention computation.\label{fig:background_self-attention}]{
+        \includegraphics[width=\textwidth]{background_self-attention.pdf}
+    }
+    \caption{Computational overview of the two main types of attentions found in the original transformer architecture~\cite{vaswani2017}.}
+    \label{fig:background_enc-dec-attention_self-attention}
+\end{figure}
 
 In reality, transformers use a more refined attention implementation called \textbf{multi-head attention}, which can be applied in all previously identified scenarios.
 Multi-head attention is a novelty introduced in the ``Attention Is All You Need''~\cite{vaswani2017} paper, and it consists in replicating the attention structure multiple times, thus obtaining multiple representation spaces for each attention layer.
@@ -430,17 +430,17 @@ Over time, numerous variations and improvements on the base architecture have em
 We will primarily focus on the Llama 2~\cite{touvron2023} and Llama 3~\cite{dubey2024} (hereafter referred to simply as Llama) models, developed by \href{https://ai.meta.com/}{Meta AI} in 2023 and 2024 respectively.
 Other minor models may also be taken into consideration, although without particular emphasis on their architecture.
 
-\begin{figure}[t!]
-    \centering
-    \includegraphics[width=0.4\textwidth]{background_llama-arch.pdf}
-    \caption{\todo[red]{placeholder image: Decoder-only Architecture Llama https://github.com/hkproj/pytorch-llama-notes.}}
-    \label{fig:background_llama-arch}
-\end{figure}
-
 \subsubsection*{Decoder-only Models}
 
 As it is possible to observe from Llama's architectures (\cref{fig:background_llama-arch}), the first main novelty in the new state-of-the-art models is the complete removal of the encoder from the architecture.
 These models are often called \textbf{`decoder-only'}, \textbf{`autoregressive'}, \textbf{`causal'} or \textbf{`GPT-like'} from the Generative Pre-trained Transformer (GPT) architecture~\cite{radford2018,radford2019,brown2020,openai2023} that popularized the use of transformer models without the decoder, although the first documented use of a `decoder-only' architecture can be ascribed to this 2018 paper by~\citet{liu2018}.
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=0.4\textwidth]{background_llama-arch.pdf}
+    \caption{Basic architectural structure for the Llama family of transformer models~\cite{touvron2023,dubey2024}.}
+    \label{fig:background_llama-arch}
+\end{figure}
 
 The major improvement of autoregressive architectures consists in the massive reduction in parameters, which enables more flexibility during training, besides the upsides tied to scalability and efficiency.
 In addition, removing the encoder also negates possible information redundancy between the two components, empirically improving the optimization procedure~\citet{liu2018}.
@@ -494,7 +494,7 @@ However, newer architectures have begun to incorporate Gated Linear Units (GLUs)
 \begin{figure}[t!]
     \centering
     \includegraphics[width=0.35\textwidth]{background_ffnn-glu.pdf}
-    \caption{\todo[red]{placeholder image: GLU Feedforward Architecture.}}
+    \caption{Overview of the feedforward neural network (FFNN) block implemented following the SwiGLU~\cite{shazeer2020} architecture.}
     \label{fig:background_ffnn-glu}
 \end{figure}
 

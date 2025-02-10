@@ -27,7 +27,7 @@ Envisioning MI as being characterized by a general bottom-up approach for interp
 
 \subsubsection*{Overview on transformer interpretability}
 
-Another possible taxonomy for interpretability techniques, more focused on their nature rather than their use, is presented by~\citet{ferrando2024}.
+Another possible taxonomy for interpretability techniques, more focused on their nature rather than their use, is presented by~\citet{ferrando2024} as shown in \cref{fig:related_ferrando-tax}..
 They identify two main classes of interpretability approaches: \textbf{behavior localization} and \textbf{information decoding}.
 In the next sections we will follow their insightful classification to provide a synthetic analysis of the state of the art, with a specific focus on a restricted number of techniques that are especially relevant for the purpose of this work.
 
@@ -146,14 +146,14 @@ The contribution of logit lens was groundbreaking and, despite some acknowledged
 Some significant advancements include the introduction of translators, which act as probing classifiers to enhance logit lens' predictions by applying either linear mappings~\cite{din2024} or affine transformations~\cite{belrose2023a}.
 Additionally, attention lens~\cite{sakarvadia2023} applies the concepts of logit lens and translators to the outputs of attention heads, while future lens~\cite{pal2023} extends logit lens predictions to also include the next most probable tokens by exploiting causal intervention methods.
 
-Another crucial contribution, inspired by future lens, is the \emph{patchscopes} framework~\cite{ghandeharioun2024}, which aims to generalize all prior interpretability methods based on vocabulary space decoding and causal interventions.
+\cref{fig:related_patchscopes} shows another crucial contribution: the \emph{Patchscopes} framework~\cite{ghandeharioun2024} which, inspired by future lens, aims to generalize all prior interpretability methods based on vocabulary space decoding and causal interventions.
 Other significant approaches include the direct decoding of model weights~\cite{dar2023}, potentially using singular value decomposition techniques to factorize the weight matrices~\cite{millidge2022}, and logit spectroscopy~\cite{cancedda2024}, which employs a spectral analysis of the residual stream and parameter matrices interacting with it.
 This last method aims to identify and analyze specific parts of the hidden representation spectrum that are most likely to be overlooked by the classic logit lens.
 
 \begin{figure}[t!]
     \centering
     \includegraphics[width=0.8\textwidth]{related_patchscopes.pdf}
-    \caption{\todo[red]{placeholder caption: Patchscopes Visualization.}}
+    \caption{Visualization of the causal intervention process in the Patchscopes framework~\cite{ghandeharioun2024}.}
     \label{fig:related_patchscopes}
 \end{figure}
 
@@ -169,7 +169,7 @@ Additionally, it also provides useful information that can aid the interpretatio
 \begin{figure}[t!]
     \centering
     \includegraphics[width=0.9\textwidth]{related_lm-tt.pdf}
-    \caption{\todo[red]{placeholder caption: Visualization of That One Paper (LM-TT).}}
+    \caption{LM-TT application interface~\cite{tufanov2024}.}
     \label{fig:related_lm-tt}
 \end{figure}
 
