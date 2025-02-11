@@ -106,6 +106,7 @@
 \usepackage{multirow}
 \usepackage{hhline}
 \usepackage{CJKutf8}
+\usepackage{microtype}
 
 % TODO: REMOVE after draft
 \usepackage{soul}
@@ -147,11 +148,11 @@
 \frontmatter % Use roman page numbering style (i, ii, iii, iv...) for the preamble pages
 
 \puttitle{
-	title=Title, % Title of the thesis
+	title={Interpreting Large Language \linebreak Models Through the Lens of \linebreak Embedding-Oriented \mbox{Visualizations}: \linebreak Markov Models, Sankey Diagrams and Comparative Approaches}, % Title of the thesis
 	name=Davide Rigamonti, % Author Name and Surname
-	course=Computer Science and Engineering - Ingegneria Informatica, % Study Programme (in Italian)
-	ID  = 103152,  % Student ID number (numero di matricola)
-	advisor= Prof. Mark Carman, % Supervisor name
+	course=Computer Science and Engineering \\ Ingegneria Informatica, % Study Programme (in Italian)
+	ID=103152,  % Student ID number (numero di matricola)
+	advisor=Prof. Mark Carman, % Supervisor name
 	coadvisor={Nicolò Brunello, Vincenzo Scotti}, % Co-Supervisor name, remove this line if there is none
 	academicyear={2024-25},  % Academic Year
 } % These info will be put into your Title page 
@@ -164,30 +165,32 @@
 
 % ABSTRACT IN ENGLISH
 \chapter*{Abstract} 
-Here goes the Abstract in English of your thesis followed by a list of keywords.
-The Abstract is a concise summary of the content of the thesis (single page of text)
-and a guide to the most important contributions included in your thesis.
-The Abstract is the very last thing you write.
-It should be a self-contained text and should be clear to someone who hasn't (yet) read the whole manuscript.
-The Abstract should contain the answers to the main scientific questions that have been addressed in your thesis.
-It needs to summarize the adopted motivations and the adopted methodological approach as well as the findings of your work and their relevance and impact.
-The Abstract is the part appearing in the record of your thesis inside POLITesi,
-the Digital Archive of PhD and Master Theses (Laurea Magistrale) of Politecnico di Milano.
-The Abstract will be followed by a list of four to six keywords.
-Keywords are a tool to help indexers and search engines to find relevant documents.
-To be relevant and effective, keywords must be chosen carefully.
-They should represent the content of your work and be specific to your field or sub-field.
-Keywords may be a single word or two to four words. .
+In recent years, the progress and widespread usage of Large Language Models (LLMs) has steadily increased.
+Understanding the internal mechanisms of these complex and opaque engineering products poses an extremely relevant and critical challenge in the field of Natural Language Processing (NLP).
+The NLP interpretability subfield aims to provide insights into the inner workings of language models (LMs).
+This thesis presents InTraVisTo, an interactive visualization tool designed to provide an immediate and intuitive perspective on the generation process of LLMs by decoding their internal states, normally incomprehensible by humans, using tokens from their vocabularies.
+InTraVisTo is implemented as an interactive framework that enables tracking of the flow of information through residual connections between model components, and it allows users to directly sway the model's predictions by modifying internal representations.
+Additionally, this research investigates whether recent LLMs retain linear properties in their embedding spaces through the established semantic analysis framework of word analogies, finding that current state-of-the art LLMs are capable of encoding a surprising amount of semantic relationships within their embeddings.
+Furthermore, this work examines the feasibility of obtaining first-order predictions by concatenating input and output embeddings in large-scale models, testing whether LLMs inherently approximate a Markov model structure.
+Our findings demonstrate that first-order models (FOMs) extracted from LLMs exhibit a clear bias towards modeling a Markovian behavior, despite significant differences in accuracy across model architectures.
+Overall, this thesis confirms previous findings on new architectures and introduces a robust tool aimed at making LLMs more transparent and accessible to researchers in the NLP field.
 \\
 \\
-\textbf{Keywords:} here, the keywords, of your thesis % Keywords
+\textbf{Keywords:} AI, NLP, Interpretabilty, Word Embedding, LLM
 
 % ABSTRACT IN ITALIAN
 \chapter*{Abstract in lingua italiana}
-Qui va l'Abstract in lingua italiana della tesi seguito dalla lista di parole chiave.
+Negli ultimi anni, lo sviluppo e la diffusione su larga scala dei Large Language Models (LLMs) hanno registrato un costante incremento.
+Comprendere i meccanismi interni di simili prodotti ingegneristici di natura complessa e opaca costituisce una sfida di rilevanza e importanza critica nel campo dell'Elaborazione del Linguaggio Naturale (NLP), di conseguenza il sottocampo dell'interpretabilità nell'ambito dell'NLP si propone di fornire una comprensione approfondita del funzionamento interno dei modelli linguistici (LMs).
+In questa tesi si presenta InTraVisTo, uno strumento di visualizzazione interattiva concepito per offrire una prospettiva intuitiva ed immediata sul processo generativo svolto dagli LLM mediante la decodifica dei loro stati interni, altrimenti umanamente incomprensibili, attraverso l'impiego dei token presenti nel relativo vocabolario.
+InTraVisTo è implementato in qualità di framework di natura interattiva, che consente di monitorare il flusso informativo attraverso connessioni residue tra i vari componenti del modello e permette agli utenti di intervenire influenzando direttamente le previsioni modificando le rappresentazioni interne appartenenti al modello.
+Inoltre, in questa ricerca vengono analizzati gli LLM più recenti al fine di verificare se conservino le proprietà lineari all'interno dei rispettivi spazi di embedding, adoperando il consolidato framework di analisi semantica basato sulle analogie tra parole, evidenziando come i modelli di ultima generazione siano capaci di codificare un sorprendente numero di relazioni semantiche nei loro embedding.
+In aggiunta, questo lavoro esamina le possibilità di ottenere previsioni di primo ordine attraverso la concatenazione degli embedding di input e output su modelli di larga scala, verificando se gli LLM approssimino intrinsecamente la struttura di un modello di Markov.
+I risultati ottenuti evidenziano che i modelli di primo ordine (FOM) derivati dagli LLM manifestano una chiara propensione verso un comportamento Markoviano, sebbene emergano significative differenze di accuratezza in funzione delle architetture adottate.
+In sintesi, la presente tesi conferma risultati storici su nuove architetture e introduce un robusto strumento finalizzato a rendere gli LLM maggiormente trasparenti e accessibili alla comunità di ricerca nel campo dell'NLP.
 \\
 \\
-\textbf{Parole chiave:} qui, vanno, le parole chiave, della tesi % Keywords (italian)
+\textbf{Parole chiave:} AI, NLP, Interpretabilità, Word Embedding, LLM
 
 %----------------------------------------------------------------------------
 %	LIST OF CONTENTS/FIGURES/TABLES/SYMBOLS
@@ -232,7 +235,7 @@ Qui va l'Abstract in lingua italiana della tesi seguito dalla lista di parole ch
 \chapter{Experiments}\label{ch:experiments}
 \input{Chapters/5_Experiments.tex}
 
-\chapter{Conclusions}\label{ch:conclusions}
+\chapter{Conclusions and future developments}\label{ch:conclusions}
 \input{Chapters/6_Conclusions.tex}
 
 %-------------------------------------------------------------------------

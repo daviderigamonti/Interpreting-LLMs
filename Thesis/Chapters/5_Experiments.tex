@@ -382,7 +382,7 @@ From the results obtained in \cref{sec:exp_intravisto_exp4}, we show how specifi
 We also utilize the injection mechanism to investigate how anomalies in the generation process of models affect their outputs, uncovering common patterns and speculating on the probabilistic significance of internal states \todo{in function of} the generated tokens. 
 By proposing a technique for performing experiments using InTraVisTo in \cref{sssec:exp_intravisto_exp4_expset}, we also wish to create a workflow that acts as a guideline to users, in order to streamline the process of research and \todo{generalizability of its findings}.
 
-\section{Embedding Analysis}
+\section{Embedding Analysis}\label{sec:exp_emb}
 
 Following the path laid out in \cref{sec:rq_embeddings,sec:method_embeddings}, the experiments performed in this section will gravitate around the possibility of identifying linear properties modeling semantic, linguistic and factual relationships within the input and output embedding spaces of LLMs.
 
@@ -738,7 +738,7 @@ This conjecture is furtherly reinforced by the fact that the performance gain ov
     \label{fig:exp_emb_2_E}
 \end{figure}
 
-\subsection{Discussion}
+\subsection{Discussion}\label{ssec:exp_emb_discussion}
 
 In the end, we can affirm that LLMs are able to retain a surprising amount of semantic relationships inside their embeddings, despite the fact that sub-word tokenization actively works against the accumulation of meaning for token representations.
 Their performance on the selected tasks is \todo{on par}, if not greater than less recent models used as baselines.
@@ -1167,7 +1167,7 @@ Mistral's \todo{impact is amplified} by the fact that the KL divergence between 
 This underlines the apparent affinity that the FOM based on Mistral displays towards self-regression,
 Conversely, \cref{table:exp_fom_phi-kl} shows the \todo{immense} impact on KL divergence that RMS normalization has on the FOM based \todo{specifically} on Phi 3.5, resulting in a significant decrease of performance across all comparisons that include the FOM and reflecting the results of \todo{the} previous experiment on perplexity.
 
-\subsection{Discussion}
+\subsection{Discussion}\label{ssec:exp_fom_discussion}
 
 Overall, the feasibility of using a FOM as a Markov model approximation seems to be promising, although it might vary according to the specific choice of LLM, as some appear to be \todo{more predisposed} than others.
 Nevertheless, every analyzed FOM seems to exhibit a slight bias towards trying to approximate an actual unigram Markov model rather than the identity matrix.
