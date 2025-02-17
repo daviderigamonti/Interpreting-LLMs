@@ -12,19 +12,19 @@ Particular focus will be placed on the observation and interpretation of the mod
 
 More specifically, we propose \textbf{InTraVisTo}: an interactive tool designed to support and aid machine learning researchers in hypothesis formulation by offering a unique perspective on the internal representations of large language models.
 InTraVisTo fulfills the function of focal point for this work, as we also delve in additional experiments centered around the embedding-based interpretation of hidden states performed by the tool.
-A more thorough breakdown of the research questions that guide this investigation will be provided in \cref{ch:research_questions}.
+A more thorough breakdown of the research questions that guide this investigation will be provided in~\cref{ch:research_questions}.
 
 \subsubsection*{Outline}
 
 In this introductory chapter (\cref{ch:background}) we provide an overview of the current work in its entirety.
 Additionally, we analyze the background and context of both NLP and machine learning techniques that will be relevant for this work, providing a common knowledge base by briefly covering all the pertinent subjects.
-\Cref{ch:related_works} reviews the current state of the art in NLP interpretability, mentioning major approaches and techniques with a particular focus on relevant topics treated in subsequent chapters.
+\cref{ch:related_works} reviews the current state of the art in NLP interpretability, mentioning major approaches and techniques with a particular focus on relevant topics treated in subsequent chapters.
 
-The main discussion points of this work are developed across \cref{ch:research_questions,ch:methodology,ch:experiments}.
-\Cref{ch:research_questions} provides an overview of the core research questions aimed at accomplishing the previously defined overarching goals.
-Whereas, \cref{ch:methodology} offers an extensive and detailed outline of the mathematical tools utilized by \cref{ch:experiments} to support its experimental approach.
-Meanwhile, \cref{ch:experiments} tackles the practical steps taken in order to verify question and conjectures formulated in \cref{ch:research_questions}, offering useful insight for the setup and execution procedures, while providing targeted explanations for the obtained outcomes.
-Finally, \cref{ch:conclusions} briefly summarizes the conclusions gathered from \cref{ch:experiments}, drawing connections between them and the original questions presented in \cref{ch:research_questions} while bringing the discussion to a close. 
+The main discussion points of this work are developed across~\cref{ch:research_questions,ch:methodology,ch:experiments}.
+\cref{ch:research_questions} provides an overview of the core research questions aimed at accomplishing the previously defined overarching goals.
+Whereas,~\cref{ch:methodology} offers an extensive and detailed outline of the mathematical tools utilized by~\cref{ch:experiments} to support its experimental approach.
+Meanwhile,~\cref{ch:experiments} tackles the practical steps taken in order to verify question and conjectures formulated in~\cref{ch:research_questions}, offering useful insight for the setup and execution procedures, while providing targeted explanations for the obtained outcomes.
+Finally,~\cref{ch:conclusions} briefly summarizes the conclusions gathered from~\cref{ch:experiments}, drawing connections between them and the original questions presented in~\cref{ch:research_questions} while bringing the discussion to a close. 
 
 % Addendum to introduce background part of the chapter
 \vspace{1.5em}
@@ -38,7 +38,7 @@ Machine Learning is commonly considered a subfield of Artificial Intelligence, a
 The term `past experience' is often used loosely in this scenario: it is not necessarily tied with information directly perceived by an agent within a specific environment.
 Instead, it commonly denotes the entirety of accumulated data, often referred to as the dataset, which may have been collected heterogeneously and asynchronously, and that is fed to the model in order to learn.
 
-There exist three main learning paradigms for machine learning (see \cref{fig:background_ml-paradigm}):
+There exist three main learning paradigms for machine learning (see~\cref{fig:background_ml-paradigm}):
 \begin{itemize}
     \item \textbf{Supervised learning}: in supervised learning, the data that we feed to the model is labeled, meaning that each data point is associated to a specific label representing the ground truth.
 The model receives a sample from the dataset as input, eliciting an output that fulfills the role of the model's prediction.
@@ -66,7 +66,7 @@ In this paradigm we are trying to discover the optimal policy to navigate the en
 Neural networks are one of the most popular machine learning techniques.
 They are heavily inspired by the structure of the human brain, which is generally considered to be constituted by multiple neurons connected by synapses.
 Classical neural networks are typically implemented following a layer-based architecture, where a layer consists of an array of neurons connected to all other neurons belonging to both the previous and next layers.
-As \cref{fig:background_nn-arch} shows, a neural network typically consists of an input layer (which collects outside information at its inputs), an output layer (which aggregates the outputs of its neurons into the final network prediction), and any number of intermediate layers in between.
+As~\cref{fig:background_nn-arch} shows, a neural network typically consists of an input layer (which collects outside information at its inputs), an output layer (which aggregates the outputs of its neurons into the final network prediction), and any number of intermediate layers in between.
 
 \begin{figure}[t!]
     \centering
@@ -81,7 +81,7 @@ As \cref{fig:background_nn-arch} shows, a neural network typically consists of a
     \label{fig:background_nn-arch_neuron}
 \end{figure}
 
-Neurons are generally unidirectional and perform a linear combination of their inputs, each one scaled by the weight associated to its synapse, as visualized in \cref{fig:background_neuron}.
+Neurons are generally unidirectional and perform a linear combination of their inputs, each one scaled by the weight associated to its synapse, as visualized in~\cref{fig:background_neuron}.
 Before transmitting their output, they also apply an activation function which in most cases consists of a `S-shaped' nonlinear function.
 This choice is made to prevent the network from degenerating into a single linear transformation due to the combination properties of linear operations.
 Thus, nonlinearities directly affect the expressive power of neural networks and are a vital component to guarantee their success, even on complex problems that require elaborate decision boundaries.
@@ -100,7 +100,7 @@ The most important property obtained through the dimensional scale-up is the hie
 This is not a property that is exclusive to deep architectures, even classic neural networks present the same hierarchical feature patterns.
 However, the sheer scale of deep neural networks makes the exploitation of these condensed representations a viable option to build an artificial feature base that has many upsides with respect to human-defined features.
 For instance, we may require expert knowledge in order to craft an appropriate dataset containing meaningful features, while this would be done automatically in a deep learning scenario.
-\Cref{fig:background_fex_deep-fex} illustrates the difference of approach between these two paradigms, focusing on the topic of feature extraction.
+\cref{fig:background_fex_deep-fex} illustrates the difference of approach between these two paradigms, focusing on the topic of feature extraction.
 
 \begin{figure}[t!]
     \centering
@@ -127,7 +127,7 @@ Another type of deep architecture relevant for this work is the Recurrent Neural
 Recurrent connections enable RNN models to establish a distributed hidden state that acts as a memory, much like a flip-flop gate array in electronics.
 
 In practice, each RNN module is fed the inputs at the current time instant and its own outputs at the previous time instant, making it suitable to process sequences and other time-based data.
-\Cref{fig:background_rnn} shows the unrolling process of a RNN, visualizing how the recurrent connection contributes to the distributed hidden state at each time instant.
+\cref{fig:background_rnn} shows the unrolling process of a RNN, visualizing how the recurrent connection contributes to the distributed hidden state at each time instant.
 
 \begin{figure}[t!]
     \centering
@@ -147,7 +147,7 @@ LSTMs represent a direct improvement over RNNs by addressing the vanishing gradi
 
 The significant vanishing gradient in RNNs is a direct consequence of the co-occurrence between activation functions without a prominent zero-valued region and the backpropagation through time process (being the backpropagation equivalent of a network using recurrent connections).
 This results in drastically small gradient values which can limit the model's context window and make the training process slow and unreliable.
-LSTMs solve this issue by applying specialized gating functions (highlighted in \cref{fig:background_lstm}) that allow the model to decide what information to remember, forget and pass along into what is called the constant error carousel.
+LSTMs solve this issue by applying specialized gating functions (highlighted in~\cref{fig:background_lstm}) that allow the model to decide what information to remember, forget and pass along into what is called the constant error carousel.
 
 \section{Natural Language Processing}
 
@@ -165,7 +165,7 @@ During the first AI winter of the 1970s and 1980s, the focus of NLP shifted towa
 \subsubsection*{Markov Models}
 
 Exactly in these years the use of Markov models began to rise in popularity, despite having been theorized decades earlier~\cite{shannon1948}.
-As shown in \cref{fig:background_markov}, Markov models can be represented by graphs that describe sequences of events (represented by states) occurring with certain probabilities (represented by transitions). 
+As shown in~\cref{fig:background_markov}, Markov models can be represented by graphs that describe sequences of events (represented by states) occurring with certain probabilities (represented by transitions). 
 In fact, Markov models are a broader categorization of stochastic models characterized by the Markov property, which states that transitions to future states depend solely on the current state, without considering prior states or transitions.
 
 \begin{figure}[t!]
@@ -208,7 +208,7 @@ In fact, another appealing property of word embeddings is their ability to captu
 Word embeddings are generally created by extrapolating the intermediate latent representations of a neural network solving a specific task, obtaining a continuous vector space for words to reside.
 
 In practice, word embeddings are mappings from the vocabulary space to an embedding space which features a reduced number of dense dimensions devoid of any human-understandable meaning, characteristic of deep learning methodologies.
-A $3$-dimensional approximation of the embedding spatial structure can be observed in \cref{fig:background_embeddings}.
+A $3$-dimensional approximation of the embedding spatial structure can be observed in~\cref{fig:background_embeddings}.
 
 \begin{figure}[t!]
     \centering
@@ -223,7 +223,7 @@ The main purpose of Word2Vec is to create word embeddings, it is composed by a s
 
 \blockquote[J.R. Firth]{You Shall Know a Word by the Company It Keeps}
 
-Mikolov's original work introduces two primary training paradigms for Word2Vec (see \cref{fig:background_word2vec-cbow_word2vec-skipg}):
+Mikolov's original work introduces two primary training paradigms for Word2Vec (see~\cref{fig:background_word2vec-cbow_word2vec-skipg}):
 \begin{itemize}
     \item \textbf{Continuous Bag of Words (CBoW)}: predict a target word given its context.
 The context is given as a symmetric window containing all terms occurring around the target term, modeling a many-to-1 prediction (\cref{fig:background_word2vec-cbow}).
@@ -255,7 +255,7 @@ However, in the case of word embeddings, these arithmetic properties have been r
 In particular, the semantic meaningfulness of certain arithmetic and geometric transformations applied to word embeddings was highlighted by Mikolov himself in the Word2Vec paper~\cite{mikolov2013}.
 These discoveries ranged from finding similarities in embeddings of words that manifested syntactic regularities, to the resolution of complete double-word analogies located in common semantic fields.
 One of the most famous examples presented in~\cite{mikolov2013} is: \texttt{emb(`King') - emb(`Man') + emb(`Woman') $\simeq$ emb(`Queen')}, which models both the relationships of `gender' and `royalty'.
-As shown in \cref{fig:background_emb-arithmetic}, other notable analogies include country-capital, family relation, and verb tenses.
+As shown in~\cref{fig:background_emb-arithmetic}, other notable analogies include country-capital, family relation, and verb tenses.
 In principle, any kind of semantic relationship could potentially be modeled by word embeddings, given sufficient support in the training dataset.
 
 \begin{figure}[t!]
@@ -277,7 +277,7 @@ Although they were initially conceived for textual sequential inputs, in recent 
 This architecture has proven to be flexible, efficient and parallelizable, in contrast with previous popular choices for sequence learning problems such as RNNs and LSTMs.
 
 The first transformer architecture was introduced by~\citet{vaswani2017} in the seminal 2017 paper ``Attention Is All You Need''.
-This architecture, shown in \cref{fig:background_trans-enc-dec}, is of the encoder-decoder type and follows the typical paradigm of sequence-to-sequence (seq2seq) learning, implying the existence of two separate modules (an encoder and a decoder) which work in tandem to elaborate inputs and provide an output.
+This architecture, shown in~\cref{fig:background_trans-enc-dec}, is of the encoder-decoder type and follows the typical paradigm of sequence-to-sequence (seq2seq) learning, implying the existence of two separate modules (an encoder and a decoder) which work in tandem to elaborate inputs and provide an output.
 Both input and output consist of sequential data.
 
 \begin{figure}[t!]
@@ -486,7 +486,7 @@ One peculiar side effect of RMSNorm is the fact it forces the summed inputs into
 The last main change featured in most recent autoregressive transformer architectures concerns the structure of the feed-forward block.
 The base transformer implementation establishes the feed-forward layer as the combination of two linear transformations separated by a non-linear activation function, typically a choice between \emph{ReLU} and \emph{GELU}.
 
-However, newer architectures have begun to incorporate Gated Linear Units (GLUs)~\cite{dauphin2017} implemented using a \emph{Swish} (also called \emph{SiLU}) activation function, this particular architectural combination for the feed-forward block is commonly referred to as \textbf{SwiGLU}~\cite{shazeer2020} and can be observed in \cref{fig:background_ffnn-glu}.
+However, newer architectures have begun to incorporate Gated Linear Units (GLUs)~\cite{dauphin2017} implemented using a \emph{Swish} (also called \emph{SiLU}) activation function, this particular architectural combination for the feed-forward block is commonly referred to as \textbf{SwiGLU}~\cite{shazeer2020} and can be observed in~\cref{fig:background_ffnn-glu}.
 \emph{Swish}~\cite{shazeer2020} is an activation function similar to \emph{ReLU}, characterized by a non-monotonic depression in its zero-region, and is implemented in the following way: $Swish(\gbm{x}) = \gbm{x} \cdot \sigma(\gbm{x})$ where $\sigma(\gbm{x})$ represents the logistic sigmoid function.
 \emph{Swish} was shown to offer marginal improvements over \emph{ReLU} and other similar variations, based on its smoothness and possibility of returning small negative values for inputs close to zero, implying the efficient convergence of non-zero gradients and consequently minimizing the problem of dead neurons (caused by the nullification of gradient).
 

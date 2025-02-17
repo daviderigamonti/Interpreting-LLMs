@@ -27,7 +27,7 @@ Envisioning MI as being characterized by a general bottom-up approach for interp
 
 \subsubsection*{Overview on transformer interpretability}
 
-Another possible taxonomy for interpretability techniques, more focused on their nature rather than their use, is presented by~\citet{ferrando2024} as shown in \cref{fig:related_ferrando-tax}..
+Another possible taxonomy for interpretability techniques, more focused on their nature rather than their use, is presented by~\citet{ferrando2024} as shown in~\cref{fig:related_ferrando-tax}.
 They identify two main classes of interpretability approaches: \textbf{behavior localization} and \textbf{information decoding}.
 In the next sections we will follow their insightful classification to provide a synthetic analysis of the state of the art, with a specific focus on a restricted number of techniques that are especially relevant for the purpose of this work.
 
@@ -90,7 +90,7 @@ Circuits are subsets of model components that can be seen as acting independentl
 Despite their successful application on LMs, circuits were not originally identified with the transformer architecture in mind; in fact, their first application was on vision models~\cite{cammarata2020}.
 Most of the initial work regarding transformer circuits was performed on publications belonging to the `transformer circuits thread'~\cite{elhage2021,olsson2022,elhage2022,bricken2023,elhage2023}, heavily inspired by the preceding vision counterpart~\cite{cammarata2020}.
 
-In particular, `A Mathematical Framework for Transformer Circuits' \cite{elhage2021} can be considered the seminal work that popularized circuit identification in transformer models.
+In particular, `A Mathematical Framework for Transformer Circuits'~\cite{elhage2021} can be considered the seminal work that popularized circuit identification in transformer models.
 In this work, \citet{elhage2021} perform a reverse-engineering analysis on simplified versions of transformer models, leading to the discovery of relevant properties.
 For once, they entirely deconstruct a small attention-only model by keeping the embedding and unembedding layers, while progressively incorporating attention layers.
 The results obtained from this process highlight the tendency of the zero layer transformer to model bigram statistics, while models with added attention layers can interpret more expressive patterns.
@@ -163,7 +163,7 @@ Unfortunately, the maximally-activating input analysis has been criticized for g
 
 \emph{LM Transparency Tool} (LM-TT)~\cite{tufanov2024} is an exceptional toolkit that offers interactive tools for analyzing the internal workings of transformer models.
 LM-TT builds on top of the circuital interpretation of the transformer to visualize the information flow.
-As it is possible to observe from \cref{fig:related_lm-tt}, LM-TT tool focuses on the visualization of the most relevant attention paths leading to the production of an embedding in the internal states of the transformer.
+As it is possible to observe from~\cref{fig:related_lm-tt}, LM-TT tool focuses on the visualization of the most relevant attention paths leading to the production of an embedding in the internal states of the transformer.
 Additionally, it also provides useful information that can aid the interpretation of intermediate representations at varying degrees of granularity.
 
 \begin{figure}[t!]
@@ -178,4 +178,4 @@ However, there are also some fundamental differences in how these tools carry ou
 For example, InTraVisTo includes a unique visualization of the residual flow using a Sankey diagram, which comes with the advantage of providing the user with a complete overview of the influence of all tokens in a single screen.
 Additionally, the evolution of intermediate representations is quantified using the KL divergence measure between intermediate steps, and by applying vocabulary decoding techniques on their difference.
 Lastly, InTraVisTo offers an injection and ablation framework to enable interactive interventions in real time, allowing users to directly affect and observe the model computation.
-These distinctive features offered by InTraVisTo will be examined more in greater detail in \cref{sec:rq_intravisto,sec:method_intravisto,sec:exp_intravisto}.
+These distinctive features offered by InTraVisTo will be examined more in greater detail in~\cref{sec:rq_intravisto,sec:method_intravisto,sec:exp_intravisto}.

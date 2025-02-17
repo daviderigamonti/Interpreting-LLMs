@@ -1,13 +1,13 @@
-This chapter presents the experiments conducted to evaluate the methodology proposed in \cref{ch:methodology} for the reference scenarios described in \cref{ch:research_questions}.
+This chapter presents the experiments conducted to evaluate the methodology proposed in~\cref{ch:methodology} for the reference scenarios described in~\cref{ch:research_questions}.
 The experiments were initially designed to shed light onto some specific aspects of LLM internal state interpretability via vocabulary decoding, although after some interesting findings, more attention was given to the actual initial and final embedding representations in LLMs.
 
-This chapter is organized similarly to \cref{ch:research_questions,ch:methodology}, following the three main research questions defined as a baseline.
+This chapter is organized similarly to~\cref{ch:research_questions,ch:methodology}, following the three main research questions defined as a baseline.
 Each research question contemplates multiple experiments aimed at providing empirical evidence to elicit a deeper understanding of large transformer architectures.
 This understanding is achieved through the perspective of the question at hand and, more generally, with the aid of InTraVisTo.
 Where applicable, experiments include a fixed set of key points to formalize the analysis in a structured way.
 These points include:
 \begin{itemize}
-    \item \textbf{Experimental Setup}: complete description of the experiment performed in reference of the theoretical background provided in \cref{ch:methodology}.
+    \item \textbf{Experimental Setup}: complete description of the experiment performed in reference of the theoretical background provided in~\cref{ch:methodology}.
 Parameter combinations, hardware specifications and resources employed may also be mentioned in the setup description.
     \item \textbf{Dataset}: summary of data and information utilized for the experiment, \todo{either} for training models or as direct testing material.
     \item \textbf{Models}: list of models, along with brief \todo{specifics}, that have been utilized to perform the experiment or have been employed for auxiliary tasks. 
@@ -18,7 +18,7 @@ Furthermore, each research question has a final discussion section, which is aim
 
 \section{Transformer Visualization}\label{sec:exp_intravisto}
 
-As anticipated in \cref{sec:rq_intravisto} and explored in \cref{sec:method_intravisto}, the experiments tied to this research question are centered around the InTraVisTo tool.
+As anticipated in~\cref{sec:rq_intravisto} and explored in~\cref{sec:method_intravisto}, the experiments tied to this research question are centered around the InTraVisTo tool.
 The first points (\cref{sec:exp_intravisto_exp1,sec:exp_intravisto_exp2,sec:exp_intravisto_exp3}) within this section provide an exhaustive overview of the interface, diving into the technical aspects and explaining the role of components that are present in the application.
 Consequently, these points do not present the experimental structure defined in the introductory section of this chapter.
 Whereas, the last point (\cref{sec:exp_intravisto_exp4}) is dedicated to the exploration of the proposed tool's actual capabilities, taking into consideration specific use cases and small investigations to provide concrete examples of possible usage scenarios.
@@ -26,7 +26,7 @@ Whereas, the last point (\cref{sec:exp_intravisto_exp4}) is dedicated to the exp
 \subsection{Decoding Interface}\label{sec:exp_intravisto_exp1}
 
 Decoding the meaning of hidden state vectors at various depths of a transformer stack is essential for providing an intuition as to how the model is working.
-InTraVisTo allows decoding and inspection of the main four vectors (defined in \cref{ssec:method_intravisto_decoding}) that compose each layer, while offering a human-interpretable representation of each hidden state by performing a decoding operation.
+InTraVisTo allows decoding and inspection of the main four vectors (defined in~\cref{ssec:method_intravisto_decoding}) that compose each layer, while offering a human-interpretable representation of each hidden state by performing a decoding operation.
 This decoding operation is carried out using a specialized decoder which, given a hidden state as input, finds related tokens from the model's vocabulary with the goal of returning an interpretable output.
 
 In this section, we present the first visual output of InTraVisTo.
@@ -35,11 +35,11 @@ Due to the inference process of the transformer architecture, each stack of laye
 A natural visual representation for this grid-like structure is a heatmap where each cell represents a token-layer combination.
 Visually, inside each cell we can find the main decoded hidden state, and by hovering on it, a pop-up with its secondary representations along with additional information appears.
 In addition, for the sake of being able to tell apart input tokens (prompted by the user) from output tokens (autonomously generated by the model), a vertical line is put in place to divide the former from the latter.
-As it is possible to notice from \cref{fig:exp_intravisto_1_A}, the heatmap features two additional layers: one at the beginning (bottom) and one at the end (top).
+As it is possible to notice from~\cref{fig:exp_intravisto_1_A}, the heatmap features two additional layers: one at the beginning (bottom) and one at the end (top).
 The first layer is used to represent states before entering the transformer stack, right after the embedding layer.
 Whereas the last layer offers a representation that is forcibly normalized and decoded using the output embedding, in order for it to align with the raw generation output provided by the model.
 The generation of the heatmap requires the user to choose a \emph{target embedding}, a \emph{decoding strategy} and a \emph{probability} to display.
-Those parameters can be tweaked using a dedicated panel present in the interface, shown in \cref{fig:exp_intravisto_1_B}.
+Those parameters can be tweaked using a dedicated panel present in the interface, shown in~\cref{fig:exp_intravisto_1_B}.
 
 \begin{figure}[t!]
     \centering
@@ -61,20 +61,20 @@ In order to avoid saturating the visualization with information, only a single e
 
 On the other hand, the \emph{decoding strategy} choice refers to the decoding matrix utilized in the decoding process of each visualized hidden state, fulfilling the role of ``perspective'' for the interpretation.
 Choosing a meaningful decoding strategy is not a trivial task and can be considered the key \todo{aspect} of the vocabulary decoding approach to interpretability.
-As already reviewed in \cref{ssec:related_vocab}, many different approaches for decoding hidden states already exist in literature.
-InTraVisTo's decoding operation is formalized in \cref{eq:method_intravisto_decoding} and employs a decoding matrix chosen by the user.
-Besides some immediate choices such as input embeddings or output embeddings, which focus on providing meaningful decoding for layers at the bottom and layers at the top of the network \todo{correspondingly}; InTraVisTo offers the possibility of decoding states using interpolated and max-probability decoders, defined respectively in \cref{eq:method_intravisto_linear-interp,eq:method_intravisto_quadratic-interp} and \cref{eq:method_intravisto_max-p}.
+As already reviewed in~\cref{ssec:related_vocab}, many different approaches for decoding hidden states already exist in literature.
+InTraVisTo's decoding operation is formalized in~\cref{eq:method_intravisto_decoding} and employs a decoding matrix chosen by the user.
+Besides some immediate choices such as input embeddings or output embeddings, which focus on providing meaningful decoding for layers at the bottom and layers at the top of the network \todo{correspondingly}; InTraVisTo offers the possibility of decoding states using interpolated and max-probability decoders, defined respectively in~\cref{eq:method_intravisto_linear-interp,eq:method_intravisto_quadratic-interp} and~\cref{eq:method_intravisto_max-p}.
 These novel decoding techniques are built in order to give the user a semantically meaningful representation for every layer of the model at the same time.
 
 \todo{Lastly}, the \emph{probability selector} directly affects the quantity used to weight the color grading in the heatmap.
 The four main options consist of P(argmax term), entropy, attention contribution and feedforward contribution.
 Additionally, a secondary control labeled as ``Residual Contribution'' affects the attention contribution and feedforward contribution options for the probability selector.
-This ``Residual Contribution'' control determines the metric used to evaluate the concept of contribution between transformer components and the residual stream according to \cref{eq:method_intravisto_norm-contrib,eq:method_intravisto_kl-contrib}.
-The mathematical background for these selectors has been \todo{treated in depth} in \cref{sssec:method_intravisto_decoding_metrics}.
+This ``Residual Contribution'' control determines the metric used to evaluate the concept of contribution between transformer components and the residual stream according to~\cref{eq:method_intravisto_norm-contrib,eq:method_intravisto_kl-contrib}.
+The mathematical background for these selectors has been \todo{treated in depth} in~\cref{sssec:method_intravisto_decoding_metrics}.
 
-\todo{On the other hand}, users are given plenty of secondary controls to further explore the models' generation process as illustrated in \cref{fig:exp_intravisto_1_C}.
-For example, the `Embedding normalization' control gives users the possibility of choosing the type of normalization to perform on hidden states before the decoding, as defined in \cref{eq:method_intravisto_normalization}.
-Whereas, another selector is dedicated to handling the strategy for decoding secondary tokens (referencing \cref{sssec:method_intravisto_decoding_tokens}), offering either a `top-$5$' approach or by using the iterative decoding algorithm, as illustrated in \cref{alg:method_intravisto_iter-dec}.
+\todo{On the other hand}, users are given plenty of secondary controls to further explore the models' generation process as illustrated in~\cref{fig:exp_intravisto_1_C}.
+For example, the `Embedding normalization' control gives users the possibility of choosing the type of normalization to perform on hidden states before the decoding, as defined in~\cref{eq:method_intravisto_normalization}.
+Whereas, another selector is dedicated to handling the strategy for decoding secondary tokens (referencing~\cref{sssec:method_intravisto_decoding_tokens}), offering either a `top-$5$' approach or by using the iterative decoding algorithm, as illustrated in~\cref{alg:method_intravisto_iter-dec}.
 In addition, users are given the option to ignore the column corresponding to the \emph{<start>} token from the visualization, as decoding it often does not provide meaningful results.
 Furthermore, users can affect the generation process by directly choosing a different model from a customizable selection pool or altering the number of generated tokens by using the appropriate selectors.
 
@@ -96,7 +96,7 @@ The second visualization provided by InTraVisTo is a Sankey diagram that aims to
     \label{fig:exp_intravisto_2_A}
 \end{figure}
 
-Nodes in the diagram depict all the hidden states contained in each layer, visualizing each one of the four vectors referenced in \cref{ssec:method_intravisto_decoding} at the same time.
+Nodes in the diagram depict all the hidden states contained in each layer, visualizing each one of the four vectors referenced in~\cref{ssec:method_intravisto_decoding} at the same time.
 Similarly to the heatmap visualization, nodes display the main decoding result as their label and, when hovered upon, provide additional information in the form of a pop-up tooltip containing secondary tokens.
 One additional piece of information, exclusively found in the tooltip of output nodes, is the decoded difference from the previous layer.
 This detail shows the primary and secondary tokens obtained from decoding the difference between the output state of the current layer with the output state of the previous layer as if it were a separate state.
@@ -105,7 +105,7 @@ The goal of this representation is trying to visualize in a human interpretable 
 On the other hand, edges represent the amount of relevance carried by the residual stream and visualize how many components accumulate or disperse it by performing their tasks utilizing information scattered through the model.
 Being a Sankey diagram, no amount of flow is ever lost between layers, as the flow corresponding to all tokens in a horizontal section (representing a layer) can be added to obtain $100\%$.
 The flow starts from the topmost layer of nodes, and is recursively computed considering the contributions of each encountered node.
-More specifically, flow computation is discussed \todo{in depth} in \cref{ssec:method_intravisto_flow} and can be formalized using \cref{eq:method_intravisto_flows}.
+More specifically, flow computation is discussed \todo{in depth} in~\cref{ssec:method_intravisto_flow} and can be formalized using~\cref{eq:method_intravisto_flows}.
 
 When considering a \todo{fresh} generation run, the totality of the flow is evenly split between the output nodes at the end of the transformer stack.
 However, if the user decides to inspect a specific cell in the heatmap by clicking on it, the Sankey diagram also adapts by recalculating itself considering the node corresponding to the selected as the sole topmost node, resulting in \todo{it} bearing $100\%$ of the flow.
@@ -115,10 +115,10 @@ Additionally, flows are given a further shading factor that is proportional to t
 This allows users to appreciate in an immediate way states that exhibit rapid changes in distribution, thus providing a better localization for possible zones of interest.
 
 The only component that is able to redistribute the flow through various tokens is the attention node, which does so according to the attention weights computed for all preceding tokens.
-Furthermore, for each aggregation node (intermediate and output), the flow contribution of the preceding nodes is computed following the ``Residual contribution'' user control mentioned in \cref{sec:exp_intravisto_exp1} according to \cref{eq:method_intravisto_norm-contrib,eq:method_intravisto_kl-contrib}.
+Furthermore, for each aggregation node (intermediate and output), the flow contribution of the preceding nodes is computed following the ``Residual contribution'' user control mentioned in~\cref{sec:exp_intravisto_exp1} according to~\cref{eq:method_intravisto_norm-contrib,eq:method_intravisto_kl-contrib}.
 
-InTraVisTo is equipped with additional settings exclusively dedicated to the Sankey diagram visualization as illustrated in \cref{fig:exp_intravisto_2_B}.
-\todo{First}, we provide a flag for hiding the starting token similar to the one defined in \cref{sec:exp_intravisto_exp1}.
+InTraVisTo is equipped with additional settings exclusively dedicated to the Sankey diagram visualization as illustrated in~\cref{fig:exp_intravisto_2_B}.
+\todo{First}, we provide a flag for hiding the starting token similar to the one defined in~\cref{sec:exp_intravisto_exp1}.
 However, in the Sankey's case it comes with an additional control that allows users to reapport the hidden flow to remaining nodes, meaning that the values of hidden flows are set to $0$ and the missing \todo{percentage} is redistributed to visible tokens.
 Another important setting is the ``Attention highlight'', which controls the criteria for highlighting attention traces, affecting the number of visible flows related to each attention node.
 Users can choose between visualizing all flows, only the top-$k$ flows (considering attention weights), \todo{only} flows with a corresponding attention weight greater than a certain threshold, or no flows at all.
@@ -134,13 +134,13 @@ Other graphic-oriented options allow users to remove node labels for nodes that 
 \subsection{Dinamically Changing the Network}\label{sec:exp_intravisto_exp3}
 
 InTraVisTo is thought to be an interactive tool, so another class of features to aid in the understanding of the internal workings of transformers is the embedding injection.
-As previously formalized in \cref{ssec:method_intravisto_injection}, injection \todo{consists in} substituting a hidden state with a custom embedding representation, forcing the model to change its behavior based on the injected information.
+As previously formalized in~\cref{ssec:method_intravisto_injection}, injection \todo{consists in} substituting a hidden state with a custom embedding representation, forcing the model to change its behavior based on the injected information.
 Injections can be performed by clicking on a cell in the grid-layout heatmap, this actions opens a pop-up menu (\cref{fig:exp_intravisto_3_A}) related to the cell which prompt the user for the following information:
 \begin{itemize}
     \item A string of text with the purpose of being encoded into an embedding representation and injected inside the chosen hidden state.
 The application automatically converts such string to an embedding using the inverse transformation of the selected decoder.
-If the string contains multiple tokens, then all encoded representations are averaged to obtain a single embedding in accordance to \cref{eq:method_intravisto_emb-avg}.
-    \item The injection technique, which controls the way in which the new embedding \todo{gets incorporated} into the preexisting state as specified in \cref{eq:method_intravisto_inj_complete,eq:method_intravisto_inj_main}.
+If the string contains multiple tokens, then all encoded representations are averaged to obtain a single embedding in accordance to~\cref{eq:method_intravisto_emb-avg}.
+    \item The injection technique, which controls the way in which the new embedding \todo{gets incorporated} into the preexisting state as specified in~\cref{eq:method_intravisto_inj_complete,eq:method_intravisto_inj_main}.
     \item The position of the injection inside the selected layer, allowing users to inject embeddings in every position without changing the heatmap visualization.
     \item The decoding technique used to interpret the aforementioned string of text.
     \item The option to normalize the injected embedding according to the chosen injection technique. 
@@ -157,7 +157,7 @@ When a valid injection is compiled and added, a small card containing a summary 
 This operation prompts an immediate reload of the current generated result by the model in order to include the newly defined injection.
 When the heatmap visualization displays the result of a generation process which contained an injection, the cell location corresponding to the injection location is highlighted in \emph{green}.
 Injections can be removed from the generation process at any time by pressing the appropriate `X' button on their card.
-The \todo{typical} layout of injection cards can be observed in \cref{fig:exp_intravisto_3_B}.
+The \todo{typical} layout of injection cards can be observed in~\cref{fig:exp_intravisto_3_B}.
 
 \begin{figure}[t!]
     \centering
@@ -166,7 +166,7 @@ The \todo{typical} layout of injection cards can be observed in \cref{fig:exp_in
     \label{fig:exp_intravisto_3_B}
 \end{figure}
 
-\todo{As mentioned beforehand} in \cref{sec:exp_intravisto_exp1}, it is also possible to perform injections in the Sankey diagram by clicking on any visible node, triggering the same injection pop-up menu referenced before.
+\todo{As mentioned beforehand} in~\cref{sec:exp_intravisto_exp1}, it is also possible to perform injections in the Sankey diagram by clicking on any visible node, triggering the same injection pop-up menu referenced before.
 If the chosen node corresponds to a feed-forward \todo{node} or an attention node, there is an additional option that allows the user to remove the node, performing an ablation.
 Ablations are handled the same way as injections are, therefore a card is created in the top section of the interface (\cref{fig:exp_intravisto_3_B}), and the generation process is repeated to include the selected changes.
 Removing a node is handled by nullifying its contribution to the residual, therefore its hidden state is still properly decoded and can be analyzed from the heatmap, but does not influence the rest of the model.
@@ -225,9 +225,9 @@ However, the application has been developed with generality in mind, thus it can
 
 One of the earliest discoveries made via InTraVisTo is the fact that models which employ dedicated tokens for each digit, when asked to perform arithmetic operations, happen to represent decimal positional information along with digits of the result.
 For example, the number $1492$ could be represented by having $1$ + ``thousand'', $4$ + ``hundred'', $9$ + ``ninety'' and $2$.
-This was initially discovered through the unique usage of the iterative decoding technique specified in \cref{alg:method_intravisto_iter-dec} to inspect secondary decodings of internal states, although it can also be observed in certain primary decodings where the `decimal term' interpretation takes precedence over the digit one.
+This was initially discovered through the unique usage of the iterative decoding technique specified in~\cref{alg:method_intravisto_iter-dec} to inspect secondary decodings of internal states, although it can also be observed in certain primary decodings where the `decimal term' interpretation takes precedence over the digit one.
 We speculate that models intentionally use this technique to keep track of the current decimal position of the result while performing arithmetic operations.
-This pattern can also be occasionally spotted in the reverse order as seen in \cref{fig:exp_intravisto_4_A}, meaning that the model starts assigning decimal markers to the most significant digit, in what can be thought to be an attempt to circumvent the constraints entailed by carry operations.
+This pattern can also be occasionally spotted in the reverse order as seen in~\cref{fig:exp_intravisto_4_A}, meaning that the model starts assigning decimal markers to the most significant digit, in what can be thought to be an attempt to circumvent the constraints entailed by carry operations.
 Some relevant examples of decimal markers include:
 \begin{itemize}
     \item \texttt{\_hundred}, \texttt{\_hundreds}, \begin{CJK}{UTF8}{goth}百\end{CJK} and \texttt{\_century} being used to indicate hundreds;
@@ -243,7 +243,7 @@ Some relevant examples of decimal markers include:
     \label{fig:exp_intravisto_4_A}
 \end{figure}
 
-Other interesting representations of numbers can be noticed by directly analyzing single instances of numerical tokens and observing their alternative representations as in \cref{fig:exp_intravisto_4_B}.
+Other interesting representations of numbers can be noticed by directly analyzing single instances of numerical tokens and observing their alternative representations as in~\cref{fig:exp_intravisto_4_B}.
 For example:
 \begin{itemize}
     \item Using month names such as ``July'' and ``February'' to represent single digit numbers such as $7$ and $2$ respectively (\cref{fig:exp_intravisto_4_B3});
@@ -275,9 +275,9 @@ For example:
 \end{figure}
 
 \todo{On the other hand}, we can also perform a complete analysis over a certain query, for example \emph{``What is the capital of Italy?''}, to which the model should answer \emph{`Rome'}.
-By observing the heatmap in \cref{fig:exp_intravisto_4_C1} we can see that the model reaches the correct answer at the first generated token by gradually encoding \emph{`city'}, \emph{`capital'} and finally \emph{`Rome'} into the embeddings.
+By observing the heatmap in~\cref{fig:exp_intravisto_4_C1} we can see that the model reaches the correct answer at the first generated token by gradually encoding \emph{`city'}, \emph{`capital'} and finally \emph{`Rome'} into the embeddings.
 However, on the very last layer, the answer changes into the determiner \emph{`The'} in order to generate a more formal answer including the original question formulation into the \todo{answer}.
-In addition, by observing the Sankey diagram shown in \cref{fig:exp_intravisto_4_C2}, it is possible to notice that during the generation process of the actual occurrence of \emph{`Rome'} at position $16$, the model collects a significant amount of attention directly from the first generated token \todo{referenced before}.
+In addition, by observing the Sankey diagram shown in~\cref{fig:exp_intravisto_4_C2}, it is possible to notice that during the generation process of the actual occurrence of \emph{`Rome'} at position $16$, the model collects a significant amount of attention directly from the first generated token \todo{referenced before}.
 
 \begin{figure}[t!]
     \centering
@@ -293,11 +293,11 @@ In addition, by observing the Sankey diagram shown in \cref{fig:exp_intravisto_4
 \end{figure}
 
 To go one step further, we decide to try \todo{and} sway the model's prediction into generating a counter-factual information.
-We do so by replacing the token \texttt{\_Rome} present at position $16$ with \texttt{\_Paris} using the injection interface described in \cref{sec:exp_intravisto_exp3}.
+We do so by replacing the token \texttt{\_Rome} present at position $16$ with \texttt{\_Paris} using the injection interface described in~\cref{sec:exp_intravisto_exp3}.
 Interestingly, we notice a significant difference in behavior depending on the chosen layer of injection.
-If we inject our token at the first occurrence of the token \texttt{\_Rome} (layer $20$), as can be observed in \cref{fig:exp_intravisto_4_D1}, we can see that our injection quickly vanishes through the layers in favor of the correct answer.
-On the other hand, if we perform our injection at a layer where the token \texttt{\_Rome} actually starts gaining a meaningful probability (around $90.45\%$ at layer $25$) the model is not able to recover immediately and, as we can appreciate in \cref{fig:exp_intravisto_4_D2}, ends up inserting \emph{`Paris'} in its answer.
-\todo{Interestingly enough}, observing the rest of the generated sentence in \cref{fig:exp_intravisto_4_D3} reveals that the model is still able to understand the \todo{committed} error and give an overall correct answer by re-contextualizing its erroneous output.
+If we inject our token at the first occurrence of the token \texttt{\_Rome} (layer $20$), as can be observed in~\cref{fig:exp_intravisto_4_D1}, we can see that our injection quickly vanishes through the layers in favor of the correct answer.
+On the other hand, if we perform our injection at a layer where the token \texttt{\_Rome} actually starts gaining a meaningful probability (around $90.45\%$ at layer $25$) the model is not able to recover immediately and, as we can appreciate in~\cref{fig:exp_intravisto_4_D2}, ends up inserting \emph{`Paris'} in its answer.
+\todo{Interestingly enough}, observing the rest of the generated sentence in~\cref{fig:exp_intravisto_4_D3} reveals that the model is still able to understand the \todo{committed} error and give an overall correct answer by re-contextualizing its erroneous output.
 
 \begin{figure}[t!]
     \centering
@@ -320,10 +320,10 @@ On the other hand, if we perform our injection at a layer where the token \textt
 \end{figure}
 
 This self-correcting behavior is mildly surprising, but it is still interesting to observe the internal recovery process from the perspective of the model to understand where and how it \todo{takes place}.
-By directly observing the progression of tokens representing internal state of the model for the generation instance right after our injection (position $18$) in \cref{fig:exp_intravisto_4_E1}, we can notice that the state loses confidence in the \texttt{\_Paris} token in a relatively slow way.
+By directly observing the progression of tokens representing internal state of the model for the generation instance right after our injection (position $18$) in~\cref{fig:exp_intravisto_4_E1}, we can notice that the state loses confidence in the \texttt{\_Paris} token in a relatively slow way.
 After starting the state morphing process from input to output, inside the middle layers, the model immediately enters a state space dominated by tokens such as \texttt{nah}, \texttt{wait}, \texttt{\_mistaken}, \texttt{\_joke}, \texttt{...} and \texttt{?!}, to finally settle on \texttt{?} \todo{with} an exceptionally low confidence and surprisingly late ($47.75\%$ at layer $31$).
 This behavior reflects the uncertainty of the model and its \todo{struggle} to blend discordant information.
-Furthermore, in \cref{fig:exp_intravisto_4_E2} it is possible to notice a discrete amount of flow being gathered by the token referring to \emph{`Italy'}in the question through the attention component.
+Furthermore, in~\cref{fig:exp_intravisto_4_E2} it is possible to notice a discrete amount of flow being gathered by the token referring to \emph{`Italy'}in the question through the attention component.
 \todo{This} can be observed in the early stages of the model trying to recover from the injection, meaning that there could be some form of comparison or self-check being performed in the earlier layers.
 
 \begin{figure}[t!]
@@ -340,9 +340,9 @@ Furthermore, in \cref{fig:exp_intravisto_4_E2} it is possible to notice a discre
 
 We propose another complete analytical overview starting from a query, this time of numerical nature: \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''}.
 This type of task is known increase the likeness of reasoning errors in LLMs, which \todo{some} attribute to \emph{attention glitches}: minor errors propagated throughout the attention pattern in the model~\cite{liu2023}.
-By directly observing the output of the model in \cref{fig:exp_intravisto_4_F1}, we can see that the answer is not correct since the model returned $43234831$ instead of $32341384$.
+By directly observing the output of the model in~\cref{fig:exp_intravisto_4_F1}, we can see that the answer is not correct since the model returned $43234831$ instead of $32341384$.
 However, by observing the obtained result in more depth we can actually see that the model has indeed tried to reverse the number by splitting it in half and recomposing the two halves in reverse order.
-This behavior is reconfirmed by observing the token generation process using the heatmap illustrated in \cref{fig:exp_intravisto_4_F2}.
+This behavior is reconfirmed by observing the token generation process using the heatmap illustrated in~\cref{fig:exp_intravisto_4_F2}.
 The heatmap clearly shows that there exists a clear step in the magnitude of token probabilities when passing from intermediate layers to last layers, and this step \todo{punctually} tends to happen earlier in layers as the next token becomes more obvious.
 For example, we can see that the sequence of digits that are reversed correctly by the model such as $2$, $3$, $4$ \todo{at} positions $21$, $22$, $23$ and $3$, $8$, $4$ \todo{at} positions $25$, $26$, $27$ appear at much earlier layers and quickly gain a consistent probability mass.
 Whereas, tokens that determine the start of incorrect sections of digits such as $3$ and $1$ \todo{at} positions $20$ and $24$ appear to only emerge in later layers with fluctuating probability values.
@@ -362,9 +362,9 @@ In particular, \todo{in the case of digit $1$} at position $24$, we can even see
 \end{figure}
 
 We also replicate the same experiment using \todo{Mistral}, obtaining a slightly more correct result.
-In fact, \todo{Mistral} is able to almost entirely produce the reverse number \todo{aside from} two digits, $3$ and $8$, which appear inverted as depicted in \cref{fig:exp_intravisto_4_G1}.
-On the other hand, if we take into consideration the heatmap shown in \cref{fig:exp_intravisto_4_G2}, it is possible to observe all the previous probabilistic token patterns that were shown by \todo{Llama 2} in \cref{fig:exp_intravisto_4_F}: in this scenario, only the first incorrect digit ($8$) displays the signs of low model confidence for its prediction.
-In fact, by observing \cref{fig:exp_intravisto_4_G3} it is also possible to localize which model components contribute to swaying the model residual into erroneous token representations.
+In fact, \todo{Mistral} is able to almost entirely produce the reverse number \todo{aside from} two digits, $3$ and $8$, which appear inverted as depicted in~\cref{fig:exp_intravisto_4_G1}.
+On the other hand, if we take into consideration the heatmap shown in~\cref{fig:exp_intravisto_4_G2}, it is possible to observe all the previous probabilistic token patterns that were shown by \todo{Llama 2} in~\cref{fig:exp_intravisto_4_F}: in this scenario, only the first incorrect digit ($8$) displays the signs of low model confidence for its prediction.
+In fact, by observing~\cref{fig:exp_intravisto_4_G3} it is also possible to localize which model components contribute to swaying the model residual into erroneous token representations.
 We can notice that, while tokens decoded from attention embeddings \todo{are not very informative} and tokens decoded along residuals \todo{are} generally similar to the final prediction, tokens decoded from the FFNN layers occasionally show meaningful predictions.
 In particular, it is possible to \todo{spot} an $8$ inside the FFNN of the $29^{th}$ layer, which corresponds to the actual correct prediction.
 By comparing the behavior of FFNNs in the last layers, it is possible to notice that the correct prediction always emerges between layers $27$ and $30$, with a decreasing amount of probability as the generation \todo{goes on}.
@@ -395,11 +395,11 @@ By performing an embedding injection earlier in the layer stack, and forcing the
 The output after this procedure is \emph{``432348313''}.
 At first, it appears that the problem concerning the two swapped digits is solved, \todo{however}, the model generates an extra $3$ right at the end of the reversed number instead of a newline character as it did before the injection.
 We can confirm that $3$ is the only additional digit appended to the result by increasing the maximum count of generated tokens and observing that the next token would be, in fact, the newline character \emph{``\textbackslash{}n''}.
-By analyzing the Sankey diagram in \cref{fig:exp_intravisto_4_H1}, we can almost exactly trace back the introduction of the extra $3$ to the self-attention contribution of layer $31$, as \todo{up until this point} the decoded residual reads \emph{``\textbackslash{}n''}.
+By analyzing the Sankey diagram in~\cref{fig:exp_intravisto_4_H1}, we can almost exactly trace back the introduction of the extra $3$ to the self-attention contribution of layer $31$, as \todo{up until this point} the decoded residual reads \emph{``\textbackslash{}n''}.
 However, after the contribution of the \todo{incriminated} self-attention block we can see the residual shifting towards an embedding that represents the number $3$.
 Moreover, if we inspect the attention traces that hold the most importance for the self-attention contribution of interest, we can observe that indeed they point to the question token that contains a $3$, and the self-attention state \todo{in it of itself} can be decoded as the token $3$.
 Yet again, by utilizing a functionality of InTraVisTo and removing the contribution of that specific self-attention block, the model is able to avoid erroneously changing the main content of its residual stream.
-Thus, by ending the number with a newline character, the model is able to give the correct answer to the original query, as it can be \todo{appreciated} in \cref{fig:exp_intravisto_4_H2}.
+Thus, by ending the number with a newline character, the model is able to give the correct answer to the original query, as it can be \todo{appreciated} in~\cref{fig:exp_intravisto_4_H2}.
 
 \begin{figure}[t!]
     \centering
@@ -422,13 +422,13 @@ As an interactive tool, InTraVisTo is equipped with additional tools to modify a
 Moreover, InTraVisTo's implementation supports simultaneous \todo{usage} by different users loading multiple distinct LLMs at the same time, making it a flexible application capable of being deployed in a reproducible \todo{way} \todo{targeted} towards NLP researchers and practicioners.
 
 \todo{As extensively shown} in the proposed examples and experiments, InTraVisTo can be used methodically to extract \todo{considerations} from the generation process of language models.
-From the results obtained in \cref{sec:exp_intravisto_exp4}, we show how specific models encode numerical tokens and how these representations affect the contents of states belonging the residual flow.
+From the results obtained in~\cref{sec:exp_intravisto_exp4}, we show how specific models encode numerical tokens and how these representations affect the contents of states belonging the residual flow.
 We also utilize the injection mechanism to investigate how anomalies in the generation process of models affect their outputs, uncovering common patterns and speculating on the probabilistic significance of internal states \todo{in function of} the generated tokens. 
-By proposing a technique for performing experiments using InTraVisTo in \cref{sssec:exp_intravisto_exp4_expset}, we also wish to create a workflow that acts as a guideline to users, in order to streamline the process of research and \todo{generalizability of its findings}.
+By proposing a technique for performing experiments using InTraVisTo in~\cref{sssec:exp_intravisto_exp4_expset}, we also wish to create a workflow that acts as a guideline to users, in order to streamline the process of research and \todo{generalizability of its findings}.
 
 \section{Embedding Analysis}\label{sec:exp_emb}
 
-Following the path laid out in \cref{sec:rq_embeddings,sec:method_embeddings}, the experiments performed in this section will gravitate around the possibility of identifying linear properties modeling semantic, linguistic and factual relationships within the input and output embedding spaces of LLMs.
+Following the path laid out in~\cref{sec:rq_embeddings,sec:method_embeddings}, the experiments performed in this section will gravitate around the possibility of identifying linear properties modeling semantic, linguistic and factual relationships within the input and output embedding spaces of LLMs.
 
 To explore this inquiry, we have set up various experiments aimed at replicating some of the well-established embeddings properties~\cite{mikolov2013} in recent state-of-the-art architectures.
 Additionally, we expand upon these ideas and provide further explanations for the behaviors emerged from the performed experiments.
@@ -438,7 +438,7 @@ Additionally, we expand upon these ideas and provide further explanations for th
 The dataset used for all the experiments under this research question was created by \todo{unifying} the original analogy dataset employed by word2vec~\cite{mikolov2013} and the \emph{BATS (Bigger Analogy Test Set)}~\cite{drozd2016}.
 The word2vec dataset (also known as Google analogy dataset) is structured in two main files: \emph{question-words} and \emph{question-phrases}.
 Question-words contains $14$ categories for a total of $19544$ analogies spacing from linguistic relations to semantic relations, while question-phrases only features $5$ classes and a total of $3218$ analogies regarding common-knowledge relations involving proper nouns.
-BATS features a more complex hierarchy since it is meant to be an improvement over the Google dataset: as already hinted in \cref{ssec:method_embeddings_analogies}, it covers $4$ main relation types (inflectional morphology, derivational morphology, lexicographic semantics and encyclopedic semantics), each one being subdivided into $10$ further sub-categories containing $50$ unique word pairs each.
+BATS features a more complex hierarchy since it is meant to be an improvement over the Google dataset: as already hinted in~\cref{ssec:method_embeddings_analogies}, it covers $4$ main relation types (inflectional morphology, derivational morphology, lexicographic semantics and encyclopedic semantics), each one being subdivided into $10$ further sub-categories containing $50$ unique word pairs each.
 In addition, BATS provides multiple correct answers for word pairs when applicable. 
 
 Due to the different format in which the two datasets have been released (BATS containing word pairs, while Google analogy dataset being comprised of already constructed analogies), \todo{some} work has been put into collecting, standardizing and unifying analogies.
@@ -472,16 +472,16 @@ Therefore, we also question if models with large vocabularies that are not backe
 At its core, this class of experiments evaluates the resolution of analogies between sets of four terms utilizing the embedding layer of a model to encode words and compute distances.
 
 Once the dataset and model are loaded, each batch of word analogies is processed, treating every single analogy as an independent computation.
-All words that compose the input section of the analogy are appropriately encoded following \cref{eq:method_embeddings_multitok-in}.
+All words that compose the input section of the analogy are appropriately encoded following~\cref{eq:method_embeddings_multitok-in}.
 Which words belong to the input for each batch of analogies \todo{are} determined by a hyperparameter containing the analogy layout (e.g. obtaining $w_1 - w_2 + w_4 = w_3$ from $w_1 : w_2 = w_3 : w_4$).
 The provided layout also defines the arithmetic operations to be performed on the encoded words in order to obtain the encoded output term.
 
-Afterwards, by following \cref{eq:method_embeddings_analogy}, we perform a search on the model's embedding space using a hyperparameter-defined distance metric as shown in \cref{eq:method_embeddings_distance}, obtaining the $k$ closest elements to the result of our embedding arithmetic.
-Finally, in order to extrapolate a concrete result, we compare the set of computed tokens with the set of tokens obtained through the application of \cref{eq:method_embeddings_multitok-out} to the output word defined by the layout.
-The comparison is performed through the use of the appropriate metrics formalized in \cref{eq:method_embeddings_topk-accuracy}.
+Afterwards, by following~\cref{eq:method_embeddings_analogy}, we perform a search on the model's embedding space using a hyperparameter-defined distance metric as shown in~\cref{eq:method_embeddings_distance}, obtaining the $k$ closest elements to the result of our embedding arithmetic.
+Finally, in order to extrapolate a concrete result, we compare the set of computed tokens with the set of tokens obtained through the application of~\cref{eq:method_embeddings_multitok-out} to the output word defined by the layout.
+The comparison is performed through the use of the appropriate metrics formalized in~\cref{eq:method_embeddings_topk-accuracy}.
 
 % TODO
-% \cref{eq:method_embeddings_topk-accuracy,eq:method_embeddings_rankscore}
+%~\cref{eq:method_embeddings_topk-accuracy,eq:method_embeddings_rankscore}
 
 The complete set of hyperparameters and their possible values is as follows:
 \begin{itemize}
@@ -491,9 +491,9 @@ The complete set of hyperparameters and their possible values is as follows:
 As it will be clarified later, this experiment only considers analogies where all words can be encoded using single tokens, therefore there is no need to define specific embedding strategies.
     \item \textbf{Multitoken solution strategy} with values \emph{first\_only}, \emph{subdivide}: similar concept to the embedding strategy, but handles output multi-token words by either considering the first token or every token.
 Even with the assumption of single-token analogies, this hyperparameter is still relevant due to the addition of capitalized or non-capitalized alternatives to the output word, which may not result in a single-token word as their counterpart.
-    \item \textbf{Pre-normalize embeddings} with \emph{boolean values}: flag that controls the use of normalized embeddings for all computations and comparisons, referencing \cref{eq:method_embeddings_normalization}.
+    \item \textbf{Pre-normalize embeddings} with \emph{boolean values}: flag that controls the use of normalized embeddings for all computations and comparisons, referencing~\cref{eq:method_embeddings_normalization}.
     \item \textbf{Layout} with values $w_1 - w_2 + w_4 = w_3$, $w_2 - w_1 + w_3 = w_4$, $w_1 + \Delta(w_4 - w_3) = w_2$: analogy resolution templates considering both classic analogies, reverse analogies and delta analogies.
-Delta analogies follow a slightly different resolution process, illustrated in \cref{eq:method_embeddings_delta-analogy-function}.
+Delta analogies follow a slightly different resolution process, illustrated in~\cref{eq:method_embeddings_delta-analogy-function}.
 \end{itemize}
 
 As mentioned before, due to the fact that models of different nature and with \todo{different} tokenization strategies are being compared, a filtering operation over the dataset entries is applied.
@@ -540,10 +540,10 @@ Rather, we are interested in assessing the presence of high-level trends which j
 
 \subsubsection{Results}\label{sssec:exp_emb_exp1_results}
 
-By observing the preliminary set of results in \cref{fig:exp_emb_1_A1} it is apparent that Llama 2 and Mistral present the best overall performance against other models; although their \todo{performance difference} against Gemma 2, Phi 3.5, and surprisingly, GPT 2 and BERT is minimal as shown in \cref{fig:exp_emb_1_A2}.
+By observing the preliminary set of results in~\cref{fig:exp_emb_1_A1} it is apparent that Llama 2 and Mistral present the best overall performance against other models; although their \todo{performance difference} against Gemma 2, Phi 3.5, and surprisingly, GPT 2 and BERT is minimal as shown in~\cref{fig:exp_emb_1_A2}.
 The fact that Mistral and Llama 2 behave similarly is not \todo{surprising}, given the fact that they share most of their architecture.
 However, despite the fact that Llama 2 and Llama 3 have also similar architectures, Llama 3 demonstrates an exceptionally low performance on the experiment.
-Lastly, Word2Vec and GloVe, the oldest models, share the worst performance overall as it is possible to observe in \cref{fig:exp_emb_1_A3}.
+Lastly, Word2Vec and GloVe, the oldest models, share the worst performance overall as it is possible to observe in~\cref{fig:exp_emb_1_A3}.
 
 \begin{figure}[t!]
     \centering
@@ -566,7 +566,7 @@ If we observe the accuracy trends of various models as $k$ increases, we can not
 On the other hand, most models seem to present a plateau in performance around $k = 30$ except for Llama 3, which accuracy appears to be steadily increasing even at $k = 50$.
 This patterns can be interpreted according to the vocabulary dimension the analyzed models, excluding older ones.
 In fact, it is possible to observe a direct correlation between model vocabulary size and jump in performance between $k$ values from $1$ to $50$, which can be explained by virtue of exact tokens being more difficult to find in a more ``populated'' embedding space.
-As directly shown in \cref{fig:exp_emb_1_B}, some extreme examples are Llama 3 and Gemma with the largest vocabularies resulting in the widest accuracy jumps, and BERT with the smallest vocabulary inducing the narrowest accuracy jump.
+As directly shown in~\cref{fig:exp_emb_1_B}, some extreme examples are Llama 3 and Gemma with the largest vocabularies resulting in the widest accuracy jumps, and BERT with the smallest vocabulary inducing the narrowest accuracy jump.
 
 \begin{figure}[t!]
     \centering
@@ -583,8 +583,8 @@ This property negatively impacts the embedding space expressiveness in two main 
 Then, tokens that are shared between languages but have different senses or are part of words with different definitions determine the presence of embeddings that are in direct competition to give additional separate meanings to the same tokens.
 
 Another important fact that must be taken into consideration is the support of the resulting dataset for each model.
-As anticipated in \cref{sssec:exp_emb_exp1_expset}, models have been evaluated on different subsets of the overall dataset in order to extract analogies that could be expressed solely using single-token words.
-In \cref{fig:exp_emb_1_C} we can observe a breakdown by dataset categories of model performance represented by colored bars, with the additional information provided by dots constituting an indication for the percentage of dataset considered by the model for each category.
+As anticipated in~\cref{sssec:exp_emb_exp1_expset}, models have been evaluated on different subsets of the overall dataset in order to extract analogies that could be expressed solely using single-token words.
+In~\cref{fig:exp_emb_1_C} we can observe a breakdown by dataset categories of model performance represented by colored bars, with the additional information provided by dots constituting an indication for the percentage of dataset considered by the model for each category.
 
 \begin{figure}[t!]
     \centering
@@ -593,18 +593,18 @@ In \cref{fig:exp_emb_1_C} we can observe a breakdown by dataset categories of mo
     \label{fig:exp_emb_1_C}
 \end{figure}
 
-By \todo{looking} at \cref{fig:exp_emb_1_C} it is possible to discern the reason for the underperformance of Word2Vec and GloVe with respect to newer models, as we can see that these older models offer a near complete support for all the dataset categories.
+By \todo{looking} at~\cref{fig:exp_emb_1_C} it is possible to discern the reason for the underperformance of Word2Vec and GloVe with respect to newer models, as we can see that these older models offer a near complete support for all the dataset categories.
 This means that their vocabulary contains a great number of tokens encompassing single words, which drastically expands the number of analogies considered for the experiment, including analogies that are not easily solved by model in the process.
 On a more \todo{general scale}, we can also observe the fact that some certain categories never seem to have support for any model.
 These categories \todo{mostly represent} the additional portion of the original Google dataset called \emph{question-phrases} modeling analogies between entities that are described by multiple words, which intuitively do not fit the single-token constraint chosen for this experiment.
-Another general pattern observable in \cref{fig:exp_emb_1_C,fig:exp_emb_1_D1} concerns the fact that most models show better performance on the categories belonging to the original Google dataset.
+Another general pattern observable in~\cref{fig:exp_emb_1_C,fig:exp_emb_1_D1} concerns the fact that most models show better performance on the categories belonging to the original Google dataset.
 This behavior can be easily explained by both the simplistic nature of the dataset and the fact that, being a well-known dataset, most models have seen it during training.
-Lastly, \cref{fig:exp_emb_1_C} shows an exceptionally low support for all categories \todo{for} Llama 3, \todo{tying back into} our previous hypothesis of a fragmented vocabulary due to explicit multilingual training.
+Lastly,~\cref{fig:exp_emb_1_C} shows an exceptionally low support for all categories \todo{for} Llama 3, \todo{tying back into} our previous hypothesis of a fragmented vocabulary due to explicit multilingual training.
 
 As a final note, we are going to discuss the effect of hyperparameters on this experiment.
 The hyperparameter that causes the most visible effects is the analogy layout, representing \todo{the methodology} used to combine words present in analogies.
-In \cref{fig:exp_emb_1_D2} we can notice that analogies of the type $w_1 - w_2 + w_4 = w_3$, seem to always return worst results than default ones: $w_2 - w_1 + w_3 = w_4$; this is likely the result of most analogies being created with a specific directionality in mind.
-Nonetheless, by observing \cref{fig:exp_emb_1_D1} we can see that this effect is mostly limited to categories that belong to the BATS dataset, as the performance for the Google dataset appears to be mostly unaffected by hyperparameter combinations.
+In~\cref{fig:exp_emb_1_D2} we can notice that analogies of the type $w_1 - w_2 + w_4 = w_3$, seem to always return worst results than default ones: $w_2 - w_1 + w_3 = w_4$; this is likely the result of most analogies being created with a specific directionality in mind.
+Nonetheless, by observing~\cref{fig:exp_emb_1_D1} we can see that this effect is mostly limited to categories that belong to the BATS dataset, as the performance for the Google dataset appears to be mostly unaffected by hyperparameter combinations.
 On the other hand, the pre-normalization of embeddings does not seem to have any major effect on any of the models, besides a slight generalized increase in performance.
 
 \begin{figure}[t!]
@@ -620,13 +620,13 @@ On the other hand, the pre-normalization of embeddings does not seem to have any
     \label{fig:exp_emb_1_D}
 \end{figure}
 
-By examining \cref{fig:exp_emb_1_E}, it is possible to notice that delta analogies offer some interesting insight into the behavior of models.
+By examining~\cref{fig:exp_emb_1_E}, it is possible to notice that delta analogies offer some interesting insight into the behavior of models.
 From a general perspective, most models experience an overall minor decrease in performance when resolving analogies using the delta formulation.
 Additionally, the growth rate according to $k$ appears to be flatter \todo{overall}, implying that meaningful predictions are gathered around low values of $k$, and that models are less likely to come up with the correct answer \todo{if it is not found} immediately.
 This behavior can be ascribed to the analogy contribution of the delta embedding term, which is \todo{likely} to present a \todo{handful} of dimensions that transport the resulting embedding toward a section of the space containing terms not directly related to the analogy.
-The most \todo{likely} reason behind the aforementioned behavior is the fact that the averaging operation referenced in \cref{eq:method_embeddings_delta-analogy-function} might not be enough to remove noise or \todo{underlying} correlations from a set of \todo{bi-word comparisons} sourced from the same set of analogies.
+The most \todo{likely} reason behind the aforementioned behavior is the fact that the averaging operation referenced in~\cref{eq:method_embeddings_delta-analogy-function} might not be enough to remove noise or \todo{underlying} correlations from a set of \todo{bi-word comparisons} sourced from the same set of analogies.
 One particular case for delta analogies is Llama 3, which seems to present significant dissimilarities with regards to its standard counterpart.
-For instance, in \cref{fig:exp_emb_1_E2} we can observe that Llama 3's baseline in the delta analogies case remains mostly unaltered and follows the performance pattern of most models.
+For instance, in~\cref{fig:exp_emb_1_E2} we can observe that Llama 3's baseline in the delta analogies case remains mostly unaltered and follows the performance pattern of most models.
 Conversely, \todo{the} performance of the actual model sees a significant increase for low values of $k$, and a slight decrease for high values of $k$, which matches the previously identified flattening pattern.
 However, the extreme improvement over the baseline \todo{hints} at the fact that most of the embedding contribution that leads to correct answers is given by the delta term.
 Consequently, given the flat trends shown by most models, we can even speculate that most of the overall contribution depends on the delta term.
@@ -647,41 +647,41 @@ Consequently, given the flat trends shown by most models, we can even speculate 
 
 For this second experiment we wish to delve deeper into the actual capabilities of the embeddings belonging to recent decoder-only LLMs.
 To this end, we will also take into consideration the unembedding layer of said models.
-As mentioned in \cref{ssec:background_transf_structure}, decoder-only transformers feature a reversed embedding matrix inside their language modeling head.
+As mentioned in~\cref{ssec:background_transf_structure}, decoder-only transformers feature a reversed embedding matrix inside their language modeling head.
 This matrix is used to translate the last hidden state produced by the transformer stack into the index for the next predicted token.
 Since it shares a common structure with the actual embedding matrix, it should be possible to run the same analogy experiments and obtain meaningful, albeit different, results.
 
-However, not all model architectures provide different embedding and unembedding matrices as already hinted in \cref{ssec:background_transf_structure}.
+However, not all model architectures provide different embedding and unembedding matrices as already hinted in~\cref{ssec:background_transf_structure}.
 Consequently, in this experiment we will also observe the differences between these architectural choices through the lens of analogies.
 
 Additionally, inspired by the decoding approach introduced for the first research question (\cref{sec:rq_intravisto}), we are also going to take into consideration interpolated embeddings.
-Embedding interpolation, defined in \cref{ssec:method_intravisto_decoding} and formalized through \cref{eq:method_intravisto_linear-interp,eq:method_intravisto_quadratic-interp}, is a novel technique that exploits linear properties of embedding spaces and hidden representations~\cite{park2023, mikolov2013, drozd2016} to generate intermediate unembedding matrices with the purpose of decoding said intermediate states.
+Embedding interpolation, defined in~\cref{ssec:method_intravisto_decoding} and formalized through~\cref{eq:method_intravisto_linear-interp,eq:method_intravisto_quadratic-interp}, is a novel technique that exploits linear properties of embedding spaces and hidden representations~\cite{park2023, mikolov2013, drozd2016} to generate intermediate unembedding matrices with the purpose of decoding said intermediate states.
 Logically, since we are performing a linear interpolation operation, we expect to observe a trend in the analogy resolution accuracy of the interpolated embeddings that goes from the input embedding to the output one according to the interpolation percentage.
-However, it could be possible that the actual rate of change for the interpolated performance might not be constant between the two end points, undermining the linearity assumption of linear interpolation, and opening up different approaches to interpolation-based decoding as shown in \cref{eq:method_intravisto_quadratic-interp,eq:method_intravisto_max-p}.
+However, it could be possible that the actual rate of change for the interpolated performance might not be constant between the two end points, undermining the linearity assumption of linear interpolation, and opening up different approaches to interpolation-based decoding as shown in~\cref{eq:method_intravisto_quadratic-interp,eq:method_intravisto_max-p}.
 
 \subsubsection{Experimental Setup}\label{sssec:exp_emb_exp2_expset}
 
 The experimental setup for this second experiment presents only few differences with respect to the previous one (\cref{ssec:exp_emb_exp1}).
-As a starting point, the core algorithm used to perform analogy resolution defined in \cref{sssec:exp_emb_exp1_expset} is left \todo{invariant}, as the fundamental task is the same between the two experiments.
+As a starting point, the core algorithm used to perform analogy resolution defined in~\cref{sssec:exp_emb_exp1_expset} is left \todo{invariant}, as the fundamental task is the same between the two experiments.
 On the other hand, one of the main differences is the absence of any kind of filtering for the dataset, implying that all models share the same amount of test cases.
 This change \todo{also} sets some restrictions on the choice of models, which will be tackled in a dedicated section (\cref{sssec:exp_emb_exp2_models}).
 
 Due to the fact that models may encounter multi-token words, the \emph{Embedding strategy} hyperparameter identified within the experimental setup of the previous experiment gains additional values to handle the encoding of multiple tokens converging inside a single word.
 These new values are \emph{average} and \emph{sum}, which correspond to taking respectively the mean and the sum of the embeddings belonging to the tokens that compose the multi-token word in question.
-As previously mentioned, these techniques are formalized in \cref{eq:method_embeddings_multitok-in}.
+As previously mentioned, these techniques are formalized in~\cref{eq:method_embeddings_multitok-in}.
 
 \subsubsection{Models}\label{sssec:exp_emb_exp2_models}
 
 For the experiment at hand we select a smaller set of models to compare due to the fact that we wish to observe the differences between input and output embeddings.
-All changes to the models will be made referencing \cref{table:exp_emb_models}, defined for \cref{ssec:exp_emb_exp1}.
+All changes to the models will be made referencing~\cref{table:exp_emb_models}, defined for~\cref{ssec:exp_emb_exp1}.
 
 As a first step, we are going to discard models without proper sub-word tokenization such as Word2Vec, GloVe and BERT.
-This allows us to also perform tests on the whole dataset, through the implementation of proper encoding strategies as defined in \cref{eq:method_embeddings_multitok-in,eq:method_embeddings_multitok-out}.
+This allows us to also perform tests on the whole dataset, through the implementation of proper encoding strategies as defined in~\cref{eq:method_embeddings_multitok-in,eq:method_embeddings_multitok-out}.
 In addition, we are not going to focus on models without distinct input and output embeddings such as GPT-2 and Gemma-2, therefore only GPT-2 will be included in order to provide a baseline evaluation.
 
 \subsubsection{Results}
 
-By a preliminary observation of the results in \cref{fig:exp_emb_2_A} we can grasp that there are some slight differences in performance between input and output embeddings across all models.
+By a preliminary observation of the results in~\cref{fig:exp_emb_2_A} we can grasp that there are some slight differences in performance between input and output embeddings across all models.
 More specifically, our analysis reveals that for increasing values of $k$, output embeddings seem to consistently outperform input embeddings (contextually to overall model performance), while for smaller $k$ values input embeddings demonstrate greater accuracy.
 This phenomenon suggests that input embeddings provide more reliable estimates for analogies results, but their vectors are laying in a sparser latent spaces, thus making it less likely to accidentally include the correct vector out of a wrong prediction by extending the range given by $k$.
 Whereas output embeddings latent spaces are more compressed and benefit more from greater $k$ values.
@@ -700,7 +700,7 @@ This is not a completely trivial result since, despite having the same dimension
     \label{fig:exp_emb_2_A}
 \end{figure}
 
-By comparing the performance of Llama 3 against the previous experiment it is possible to notice an outstanding increase in accuracy for lower values of $k$, which is now comparable to \todo{that} of the other analyzed models as shown in \cref{fig:exp_emb_2_A2}.
+By comparing the performance of Llama 3 against the previous experiment it is possible to notice an outstanding increase in accuracy for lower values of $k$, which is now comparable to \todo{that} of the other analyzed models as shown in~\cref{fig:exp_emb_2_A2}.
 This result is in clear contrast with the trends displayed by \todo{other models} between the two experiments, as they tend to have a slightly worse performance when considering the whole dataset.
 We can still speculate that the reason for this surprising behavior resides in the multilingual nature of Llama 3, and how it affected its tokenization process.
 In fact, it is very possible that a part of the analogies easily solvable by the model were not included in the dataset of the first experiment due to uncommon tokenization patterns.
@@ -708,11 +708,11 @@ Another perspective which corroborates this theory is the fact that the Llama 3'
 Nonetheless, Llama 3's accuracy still \todo{scores as the worst} between all considered models. 
 
 Another interesting result that can be garnered from the performed experiments relates to the effects of interpolation on the semantic expressiveness of embeddings.
-As it is possible to observe in \cref{fig:exp_emb_2_B1}, we can say that our expectations on the general layout of the results for interpolation tests on Mistral are indeed met, \todo{since they} always score between the two extremes that produced the interpolated variations.
+As it is possible to observe in~\cref{fig:exp_emb_2_B1}, we can say that our expectations on the general layout of the results for interpolation tests on Mistral are indeed met, \todo{since they} always score between the two extremes that produced the interpolated variations.
 In addition, it is also possible to spot an interesting diverging pattern in how the interpolated traces are placed along the graph.
 In Mistral's case, the performance of the interpolation at layers $7$ and $25$ is much closer to that of their respective input and output references models than the interpolation at layer $15$.
 This is surprising since we are performing linear operations, and the chosen interpolation layers are all equally spaced, suggesting that the representation shift happening inside the model might not follow a linear pace through the layers.
-However, the \todo{unveiled} collection of results is evident only for Mistral in \cref{fig:exp_emb_2_B1}, as for Llama 2, by observing \cref{fig:exp_emb_2_B2} we can spot the same patterns only for small values of $k$.
+However, the \todo{unveiled} collection of results is evident only for Mistral in~\cref{fig:exp_emb_2_B1}, as for Llama 2, by observing~\cref{fig:exp_emb_2_B2} we can spot the same patterns only for small values of $k$.
 This behavior is likely due to the minimal performance difference present between Llama 2's input and output embeddings, and noise, which even lets some interpolated models surpass the two original embeddings for high values of $k$.
 
 \begin{figure}[t!]
@@ -728,7 +728,7 @@ This behavior is likely due to the minimal performance difference present betwee
 \end{figure}
 
 \todo{Conversely}, we can appreciate some particular model behaviors regarding the choice of hyperparameters, especially those defining the multi-token embedding strategy.
-By observing \cref{fig:exp_emb_2_C} we can see that for the classic analogy resolution pattern ($w_2 - w_1 + w_3 = w_4$) taking the average of embeddings seems the overall best way to encode multi-token elements, followed by considering only the embedding of the first token and directly summing the embeddings.
+By observing~\cref{fig:exp_emb_2_C} we can see that for the classic analogy resolution pattern ($w_2 - w_1 + w_3 = w_4$) taking the average of embeddings seems the overall best way to encode multi-token elements, followed by considering only the embedding of the first token and directly summing the embeddings.
 This result \todo{reconfirms} the findings \todo{obtained} by~\citet{drozd2016} for newer model paradigms and is in accordance with the hypothesis of a linear embedding space.
 
 \begin{figure}[t!]
@@ -738,12 +738,12 @@ This result \todo{reconfirms} the findings \todo{obtained} by~\citet{drozd2016} 
     \label{fig:exp_emb_2_C}
 \end{figure}
 
-On the other hand, in \cref{fig:exp_emb_2_D2}, we can see that the expected drop in performance of reverse analogies ($w_1 - w_2 + w_4 = w_3$) is much more accentuated when analyzing the complete dataset rather than when filtering for single-token analogies.
+On the other hand, in~\cref{fig:exp_emb_2_D2}, we can see that the expected drop in performance of reverse analogies ($w_1 - w_2 + w_4 = w_3$) is much more accentuated when analyzing the complete dataset rather than when filtering for single-token analogies.
 This is noticeable to the point that the performance of most models seems to be \todo{equal or worse} than the baseline for some specific sets of hyperparameters that include reverse analogies in the specified format.
-In addition, by observing \cref{fig:exp_emb_2_D1} we can notice that the drop in performance appears to be more generalized \todo{throughout} all dataset categories, rather than targeting the BATS analogies as found in the previous experiment.
+In addition, by observing~\cref{fig:exp_emb_2_D1} we can notice that the drop in performance appears to be more generalized \todo{throughout} all dataset categories, rather than targeting the BATS analogies as found in the previous experiment.
 Newer models seem to be more susceptible to these \todo{types} of hyperparameter variations, whereas GPT-2 gives the impression of being only marginally affected by them.
-On the topic of pre-normalization, the effects seem to be negligible and similar to what was already stated in \cref{sssec:exp_emb_exp1_results}.
-\todo{Surprisingly}, pre-normalization appears to have slightly better results when considering the summation of embeddings as a strategy to resolve multi-token analogies, as shown in \cref{fig:exp_emb_2_D3}.
+On the topic of pre-normalization, the effects seem to be negligible and similar to what was already stated in~\cref{sssec:exp_emb_exp1_results}.
+\todo{Surprisingly}, pre-normalization appears to have slightly better results when considering the summation of embeddings as a strategy to resolve multi-token analogies, as shown in~\cref{fig:exp_emb_2_D3}.
 This behavior can be intuitively explained by considering the fact that directly summing dimensions without dividing by the variable number of elements (\todo{as for} the averaging case) returns inflated values, which get slightly mitigated by the pre-normalization operation.
 
 \begin{figure}[t!]
@@ -765,11 +765,11 @@ This behavior can be intuitively explained by considering the fact that directly
     \label{fig:exp_emb_2_D}
 \end{figure}
 
-On the topic of delta analogies, observing \cref{fig:exp_emb_2_E1,fig:exp_emb_2_E2} unveils a significant different trend with respect to the one identified for the single-token analogies in \cref{sssec:exp_emb_exp1_results}.
+On the topic of delta analogies, observing~\cref{fig:exp_emb_2_E1,fig:exp_emb_2_E2} unveils a significant different trend with respect to the one identified for the single-token analogies in~\cref{sssec:exp_emb_exp1_results}.
 Even if the overall curve flattening tendency seems to carry over between experiments, in the current case we also observe an overall performance drop across all values of $k$.
-Conversely, we also experience a \todo{tendency} for the input and output embeddings of some models to obtain closer results \todo{as opposed to} their standard analogy experiment, observable in \cref{fig:exp_emb_2_E3}.
-The reason behind this \todo{collection} of incongruences between experiments is likely tied to the double average computation performed over the tokens that form analogy components: the first in order to optimally aggregate multi-token words into a single embedded representation as \cref{eq:method_embeddings_multitok-in}, and the second as prescribed by the delta analogies experiment referenced in \cref{eq:method_embeddings_delta-analogy-function}.
-This conjecture is furtherly reinforced by the fact that the performance gain over the baselines is less \todo{prominent} for this instance of the delta analogies experiment which considers the whole dataset, \todo{rather than} the one filtering for single-token analogies, as observable in \cref{fig:exp_emb_2_E1,fig:exp_emb_2_E2}.
+Conversely, we also experience a \todo{tendency} for the input and output embeddings of some models to obtain closer results \todo{as opposed to} their standard analogy experiment, observable in~\cref{fig:exp_emb_2_E3}.
+The reason behind this \todo{collection} of incongruences between experiments is likely tied to the double average computation performed over the tokens that form analogy components: the first in order to optimally aggregate multi-token words into a single embedded representation as~\cref{eq:method_embeddings_multitok-in}, and the second as prescribed by the delta analogies experiment referenced in~\cref{eq:method_embeddings_delta-analogy-function}.
+This conjecture is furtherly reinforced by the fact that the performance gain over the baselines is less \todo{prominent} for this instance of the delta analogies experiment which considers the whole dataset, \todo{rather than} the one filtering for single-token analogies, as observable in~\cref{fig:exp_emb_2_E1,fig:exp_emb_2_E2}.
 
 \begin{figure}[t!]
     \centering
@@ -793,7 +793,7 @@ This conjecture is furtherly reinforced by the fact that the performance gain ov
 
 In the end, we can affirm that LLMs are able to retain a surprising amount of semantic relationships inside their embeddings, despite the fact that sub-word tokenization actively works against the accumulation of meaning for token representations.
 Their performance on the selected tasks is \todo{on par}, if not greater than less recent models used as baselines.
-In particular, by comparing \cref{table:exp_emb_models} and other graphs displaying the results of experiments (\cref{fig:exp_emb_1_A,fig:exp_emb_1_B}), we can almost observe a slight correlation between vocabulary size and overall performance on tasks where models with a smaller vocabulary seem to outperform \todo{others with larger ones}.
+In particular, by comparing~\cref{table:exp_emb_models} and other graphs displaying the results of experiments (\cref{fig:exp_emb_1_A,fig:exp_emb_1_B}), we can almost observe a slight correlation between vocabulary size and overall performance on tasks where models with a smaller vocabulary seem to outperform \todo{others with larger ones}.
 From this, we can observe that \todo{massive recent models} such as Llama 3 and Gemma might be \todo{moving} towards a direction of semantic empoverishment of the embedding space, whereas slightly older LLMs such as Llama 2 and Mistral, or LLMs \todo{aimed at being small and portable} such as Phi 3.5 still preserve \todo{much} of the original embedding space properties.
 
 Interestingly, we observe that the only LLM \todo{that} clearly underperformed on the proposed tasks was the only one that had an explicit multilingual training.
@@ -807,23 +807,23 @@ We speculate that, since output embeddings display a minor amount of semantic \t
 The model's vocabulary is still \todo{the same} between input and output embeddings, thus issues inherently tied with the tokenization process itself are still present.
 
 With the hyperparameter search performed on multiple experiments, we unveil that indeed averaging embeddings appears to be a relatively robust way to aggregate multiple embeddings into a single representation.
-In fact, these outcomes are fundamental in the development of the embedding interpretation logic of InTraVisTo presented in \cref{ssec:method_intravisto_decoding} for the first research question, as they lie on the same embedding space linearity assumptions as the interpolation, but also offer an intuitive way to group multiple token representations for the purpose of injection as shown in \cref{ssec:method_intravisto_injection} and formalized through \cref{eq:method_intravisto_emb-avg}.
+In fact, these outcomes are fundamental in the development of the embedding interpretation logic of InTraVisTo presented in~\cref{ssec:method_intravisto_decoding} for the first research question, as they lie on the same embedding space linearity assumptions as the interpolation, but also offer an intuitive way to group multiple token representations for the purpose of injection as shown in~\cref{ssec:method_intravisto_injection} and formalized through~\cref{eq:method_intravisto_emb-avg}.
 Another important \todo{finding from} the current experiments that also sees \todo{application} in InTraVisTo concerns the interpolation of embedding spaces.
 \todo{In fact}, from the experimental results emerges the soundness of our proposed approach from a semantic point of view, meaning that the resulting interpolated embedding spaces carry \todo{at least}  the same amount of information as the original embeddings.
-Additionally, the highlighting of nonlinearities between interpolation layer and performance offset from the original embedding spaces in related experiments, heavily inspired the creation of alternative interpolation \todo{options} such as \cref{eq:method_intravisto_quadratic-interp,eq:method_intravisto_max-p}
+Additionally, the highlighting of nonlinearities between interpolation layer and performance offset from the original embedding spaces in related experiments, heavily inspired the creation of alternative interpolation \todo{options} such as~\cref{eq:method_intravisto_quadratic-interp,eq:method_intravisto_max-p}
 
 \section{First Order Prediction}\label{sec:exp_fom}
 
-Building on the foundation established in \cref{sec:rq_fom}, the experiments in this section are focused on exploring the implications of constructing a First Order Model (FOM).
+Building on the foundation established in~\cref{sec:rq_fom}, the experiments in this section are focused on exploring the implications of constructing a First Order Model (FOM).
 A FOM is derived by removing all intermediate architectural components from an LLM, retaining only the input and output embedding layers along with the residual connections joining them.
-As described in \cref{sec:method_fom}, this transformation can be seen as the creation of a Markov whose transition matrix is given by the product of the input and output embedding matrices.
+As described in~\cref{sec:method_fom}, this transformation can be seen as the creation of a Markov whose transition matrix is given by the product of the input and output embedding matrices.
 
 Most of the experiments in this section are geared towards understanding whether the FOM accurately represents a bigram Markov model over the original model's vocabulary.
 Although past work has theorized and partially demonstrated this hypothesis for a restricted set of models~\cite{elhage2021}, we suspect that FOMs derived from different LLMs may exhibit varying degrees of Markovian behavior, and we aim to investigate this variation in this section.
 Another perspective taken in consideration, is the possibility of the FOM transition matrix reflecting an identity matrix, thus \todo{implying} that input and output embeddings tend to \todo{stray} towards equality during training, effectively modeling a form of natural weight tying~\cite{inan2017,press2017}.
 
-Following on the normalization intuition that proved effective for InTraVisTo, as explored in \cref{sssec:method_intravisto_decoding_norm}, we also explore an alternative of the basic FOM obtained from directly joining input and output embeddings.
-In fact, this alternative was introduced with the intention of addressing one particular issue observed in certain experimental instances, which exhibited similarities to challenges previously encdountered and resolved in relation to the research question referenced in \cref{sec:rq_intravisto}.
+Following on the normalization intuition that proved effective for InTraVisTo, as explored in~\cref{sssec:method_intravisto_decoding_norm}, we also explore an alternative of the basic FOM obtained from directly joining input and output embeddings.
+In fact, this alternative was introduced with the intention of addressing one particular issue observed in certain experimental instances, which exhibited similarities to challenges previously encdountered and resolved in relation to the research question referenced in~\cref{sec:rq_intravisto}.
 The main issue can be described as an excessive flattening of the vocabulary distribution for decoded states, specifically referring to the probability distribution for the next token in the FOM transition matrix.
 To mirror the previously proposed solution, the alternative model (FOM with RMS) incorporates a single RMS normalization (\cref{eq:background_rmsnorm}) step between the standard FOM embeddings.
 As we will establish in this section, the proposed solution does not yield satisfactory results compared to its previous iteration.
@@ -839,7 +839,7 @@ This extraction was performed in order to provide a less biased evaluation of mo
 
 \subsubsection{Models}
 
-Similarly to the models taken in consideration for \cref{ssec:exp_emb_exp2}, the primary selected transformer architectures feature distinct input and output embeddings.
+Similarly to the models taken in consideration for~\cref{ssec:exp_emb_exp2}, the primary selected transformer architectures feature distinct input and output embeddings.
 From these models, we choose to analyze LLaMA-2-7B~\cite{touvron2023}, Mistral-7B~\cite{jiang2023} and Phi-3.5-mini-instruct~\cite{abdin2024}.
 In addition, LLaMA-3-7B~\cite{dubey2024} was initially considered.
 However, its large vocabulary size ($128K$ tokens) resulted in a combinatorial explosion for the computation of its transition matrix, rendering it a computationally infeasible choice and leading to its exclusion.
@@ -860,37 +860,37 @@ While this method does not account for the nuances of probability distributions,
 
 \subsubsection{Experimental Setup}\label{sssec:exp_fom_exp1_expset}
 
-As previously introduced, the FOM transition matrix is computed by merging the input and output embeddings of the inspected models, following \cref{eq:method_fom_fom-matrix}.
-Conversely, the Markov model equivalent is derived by computing bigram statistics of tokens over the training dataset referenced in \cref{ssec:exp_fom_dataset}.
+As previously introduced, the FOM transition matrix is computed by merging the input and output embeddings of the inspected models, following~\cref{eq:method_fom_fom-matrix}.
+Conversely, the Markov model equivalent is derived by computing bigram statistics of tokens over the training dataset referenced in~\cref{ssec:exp_fom_dataset}.
 To ensure comparability, we directly use the LLM's tokenizer to encode the text corpus used for trainining the Markov model, ensuring that both models share the same vocabulary.
-As discussed in \cref{sec:exp_fom} we also define an auxiliary class of FOMs that incorporates RMS normalization in the transition matrix formulation.
-The specific approach is formalized in \cref{eq:method_fom_fom-matrix-rms}, where the computation is divided between input and output embeddings.
+As discussed in~\cref{sec:exp_fom} we also define an auxiliary class of FOMs that incorporates RMS normalization in the transition matrix formulation.
+The specific approach is formalized in~\cref{eq:method_fom_fom-matrix-rms}, where the computation is divided between input and output embeddings.
 
 In addition, an important detail regarding the construction of the FOM transition matrix that needs to be noted.
-When the model makes a prediction, the structure of the unembedding matrix requires a softmax operation to produce a meaningful probability distribution, as already specified in \cref{ssec:background_transf_structure}.
+When the model makes a prediction, the structure of the unembedding matrix requires a softmax operation to produce a meaningful probability distribution, as already specified in~\cref{ssec:background_transf_structure}.
 Consequently, in most scenarios, the FOM transition matrix cannot be directly compared against other transition matrices without first applying the specified conversion operation.
-As explained in \cref{ssec:method_fom_matrix}, the conversion from a logit transition matrix to an actual transition matrix is not performed in experiments that operate on greedy aggregations of most likely results.
+As explained in~\cref{ssec:method_fom_matrix}, the conversion from a logit transition matrix to an actual transition matrix is not performed in experiments that operate on greedy aggregations of most likely results.
 
 Once the two main models are loaded as transition matrices, we compare them with each other and against the identity matrix.
 As mentioned before, the identity matrix represents the transition matrix of a FOM derived from a transformer-based language model with distinct input and output embeddings.
-The comparison is conducted by quantifying the norm of the difference between two matrices as specified in \cref{eq:method_fom_fom-i-comp,eq:method_fom_fom-markov-comp}.
+The comparison is conducted by quantifying the norm of the difference between two matrices as specified in~\cref{eq:method_fom_fom-i-comp,eq:method_fom_fom-markov-comp}.
 
-On the other hand, we also perform comparisons by considering the transition matrices from a predictive token-by-token point of view as explored in \cref{ssec:method_fom_pred}, where each row is represented as a set containing the column indexes corresponding to the top-$k$ values.
-\todo{As a preliminary operation}, we compute the top-$k$ accuracy according to \cref{eq:method_fom_topk} using different choices of $k_1$ and $k_2$ for various combinations of models.
+On the other hand, we also perform comparisons by considering the transition matrices from a predictive token-by-token point of view as explored in~\cref{ssec:method_fom_pred}, where each row is represented as a set containing the column indexes corresponding to the top-$k$ values.
+\todo{As a preliminary operation}, we compute the top-$k$ accuracy according to~\cref{eq:method_fom_topk} using different choices of $k_1$ and $k_2$ for various combinations of models.
 Furthermore, we also consider some additional set-based metrics including the overlap coefficient and the Jaccard index.
-These set metrics are used to compute and compare similarities between sets of distributions (transition matrices), as defined in \cref{eq:method_fom_overlap}.
+These set metrics are used to compute and compare similarities between sets of distributions (transition matrices), as defined in~\cref{eq:method_fom_overlap}.
 As pointed out before, in experiments involving set-based metrics and predictive comparisons, the distinction between transition matrices modeling probabilities and logit matrices is irrelevant.
 This is because both the \emph{softmax} and \emph{logarithm} operators are monotonic, preserving the relative ordering of elements.
 
 \subsubsection{Results}\label{sssec:exp_fom_exp1_results}
 
-We begin our analysis by examining \cref{fig:exp_fom_1_A2,fig:exp_fom_1_A1}, which depicts Llama 2's performance on the self-regression and unigram-regression tasks respectively, using the top-$k$ accuracy metric.
+We begin our analysis by examining~\cref{fig:exp_fom_1_A2,fig:exp_fom_1_A1}, which depicts Llama 2's performance on the self-regression and unigram-regression tasks respectively, using the top-$k$ accuracy metric.
 It is possible to notice how, for any given value of $k$, the model's accuracy in predicting the identity matrix appears to be lower than any of the reported values for the unigram Markov model accuracy comparison.
 This trend is consistent across most other analyzed models, with the exception of Mistral.
-In Mistral's case, shown in \cref{fig:exp_fom_1_A4,fig:exp_fom_1_A3}, the predictions generated by the FOM appear to align more closely with the model's inputs rather than with the most probable outputs of the unigram Markov model ($k_2 = 1$).
+In Mistral's case, shown in~\cref{fig:exp_fom_1_A4,fig:exp_fom_1_A3}, the predictions generated by the FOM appear to align more closely with the model's inputs rather than with the most probable outputs of the unigram Markov model ($k_2 = 1$).
 This series of observations seems to persist for Mistral, even when considering all the more lenient variations that compute accuracy by comparing the top-$k_1$ predictions of the FOM with the top-$k_2$ predictions of the Markov model.
-On the other hand, \cref{fig:exp_fom_1_A5,fig:exp_fom_1_A4}, which depict Phi 3.5's performance, reveals that its general is similar to that of Llama 2 across both top-$k$ tasks.
-The only notable deviation in Phi 3.5's behavior is its exceptionally low accuracy in predicting the identity matrix, as highlighted in \cref{fig:exp_fom_1_A5}.
+On the other hand,~\cref{fig:exp_fom_1_A5,fig:exp_fom_1_A4}, which depict Phi 3.5's performance, reveals that its general is similar to that of Llama 2 across both top-$k$ tasks.
+The only notable deviation in Phi 3.5's behavior is its exceptionally low accuracy in predicting the identity matrix, as highlighted in~\cref{fig:exp_fom_1_A5}.
 
 \begin{figure}[t!]
     \centering
@@ -922,7 +922,7 @@ The only notable deviation in Phi 3.5's behavior is its exceptionally low accura
 \end{figure}
 
 The previous observations seem to suggest that, for certain models, embeddings may exhibit a closer relationship to their inverse rather than serving as representations for predicting the next token based on the previous one. 
-However, this interpretation appears to conflict the recorded matrix distances shown in \cref{table:exp_fom_distance}.
+However, this interpretation appears to conflict the recorded matrix distances shown in~\cref{table:exp_fom_distance}.
 The matrix distance metric indicates that the FOM based on Mistral more accurately represents its corresponding Markov model than any other analyzed model, as it exhibits the lowest FOM/Markov distance and one of the highest FOM/identity distances.
 Nonetheless, direct comparative statements based on the matrix distance should be approached with caution as this metric is neither widely used nor inherently reliable.
 
@@ -948,12 +948,12 @@ Nonetheless, direct comparative statements based on the matrix distance should b
 In fact, we can notice that all LLMs present the same trend regarding their matrix distance experiments, likely due to the noise present in their large matrices, which makes them unsuitable for direct comparison through a distance metric.
 This finding confirms a potential bias towards lower distance estimates in the FOM/Markov case, possibly resulting from a lower proportion of null values present in the Markov transition matrix compared to the identity matrix.
 However, slight differences between models emerge when considering FOM variants that incorporate RMS normalization.
-In particular, \cref{table:exp_fom_distance} shows that the FOMs with RMS derived from Llama 2 and Mistral exhibit a subtle bias toward the results previously observed in \cref{fig:exp_fom_1_A}.
+In particular,~\cref{table:exp_fom_distance} shows that the FOMs with RMS derived from Llama 2 and Mistral exhibit a subtle bias toward the results previously observed in~\cref{fig:exp_fom_1_A}.
 We speculate that this percieved trend arises because RMS normalization aligns internal representations in a way that makes probabilities appear more skewed, thus providing a better fit for their actual reference distribution.
 Nonetheless, the obtained results still contain a vast amount of noise and cannot offer a reliable basis for directly comparing FOM behavior.
 Furthermore, the FOM with RMS based on Phi 3.5 is a clear outlier, as its performance is significantly worse than its counterpart without RMS across other models and both considered comparisons.
 
-On the other hand, \cref{table:exp_fom_predictions} presents the most likely token predicted by models for a restricted set of randomly selected common input words.
+On the other hand,~\cref{table:exp_fom_predictions} presents the most likely token predicted by models for a restricted set of randomly selected common input words.
 This provides an approximate yet immediate view into the types of predictions generated by the extracted FOMs and their corresponding trained Markov models.
 In this case, Markov model predictions are aggregated into a single entry, since they perfectly overlap for the chosen set of words.
 As it is possible to observe, most next token predictions from both FOMs and Markov models can be contextualized to make sense within a natural language setting.
@@ -985,11 +985,11 @@ In addition, it is also possible to notice how FOM variants that include RMS nor
 \end{table}
 
 As previously mentioned, we introduce set metrics as a more reliable measure for comparing transition matrices.
-Considering \cref{fig:exp_fom_1_B1}, it is possible to notice that the two chosen set metrics appear to be roughly equivalent in assessing model comparisons.
+Considering~\cref{fig:exp_fom_1_B1}, it is possible to notice that the two chosen set metrics appear to be roughly equivalent in assessing model comparisons.
 Although the graph only includes Llama 2, set metrics exhibit the same general behavior across all analyzed models.
 Substantial differences among metrics can be appreciated only for extremely low values of $k$.
 We also examine the effects of RMS normalization on FOMs within the context of this experiment.
-As it is possible to discern from \cref{fig:exp_fom_1_B}, there does not appear to be any significant difference between the Jaccard index of a FOM and its counterpart with RMS for Llama 2.
+As it is possible to discern from~\cref{fig:exp_fom_1_B}, there does not appear to be any significant difference between the Jaccard index of a FOM and its counterpart with RMS for Llama 2.
 This observation holds for other models and metrics as well, likely because, in this case, RMS primarily causes noticeable changes in the underlying probabily distribution while leaving the internal ordering of predictions mostly unaltered.
 
 \begin{figure}[t!]
@@ -1010,10 +1010,10 @@ This observation holds for other models and metrics as well, likely because, in 
 \end{figure}
 
 On the other hand, \todo{looking at the models comparatively tells us that} while Llama 2 and Phi 3.5 seem to exhibit similar overall trends for their FOM/Markov equivalence, Mistral shows an entirely different profile.
-As we can observe in \cref{fig:exp_fom_1_C1,fig:exp_fom_1_C3}, ignoring the raw accuracy, Llama 2 and Phi 3.5 present a high average overlap coefficient for low values of $k$, clearly outperforming both random baselines.
+As we can observe in~\cref{fig:exp_fom_1_C1,fig:exp_fom_1_C3}, ignoring the raw accuracy, Llama 2 and Phi 3.5 present a high average overlap coefficient for low values of $k$, clearly outperforming both random baselines.
 This value slowly decreases until $k$ reaches a value \todo{just shy} of $200$, then it start growing asymptotically, matching the pace of the random baselines.
 In particular, the FOM/Markov overlap coefficient is not outperformed by the baselines for any value of $k$.
-On the other hand, by observing \cref{fig:exp_fom_1_C2} we can see that Mistral's average overlap coefficient is just slightly above the baselines for low values of $k$.
+On the other hand, by observing~\cref{fig:exp_fom_1_C2} we can see that Mistral's average overlap coefficient is just slightly above the baselines for low values of $k$.
 In addition, its growth rate is almost equal \todo{to that of the} baselines, meaning that the overlap coefficient associated to the FOM/Markov comparison is already at full capacity after the small positive jump for $k$ around $10$.
 
 \begin{figure}[t!]
@@ -1033,7 +1033,7 @@ In addition, its growth rate is almost equal \todo{to that of the} baselines, me
 
 The first values of $k$ hold \todo{the most} significance to the experiment as they are the primary next token predictions for the model, and after a certain value of $k$ every model regresses to the random baseline performance.
 In particular, this means that there is a depth of $k$ for which the FOM is just modeling random noise.
-By looking at Mistral's performance in \cref{fig:exp_fom_1_C2}, since the overlap coefficient corresponding to the FOM/Markov comparison is parallel to that of the random baselines, we can infer that its FOM is actually modeling noise from the start, with the addition of some related terms that determine a slight improvement over the baseline nonetheless.
+By looking at Mistral's performance in~\cref{fig:exp_fom_1_C2}, since the overlap coefficient corresponding to the FOM/Markov comparison is parallel to that of the random baselines, we can infer that its FOM is actually modeling noise from the start, with the addition of some related terms that determine a slight improvement over the baseline nonetheless.
 From this direct comparison we can clearly observe the patterns already found in previous experiments, identifying Mistral as the model which FOM has the lowest affinity with a Markov model, while still being able to \todo{approximate it to a lower degree} of accuracy.
 Whereas, the FOMs extracted from Llama 2 and Phi 3.5 can almost be considered faithful approximations of their respective Markov models.
 
@@ -1043,29 +1043,29 @@ The second experiment expands upon the evaluation of transition matrices generat
 For this experiment, we shift our perspective on transition matrices from sets of elements generating binary predictions to actual probability distributions.
 This approach enables a more precise evaluation by considering how models would concretely be utilized beyond these experimental scenarios.
 
-In \cref{ssec:method_fom_prob} we define the two primary mathematical tools used in this experiment: perplexity (\cref{eq:method_fom_perplexity}) and KL divergence (\cref{eq:method_fom_kldiv}).
+In~\cref{ssec:method_fom_prob} we define the two primary mathematical tools used in this experiment: perplexity (\cref{eq:method_fom_perplexity}) and KL divergence (\cref{eq:method_fom_kldiv}).
 These metrics allow us to determine the similarity or dissimilarity between two distributions over a vocabulary, either by directly comparing them using the KL divergence or by measuring their `surprise' over a text corpus using the perplexity metric. 
 
 \subsubsection{Experimental Setup}
 
-The overall perplexity for a model over a dataset is determined by averaging the perplexity values computed according to \cref{eq:method_fom_perplexity} over all sentences in the test dataset.
+The overall perplexity for a model over a dataset is determined by averaging the perplexity values computed according to~\cref{eq:method_fom_perplexity} over all sentences in the test dataset.
 As already stated in the corresponding equation, the perplexity of each sentence is calculated by cumulating, over all tokens, the perplexity obtained by comparing the model's output logits with the one-hot encoded identifier of the subsequent token.
 
 In this experiment, four perplexity scores are taken into consideration for each model variant.
 The two main results used for central comparisons are the FOM and Markov model perplexity scores, while baseline comparisons are also made using results obtained from a uniform distribution over the model's vocabulary and the identity matrix model.
 
 We also compute the Kullback-Leibler divergence (KL divergence) between pairs of relevant distributions in order to assess their similarity from a statistical standpoint.
-The KL divergence is calculated according to \cref{eq:method_fom_kldiv} and, as noted, is an asymmetric distance which measures how much a given distribution differs from another.
+The KL divergence is calculated according to~\cref{eq:method_fom_kldiv} and, as noted, is an asymmetric distance which measures how much a given distribution differs from another.
 In practice, for each token, we compute point-wise contributions for every vocabulary item and then aggregate these contributions by summing them.
 Subsequently, we average the computed KL divergences to obtain the average KL divergence over the entire vocabulary for each model.
 Similarly to the perplexity computation, we evaluate the KL divergence for all combinations and reverse combinations of FOM, Markov model and identity matrix. 
 
 \subsubsection{Results}
 
-Based on a preliminary analysis of the average perplexities presented in \cref{table:exp_fom_wikitext}, we immediately note that all models exhibit similar trends in in the performance of their FOM relative to the uniform baseline and the computed Markov model counterpart.
+Based on a preliminary analysis of the average perplexities presented in~\cref{table:exp_fom_wikitext}, we immediately note that all models exhibit similar trends in in the performance of their FOM relative to the uniform baseline and the computed Markov model counterpart.
 In fact, we observe that the average perplexity from the FOM is consistently slightly lower than that of the uniform baseline while remaining considerably higher than the performance of the Markov model.
 We hypothesize that this behavior is caused by a combination between the improper nature of the FOM and potential biases in the training set of the Markov model.
-This last point is only marginally mitigated by the usage of a different test set, as \cref{table:exp_fom_openwebtext} shows a significant increase in the perplexity for Markov models, although their performance remains markedly distinct from that of the FOMs.
+This last point is only marginally mitigated by the usage of a different test set, as~\cref{table:exp_fom_openwebtext} shows a significant increase in the perplexity for Markov models, although their performance remains markedly distinct from that of the FOMs.
 
 \begin{table}[t!]
     \centering
@@ -1105,9 +1105,9 @@ This last point is only marginally mitigated by the usage of a different test se
 
 Unsurprisingly, we observe the perplexity results of the identity matrix predictions being disproportionately higher than that of all other models, as it reflects a scenario where each token is predicted to repeat with complete certainty: a behavior that does not constitute a meaningful Markov model.
 However, we still value this outcome since it provides a baseline for comparison for the FOM derived from each LLM, thereby confirming the findings from the previous experiment (\cref{ssec:exp_fom_exp1}) that FOMs are generally closer to being approximations of the actual Markov model rather than the identity matrix.
-Nonetheless, we can speculate that the pattern unveiled in \cref{sssec:exp_fom_exp1_results} appears to persist in \cref{table:exp_fom_wikitext,table:exp_fom_openwebtext}, as the perplexity tied to the FOM based on Mistral is slightly higher than that for its LLama 2 and Phi 3.5 counterparts, possibly suggesting that it incorporates similarities to the uniform and identity matrix distributions.
+Nonetheless, we can speculate that the pattern unveiled in~\cref{sssec:exp_fom_exp1_results} appears to persist in~\cref{table:exp_fom_wikitext,table:exp_fom_openwebtext}, as the perplexity tied to the FOM based on Mistral is slightly higher than that for its LLama 2 and Phi 3.5 counterparts, possibly suggesting that it incorporates similarities to the uniform and identity matrix distributions.
 
-One notable trend observable in \cref{fig:exp_fom_2_A} is that when plotting perplexity over multiple sentences in the test dataset, a clear pattern of several horizontal lines emerges for the FOM version of most LLMs.
+One notable trend observable in~\cref{fig:exp_fom_2_A} is that when plotting perplexity over multiple sentences in the test dataset, a clear pattern of several horizontal lines emerges for the FOM version of most LLMs.
 These lines vary in density and are located in the loose proximity of the perplexity level of the uniform model.
 The number and position of the lines appears to be dependent on both the underlying LLM and the test dataset, although they generally tend to align with the uniform prediction.
 The observed consistencies imply the existence of macro-groups of sentences for which a model consistently scores perplexity values that are marginally inferior or superior to random guessing.
@@ -1138,11 +1138,11 @@ In summary, we can affirm that the difference between FOM and uniform performanc
 \todo[purple!30]{Explore some outlier sentences in depth}
 
 Regarding the alternative FOM formulation that incorporates RMS normalization, we can clearly see a drastic and widespread drop in performance.
-Even when comparing the gathered results from the previous experiment described in \cref{ssec:exp_fom_exp1}, FOMs with RMS normalization exhibit severe underperformance, with their average perplexity appearing to be several orders of magnitude higher than both their standard FOM counterparts and the uniform baseline, as noted in \cref{table:exp_fom_llama-kl,table:exp_fom_mistral-kl}.
+Even when comparing the gathered results from the previous experiment described in~\cref{ssec:exp_fom_exp1}, FOMs with RMS normalization exhibit severe underperformance, with their average perplexity appearing to be several orders of magnitude higher than both their standard FOM counterparts and the uniform baseline, as noted in~\cref{table:exp_fom_llama-kl,table:exp_fom_mistral-kl}.
 One notable exception is the FOM with RMS tied to Mistral, which shows only a moderate drop in performance compared to FOMs obtained from other models.
-Moreover, \cref{fig:exp_fom_2_B} reveals an interesting phenomenon: the two perplexity groups observed in \cref{fig:exp_fom_2_A2} appear to fragment into multiple groups with progressively increasing perplexity.
+Moreover,~\cref{fig:exp_fom_2_B} reveals an interesting phenomenon: the two perplexity groups observed in~\cref{fig:exp_fom_2_A2} appear to fragment into multiple groups with progressively increasing perplexity.
 In general, it is possible that the degraded performance unveiled by the RMS normalization is indicative of actual model performance by eliminating the uniform correlation and skewing the probability distributions.
-However, we consider this hypothesis unlikely, as the effect varies across models, in contrast to the findings shown in \cref{sssec:exp_fom_exp1_results}.
+However, we consider this hypothesis unlikely, as the effect varies across models, in contrast to the findings shown in~\cref{sssec:exp_fom_exp1_results}.
 
 \begin{figure}[t!]
     \centering
@@ -1206,23 +1206,23 @@ Following this idea, we also experience interesting behaviors when considering t
     \label{table:exp_fom_phi-kl}
 \end{table}
 
-The distribution dissimilarity between FOM and Markov model is \todo{clearly} substantially lower than \todo{that of} any other pair of model distributions for all analyzed LLMs as shown in \cref{table:exp_fom_llama-kl,table:exp_fom_mistral-kl,table:exp_fom_phi-kl}.
+The distribution dissimilarity between FOM and Markov model is \todo{clearly} substantially lower than \todo{that of} any other pair of model distributions for all analyzed LLMs as shown in~\cref{table:exp_fom_llama-kl,table:exp_fom_mistral-kl,table:exp_fom_phi-kl}.
 We can also notice that $KL(Markov||FOM)$ \todo{formula} is consistently smaller than the reverse ($KL(FOM||Markov)$ \todo{formula}) for all LLMs, implying that FOMs are a better approximation of Markov models than \todo{the opposite}.
 This result is likely tied to the difference in probability magnitude over the majority of the vocabulary terms.
 Since the Markov model was trained by analyzing a restricted dataset with a set of terms smaller than the vocabulary, we believe that its distribution neglects tokens that were never seen during training, even despite the smoothing coefficient applied to token counts.
 On the other hand, the FOM possesses a much more uniform-like baseline as already shown in previous experiments, thus it \todo{acts better at being considered} the reference distribution in the KL divergence computation.
 
 Although the results are much more aligned between models with regard to previous experiments, it is still possible to partially observe the same properties tied to the FOM approximations of specific LLMs underlined in previous experiments.
-For instance, in \cref{table:exp_fom_mistral-kl} we can notice a slightly higher $KL(Markov||FOM)$ \todo{formula} value and a slightly lower $KL(FOM||Markov)$ \todo{formula} value for the Mistral FOM compared against other models.
+For instance, in~\cref{table:exp_fom_mistral-kl} we can notice a slightly higher $KL(Markov||FOM)$ \todo{formula} value and a slightly lower $KL(FOM||Markov)$ \todo{formula} value for the Mistral FOM compared against other models.
 Additionally, KL divergence values related to comparisons between identity matrix and FOM for the Mistral model seem to present the same behavior with respect to Llama 2 and Phi 3.5.
 
 As far as FOMs that include RMS normalization are concerned, there are some meaningful differencens brought to light by the performed experiment.
-Firstly, in \cref{table:exp_fom_llama-kl} we can observe that the FOM based on Llama 2 performs slightly better than its alternate version including RMS.
+Firstly, in~\cref{table:exp_fom_llama-kl} we can observe that the FOM based on Llama 2 performs slightly better than its alternate version including RMS.
 This finding is unsurprising \todo{in it of itself}, since it follows the general performance pattern established and already mentioned in previous experiments.
-However, if we also consider \cref{table:exp_fom_mistral-kl} it is possible to notice that the performance drop tied to the FOM with RMS based on Mistral is actually much less noticeable than \todo{its} Llama 2 counterpart.
+However, if we also consider~\cref{table:exp_fom_mistral-kl} it is possible to notice that the performance drop tied to the FOM with RMS based on Mistral is actually much less noticeable than \todo{its} Llama 2 counterpart.
 Mistral's \todo{impact is amplified} by the fact that the KL divergence between FOM with RMS and identity matrix is actually lower than the KL divergence considering the original FOM.
 This underlines the apparent affinity that the FOM based on Mistral displays towards self-regression,
-Conversely, \cref{table:exp_fom_phi-kl} shows the \todo{immense} impact on KL divergence that RMS normalization has on the FOM based \todo{specifically} on Phi 3.5, resulting in a significant decrease of performance across all comparisons that include the FOM and reflecting the results of \todo{the} previous experiment on perplexity.
+Conversely,~\cref{table:exp_fom_phi-kl} shows the \todo{immense} impact on KL divergence that RMS normalization has on the FOM based \todo{specifically} on Phi 3.5, resulting in a significant decrease of performance across all comparisons that include the FOM and reflecting the results of \todo{the} previous experiment on perplexity.
 
 \subsection{Discussion}\label{ssec:exp_fom_discussion}
 
@@ -1233,7 +1233,7 @@ This collection of results provides partial empirical confirmation of what was i
 Additionally, it provides solid evidence that output embeddings do not naturally tend to drift towards modeling input embeddings.
 This implies that current transformer-based LLMs might not benefit as much from weight tying as some older language models, reducing the quantifiable improvements to a marginal reduction in the number of parameters.
 
-It is possible to \todo{further contextualize} the results obtained in the current section into the InTraVisTo framework since it is based around the concept of residual flow as previously mentioned in \cref{sec:exp_intravisto_exp2}.
+It is possible to \todo{further contextualize} the results obtained in the current section into the InTraVisTo framework since it is based around the concept of residual flow as previously mentioned in~\cref{sec:exp_intravisto_exp2}.
 The tendency of the FOM to act as a Markov model fits perfectly into the perspective of a residual flow that, starting from the current token, reaches a probability distribution over the vocabulary for the next token through a process of continuous refinement enacted by various modules \todo{that comprise} transformer architectures.
 If we strip the model of its modules, we are left with a direct communication channel that provides the simplest possible prediction given the available transformations.
 By extending this interpretation and capitalizing on the fact that operations on the residual stream are performed additively, we can rationalize the purpose of InTraVisTo as a tool that can be utilized to extract partial interpretations of a state that is progressively drifting towards a final prediction.

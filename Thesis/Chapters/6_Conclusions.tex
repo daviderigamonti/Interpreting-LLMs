@@ -1,15 +1,15 @@
 In this work, we have explored various aspect of transformer interpretability, focusing on the creation of a specialized tool that enables the visualization of internal states of transformer-based language models: \textbf{InTraVisTo}.
 InTraVisTo was created with research in mind: its main purpose \todo{being of aiding} researchers and practitioners in the field of NLP to observe the internal reasoning steps carried out by LLMs in an immediate and interactive \todo{manner}.
 Moreover, its easily configurable, highly optimized and multi-user oriented implementation allows for an overall user-friendly experience centered around the discovery of LLM architectures through the lens of their own embeddings.
-InTraVisTo answers the first identified research question in \cref{sec:rq_intravisto} by providing an expanded and general view on the topic of vocabulary space decoding for LLMs.
+InTraVisTo answers the first identified research question in~\cref{sec:rq_intravisto} by providing an expanded and general view on the topic of vocabulary space decoding for LLMs.
 The addition of the information flow visualization and the possibility of interacting with the generative process of the model from the inside offer a unique experience \todo{catered} to the preliminary exploration and investigation process performed by NLP researchers.
 
 The development of InTraVisTo introduced a series of additional research questions that needed separate investigation in order to address \todo{important} issues and \todo{substantiate} methodologies employed in the final application.
-First of these secondary inquiries is the second research question formulated in \cref{sec:rq_embeddings} and explored in \cref{sec:exp_emb}.
+First of these secondary inquiries is the second research question formulated in~\cref{sec:rq_embeddings} and explored in~\cref{sec:exp_emb}.
 We examined the behavior of the embeddings belonging autoregressive LLMs, with the \todo{ultimate} goal of understanding whether these recent model retain linear properties in their embedding spaces.
 Our analysis revealed that while these properties are still present in LLMs to some extent, their prominence varies across different architectures, model sizes and is \todo{especially} influenced by the tokenization process and overall training objectives.
 Additionally, our comparison of embedding and unembedding spaces highlighted crucial differences in their functional roles, particularly in models where these two spaces are distinct where we observe that input embeddings contain more semantic information \todo{rather than the latter}.
-As already mentioned in \cref{ssec:exp_emb_discussion}, the proposed study on embedding linearity significantly drove the implementation of the vocabulary decoding techniques for hidden representations in InTraVisTo.
+As already mentioned in~\cref{ssec:exp_emb_discussion}, the proposed study on embedding linearity significantly drove the implementation of the vocabulary decoding techniques for hidden representations in InTraVisTo.
 In particular, both the concept of interpolation and the idea of performing interpolation with a nonlinear \todo{pace} stem results obtained while pursuing the second research question.
 
 The third research question (\cref{sec:exp_fom}) addressed the possibility of obtaining first-order predictions by concatenating the input and output embedding spaces of LLMs.
@@ -20,7 +20,7 @@ The \todo{obtained} findings tie back into InTraVisTo's view of the model by ide
 
 Future work could extend InTraVisTo by adding support for new decoding techniques, model architectures and injection approaches.
 Additional developments on \todo{the} secondary points treated in this work could include further experimenting and investigation on the impact of multilingual training on the embedding space LLMs or \todo{further} considerations on the feasibility of interpolating embeddings.
-As already \todo{mentioned} in \cref{ssec:exp_fom_discussion}, we also acknowledge the possibility of utilizing a Markov model to initialize the embedding and unembedding weights pair for model training, which could be an interesting future development.
+As already \todo{mentioned} in~\cref{ssec:exp_fom_discussion}, we also acknowledge the possibility of utilizing a Markov model to initialize the embedding and unembedding weights pair for model training, which could be an interesting future development.
 
 In conclusion, this thesis confirms previous findings and brings novel perspectives in the NLP field, providing a valuable interactive visualization tool aimed at \todo{streamlining} the study of transformer interpretability: InTraVisTo.
 By providing insight and innovative tools to the explainability field we aim to contribute to the broader goal of making LLMs more transparent and interpretable.
