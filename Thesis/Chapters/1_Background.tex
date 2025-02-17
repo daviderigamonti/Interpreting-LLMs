@@ -213,7 +213,7 @@ A $3$-dimensional approximation of the embedding spatial structure can be observ
 \begin{figure}[t!]
     \centering
     \includegraphics[width=0.5\textwidth]{background_embeddings.pdf}
-    \caption{Embedding space visualization for a Word2Vec model. The dimensionality of the space is reduced to $3$ \todo{through} the t-SNE algorithm and the overall number of shown embeddings is limited. Embeddings belonging to certain semantic fields (e.g. animals, colors,\dots) are colored in order to highlight their proximity in the space.}
+    \caption[Embedding space visualization for a Word2Vec model.]{Embedding space visualization for a Word2Vec model. The dimensionality of the space is reduced to $3$ \todo{through} the t-SNE algorithm and the overall number of shown embeddings is limited. Embeddings belonging to certain semantic fields (e.g. animals, colors,\dots) are colored in order to highlight their proximity in the space.}
     \label{fig:background_embeddings}
 \end{figure}
 
@@ -261,9 +261,10 @@ In principle, any kind of semantic relationship could potentially be modeled by 
 \begin{figure}[t!]
     \centering
     \includegraphics[width=\textwidth]{background_emb-arithmetic_placeholder.pdf}
-    \caption{\todo[red]{placeholder image: Embedding Arithmetic https://developers.google.com/machine-learning/crash-course/embeddings/embedding-space?hl=it.}}
+    \caption[Examples of embedding arithmetic provided by Google's machine learning crash course]{Examples of embedding arithmetic provided by Google's machine learning crash course\footnotemark.}
     \label{fig:background_emb-arithmetic}
 \end{figure}
+\footnotetext{\url{https://developers.google.com/machine-learning/crash-course/embeddings/embedding-space}}
 
 While these properties have some direct use cases, primarily involving clustering and similarity comparisons, their study has proven insightful from an explainability standpoint.
 Possibly understanding the semantic associations underlying text models can provide an educated perspective on how these models interpret their inputs, but also underline human and language biases.
@@ -282,7 +283,7 @@ Both input and output consist of sequential data.
 \begin{figure}[t!]
     \centering
     \includegraphics[width=0.6\textwidth]{background_trans-enc-dec_placeholder.pdf}
-    \caption{\todo[red]{placeholder image: Attention is All You Need Transformer Architecture https://arxiv.org/abs/1706.03762.}}
+    \caption{Original transformer architecture for the ``Attention is All You Need'' paper~\cite{vaswani2017}.}
     \label{fig:background_trans-enc-dec}
 \end{figure}
 
@@ -497,11 +498,11 @@ However, newer architectures have begun to incorporate Gated Linear Units (GLUs)
 \end{figure}
 
 On the other hand, GLUs determine an entire revision of the feed-forward architecture, as they introduce a gating mechanism where one linear transformation is modulated by the output of another, which allows the model to dynamically control the flow of information.
-In the case of Llama models~\cite{touvron2023,dubey2024}, the gating mechanism happens through an element-wise multiplication where $\gbm{W}_{in} \in \mathbb{R}^{D \times d_{hid}}$ represents the input transformation matrix with its respective bias $\gbm{b}_{in}$, $\gbm{V} \in \mathbb{R}^{D \times d_{hid}}$ is the gate transformation matrix with its respective bias $\gbm{b_{V}}$, $\gbm{W}_{out} \in \mathbb{R}^{d_{hid} \times D}$ performs the out-projection to the model's hidden representation dimensionality with its respective bias $\gbm{b}_{out}$ and $f$ represents the activation/gating function (in the SwiGLU case $f(\gbm{x}) = Swish(\gbm{x})$):
+In the case of Llama models~\cite{touvron2023,dubey2024}, the gating mechanism happens through an element-wise multiplication where $\gbm{W}_{in}^{GLU} \in \mathbb{R}^{D \times d_{GLU}}$ represents the input transformation matrix with its respective bias $\gbm{b}_{in}$, $\gbm{V} \in \mathbb{R}^{D \times d_{GLU}}$ is the gate transformation matrix with its respective bias $\gbm{b_{V}}$, $\gbm{W}_{out}^{GLU} \in \mathbb{R}^{d_{GLU} \times D}$ performs the out-projection to the model's hidden representation dimensionality with its respective bias $\gbm{b}_{out}$ and $f$ represents the activation/gating function (in the SwiGLU case $f(\gbm{x}) = Swish(\gbm{x})$):
 \begin{equation}
     \label{eq:background_ffnn}
-    FFN(\gbm{x}) = GLU(\gbm{x}) \cdot \gbm{W}_{out} + \gbm{b}_{out} 
-    = \Bigl( f(\gbm{x}\gbm{V} + \gbm{b_V}) \odot \gbm{x}\gbm{W}_{in} + \gbm{b}_{in} \Bigr) \cdot \gbm{W}_{out} + \gbm{b}_{out}
+    FFN(\gbm{x}) = GLU(\gbm{x}) \cdot \gbm{W}_{out}^{GLU} + \gbm{b}_{out} 
+    = \Bigl( f(\gbm{x}\gbm{V} + \gbm{b_V}) \odot \gbm{x}\gbm{W}_{in}^{GLU} + \gbm{b}_{in} \Bigr) \cdot \gbm{W}_{out}^{GLU} + \gbm{b}_{out}
 \end{equation}
 For Llama models~\cite{touvron2023,dubey2024}, all biases of the transformation matrices referring to the SwiGLU implementation are set to zero ($\gbm{b}_{in} = \gbm{b_V} = \gbm{b}_{out} = \vec {\gbm{0}}$).
 

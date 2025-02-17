@@ -125,6 +125,8 @@
 
 \newcommand{\rowcolorhang}[1]{\rowcolor{#1}[\dimexpr\tabcolsep+0.1pt\relax]} % Add overang to table row coloring, to avoid vertical white lines
 
+\interfootnotelinepenalty=1000000 % Avoid footnotes from breaking across pages
+
 % TODO: REMOVE after draft
 \renewcommand{\todo}[2][yellow]{\sethlcolor{#1}\hl{#2}} % TODO highlight
 
@@ -271,10 +273,21 @@ In sintesi, la presente tesi conferma risultati storici su nuove architetture e 
 \begin{table}[H]
     \centering
     \begin{tabular}{lll}
-        \textbf{Variable} & \textbf{Description} & \textbf{SI unit} \\
+        \textbf{Variable} & \textbf{Description} & \textbf{Dimensionality} \\
 		\midrule \\[-9px]
-        $\bm{u}$ & solid displacement & m \\[2px]
-        $\bm{u}_f$ & fluid displacement & m \\[2px]
+		$V$ & vocabulary cardinality & $-$ \\[2px]
+		$\mathcal{V}$ & model vocabulary & $V$ \\[2px]
+		$D$ & model hidden size & $-$ \\[2px]
+		$L$ & number of model layers & $-$ \\[2px]
+		$\gbm{x}, \gbm{h}, \gbm{v}$ & hidden state vectors & $1 \times D$ \\[2px]
+		$\gbm{e}, \gbm{w}$ & embedded vectors & $1 \times D$ \\[2px]
+		$\gbm{\gamma}, \gbm{\beta}$ & normalization parameters & $1 \times D$ \\[2px]
+		$\gbm{W}_{in}$ & embedding matrix & $V \times D$ \\[2px]
+		$\gbm{W}_{out}$ & unembedding matrix & $D \times V$ \\[2px]
+		$d_{dec}$ & decoder choice & $-$ \\[2px]
+		$n_{norm}$ & normalization choice & $-$ \\[2px]
+		$\gbm{Q}$ & transition matrix & $V \times V$ \\[2px]
+		$\gbm{I}_V$ & identity matrix of order $V$ & $V \times V$ \\[2px]
     \end{tabular}
 \end{table}
 
