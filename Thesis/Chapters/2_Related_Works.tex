@@ -21,7 +21,7 @@ Mechanistic interpretability offers a novel perspective over the interpretabilit
 Previously identified model-agnostic techniques have been proven to offer limited insight for the transformer architecture~\cite{neely2022,pruthi2022,bibal2022,krishna2024}.
 In contrast, MI embraces the opposite philosophy by eliminating model abstractions and analyzing LMs in terms of their specific components and interactions.
 
-Mechanistic interpretability was initially mentioned as being the main driving ideology behind the `transformer circuits thread'~\cite{elhage2021}.
+Mechanistic interpretability was initially mentioned as being the main driving ideology behind the `transformer circuits thread'~\cite{elhage2023}.
 Nonetheless, by following~\citet{rai2024} approach, we can observe that the concept of MI is not limited to the application of circuits.
 Envisioning MI as being characterized by a general bottom-up approach for interpreting LMs, allows its scope to extend to include earlier techniques such as the logit lens~\cite{nostalgebraist2020} and other probing methods.
 
@@ -88,7 +88,7 @@ ROME makes it possible to modify factual associations by inserting a new knowled
 \textbf{Circuit analysis} is closely related to the mechanistic interpretability (MI) subfield analyzed previously as its main goal is tied to the discovery of circuits inside LMs.
 Circuits are subsets of model components that can be seen as acting independently while carrying out a specific task, and can possibly be synthesized into an algorithm.
 Despite their successful application on LMs, circuits were not originally identified with the transformer architecture in mind; in fact, their first application was on vision models~\cite{cammarata2020}.
-Most of the initial work regarding transformer circuits was performed on publications belonging to the `transformer circuits thread'~\cite{elhage2021,olsson2022,elhage2022,bricken2023}, heavily inspired by the preceding vision counterpart~\cite{cammarata2020}.
+Most of the initial work regarding transformer circuits was performed on publications belonging to the `transformer circuits thread'~\cite{elhage2021,olsson2022,elhage2022,bricken2023,elhage2023}, heavily inspired by the preceding vision counterpart~\cite{cammarata2020}.
 
 In particular, `A Mathematical Framework for Transformer Circuits' \cite{elhage2021} can be considered the seminal work that popularized circuit identification in transformer models.
 In this work, \citet{elhage2021} perform a reverse-engineering analysis on simplified versions of transformer models, leading to the discovery of relevant properties.

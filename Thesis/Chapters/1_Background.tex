@@ -164,7 +164,7 @@ During the first AI winter of the 1970s and 1980s, the focus of NLP shifted towa
 
 \subsubsection*{Markov Models}
 
-Exactly in these years the use of Markov models began to rise in popularity, despite having been theorized decades earlier \todo[orange]{cite shannon}.
+Exactly in these years the use of Markov models began to rise in popularity, despite having been theorized decades earlier~\cite{shannon1948}.
 As shown in \cref{fig:background_markov}, Markov models can be represented by graphs that describe sequences of events (represented by states) occurring with certain probabilities (represented by transitions). 
 In fact, Markov models are a broader categorization of stochastic models characterized by the Markov property, which states that transitions to future states depend solely on the current state, without considering prior states or transitions.
 
@@ -185,7 +185,7 @@ In practice, only small $n$-grams were typically ever utilized, as the number of
 
 Following the concept of stochastic text analysis, it is also possible to represent an entire document as an unordered set of $n$-gram frequencies, this approach is known as Bag of Words (BoW) model.
 This representation can be identified as document-oriented since words are used as features to characterize an entire document.
-This type of representation is not limited to direct text frequency as a metric to represent word prevalence within a document, since specialized metrics such as TF-IDF \todo[orange]{cite} are also used to provide more accurate estimates for information retrieval and document classification tasks.
+This type of representation is not limited to direct text frequency as a metric to represent word prevalence within a document, since specialized metrics such as TF-IDF are also used to provide more accurate estimates for information retrieval and document classification tasks.
 
 One of the fundamental weaknesses of BoW models and other document-oriented approaches is their inherent limitation in capturing semantic relationship between words, as these methods treat words as discrete variables without meaningful connection or context beyond co-occurrence statistics.
 To address this, more advanced techniques, such as word embeddings, have been developed.
@@ -329,9 +329,9 @@ There exist different attention function implementations such as \emph{simple do
 The original transformer architecture mentioned in ``Attention Is All You Need''~\cite{vaswani2017} uses \emph{scaled dot product attention}, which is implemented with the following formula:
 \begin{equation}
     \label{eq:background_attention}
-    Attention(Q,K,V) = softmax\left(\frac{QK^\T}{\sqrt{d_K}}\right)V
+    Attention(\gbm{Q},\gbm{K},\gbm{V}) = softmax\left(\frac{\gbm{Q}\gbm{K}^\T}{\sqrt{d_{\gbm{K}}}}\right)\gbm{V}
 \end{equation}
-Where $Q$, $K$ and $V$ represent the \emph{query}, \emph{key} and \emph{value} components of attention which are obtained by multiplying the hidden state vectors to their respective projection matrices $W_Q$, $W_K$ and $W_V$, which are composed of learnable model parameters.
+Where $\gbm{Q}$, $\gbm{K}$ and $\gbm{V}$ represent the \emph{query}, \emph{key} and \emph{value} components of attention which are obtained by multiplying the hidden state vectors to their respective projection matrices $\gbm{W_Q}$, $\gbm{W_K}$ and $\gbm{W_V}$, which are composed of learnable model parameters.
 
 The transformer architecture implements three different types of attention:
 \begin{itemize}
@@ -346,14 +346,13 @@ The masked self-attention formula can be summarized as follows:
 \begin{equation}
     \label{eq:background_masked-attention}
     \begin{gathered}
-        MaskedAttention(Q,K,V) = softmax\left(\frac{QK^\T + M}{\sqrt{d_K}}\right)V \\
+        MaskedAttention(\gbm{Q},\gbm{K},\gbm{V}) = softmax\left(\frac{\gbm{Q}\gbm{K}^\T + \gbm{M}}{\sqrt{d_{\gbm{K}}}}\right)\gbm{V} \\
         M_{ij} = \begin{cases}
             0 & \text{if}\ i \ge j, \\
             -\infty & \text{otherwise}.
         \end{cases}
     \end{gathered}
 \end{equation}
-\todo[cyan]{check M definition equation}
 \end{itemize}
 
 \begin{figure}[!htp]
@@ -371,18 +370,18 @@ The masked self-attention formula can be summarized as follows:
 
 In reality, transformers use a more refined attention implementation called \textbf{multi-head attention}, which can be applied in all previously identified scenarios.
 Multi-head attention is a novelty introduced in the ``Attention Is All You Need''~\cite{vaswani2017} paper, and it consists in replicating the attention structure multiple times, thus obtaining multiple representation spaces for each attention layer.
-This operation influences the dimension of attention vectors, which needs to be divided by $h$, where $h$ is the chosen number of separate attention heads for multi-head attention.
-The attention output for multi-head attention is then obtained as the concatenation between the attention outputs of all $h$ heads as follows:
+This operation influences the dimension of attention vectors, which needs to be divided by $H$, where $H$ is the chosen number of separate attention heads for multi-head attention.
+The attention output for multi-head attention is then obtained as the concatenation between the attention outputs of all $H$ heads as follows:
 \begin{equation}
     \label{eq:background_multihead-attention}
     \begin{aligned}
-    MultiHead(Q,K,V)    &= head_1\ \oplus\ \ldots\ \oplus\ head_h \\
-                        &= Attention_1(Q,K,V)\ \oplus\ \ldots\ \oplus\ Attention_h(Q,K,V)
+    MultiHead(\gbm{Q},\gbm{K},\gbm{V})    &= head_1\ \oplus\ \ldots\ \oplus\ head_H \\
+                        &= Attention_1(\gbm{Q},\gbm{K},\gbm{V})\ \oplus\ \ldots\ \oplus\ Attention_H(\gbm{Q},\gbm{K},\gbm{V})
     \end{aligned}
 \end{equation}
 In practice, multi-head attention enables the model to simultaneously focus on information present at different positions, avoiding excessive attention on single tokens.
 
-\todo[green]{attention dimensional analysis}
+\todo[purple!30]{Write paragraph for attention dimensional analysis, plus image}
 
 The second main component contained in the transformer block is the \textbf{feed-forward block}.
 As the name suggests, it consists of a simple feed-forward network and is typically situated as the last step of the transformer block, using the outputs of previous attention layers as inputs.
@@ -396,15 +395,14 @@ In particular:
 \begin{itemize}
     \item \textbf{Layer normalization}~\cite{ba2016} is applied after each attention and feed-forward block.
 It consists of two steps: a batch-independent normalization step performed with parameters ($\mu$, $\sigma$) which model a normal distribution over the feature space of the vector representations, and a linear transformation using a bias and a scale factor.
-The bias and scale factor are usually referred to as $\beta$ and $\gamma$ respectively, and are trainable layer-level parameters which perform a shift and rescale operation on the normalized vector.
-If $v_i$ is a vector representation, after layer normalization at layer $\ell$ we obtain:
+The bias and scale factor are usually referred to as $\gbm{\beta}$ and $\gbm{\gamma}$ respectively, and are trainable layer-level parameters which perform a shift and rescale operation on the normalized vector.
+If $\gbm{v}$ is a vector representation, after layer normalization at layer $\ell$ we obtain:
 \begin{subequations}
     \begin{gather}
-        \bar v_{i,\ell} = \gamma_\ell \cdot \left( \frac{v_i - \mu}{\sigma} \right) + \beta_\ell, \label{eq:background_layernorm} \\
-        \text{where}\ \mu = \frac{1}{n}\sum_{i=1}^{n}{v_i},\ \sigma = \sqrt{\frac{1}{n}\sum_{i=1}^{n}{{(v_i - \mu)}^2}} \label{eq:background_layernorm_extra}
+        \gbm{\bar v} = \gbm{\gamma}_\ell \odot \left( \frac{\gbm{v} - \mu}{\sigma} \right) + \gbm{\beta}_\ell, \label{eq:background_layernorm} \\
+        \text{where}\ \mu = \frac{1}{D}\sum_{i=1}^{D}{v_i},\ \sigma = \sqrt{\frac{1}{D}\sum_{i=1}^{D}{{(v_i - \mu)}^2}} \label{eq:background_layernorm_extra}
     \end{gather}
 \end{subequations}
-\todo[cyan]{Check equation pedices}
     \item \textbf{Residual connections}~\cite{he2016} are a strategy employed in deep architectures to streamline gradient propagation and avoid vanishing gradients.
 Additionally, it helps the transformer to preserve local information as attention and feed-forward blocks are added to the base residual flow, limiting their freedom in the effective output space.
 In practice, residual connections sum the identity function of the input of a block to the output of that block, in the transformer's case the residual summation happens before layer normalization.
@@ -471,16 +469,16 @@ Another variation on the transformer normalization mechanism was achieved with t
 The fundamental improvement introduced by RMSNorm is a substantial reduction in the amount of computation performed with respect to classical layer normalization and an overall gain in efficiency, this is especially true for deep architectures where the computational overhead of layer normalization is meaningful.
 
 Implementation wise, RMSNorm only focuses on the rescaling aspect rather than including both centering and rescaling as layer normalization does.
-The central quantity used to perform the rescaling computation is the Root Mean Square (RMS) statistic and only the $\gamma$ parameter is retained from the set of learnable parameters due to the fact that the re-centering operation performed by $\beta$ was deemed to be mostly irrelevant for both layer normalization and RMSNorm~\cite{zhang2019}.
-If $v_i$ is a vector representation, after RMSNorm at layer $\ell$ we obtain:
+The central quantity used to perform the rescaling computation is the Root Mean Square (RMS) statistic and only the $\gbm{\gamma}$ parameter is retained from the set of learnable parameters due to the fact that the re-centering operation performed by $\gbm{\beta}$ was deemed to be mostly irrelevant for both layer normalization and RMSNorm~\cite{zhang2019}.
+If $\gbm{v}$ is a vector representation, after RMSNorm at layer $\ell$ we obtain:
 \begin{equation}
     \label{eq:background_rmsnorm}
     \begin{aligned}
-        \bar v_{i,\ell} = \gamma_\ell \cdot \frac{v_i}{RMS(v)}, &&
-        \text{where}\ RMS(v) = \sqrt{\frac{1}{n}\sum_{i=1}^{n}{v_i^2}}
+        \gbm{\bar v} = \gbm{\gamma}_\ell \odot \frac{\gbm{v}}{RMS(\gbm{v})}, &&
+        \text{where}\ RMS(\gbm{v}) = \sqrt{\frac{1}{D}\sum_{i=1}^{D}{v_i^2}}
     \end{aligned}
 \end{equation}
-One peculiar side effect of RMSNorm is the fact it forces the summed inputs into a $\sqrt{n}$-scaled unit sphere which benefits the stability of layer activations and output distribution, positively influencing the interpretability of the hidden space.
+One peculiar side effect of RMSNorm is the fact it forces the summed inputs into a \mbox{$\sqrt{D}$-scaled} unit sphere which benefits the stability of layer activations and output distribution, positively influencing the interpretability of the hidden space.
 
 \subsubsection*{SwiGLU}
 
@@ -488,7 +486,7 @@ The last main change featured in most recent autoregressive transformer architec
 The base transformer implementation establishes the feed-forward layer as the combination of two linear transformations separated by a non-linear activation function, typically a choice between \emph{ReLU} and \emph{GELU}.
 
 However, newer architectures have begun to incorporate Gated Linear Units (GLUs)~\cite{dauphin2017} implemented using a \emph{Swish} (also called \emph{SiLU}) activation function, this particular architectural combination for the feed-forward block is commonly referred to as \textbf{SwiGLU}~\cite{shazeer2020} and can be observed in \cref{fig:background_ffnn-glu}.
-\emph{Swish}~\cite{shazeer2020} is an activation function similar to \emph{ReLU}, characterized by a non-monotonic depression in its zero-region, and is implemented in the following way: $Swish(x) = x \cdot \sigma(x)$ where $\sigma(x)$ represents the logistic sigmoid function.
+\emph{Swish}~\cite{shazeer2020} is an activation function similar to \emph{ReLU}, characterized by a non-monotonic depression in its zero-region, and is implemented in the following way: $Swish(\gbm{x}) = \gbm{x} \cdot \sigma(\gbm{x})$ where $\sigma(\gbm{x})$ represents the logistic sigmoid function.
 \emph{Swish} was shown to offer marginal improvements over \emph{ReLU} and other similar variations, based on its smoothness and possibility of returning small negative values for inputs close to zero, implying the efficient convergence of non-zero gradients and consequently minimizing the problem of dead neurons (caused by the nullification of gradient).
 
 \begin{figure}[t!]
@@ -499,14 +497,13 @@ However, newer architectures have begun to incorporate Gated Linear Units (GLUs)
 \end{figure}
 
 On the other hand, GLUs determine an entire revision of the feed-forward architecture, as they introduce a gating mechanism where one linear transformation is modulated by the output of another, which allows the model to dynamically control the flow of information.
-In the case of Llama models~\cite{touvron2023,dubey2024}, the gating mechanism happens through an element-wise multiplication where $W_{in} \in \mathbb{R}^{d_{model} \times d_{hid}}$ represents the input transformation matrix with its respective bias $b_{in}$, $V \in \mathbb{R}^{d_{model} \times d_{hid}}$ is the gate transformation matrix with its respective bias $b_{V}$, $W_{out} \in \mathbb{R}^{d_{hid} \times d_{model}}$ performs the out-projection to the model's hidden representation dimensionality with its respective bias $b_{out}$ and $f$ represents the activation/gating function (in the SwiGLU case $f(x) = Swish(x)$):
+In the case of Llama models~\cite{touvron2023,dubey2024}, the gating mechanism happens through an element-wise multiplication where $\gbm{W}_{in} \in \mathbb{R}^{D \times d_{hid}}$ represents the input transformation matrix with its respective bias $\gbm{b}_{in}$, $\gbm{V} \in \mathbb{R}^{D \times d_{hid}}$ is the gate transformation matrix with its respective bias $\gbm{b_{V}}$, $\gbm{W}_{out} \in \mathbb{R}^{d_{hid} \times D}$ performs the out-projection to the model's hidden representation dimensionality with its respective bias $\gbm{b}_{out}$ and $f$ represents the activation/gating function (in the SwiGLU case $f(\gbm{x}) = Swish(\gbm{x})$):
 \begin{equation}
     \label{eq:background_ffnn}
-    FFN(x) = GLU(x) \cdot W_{out} + b_{out} 
-    = \Bigl( f(xV + b_V) \odot xW_{in} + b_{in} \Bigr) \cdot W_{out} + b_{out}
+    FFN(\gbm{x}) = GLU(\gbm{x}) \cdot \gbm{W}_{out} + \gbm{b}_{out} 
+    = \Bigl( f(\gbm{x}\gbm{V} + \gbm{b_V}) \odot \gbm{x}\gbm{W}_{in} + \gbm{b}_{in} \Bigr) \cdot \gbm{W}_{out} + \gbm{b}_{out}
 \end{equation}
-\todo[cyan]{check dimensionality}
-For Llama models~\cite{touvron2023,dubey2024}, all biases of the transformation matrices referring to the SwiGLU implementation are set to zero ($b_{in} = b_V = b_{out} = \vec 0$).
+For Llama models~\cite{touvron2023,dubey2024}, all biases of the transformation matrices referring to the SwiGLU implementation are set to zero ($\gbm{b}_{in} = \gbm{b_V} = \gbm{b}_{out} = \vec {\gbm{0}}$).
 
 The benefits of SwiGLU are largely tied to providing a better downstream performance on fine-tuning tasks and pre-training objectives, despite proof of SwiGLU actually having an impactful effect on transformer models being purely empirical.
 However, the reasons for its effectiveness may potentially be associated with its capability to model complex functions through the gating mechanism~\cite{shazeer2020,shibuya2023}.

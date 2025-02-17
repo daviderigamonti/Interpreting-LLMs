@@ -45,7 +45,7 @@ Where $\gbm{W}_{d_\textit{dec}}$ represents the matrix of decoder weights accord
 Considering $\mathcal{N}{(\gbm{x})}$ the normalization component of the model's final normalization layer, being reliant on $\mu$ and $\sigma$ for LayerNorm implementations as defined in \cref{eq:background_layernorm,eq:background_layernorm_extra}, and $RMS(\gbm{x})$ for RMSNorm implementations as defined in \cref{eq:background_rmsnorm}
 
 Two natural choices of decoders to use are the transpose of the \emph{input embedding matrix} $\gbm{W}_\textit{in}^\T$ used by the model to convert tokens to vectors on input, and the \emph{output decoder} $\gbm{W}_\textit{out}$ used upon output within the language modeling head.
-Some models, like GPT-2~\cite{radford2019} and Gemma~\cite{mesnard2024} tie these two parameter matrices together during training, while other popular models such as Mistral~\cite{jiang2023} and Llama~\cite{touvron2023,dubey2024} allow these two matrices to differ.
+Some models, like GPT-2~\cite{radford2019} and Gemma~\cite{mesnard2024,rivi2024} tie these two parameter matrices together during training, while other popular models such as Mistral~\cite{jiang2023} and Llama~\cite{touvron2023,dubey2024} allow these two matrices to differ.
 This structural weight difference will be analyzed more in depth in later sections, \todo{however,} in our current scope having different weight matrices for embedding and unembedding ($\gbm{W}_\textit{in}^\T \neq \gbm{W}_\textit{out}$) implies that earlier layers tend to be much more interpretable when decoded with the input embedding ($\gbm{W}_\textit{in}^\T$) while latter layers are more meaningful if the output decoder ($\gbm{W}_\textit{out}$) is used.
 
 Previous work has looked to \emph{train specialized decoders}~\cite{belrose2023a,sakarvadia2023,pal2023} for generating meaningful vocabulary distributions at any point in a model, at the cost of introducing a great deal of additional complexity and potential errors.
@@ -84,7 +84,7 @@ As a consequence, we postulate that hidden representations existing in these int
 Iterative decoding exploits these linear properties by performing a sequence of subtractions from the main hidden representation, removing the embedding of the most probable representation during each iteration.
 
 \begin{algorithm}
-    \caption{Iterative decoding algorithm}\label{alg:method_intravisto_iter-dec}
+    \caption{Iterative decoding algorithm.}\label{alg:method_intravisto_iter-dec}
     \begin{algorithmic}
         \STATE{$tokens \gets \{\}$}
         \STATE{$norms \gets \{\}$}
@@ -339,24 +339,36 @@ We wish to establish if geometric relationships can still be modeled inside the 
 The first step \todo{towards the direction of this approach} was the direct experimentation on \emph{word analogy tasks}, as already illustrated in~\citet{mikolov2013}.
 Solving word analogies showcases the ability of an embedding space to model the semantics of words in a relatively consistent way, implying the existence of embedding dimensions with associated meanings (even if overlapping or under superposition as mentioned by~\citet{elhage2022,henighan2023}), which is not necessarily an expected feature of language models on a large scale.
 
-\todo[gray]{V: Expand and explain what is an analogy}
+\todo{In their purest form}, word analogies consist of $4$ words that satisfy a mutual analogy relationship of the type:
+\begin{center}
+    \emph{``The dog barks as the cat meows''} $\Longleftrightarrow$ $\textit{`dog'}\ :\ \textit{`bark'}\ =\ \textit{`cat'}\ :\ \textit{`meow'}$
+\end{center}
+As previously mentioned, in the context of transformer models, these types of analogies are commonly used to test whether semantic relationships between words are encoded as linear transformations in the embedding space of models.
+There exist \todo{many} types of analogies, encoding different paradigms across various semantic fields and morphological connections.
+For example~\citet{drozd2016} identify $4$ main relationship types between words in their \emph{BATS (Bigger Analogy Test Set)}: 
+\begin{itemize}
+    \item \textbf{Inflectional morphology}: $\textit{`user'}\!:\!\textit{`users'}$, $\textit{`hot'}\!:\!\textit{`hotter'}$, $\textit{`enjoy'}\!:\!\textit{`enjoying'}$, \dots
+    \item \textbf{Derivational morphology}: $\textit{`able'}\!:\!\textit{`unable'}$, $\textit{`apply'}\!:\!\textit{`reapply'}$, $\textit{`nice'}\!:\!\textit{`nicely'}$, \dots
+    \item \textbf{Encyclopedic semantics}: $\textit{`madrid'}\!:\!\textit{`spain'}$, $\textit{`dante'}\!:\!\textit{`poet'}$, $\textit{`cabbage'}\!:\!\textit{`green'}$, \dots
+    \item \textbf{Lexicographic semantics}: $\textit{`armchair'}\!:\!\textit{`chair'}$, $\textit{`nap'}\!:\!\textit{`sleep'}$, $\textit{`after'}\!:\!\textit{`before'}$, \dots
+\end{itemize}
+By combining two pairs of words from the same category we obtain word analogies in their full form, and they can be resolved by performing appropriate geometric transformation on the vectors that represent words.
 
 \subsubsection{Analogy Computation}
 
-\todo[green]{maybe slightly expand this text}
 As far as the actual word analogy computation is concerned, given 4 words $\{w_1, w_2, w_3, w_4\}$ set up as an analogy of the type `$w_1 : w_2 = w_3 : w_4$', we can formalize it as follows:
 \begin{equation}
     \label{eq:method_embeddings_analogy}
     \begin{gathered}
-        closest = \arg\min {\Bigl\{ d_{\textit{dist}}\bigl(\tilde w, \textit{encode}^{\textit{emb}}(v_{id})\bigr) \ |\ \forall v_{id} \in \mathcal{V} \Bigr\}} \\
+        closest = \operatornamewithlimits{argmin}_{\forall v \in \mathcal{V}} d_{\textit{dist}}\bigl(\tilde w, \textit{encode}^{\textit{emb}}(v)\bigr) \\
         \tilde w = \textit{analogy}(w_1, w_2, w_3, w_4)
     \end{gathered}
 \end{equation}
-Where $d_{\textit{dist}}$ is the chosen distance metric as illustrated in \cref{eq:method_embeddings_distance}, and $\textit{encode}^{\textit{emb}}$ refers to a simple encoding of a single token $v_{id} \in \mathcal{V}$ using the embedding matrix $\gbm{W}_{\textit{emb}}$.
+Where $d_{\textit{dist}}$ is the chosen distance metric as illustrated in \cref{eq:method_embeddings_distance}, and $\textit{encode}^{\textit{emb}}$ refers to a simple encoding of a single token $v \in \mathcal{V}$ using the embedding matrix $\gbm{W}_{\textit{emb}}$.
 On the other hand, \emph{`closest'} indicates the returned value, which is the actual token identifier of the closest embedding (of a word present in vocabulary $\mathcal{V}$) to the computed result of the word analogy.
-\todo[green]{possibility of using top-k instead of closest}
 Furthermore, the $\textit{analogy}$ function expresses the combination of words $\{w_1, w_2, w_3, w_4\}$ that composes the logic relationship of the word analogy.
-Due to the fact that it is possible to define multiple analogy test cases from a single combination of words, the definitions of the actual \emph{analogy function} implementations slightly fall out of the scope of this section, while keeping in mind that they will be discussed more in depth inside the actual experimental setup section \todo[orange]{reference}.
+In case we need a more robust evaluation support for comparing models, there also exists the possibility of gathering the top-$k$ closest embeddings to the obtained result instead of only representing the first one.
+Additionally, due to the fact that it is possible to define multiple analogy test cases from a single combination of words, the definitions of the actual \emph{analogy function} implementations slightly falls out of the scope of this section, while keeping in mind that they will be discussed more in depth inside the experimental setup section of the corresponding experiment (\cref{sssec:exp_emb_exp1_expset}).
 Thus, for simplicity, we can assume to \todo{follow} the \todo{renowed} `$king - man + woman \approx queen$' example from~\citet{mikolov2013}, obtaining:
 \begin{equation}
     \label{eq:method_embeddings_analogy-function}
@@ -381,9 +393,11 @@ Subsequently, we use multiple analogies from the same group to obtain the relati
         \text{where}&\ \textit{batch} = \Bigl\{ \{w_1^i, w_2^i, w_3^i, w_4^i\} \ |\ \forall i \in \{1,\ldots, B_{\textit{batch}}\} \Bigr\}
     \end{aligned}
 \end{equation}
-\todo{write better}
-\todo[cyan]{explain why delta analogies are done on half analogy}
-\todo[cyan]{change all instances of "delta analogies"}
+As it is possible to observe in \cref{eq:method_embeddings_delta-analogy-function}, we are computing the analogy term considering only \todo{half} of the word available in the analogy; in the cited case $w_3$ and $w_4$.
+This is \todo{done} since, as explained in the first paragraphs of \cref{ssec:method_embeddings_analogies}, word analogies are effectively composed by two pairs of words, each representing a semantic or morphological relationship.
+Thus, considering that in the delta analogies scenario we are looking to extract a vector that represents the common relationship modeled by a subgroup of analogies, we only need a single occurrence of each single pair of words.
+
+\todo[purple!30]{change all instances of "delta analogies"}
 
 \subsubsection{Analogy Evaluation}\label{subsubsec:method_embeddings_evaluation}
 
@@ -398,15 +412,16 @@ In our case, it can be written using the following notation:
 \end{equation}
 where ${\textit{result}\,}^i_j$ represents the $j$-th result of the $i$-th analogy, ${\textit{sol}\,}^i$ indicates the set of solution for the $i$-th analogy obtained through the use of the ${\textit{encode}}^{out}$ function as illustrated in \cref{eq:method_embeddings_multitok-out}, and $n$ is the dimension of the considered dataset.
 
-Alternatively, we devised an additional measure which fulfills a similar purpose to the top-$k$ accuracy by evaluating a set of embeddings on an analogy task.
-The chosen metric is a slight variation of the Mean Reciprocal Rank statistic measure, commonly referred to as $MRR = \frac{1}{n}\sum_{i=1}{n}{\frac{1}{rank_i}}$ \todo[orange]{cite?}.
-We considered this approach in order to fully utilize the rank information given by the \todo{comparison analysis}, rather than just limiting the computation of our metric to check for the presence of matches between the results and the solutions, as it is done in the top-$k$ accuracy case.
-Rankscore:
-\begin{equation}
-    \label{eq:method_embeddings_rankscore}
-    \textit{rankscore}_k = 1 - \frac{\sum_{i=1}^{n}{rank_i}}{n \cdot k}
-\end{equation}
-\todo[cyan]{Understand if rankscore makes sense, eventually adapt it to MRR or remove MRR as a reference}
+\todo[purple!30]{Mean Reciprocal Rank / Rankscore evaluation of analogies}
+%Alternatively, we devised an additional measure which fulfills a similar purpose to the top-$k$ accuracy by evaluating a set of embeddings on an analogy task.
+%The chosen metric is a slight variation of the Mean Reciprocal Rank statistic measure, commonly referred to as $MRR = \frac{1}{n}\sum_{i=1}{n}{\frac{1}{rank_i}}$ \todo[orange]{cite?}.
+%We considered this approach in order to fully utilize the rank information given by the \todo{comparison analysis}, rather than just limiting the computation of our metric to check for the presence of matches between the results and the solutions, as it is done in the top-$k$ accuracy case.
+%Rankscore:
+%\begin{equation}
+%    \label{eq:method_embeddings_rankscore}
+%    \textit{rankscore}_k = 1 - \frac{\sum_{i=1}^{n}{rank_i}}{n \cdot k}
+%\end{equation}
+%\todo[cyan]{Understand if rankscore makes sense, eventually adapt it to MRR or remove MRR as a reference}
 
 
 \section{First Order Prediction}\label{sec:method_fom}
@@ -417,39 +432,70 @@ In particular, we are interested in observing if there exists any particular fun
 \subsection{Markov Models}
 
 The hypothesis regarding output embeddings carrying out a prediction of the most likely subsequent token based on the input is inspired by architectural deconstructions of decoder-only transformer models, revealing residual links directly connecting the embedding layer to the decoder~\cite{vaswani2017}.
+On this topic, \citet{elhage2021} claim that zero layer transformers model bigram statistics and that the bigram table can be accessed directly from the weights, although their experimental results only confirm their hypotheses for a restricted set of models.
 Since the task of decoder-only models is to predict the next word given the previous context~\cite{radford2019}, by stripping from the architecture all the transformer blocks while keeping only a direct link from the input embedding layer to the output decoder layer, yields a \emph{First Order Model (FOM)} at best capable of predicting the next token given the previous one, akin to the behavior of first-order Markov models~\cite{markov2006}.
-\todo[green]{add part regarding transformers circuit thread}
 Such Markov models leverage bigram probability estimates retrieved from a corpus of text in order to generate the next word, provided with the previous one.
 Given words $w_i$ and $w_j$, the bigram probability can be expressed as:
-
 \begin{equation}
-    P(w_j|w_i) = \frac{P(w_i, w_j)}{P(w_i)}
+    \label{eq:method_fom_markov-prob}
+    P(w_j|w_i) = P_{ij} = \frac{P(w_i, w_j)}{P(w_i)}
 \end{equation}
-\todo[yellow]{needed as separate equation?}
 
-\subsection{Matrix Comparison}
+The state-based stochastic transitions of a Markov model can be entirely described \todo{by} a transition matrix $\gbm{Q} \in \mathbb {R}_{+}^{|S| \times |S|}$ given the state space $S$.
+The transition matrix is defined as:
+\begin{equation*}
+    \gbm{Q} = \left(P_{ij}\right)_{i,j} \;\; \forall i,j \in 1,\dots,|S|
+\end{equation*}
+Where $P_{ij}$ follows the definition specified in \cref{eq:method_fom_markov-prob} and, representing the transition probability of moving to state $j$ from state $i$, must respect $\sum_{j=1}^{|S|}{P_{ij}} = 1 \;\; \forall j \in 1,\dots,|S|$.
+
+\subsection{Matrix Comparison}\label{ssec:method_fom_matrix}
 
 As a preliminary way to explore various relationships between the input and output embeddings, we decide to perform an analysis of their matrices.
-To do so, we compute the `transition matrix' four our First Order Model (FOM) by combining and transposing the input and output weight matrices as follows:
-
+To do so, we compute the `transition matrix' for our First Order Model (FOM) by combining and transposing the input and output weight matrices as follows:
 \begin{equation}
     \label{eq:method_fom_fom-matrix}
-    \gbm{Q}_{\textit{FOM}} = \gbm{W}_{in} \cdot \gbm{W}_{out}^\T
+    \gbm{Q}_{\textit{FOM}} = \operatorname{softmax}(\gbm{Q}_{\textit{FOM}}^{log}) = \operatorname{softmax}(\gbm{W}_{in} \cdot \gbm{W}_{out}^\T)
 \end{equation}
-Where $W_{in}$ and $W_{out}$ are, respectively, the input and output embedding weight matrices.
+Where $\gbm{W}_{in}$ and $\gbm{W}_{out}$ are, respectively, the input and output embedding weight matrices.
+One important detail is the presence of the \emph{softmax} operator, which is applied to each row of the resulting logit transition matrix $\gbm{Q}_{\textit{FOM}}^{log}$ in order to obtain a transition matrix representing actual probabilities over the vocabulary space.
+This operation is necessary \todo{since} the direct product between embedding matrices returns series of logit distributions over the vocabulary, which do not benefit from the \todo{properties of} probability distributions.
+However, not all experiments require the computation of the actual transition matrix $\gbm{Q}_{\textit{FOM}}$ as experiments that consider top-$k$ aggregations and other greedy approximations of next-token predictions can also be performed with $\gbm{Q}_{\textit{FOM}}^{log}$ since the ordering of elements is not \todo{modified} by the softmax operator.
+To avoid confusion, the \todo{aforementioned} distinction is \todo{made} only for practical experiments present in \cref{sec:exp_fom}, whereas the \todo{theoretical groundwork} \todo{present} in this section \todo{only acknowledges} the probability matrix $\gbm{Q}_{\textit{FOM}}$ as the FOM transition matrix.
+
+\todo{For reasons examined in depth} in \cref{sec:exp_fom,sssec:exp_fom_exp1_expset}, we also define a FOM transition matrix with the addition of RMSNorm (\todo{from here} simply RMS normalization).
+RMS normalization is a normalization technique defined in \cref{eq:background_rmsnorm}, \todo{which} is commonly found in multiple places inside recent transformer architectures as highlighted in \cref{ssec:background_transf_current}.
+In our case, we split the RMS computation between input and output embedding matrices by performing the actual RMS normalization portion of the computation in the input and the weight product on the output.
+\begin{equation}
+    \label{eq:method_fom_fom-matrix-rms}
+    \begin{gathered}
+        \gbm{Q}_{\textit{FOM}}^{RMS} = \operatorname{softmax}(\gbm{W}_{in,RMS} \cdot \gbm{W}_{out,RMS}^\T) \\
+        \text{where}\ \left\{
+            \begin{array}{cl}
+                \gbm{W}_{in,RMS} &= \left(\frac{\gbm{w}_i^{in}}{RMS(\gbm{w}_i^{in})}\right)_{i,\cdot} = \left(\frac{\gbm{w}_i^{in}}{\sqrt{\frac{1}{D}\sum_{j=1}^{D}{(w_{ij}^{in})^2}}}\right)_{i,\cdot} \\
+                \gbm{W}_{out,RMS} &= \left(\gbm{\gamma}^\T \odot \gbm{w}_j^{out}\right)_{\cdot,j}
+            \end{array}
+        \right.
+    \end{gathered}
+\end{equation}
+In particular, $\gbm{w}_i^{in}$ refers to row vectors extracted from $\gbm{W}_{in}$, $w_{ij}^{in}$ refers to elements extracted from $\gbm{W}_{in}$ and $\gbm{w}_j^{out}$ refers to column vectors extracted from $\gbm{W}_{out}$, therefore:
+\begin{equation*}
+    \gbm{w}_i^{in} = \left(\gbm{W}_{in}\right)_{i,\cdot},\ \ w_{ij}^{in} = \left(\gbm{W}_{in}\right)_{i,j},\ \ \gbm{w}_j^{out} = \left(\gbm{W}_{out}\right)_{\cdot,j},
+\end{equation*}
+Additionally, the multiplicative weights $\gbm{\gamma}$ associated with RMS normalization in \cref{eq:method_fom_fom-matrix-rms} \todo{are the} weights of the RMSNorm layer positioned at the end of the stack of transformer layers, before the unembedding layer in recent decoder architecture, as seen in \cref{fig:background_llama-arch}.
 
 At this point, we are able to use the newly defined matrix to compare it against \todo{others} in order to quantify its resemblance against other known transition matrices.
-Our metric of choice for matrix comparison is the Frobenius norm, which is a relatively simple and natural way to estimate how two matrices differ from each other \todo[cyan]{are we sure of this? Check if Frobenius norm is the best choice}.
+Our metric of choice for direct matrix comparison is the Frobenius norm, which is a relatively simple way to estimate how two matrices differ from each other.
+Due to its inherent simplicity, the Frobenius norm can be considered a naïve option for evaluating matrix distance in a \todo{scenario composed of} transition matrices.
+Indeed, the results obtained in \cref{sssec:exp_fom_exp1_results} \todo{expose} the Frobenius norm as an unreliable comparison metric with respect to other measures, \todo{but} still capable of providing some amount of valuable insight to the experiments formalized in \cref{ssec:exp_fom_exp1,ssec:exp_fom_exp2}. 
 
-To explore the potential inverse relationship, we computed the distance between the FOM transition matrix $\gbm{Q}_{\textit{FOM}}$ and the identity matrix of equivalent dimensions $I_n$.
+To explore the potential inverse relationship, we compute the distance between the FOM transition matrix $\gbm{Q}_{\textit{FOM}}$ and the identity matrix of equivalent dimensions $\gbm{I}_V$.
 This follows the idea that a Markov model where every state leads into itself is represented by an identity matrix, thus if our input/output embedding pair is attempting to converge towards being equal (as it is enforced by weight tying) we should observe the FOM transition matrix degenerating into an identity one.
 We can model the distance between the FOM matrix and the identity matrix in the following way:
 
 \begin{equation}
     \label{eq:method_fom_fom-i-comp}
-    d_{\textit{FOM},I} = \| \gbm{Q}_{\textit{FOM}} - \gbm{I}_n \|_F
+    d_{\textit{FOM},I} = \| \gbm{Q}_{\textit{FOM}} - \gbm{I}_V \|_F
 \end{equation}
-\todo[cyan]{n as dimension ok?}
 
 Following the same intuition, it is also possible to compare the FOM transition matrix $\gbm{Q}_{\textit{FOM}}$ with the transition matrix of a bigram Markov model $\gbm{Q}_{\textit{markov}}$ trained on a \todo{statistically relevant dataset}:
 
@@ -457,13 +503,74 @@ Following the same intuition, it is also possible to compare the FOM transition 
     \label{eq:method_fom_fom-markov-comp}
     d_{\textit{FOM},\textit{markov}} = \| \gbm{Q}_{\textit{FOM}} - \gbm{Q}_{\textit{markov}} \|_F
 \end{equation}
-\todo[cyan]{n as dimension ok?}
 
-\subsection{Prediction Comparison}
+\subsection{Prediction Comparison}\label{ssec:method_fom_pred}
 
 Additionally, we wanted to approach the previous ideas from a more practical point of view.
 To this end we recorded the top-$k$ answers elicited using the FOM matrix $\gbm{Q}_{\textit{FOM}}$ across all tokens inside the model's vocabulary, using each token as the known word and obtaining the FOM's most probable next tokens.
 Once we have the set of generated next tokens for each token inside the vocabulary we can compare them to our actual hypothesized reference tokens, obtained applying the identity function in the `inversion' hypothesis case, and in the `Markov' hypothesis case by querying the Markov model in the same way that we did with the FOM.
 As already done before in \cref{subsubsec:method_embeddings_evaluation} using \cref{eq:method_embeddings_topk-accuracy}, we employ the top-$k$ accuracy metric to establish the similarity between the predictions of the FOM against the two baselines defined by the identity function and the Markov model.
 The top-$k$ accuracy is computed by taking the $k$ tokens corresponding to the $k$ highest values between logits, and observing if the input token is present among them.
-\todo[green]{additional considerations, kl div / perplexity analysis / }
+
+Generalizing, we can formalize the average top-$k$ accuracy between two models represented by their transition matrices $\gbm{Q}_1$ and $\gbm{Q}_2$ according to the respective $k_1$ and $k_2$ variables in the following way:
+\begin{equation}
+    \label{eq:method_fom_topk}
+    \begin{aligned}
+    \textit{accuracy}_{k_1,k_2}(\gbm{Q}_1, \gbm{Q}_2) = \frac{1}{V} \sum_{v \in \mathcal{V}}{\textit{tok\_overlap}_{k_1,k_2}(\gbm{Q}_1, \gbm{Q}_2, v)} \\
+    \textit{tok\_overlap}_{k_1,k_2}(\gbm{Q}_1, \gbm{Q}_2, v) = \left\{
+        \begin{array}{cl}
+            1 &\ \text{if}\ \operatorname{top-k}(\gbm{Q}_1, k_1, v) \cap \operatorname{top-k}(\gbm{Q}_2, k_2, v) \neq \emptyset \\
+            0 &\ \text{otherwise}
+        \end{array}
+        \right.
+    \end{aligned}
+\end{equation}
+Where, as stated before, $\operatorname{top-k}(\gbm{Q}, k, v)$ represents the set of $k$ vocabulary tokens corresponding to the $k$ indices with highest probability obtained from indexing $Q$ with $v$.
+In addition, when comparing $\gbm{Q}_1 = \gbm{Q}_{FOM}$ with the identity matrix we have that $\gbm{Q}_2 = \gbm{I}_V$ and $k_2 = 1$.
+
+On the other hand, we also expand on the prediction-based comparisons by introducing two specific set metrics to provide a weighted perspective on the distributions of transition matrices.
+We choose to employ the overlap coefficient (which is equal to the Dice-S\o{}rensen index when considering sets with equal cardinality) and the Jaccard index to evaluate the predictions obtained from pairs of models averaged over the target vocabulary.
+We refer \todo{to them} as overlap metrics and we formalize them in the following way:
+\begin{equation}
+    \label{eq:method_fom_overlap}
+    \begin{aligned}
+        \operatorname{overlap}_k(\gbm{Q}_1, \gbm{Q}_2) &= \frac{1}{V}\sum_{v \in \mathcal{V}}{\frac{|\operatorname{top-k}(\gbm{Q}_1, k, v) \cap \operatorname{top-k}(\gbm{Q}_2, k, v)|}{\operatornamewithlimits{min}\bigl\{|\operatorname{top-k}(\gbm{Q}_1, k, v)|, |\operatorname{top-k}(\gbm{Q}_2, k, v)|\bigr\}}} \\
+        \operatorname{J}_k(\gbm{Q}_1, \gbm{Q}_2) &= \frac{1}{V}\sum_{v \in \mathcal{V}}{\frac{|\operatorname{top-k}(\gbm{Q}_1, k, v) \cap \operatorname{top-k}(\gbm{Q}_2, k, v)|}{|\operatorname{top-k}(\gbm{Q}_1, k, v) \cup \operatorname{top-k}(\gbm{Q}_2, k, v)|}} \\
+    \end{aligned}
+\end{equation}
+
+\subsection{Probabilistic Comparison}\label{ssec:method_fom_prob}
+
+In order to obtain a wider perspective on the probability distributions included inside \todo{the} transition matrices, we evaluate our models through the lenses of metrics that take into account the entirety of the information included in said probability distributions.
+These metrics can be utilized, either directly or indirectly, to measure the similarity or dissimilarity between two probability distributions.
+
+\todo{The first chosen metric} is the perplexity, which quantifies how well a certain discrete probability distribution is able to predict a sample; that is, the likelihood of the sample being drawn from the distribution itself.
+In other words, it is commonly referred to as the `surprise' of the distribution in observing a certain sample: high values mean that the sample is unlikely to align with the distribution (greater surprise), whereas low values imply that the sample is likely to be drawn from the distribution (low surprise).
+\todo{Given} the \todo{generic} formulation for perplexity for a probability distribution $p$ over a sequence of words $w_1,\dots,w_N$ defined as:
+\begin{equation*}
+    PP(p) = \exp{\Bigl(-\frac{1}{N}\sum_{i=1}^{N}{\ln{p(w_i)}}\Bigr)}
+\end{equation*}
+In practice, we compute our version of perplexity considering the transition matrix $\gbm{Q}$ as:
+\begin{equation}
+    \label{eq:method_fom_perplexity}
+        PP(\gbm{Q}, S) = \exp{\Bigl(-\frac{1}{T}\sum_{t=1}^{N}{\ln{\bigl((\gbm{Q})_{S(t+1),S(t)}\bigr)}}\Bigr)}
+\end{equation}
+Where $S$ \todo{indicates} a sentence composed of a total of $T$ tokens identified as $S(1),\dots,S(T)$ and $(\gbm{Q})_{i,j}$ represents the indexing operation done on the transition matrix $\gbm{Q}$, thus obtaining the transition probability from state $i$ to state $j$.
+
+On the other hand, we also consider the Kullback-Leibler divergence (KL divergence) as a way to \todo{gauge at} the direct dissimilarity between the probability distributions encoded inside transition matrices.
+By definition, the KL divergence cannot be classified as a metric due to its inherent \todo{asymmetricity} since it is possible to identify a reference distribution and a model distribution.
+The KL divergence effectively measures the divergence of the model distribution $Q$ from the reference distribution $P$ over a common domain $X$, and it is \todo{generally} expressed as:
+\begin{equation*}
+    D_{KL}(P||Q) = \sum_{x \in X}{P(x)\ln{\frac{P(x)}{Q(x)}}}
+\end{equation*}
+In \todo{our case}, we compute the mean KL divergence over all tokens present in the vocabulary using the following formula:
+\begin{equation}
+    \label{eq:method_fom_kldiv}
+    \begin{gathered}
+    {\overline {D_{KL}}}(\gbm{Q}_{ref} || \gbm{Q}_{model}) = \frac{1}{V}\sum_{v \in \mathcal{V}}{D_{KL}^v(\gbm{Q}_{ref} || \gbm{Q}_{model})} \\
+    \text{where}\ D_{KL}^v(\gbm{Q}_{ref} || \gbm{Q}_{model}) = \sum_{w \in \mathcal{V}}{\bigl((\gbm{Q}_{ref})_{v,w}\bigr)\ln{\frac{(\gbm{Q}_{ref})_{v,w}}{(\gbm{Q}_{model})_{v,\cdot}}}}
+    \end{gathered}
+\end{equation}
+Where, as mentioned before for \cref{eq:method_fom_perplexity}, $(\gbm{Q})_{i,j}$ represents the indexing operation on the transition matrix $\gbm{Q}$.
+
+\todo[purple!30]{mention perplexity relationship with cross-entropy}
