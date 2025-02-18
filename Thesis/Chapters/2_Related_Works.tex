@@ -41,7 +41,7 @@ In the next sections we will follow their insightful classification to provide a
 \section{Behavior localization}
 
 Behavior localization techniques consist in the localization elements inside language models that are responsible for specific predictions or certain prediction patterns.
-It is a generally broad task, but an important distinction can be made between the localization of behaviors towards input features (\textbf{input attribution}) and towards model components (\textbf{model component attribution})~\cite{ferrando2024}. 
+It is a generally broad task, but an important distinction can be made between the localization of behaviors towards input features (\textbf{input attribution}) and towards model components (\textbf{model component attribution})~\cite{ferrando2024}.
 
 \subsection{Input attribution}
 
@@ -124,7 +124,7 @@ The central idea for this hypothesis builds upon early findings of linearity ins
 Recent studies have uncovered numerous instances of FFN neurons that consistently fire with  patterns linked to specific input features~\cite{voita2024}, suggesting that this behavior is an effect of the next token prediction training paradigm~\cite{jiang2024}.
 
 Moreover, numerous attempts aimed at modifying the internal representations of models have been made by leveraging their linear properties.
-These linear interventions have been proven successful in erasing specific concepts and features from intermediate model representations~\cite{ravfogel2020, ravfogel2022, belrose2023b}, as well as in meaningfully altering the model's behavior~\cite{nanda2023, belrose2023b}, opening up new avenues for model steering and alignment. 
+These linear interventions have been proven successful in erasing specific concepts and features from intermediate model representations~\cite{ravfogel2020, ravfogel2022, belrose2023b}, as well as in meaningfully altering the model's behavior~\cite{nanda2023, belrose2023b}, opening up new avenues for model steering and alignment.
 
 Another important aspect of the linear representation hypothesis is the presence of polysemanticity and superposition in the identified features.
 The effects of dimensionality reduction algorithms causing information compression and resulting in distributed representations has widely been observed and studied in many fields, however \citet{olah2023} makes an important distinction between the separate phenomena of composition and superposition.
@@ -139,7 +139,8 @@ Consequently, the illusion of English pivoting can be pointed to an English bias
 
 \subsection{Vocabulary space decoding}\label{ssec:related_vocab}
 
-One of the most direct methods to comprehend a model's hidden representations is by employing its own vocabulary to derive plausible interpretations. \textbf{Vocabulary space decoding} techniques are founded on this principle, by utilizing the model's existing vocabulary they can generate outputs that are immediately understandable and may unveil hidden patterns inside the model's generation process.
+One of the most direct methods to comprehend a model's hidden representations is by employing its own vocabulary to derive plausible interpretations.
+\textbf{Vocabulary space decoding} techniques are founded on this principle, by utilizing the model's existing vocabulary they can generate outputs that are immediately understandable and may unveil hidden patterns inside the model's generation process.
 
 The first real implementation of vocabulary space decoding is logit lens~\cite{nostalgebraist2020}, which proposed the decoding of interlayer hidden representation using the model's own unembedding matrix following the intuition of an iterative refining of the model's prediction throughout the forward pass~\cite{jastrzebski2018}.
 The contribution of logit lens was groundbreaking and, despite some acknowledged shortcomings by the author, inspired numerous similar techniques aimed at improving its design or offering alternative functionalities.

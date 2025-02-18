@@ -116,7 +116,7 @@ While this has only a marginal impact on the decoding process, it can significan
 \subsubsection{Decoding Metrics}\label{sssec:method_intravisto_decoding_metrics}
 
 Other meaningful quantities that are shown through the InTraVisTo visualization are tied to the actual probability distributions obtained through the decoding process.
-The first option is \emph{``P(argmax term)''}, which directly translates into the probability of the most probable token output from the chosen decoder.
+The first option is \emph{``P(argmax term)''}, which directly translates into the probability of the most probable token output from the chosen decoder. % chktex 36
 It gives an immediate idea of how much the model is sure about the token that has been greedily sampled.
 On the other hand, a complementary measure is the \emph{entropy} of the probability distribution over the vocabulary space, which the higher it is, the more unsure the model is of the next token.
 Entropy for an embedding $\gbm{x}$ is computed in the following way:
@@ -397,7 +397,7 @@ As it is possible to observe in~\cref{eq:method_embeddings_delta-analogy-functio
 This is \todo{done} since, as explained in the first paragraphs of~\cref{ssec:method_embeddings_analogies}, word analogies are effectively composed by two pairs of words, each representing a semantic or morphological relationship.
 Thus, considering that in the delta analogies scenario we are looking to extract a vector that represents the common relationship modeled by a subgroup of analogies, we only need a single occurrence of each single pair of words.
 
-\todo[purple!30]{change all instances of "delta analogies"}
+\todo[purple!30]{change all instances of ``delta analogies'' to another name}
 
 \subsubsection{Analogy Evaluation}\label{subsubsec:method_embeddings_evaluation}
 
@@ -508,7 +508,7 @@ Following the same intuition, it is also possible to compare the FOM transition 
 
 Additionally, we wanted to approach the previous ideas from a more practical point of view.
 To this end we recorded the top-$k$ answers elicited using the FOM matrix $\gbm{Q}_{\textit{FOM}}$ across all tokens inside the model's vocabulary, using each token as the known word and obtaining the FOM's most probable next tokens.
-Once we have the set of generated next tokens for each token inside the vocabulary we can compare them to our actual hypothesized reference tokens, obtained applying the identity function in the `inversion' hypothesis case, and in the `Markov' hypothesis case by querying the Markov model in the same way that we did with the FOM.
+Once we have the set of generated next tokens for each token inside the vocabulary we can compare them to our actual hypothesized reference tokens, obtained applying the identity function in the `inversion' hypothesis case, and in the `Markov' hypothesis case by querying the Markov model in the same way that we did with the FOM\@.
 As already done before in~\cref{subsubsec:method_embeddings_evaluation} using~\cref{eq:method_embeddings_topk-accuracy}, we employ the top-$k$ accuracy metric to establish the similarity between the predictions of the FOM against the two baselines defined by the identity function and the Markov model.
 The top-$k$ accuracy is computed by taking the $k$ tokens corresponding to the $k$ highest values between logits, and observing if the input token is present among them.
 

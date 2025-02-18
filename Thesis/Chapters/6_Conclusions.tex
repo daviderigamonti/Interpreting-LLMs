@@ -15,7 +15,7 @@ In particular, both the concept of interpolation and the idea of performing inte
 The third research question (\cref{sec:exp_fom}) addressed the possibility of obtaining first-order predictions by concatenating the input and output embedding spaces of LLMs.
 Building upon previous findings, we investigated whether such concatenation effectively replicates the behavior of a Markov model following the theoretical groundwork laid by~\citet{elhage2021}.
 Our results indicate that the first order models (FOMs) extracted from most LLMs are generally faithful approximations of the corresponding Markov models and exhibit a solid bias towards the next-token prediction task, although the amount of \todo{closeness} to the Markov model varies greatly across model architectures and weights.
-Furthermore, our analysis investigates the compatibility of our results with the practice of weight tying, concluding that the benefit from setting the unembedding weights \todo{equal to the embedding ones} is limited to a reduction in the number of overall model parameters. 
+Furthermore, our analysis investigates the compatibility of our results with the practice of weight tying, concluding that the benefit from setting the unembedding weights \todo{equal to the embedding ones} is limited to a reduction in the number of overall model parameters.
 The \todo{obtained} findings tie back into InTraVisTo's view of the model by identifying the residual flow as the main communication channel between embeddings, \todo{to which the} components progressively add information as the prediction progresses through the layers.
 
 Future work could extend InTraVisTo by adding support for new decoding techniques, model architectures and injection approaches.

@@ -1,5 +1,5 @@
 With the current escalation in popularity and pervasiveness of machine learning solutions applied to the realm of natural languages, there exists an increasingly relevant topic that is still being the subject of extensive studies by experts in this field: interpretabilty.
-Interpretabilty in itself is far from being a novel concept, as from the early advent of machine learning there has always been the necessity of understanding the inner process by which an opaque model performs its inner computations, possibly even going as far as giving an algorithmic interpretation to it. 
+Interpretabilty in itself is far from being a novel concept, as from the early advent of machine learning there has always been the necessity of understanding the inner process by which an opaque model performs its inner computations, possibly even going as far as giving an algorithmic interpretation to it.
 
 Considering the introduction of deep learning, the need for interpretabilty spiked as models got increasingly more complex.
 The entire paradigm of deep learning is centered around the removal of human control over the feature space, letting models figure out `what needs to be learned' to solve the problem at hand.
@@ -24,13 +24,13 @@ The main discussion points of this work are developed across~\cref{ch:research_q
 \cref{ch:research_questions} provides an overview of the core research questions aimed at accomplishing the previously defined overarching goals.
 Whereas,~\cref{ch:methodology} offers an extensive and detailed outline of the mathematical tools utilized by~\cref{ch:experiments} to support its experimental approach.
 Meanwhile,~\cref{ch:experiments} tackles the practical steps taken in order to verify question and conjectures formulated in~\cref{ch:research_questions}, offering useful insight for the setup and execution procedures, while providing targeted explanations for the obtained outcomes.
-Finally,~\cref{ch:conclusions} briefly summarizes the conclusions gathered from~\cref{ch:experiments}, drawing connections between them and the original questions presented in~\cref{ch:research_questions} while bringing the discussion to a close. 
+Finally,~\cref{ch:conclusions} briefly summarizes the conclusions gathered from~\cref{ch:experiments}, drawing connections between them and the original questions presented in~\cref{ch:research_questions} while bringing the discussion to a close.
 
 % Addendum to introduce background part of the chapter
 \vspace{1.5em}
 \noindent As previously anticipated, the following sections provide a field review for machine learning and NLP techniques.
 We introduce foundational concepts and terminology, necessary for understanding the methodologies and approaches employed in this work.
-This includes an exploration of key machine learning paradigms, as well as recent architectural advancements in NLP.
+This includes an exploration of key machine learning paradigms, as well as recent architectural advancements in NLP\@.
 
 \section{Machine Learning}
 
@@ -48,7 +48,7 @@ Most machine learning techniques fall into this category, which will also be the
     \item \textbf{Unsupervised learning}: unsupervised learning detaches the labeled component from the dataset, removing direct feedback from the model's training process.
 In this scenario we let the model find patterns within the data autonomously.
 This process typically involves some kind of summarization or condensation of information; however, the common factor is given by a direct search of hidden structures throughout the dataset.
-Clustering techniques are a fairly common and well-known instance of unsupervised learning. 
+Clustering techniques are a fairly common and well-known instance of unsupervised learning.
     \item \textbf{Reinforcement learning}: reinforcement learning mostly concerns the decision-making process of an agent placed inside a dynamic environment.
 The inputs of a reinforcement learning algorithm are represented by the environment state and rewards, while the agent's actions are treated as output.
 In this paradigm we are trying to discover the optimal policy to navigate the environment, balancing both the exploration of new states, and the exploitation of the current maximally rewarding actions.
@@ -70,13 +70,13 @@ As~\cref{fig:background_nn-arch} shows, a neural network typically consists of a
 
 \begin{figure}[t!]
     \centering
-    \subfloat[Neural network architecture.\label{fig:background_nn-arch}]{
-        \includegraphics[width=0.8\textwidth]{background_nn-arch.pdf}
-    }
+    \subfloat[Neural network architecture.\label{fig:background_nn-arch}]{%
+        \includegraphics[width=0.8\textwidth]{background_nn-arch.pdf}%
+    }%
     \quad
-    \subfloat[Neuron.\label{fig:background_neuron}]{
-        \includegraphics[width=0.4\textwidth]{background_neuron.pdf}
-    }
+    \subfloat[Neuron.\label{fig:background_neuron}]{%
+        \includegraphics[width=0.4\textwidth]{background_neuron.pdf}%
+    }%
     \caption{Architectural overview of a neural network and its base component: the neuron.}
     \label{fig:background_nn-arch_neuron}
 \end{figure}
@@ -104,13 +104,12 @@ For instance, we may require expert knowledge in order to craft an appropriate d
 
 \begin{figure}[t!]
     \centering
-    \subfloat[Classical machine learning framework.\label{fig:background_fex}]{
-        \raisebox{2.65em}{\includegraphics[width=0.46\textwidth]{background_fex.pdf}}
-    }
-    \quad
-    \subfloat[Deep learning framework.\label{fig:background_deep-fex}]{
-        \includegraphics[width=0.46\textwidth]{background_deep-fex.pdf}
-    }
+    \subfloat[Classical machine learning framework.\label{fig:background_fex}]{%
+        \raisebox{2.4em}{\includegraphics[width=0.5\textwidth]{background_fex.pdf}}%
+    }%
+    \subfloat[Deep learning framework.\label{fig:background_deep-fex}]{%
+        \includegraphics[width=0.5\textwidth]{background_deep-fex.pdf}%
+    }%
     \caption{Feature extraction operation for classical machine learning and deep learning frameworks.}
     \label{fig:background_fex_deep-fex}
 \end{figure}
@@ -131,13 +130,13 @@ In practice, each RNN module is fed the inputs at the current time instant and i
 
 \begin{figure}[t!]
     \centering
-    \subfloat[Recurrent neural network module with unrolling.\label{fig:background_rnn}]{
-        \includegraphics[width=0.95\textwidth]{background_rnn.pdf}
-    }
+    \subfloat[Recurrent neural network module with unrolling.\label{fig:background_rnn}]{%
+        \includegraphics[width=0.95\textwidth]{background_rnn.pdf}%
+    }%
     \quad
-    \subfloat[LSTM module internal architecture.\label{fig:background_lstm}]{
-        \includegraphics[width=0.8\textwidth]{background_lstm.pdf}
-    }
+    \subfloat[LSTM module internal architecture.\label{fig:background_lstm}]{%
+        \includegraphics[width=0.8\textwidth]{background_lstm.pdf}%
+    }%
     \caption{Basic modules from recurrent architectures.}
     \label{fig:background_rnn_lstm}
 \end{figure}
@@ -194,7 +193,7 @@ These embeddings will be explored in detail in the next section.
 \subsection{Word Embeddings}
 
 One of the most relevant and groundbreaking developments in the field of NLP was the introduction of word embeddings.
-Word embeddings came as a straightforward application of deep learning concepts and approaches to the world of NLP.
+Word embeddings came as a straightforward application of deep learning concepts and approaches to the world of NLP\@.
 Their introduction not only determined an improvement in most text-based applications, but also motivated a shift in text representation techniques, incentivizing a word-centric approach rather than focusing on documents.
 
 The main appeal of word embeddings is their dimensionality reduction effect, since the original vocabulary representation (bag of words) suffers from the curse of dimensionality to a great extent.
@@ -213,7 +212,7 @@ A $3$-dimensional approximation of the embedding spatial structure can be observ
 \begin{figure}[t!]
     \centering
     \includegraphics[width=0.5\textwidth]{background_embeddings.pdf}
-    \caption[Embedding space visualization for a Word2Vec model.]{Embedding space visualization for a Word2Vec model. The dimensionality of the space is reduced to $3$ \todo{through} the t-SNE algorithm and the overall number of shown embeddings is limited. Embeddings belonging to certain semantic fields (e.g. animals, colors,\dots) are colored in order to highlight their proximity in the space.}
+    \caption[Embedding space visualization for a Word2Vec model.]{Embedding space visualization for a Word2Vec model. The dimensionality of the space is reduced to $3$ \todo{through} the t-SNE algorithm and the overall number of shown embeddings is limited. Embeddings belonging to certain semantic fields (e.g.\ animals, colors,\dots) are colored in order to highlight their proximity in the space.}
     \label{fig:background_embeddings}
 \end{figure}
 
@@ -223,9 +222,9 @@ The main purpose of Word2Vec is to create word embeddings, it is composed by a s
 
 \blockquote[J.R. Firth]{You Shall Know a Word by the Company It Keeps}
 
-Mikolov's original work introduces two primary training paradigms for Word2Vec (see~\cref{fig:background_word2vec-cbow_word2vec-skipg}):
+Mikolov's original work introduces two primary training paradigms for Word2Vec, illustrated in~\cref{fig:background_word2vec-cbow_word2vec-skipg}, which achieve the same goal through different means:
 \begin{itemize}
-    \item \textbf{Continuous Bag of Words (CBoW)}: predict a target word given its context.
+    \item \textbf{Continuous Bag of Words (CBoW)}: predicts a target word given its context.
 The context is given as a symmetric window containing all terms occurring around the target term, modeling a many-to-1 prediction (\cref{fig:background_word2vec-cbow}).
     \item \textbf{Skip-gram}: predicts surrounding words given a target word.
 Single context words are predicted one at a time, modeling a 1-to-1 prediction (\cref{fig:background_word2vec-skipg}).
@@ -235,13 +234,13 @@ The key aspect is that the full context of each word is integrated into the word
 
 \begin{figure}[t!]
     \centering
-    \subfloat[Continuous Bag of Words (CBoW) many-to-1 prediction.\label{fig:background_word2vec-cbow}]{
-        \includegraphics[width=\textwidth]{background_word2vec-cbow.pdf}
-    }
+    \subfloat[Continuous Bag of Words (CBoW) many-to-1 prediction.\label{fig:background_word2vec-cbow}]{%
+        \includegraphics[width=\textwidth]{background_word2vec-cbow.pdf}%
+    }%
     \quad
-    \subfloat[Skip-gram 1-to-1 prediction.\label{fig:background_word2vec-skipg}]{
-        \includegraphics[width=0.9\textwidth]{background_word2vec-skipg.pdf}
-    }
+    \subfloat[Skip-gram 1-to-1 prediction.\label{fig:background_word2vec-skipg}]{%
+        \includegraphics[width=0.9\textwidth]{background_word2vec-skipg.pdf}%
+    }%
     \caption{Word2Vec training paradigms.}
     \label{fig:background_word2vec-cbow_word2vec-skipg}
 \end{figure}
@@ -254,7 +253,7 @@ However, in the case of word embeddings, these arithmetic properties have been r
 
 In particular, the semantic meaningfulness of certain arithmetic and geometric transformations applied to word embeddings was highlighted by Mikolov himself in the Word2Vec paper~\cite{mikolov2013}.
 These discoveries ranged from finding similarities in embeddings of words that manifested syntactic regularities, to the resolution of complete double-word analogies located in common semantic fields.
-One of the most famous examples presented in~\cite{mikolov2013} is: \texttt{emb(`King') - emb(`Man') + emb(`Woman') $\simeq$ emb(`Queen')}, which models both the relationships of `gender' and `royalty'.
+One of the most famous examples presented in~\cite{mikolov2013} is: \texttt{emb(`King') - emb(`Man') + emb(`Woman') $\simeq$ emb(`Queen')}, which models both the relationships of `gender' and `royalty'. % chktex 36
 As shown in~\cref{fig:background_emb-arithmetic}, other notable analogies include country-capital, family relation, and verb tenses.
 In principle, any kind of semantic relationship could potentially be modeled by word embeddings, given sufficient support in the training dataset.
 
@@ -264,7 +263,7 @@ In principle, any kind of semantic relationship could potentially be modeled by 
     \caption[Examples of embedding arithmetic provided by Google's machine learning crash course]{Examples of embedding arithmetic provided by Google's machine learning crash course\footnotemark.}
     \label{fig:background_emb-arithmetic}
 \end{figure}
-\footnotetext{\url{https://developers.google.com/machine-learning/crash-course/embeddings/embedding-space}}
+\footnotetext{\rlap{\url{https://developers.google.com/machine-learning/crash-course/embeddings/embedding-space}}}
 
 While these properties have some direct use cases, primarily involving clustering and similarity comparisons, their study has proven insightful from an explainability standpoint.
 Possibly understanding the semantic associations underlying text models can provide an educated perspective on how these models interpret their inputs, but also underline human and language biases.
@@ -356,15 +355,15 @@ The masked self-attention formula can be summarized as follows:
 \end{equation}
 \end{itemize}
 
-\begin{figure}[!htp]
+\begin{figure}[tp!]
     \centering
-    \subfloat[Encoder-decoder attention computation.\label{fig:background_enc-dec-attention}]{
-        \includegraphics[width=\textwidth]{background_enc-dec-attention.pdf}
-    }
+    \subfloat[Encoder-decoder attention computation.\label{fig:background_enc-dec-attention}]{%
+        \includegraphics[width=0.92\textwidth]{background_enc-dec-attention.pdf}%
+    }%
     \quad
-    \subfloat[Self-attention computation.\label{fig:background_self-attention}]{
-        \includegraphics[width=\textwidth]{background_self-attention.pdf}
-    }
+    \subfloat[Self-attention computation.\label{fig:background_self-attention}]{%
+        \includegraphics[width=0.92\textwidth]{background_self-attention.pdf}%
+    }%
     \caption{Computational overview of the two main types of attentions found in the original transformer architecture~\cite{vaswani2017}.}
     \label{fig:background_enc-dec-attention_self-attention}
 \end{figure}

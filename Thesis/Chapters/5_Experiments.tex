@@ -10,7 +10,7 @@ These points include:
     \item \textbf{Experimental Setup}: complete description of the experiment performed in reference of the theoretical background provided in~\cref{ch:methodology}.
 Parameter combinations, hardware specifications and resources employed may also be mentioned in the setup description.
     \item \textbf{Dataset}: summary of data and information utilized for the experiment, \todo{either} for training models or as direct testing material.
-    \item \textbf{Models}: list of models, along with brief \todo{specifics}, that have been utilized to perform the experiment or have been employed for auxiliary tasks. 
+    \item \textbf{Models}: list of models, along with brief \todo{specifics}, that have been utilized to perform the experiment or have been employed for auxiliary tasks.
     \item \textbf{Results}: set of results emerged from the experiment paired with comments, explanations and a breakdown of the findings' possible implications.
 \end{itemize}
 If the previously identified points overlap for all the \todo{identified} experiments of any given research question then, those are directly incorporated inside the main section belonging to the question in order to avoid meaningless repetition.
@@ -56,7 +56,7 @@ Those parameters can be tweaked using a dedicated panel present in the interface
 \end{figure}
 
 The \emph{embedding} refers to the position of the hidden state vector to be decoded within the layer.
-Therefore, by selecting different embedding positions, the user can inspect different subcomponents for each a single layer and understand which \todo{information} is propagated between layers. 
+Therefore, by selecting different embedding positions, the user can inspect different subcomponents for each a single layer and understand which \todo{information} is propagated between layers.
 In order to avoid saturating the visualization with information, only a single embedding position can be chosen to be \todo{visualized} at any time from the heatmap.
 
 On the other hand, the \emph{decoding strategy} choice refers to the decoding matrix utilized in the decoding process of each visualized hidden state, fulfilling the role of ``perspective'' for the interpretation.
@@ -67,7 +67,7 @@ Besides some immediate choices such as input embeddings or output embeddings, wh
 These novel decoding techniques are built in order to give the user a semantically meaningful representation for every layer of the model at the same time.
 
 \todo{Lastly}, the \emph{probability selector} directly affects the quantity used to weight the color grading in the heatmap.
-The four main options consist of P(argmax term), entropy, attention contribution and feedforward contribution.
+The four main options consist of P(argmax term), entropy, attention contribution and feedforward contribution. % chktex 36
 Additionally, a secondary control labeled as ``Residual Contribution'' affects the attention contribution and feedforward contribution options for the probability selector.
 This ``Residual Contribution'' control determines the metric used to evaluate the concept of contribution between transformer components and the residual stream according to~\cref{eq:method_intravisto_norm-contrib,eq:method_intravisto_kl-contrib}.
 The mathematical background for these selectors has been \todo{treated in depth} in~\cref{sssec:method_intravisto_decoding_metrics}.
@@ -143,7 +143,7 @@ If the string contains multiple tokens, then all encoded representations are ave
     \item The injection technique, which controls the way in which the new embedding \todo{gets incorporated} into the preexisting state as specified in~\cref{eq:method_intravisto_inj_complete,eq:method_intravisto_inj_main}.
     \item The position of the injection inside the selected layer, allowing users to inject embeddings in every position without changing the heatmap visualization.
     \item The decoding technique used to interpret the aforementioned string of text.
-    \item The option to normalize the injected embedding according to the chosen injection technique. 
+    \item The option to normalize the injected embedding according to the chosen injection technique.
 \end{itemize}
 
 \begin{figure}[t!]
@@ -256,15 +256,15 @@ For example:
     \centering
     \begingroup
     \captionsetup{width=0.8\textwidth/2}
-    \subfloat[Mistral addressing the digit $8$ via text representations.\label{fig:exp_intravisto_4_B1}]{
-        \includegraphics[width=0.5\textwidth]{exp_intravisto_4B_eight.png}
+    \subfloat[Mistral addressing the digit $8$ via text representations.\label{fig:exp_intravisto_4_B1}]{%
+        \includegraphics[width=0.5\textwidth]{exp_intravisto_4B_eight.png}%
     }%
-    \subfloat[Llama 2 addressing the digit $9$ via text and alternate representations, including the Roman numeral ``IX''.\label{fig:exp_intravisto_4_B2}]{
-        \includegraphics[width=0.4\textwidth]{exp_intravisto_4B_roman.png}
+    \subfloat[Llama 2 addressing the digit $9$ via text and alternate representations, including the Roman numeral ``IX''.\label{fig:exp_intravisto_4_B2}]{%
+        \includegraphics[width=0.4\textwidth]{exp_intravisto_4B_roman.png}%
     }%
     \quad
-    \subfloat[Llama 2 addressing the digit $7$ via text representations and with the name of the corresponding month of the year: ``July''.\label{fig:exp_intravisto_4_B3}]{
-        \includegraphics[width=0.45\textwidth]{exp_intravisto_4B_month.png}
+    \subfloat[Llama 2 addressing the digit $7$ via text representations and with the name of the corresponding month of the year: ``July''.\label{fig:exp_intravisto_4_B3}]{%
+        \includegraphics[width=0.45\textwidth]{exp_intravisto_4B_month.png}%
     }%
     \subfloat[Mistral addressing the digit $7$ with the token \texttt{\_lucky}.\label{fig:exp_intravisto_4_B4}]{
         \includegraphics[width=0.4\textwidth]{exp_intravisto_4B_lucky.png}
@@ -279,14 +279,14 @@ By observing the heatmap in~\cref{fig:exp_intravisto_4_C1} we can see that the m
 However, on the very last layer, the answer changes into the determiner \emph{`The'} in order to generate a more formal answer including the original question formulation into the \todo{answer}.
 In addition, by observing the Sankey diagram shown in~\cref{fig:exp_intravisto_4_C2}, it is possible to notice that during the generation process of the actual occurrence of \emph{`Rome'} at position $16$, the model collects a significant amount of attention directly from the first generated token \todo{referenced before}.
 
-\begin{figure}[t!]
+\begin{figure}[tp!]
     \centering
-    \subfloat[Heatmap visualization calling attention to the first generated token generative process on the left.\label{fig:exp_intravisto_4_C1}]{
-        \includegraphics[width=0.7\textwidth]{exp_intravisto_4C_heatmap.png}
+    \subfloat[Heatmap visualization calling attention to the first generated token generative process on the left.\label{fig:exp_intravisto_4_C1}]{%
+        \includegraphics[width=0.7\textwidth]{exp_intravisto_4C_heatmap.png}%
     }%
     \quad
-    \subfloat[Sankey diagram visualization computing flow starting from the $16$th token at layer $32$.\label{fig:exp_intravisto_4_C2}]{
-        \includegraphics[width=0.7\textwidth]{exp_intravisto_4C_sankey.png}
+    \subfloat[Sankey diagram visualization computing flow starting from the $16$th token at layer $32$.\label{fig:exp_intravisto_4_C2}]{%
+        \includegraphics[width=0.7\textwidth]{exp_intravisto_4C_sankey.png}%
     }%
     \caption{InTraVisTo visualizations given the prompt \emph{``What is the capital of Italy?''} to Mistral.}
     \label{fig:exp_intravisto_4_C}
@@ -299,41 +299,46 @@ If we inject our token at the first occurrence of the token \texttt{\_Rome} (lay
 On the other hand, if we perform our injection at a layer where the token \texttt{\_Rome} actually starts gaining a meaningful probability (around $90.45\%$ at layer $25$) the model is not able to recover immediately and, as we can appreciate in~\cref{fig:exp_intravisto_4_D2}, ends up inserting \emph{`Paris'} in its answer.
 \todo{Interestingly enough}, observing the rest of the generated sentence in~\cref{fig:exp_intravisto_4_D3} reveals that the model is still able to understand the \todo{committed} error and give an overall correct answer by re-contextualizing its erroneous output.
 
-\begin{figure}[t!]
+\begin{figure}[tp!]
     \centering
-    \subfloat[Injection at layer $20$.\label{fig:exp_intravisto_4_D1}]{
-        \includegraphics[width=0.7\textwidth]{exp_intravisto_4D_heatmap-first.png}
+    \subfloat[Injection at layer $20$.\label{fig:exp_intravisto_4_D1}]{%
+        \includegraphics[width=0.7\textwidth]{exp_intravisto_4D_heatmap-first.png}%
     }%
     \quad
-    \subfloat[Injection at layer $25$.\label{fig:exp_intravisto_4_D2}]{
-        \includegraphics[width=0.7\textwidth]{exp_intravisto_4D_heatmap-prob.png}
+    \subfloat[Injection at layer $25$.\label{fig:exp_intravisto_4_D2}]{%
+        \includegraphics[width=0.7\textwidth]{exp_intravisto_4D_heatmap-prob.png}%
     }%
     \caption{InTraVisTo heatmap visualizations given the prompt \emph{``What is the capital of Italy?''} to Mistral with \emph{`Paris'} injected at different layers for the $16$th token.}
     \label{fig:exp_intravisto_4_D}
 \end{figure}
 
-\begin{figure}[t!]
+\begin{figure}[tp!]
     \centering
-    \includegraphics[width=0.8\textwidth]{exp_intravisto_4D_output.png}
+    \includegraphics[width=0.9\textwidth]{exp_intravisto_4D_output.png}
     \caption{InTraVisTo input and output text given the prompt \emph{``What is the capital of Italy?''} to Mistral with \emph{`Paris'} injected at layer $25$ for the $16$th token.}
     \label{fig:exp_intravisto_4_D3}
 \end{figure}
 
 This self-correcting behavior is mildly surprising, but it is still interesting to observe the internal recovery process from the perspective of the model to understand where and how it \todo{takes place}.
 By directly observing the progression of tokens representing internal state of the model for the generation instance right after our injection (position $18$) in~\cref{fig:exp_intravisto_4_E1}, we can notice that the state loses confidence in the \texttt{\_Paris} token in a relatively slow way.
-After starting the state morphing process from input to output, inside the middle layers, the model immediately enters a state space dominated by tokens such as \texttt{nah}, \texttt{wait}, \texttt{\_mistaken}, \texttt{\_joke}, \texttt{...} and \texttt{?!}, to finally settle on \texttt{?} \todo{with} an exceptionally low confidence and surprisingly late ($47.75\%$ at layer $31$).
+After starting the state morphing process from input to output, inside the middle layers, the model immediately enters a state space dominated by tokens such as \texttt{nah}, \texttt{wait}, \texttt{\_mistaken}, \texttt{\_joke}, \texttt{...} and \texttt{?!}, to finally settle on \texttt{?} \todo{with} an exceptionally low confidence and surprisingly late ($47.75\%$ at layer $31$). % chktex 11
 This behavior reflects the uncertainty of the model and its \todo{struggle} to blend discordant information.
 Furthermore, in~\cref{fig:exp_intravisto_4_E2} it is possible to notice a discrete amount of flow being gathered by the token referring to \emph{`Italy'}in the question through the attention component.
 \todo{This} can be observed in the early stages of the model trying to recover from the injection, meaning that there could be some form of comparison or self-check being performed in the earlier layers.
 
 \begin{figure}[t!]
     \centering
-    \subfloat[Heatmap visualization underlining residual states expressing contradictory behaviors.\label{fig:exp_intravisto_4_E1}]{
-        \includegraphics[width=0.15\textwidth]{exp_intravisto_4E_wrong.png}
+    \subfloat[Heatmap visualization underlining residual states that express contradictory behaviors.\label{fig:exp_intravisto_4_E1}]{%
+        \hspace{0.05\textwidth}%
+        \includegraphics[width=0.2\textwidth]{exp_intravisto_4E_wrong.png}%
+        \hspace{0.05\textwidth}%
     }%
-    \subfloat[Sankey diagram visualization computing flow starting from the $17$th token at layer $9$, highlighting the flow of information towards states containing \emph{`Italy'}.\label{fig:exp_intravisto_4_E2}]{
-        \includegraphics[width=0.85\textwidth]{exp_intravisto_4E_sankey.png}
+    \begingroup%
+    \captionsetup{width=0.63\textwidth}% 0.63 = 0.7 * 0.9
+    \subfloat[Sankey diagram visualization computing flow starting from the $17$th token at layer $9$, highlighting the flow of information towards states containing \emph{`Italy'}.\label{fig:exp_intravisto_4_E2}]{%
+        \includegraphics[width=0.7\textwidth]{exp_intravisto_4E_sankey.png}%
     }%
+    \endgroup%
     \caption[InTraVisTo visualizations given the prompt \emph{``What is the capital of Italy?''} to Mistral with injections.]{InTraVisTo visualizations given the prompt \emph{``What is the capital of Italy?''} to Mistral with \emph{`Paris'} injected at layer $25$ for the $16$th token.}
     \label{fig:exp_intravisto_4_E}
 \end{figure}
@@ -350,12 +355,12 @@ In particular, \todo{in the case of digit $1$} at position $24$, we can even see
 
 \begin{figure}[t!]
     \centering
-    \subfloat[Input and output text focusing on the incorrect answer returned.\label{fig:exp_intravisto_4_F1}]{
-        \includegraphics[width=0.8\textwidth]{exp_intravisto_4F_output.png}
+    \subfloat[Input and output text focusing on the incorrect answer returned.\label{fig:exp_intravisto_4_F1}]{%
+        \includegraphics[width=0.9\textwidth]{exp_intravisto_4F_output.png}%
     }%
     \quad
-    \subfloat[Heatmap visualization highlighting the correlation between correct digits and model certainty in the last layers.\label{fig:exp_intravisto_4_F2}]{
-        \includegraphics[width=0.7\textwidth]{exp_intravisto_4F_heatmap.png}
+    \subfloat[Heatmap visualization highlighting the correlation between correct digits and model certainty in the last layers.\label{fig:exp_intravisto_4_F2}]{%
+        \includegraphics[width=0.7\textwidth]{exp_intravisto_4F_heatmap.png}%
     }%
     \caption{InTraVisTo visualizations given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Llama 2.}
     \label{fig:exp_intravisto_4_F}
@@ -371,21 +376,21 @@ By comparing the behavior of FFNNs in the last layers, it is possible to notice 
 Coincidentally, the model also seems to adjust its residual representation according to the correct token predicted by the FFNN if it is still uncertain.
 According to these considerations, it would seem that the model struggles to switch its prediction into the correct computation either due to a lack of confidence in the correct prediction or to an excessive amount of confidence into the wrong prediction.
 
-\begin{figure}[t!]
+\begin{figure}[tp!]
     \centering
-    \includegraphics[width=0.8\textwidth]{exp_intravisto_4G_output.png}
+    \includegraphics[width=0.9\textwidth]{exp_intravisto_4G_output.png}
     \caption{InTraVisTo input and output text given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral.}
     \label{fig:exp_intravisto_4_G1}
 \end{figure}
 
-\begin{figure}[t!]
+\begin{figure}[tp!]
     \centering
-    \subfloat[Heatmap visualization highlighting the correlation between correct digits and model certainty in the last layers.\label{fig:exp_intravisto_4_G2}]{
-        \includegraphics[width=0.8\textwidth]{exp_intravisto_4G_heatmap.png}
+    \subfloat[Heatmap visualization highlighting the correlation between correct digits and model certainty in the last layers.\label{fig:exp_intravisto_4_G2}]{%
+        \includegraphics[width=0.55\textwidth]{exp_intravisto_4G_heatmap.png}%
     }%
     \quad
-    \subfloat[Sankey diagram visualization computing flow starting from the $25$th token at layer $32$, underlining single model components contributing towards an incorrect digit representation.\label{fig:exp_intravisto_4_G3}]{
-        \includegraphics[width=0.7\textwidth]{exp_intravisto_4G_sankey.png}
+    \subfloat[Sankey diagram visualization computing flow starting from the $25$th token at layer $32$, underlining single model components contributing towards an incorrect digit representation.\label{fig:exp_intravisto_4_G3}]{%
+        \includegraphics[width=0.8\textwidth]{exp_intravisto_4G_sankey.png}%
     }%
     \caption{InTraVisTo visualizations given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral.}
     \label{fig:exp_intravisto_4_G}
@@ -403,13 +408,13 @@ Thus, by ending the number with a newline character, the model is able to give t
 
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=0.7\textwidth]{exp_intravisto_4H_sankey.png}
+    \includegraphics[width=0.8\textwidth]{exp_intravisto_4H_sankey.png}
     \caption[InTraVisTo Sankey diagram visualization given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral with injection.]{InTraVisTo Sankey diagram visualization given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral with \emph{`8'} injected at layer $29$ for the $25$th token.}
     \label{fig:exp_intravisto_4_H1}
 \end{figure}
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=0.7\textwidth]{exp_intravisto_4H_sankey-abl.png}
+    \includegraphics[width=0.8\textwidth]{exp_intravisto_4H_sankey-abl.png}
     \caption[InTraVisTo Sankey diagram visualization given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral with injection and ablation.]{InTraVisTo Sankey diagram visualization given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral with \emph{`8'} injected at layer $29$ for the $25$th token and feedforward contribution removed at layer $32$ for the $28$th token.}
     \label{fig:exp_intravisto_4_H2}
 \end{figure}
@@ -423,7 +428,7 @@ Moreover, InTraVisTo's implementation supports simultaneous \todo{usage} by diff
 
 \todo{As extensively shown} in the proposed examples and experiments, InTraVisTo can be used methodically to extract \todo{considerations} from the generation process of language models.
 From the results obtained in~\cref{sec:exp_intravisto_exp4}, we show how specific models encode numerical tokens and how these representations affect the contents of states belonging the residual flow.
-We also utilize the injection mechanism to investigate how anomalies in the generation process of models affect their outputs, uncovering common patterns and speculating on the probabilistic significance of internal states \todo{in function of} the generated tokens. 
+We also utilize the injection mechanism to investigate how anomalies in the generation process of models affect their outputs, uncovering common patterns and speculating on the probabilistic significance of internal states \todo{in function of} the generated tokens.
 By proposing a technique for performing experiments using InTraVisTo in~\cref{sssec:exp_intravisto_exp4_expset}, we also wish to create a workflow that acts as a guideline to users, in order to streamline the process of research and \todo{generalizability of its findings}.
 
 \section{Embedding Analysis}\label{sec:exp_emb}
@@ -439,7 +444,7 @@ The dataset used for all the experiments under this research question was create
 The word2vec dataset (also known as Google analogy dataset) is structured in two main files: \emph{question-words} and \emph{question-phrases}.
 Question-words contains $14$ categories for a total of $19544$ analogies spacing from linguistic relations to semantic relations, while question-phrases only features $5$ classes and a total of $3218$ analogies regarding common-knowledge relations involving proper nouns.
 BATS features a more complex hierarchy since it is meant to be an improvement over the Google dataset: as already hinted in~\cref{ssec:method_embeddings_analogies}, it covers $4$ main relation types (inflectional morphology, derivational morphology, lexicographic semantics and encyclopedic semantics), each one being subdivided into $10$ further sub-categories containing $50$ unique word pairs each.
-In addition, BATS provides multiple correct answers for word pairs when applicable. 
+In addition, BATS provides multiple correct answers for word pairs when applicable.
 
 Due to the different format in which the two datasets have been released (BATS containing word pairs, while Google analogy dataset being comprised of already constructed analogies), \todo{some} work has been put into collecting, standardizing and unifying analogies.
 To this end, BATS word pairs have been combined into a total of $(50 \times 49) \times 10 \times 4 = 98000$ unique analogies to be combined with the $19544 + 3218 = 22762$ analogies provided by the Google dataset.
@@ -473,7 +478,7 @@ At its core, this class of experiments evaluates the resolution of analogies bet
 
 Once the dataset and model are loaded, each batch of word analogies is processed, treating every single analogy as an independent computation.
 All words that compose the input section of the analogy are appropriately encoded following~\cref{eq:method_embeddings_multitok-in}.
-Which words belong to the input for each batch of analogies \todo{are} determined by a hyperparameter containing the analogy layout (e.g. obtaining $w_1 - w_2 + w_4 = w_3$ from $w_1 : w_2 = w_3 : w_4$).
+Which words belong to the input for each batch of analogies \todo{are} determined by a hyperparameter containing the analogy layout (e.g.\ obtaining $w_1 - w_2 + w_4 = w_3$ from $w_1 : w_2 = w_3 : w_4$).
 The provided layout also defines the arithmetic operations to be performed on the encoded words in order to obtain the encoded output term.
 
 Afterwards, by following~\cref{eq:method_embeddings_analogy}, we perform a search on the model's embedding space using a hyperparameter-defined distance metric as shown in~\cref{eq:method_embeddings_distance}, obtaining the $k$ closest elements to the result of our embedding arithmetic.
@@ -547,15 +552,15 @@ Lastly, Word2Vec and GloVe, the oldest models, share the worst performance overa
 
 \begin{figure}[t!]
     \centering
-    \subfloat[Accuracy for Llama 2, Llama 3 and Mistral.\label{fig:exp_emb_1_A1}]{
-        \includegraphics[width=0.5\textwidth]{exp_emb_1A_topk_l2-m-l3.pdf}
+    \subfloat[Accuracy for Llama 2, Llama 3 and Mistral.\label{fig:exp_emb_1_A1}]{%
+        \includegraphics[width=0.5\textwidth]{exp_emb_1A_topk_l2-m-l3.pdf}%
     }%
-    \subfloat[Accuracy for Gemma 2, Phi 3.5 and BERT.\label{fig:exp_emb_1_A2}]{
-        \includegraphics[width=0.5\textwidth]{exp_emb_1A_topk_g2-p3-b.pdf}
+    \subfloat[Accuracy for Gemma 2, Phi 3.5 and BERT.\label{fig:exp_emb_1_A2}]{%
+        \includegraphics[width=0.5\textwidth]{exp_emb_1A_topk_g2-p3-b.pdf}%
     }%
     \quad
-    \subfloat[Accuracy for Word2Vec and GloVe.\label{fig:exp_emb_1_A3}]{
-        \includegraphics[width=0.5\textwidth]{exp_emb_1A_topk_w2v-gv.pdf}
+    \subfloat[Accuracy for Word2Vec and GloVe.\label{fig:exp_emb_1_A3}]{%
+        \includegraphics[width=0.5\textwidth]{exp_emb_1A_topk_w2v-gv.pdf}%
     }%
     \caption{Top-$k$ accuracy for the word analogies task.}
     \label{fig:exp_emb_1_A}
@@ -609,12 +614,12 @@ On the other hand, the pre-normalization of embeddings does not seem to have any
 
 \begin{figure}[t!]
     \centering
-    \subfloat[Dataset categories breakdown for the word analogies task.\label{fig:exp_emb_1_D1}]{
-        \includegraphics[width=1\textwidth]{exp_emb_1D_cat_l2-l3-e3e4.pdf}
+    \subfloat[Dataset categories breakdown for the word analogies task.\label{fig:exp_emb_1_D1}]{%
+        \includegraphics[width=1\textwidth]{exp_emb_1D_cat_l2-l3-e3e4.pdf}%
     }%
     \quad
-    \subfloat[Top-$k$ accuracy for the word analogies task.\label{fig:exp_emb_1_D2}]{
-        \includegraphics[width=0.5\textwidth]{exp_emb_1D_topk_l2-l3-e3e4.pdf}
+    \subfloat[Top-$k$ accuracy for the word analogies task.\label{fig:exp_emb_1_D2}]{%
+        \includegraphics[width=0.5\textwidth]{exp_emb_1D_topk_l2-l3-e3e4.pdf}%
     }%
     \caption{Word analogies task for Llama 2 and Llama 3 considering classic and reverse analogy layouts.}
     \label{fig:exp_emb_1_D}
@@ -633,11 +638,11 @@ Consequently, given the flat trends shown by most models, we can even speculate 
 
 \begin{figure}[t!]
     \centering
-    \subfloat[Accuracy for BERT, Word2Vec and Mistral.\label{fig:exp_emb_1_E1}]{
-        \includegraphics[width=0.5\textwidth]{exp_emb_1E_topk_w2v-bd-m-dnd.pdf}
+    \subfloat[Accuracy for BERT, Word2Vec and Mistral.\label{fig:exp_emb_1_E1}]{%
+        \includegraphics[width=0.5\textwidth]{exp_emb_1E_topk_w2v-bd-m-dnd.pdf}%
     }%
-    \subfloat[Accuracy for Llama 2 and Llama 3.\label{fig:exp_emb_1_E2}]{
-        \includegraphics[width=0.5\textwidth]{exp_emb_1E_topk_l2-l3-dnd.pdf}
+    \subfloat[Accuracy for Llama 2 and Llama 3.\label{fig:exp_emb_1_E2}]{%
+        \includegraphics[width=0.5\textwidth]{exp_emb_1E_topk_l2-l3-dnd.pdf}%
     }%
     \caption{Top-$k$ accuracy for the word analogies task considering classic and delta analogy layouts.}
     \label{fig:exp_emb_1_E}
@@ -675,7 +680,7 @@ As previously mentioned, these techniques are formalized in~\cref{eq:method_embe
 For the experiment at hand we select a smaller set of models to compare due to the fact that we wish to observe the differences between input and output embeddings.
 All changes to the models will be made referencing~\cref{table:exp_emb_models}, defined for~\cref{ssec:exp_emb_exp1}.
 
-As a first step, we are going to discard models without proper sub-word tokenization such as Word2Vec, GloVe and BERT.
+As a first step, we are going to discard models without proper sub-word tokenization such as Word2Vec, GloVe and BERT\@.
 This allows us to also perform tests on the whole dataset, through the implementation of proper encoding strategies as defined in~\cref{eq:method_embeddings_multitok-in,eq:method_embeddings_multitok-out}.
 In addition, we are not going to focus on models without distinct input and output embeddings such as GPT-2 and Gemma-2, therefore only GPT-2 will be included in order to provide a baseline evaluation.
 
@@ -690,11 +695,11 @@ This is not a completely trivial result since, despite having the same dimension
 
 \begin{figure}[t!]
     \centering
-    \subfloat[Accuracy for GPT-2, Mistral and Phi 3.5.\label{fig:exp_emb_2_A1}]{
-        \includegraphics[width=0.5\textwidth]{exp_emb_2A_topk_gpt-m-p3-io.pdf}
+    \subfloat[Accuracy for GPT-2, Mistral and Phi 3.5.\label{fig:exp_emb_2_A1}]{%
+        \includegraphics[width=0.5\textwidth]{exp_emb_2A_topk_gpt-m-p3-io.pdf}%
     }%
-    \subfloat[Accuracy for GPT-2, Llama 2 and Llama 3.\label{fig:exp_emb_2_A2}]{
-        \includegraphics[width=0.5\textwidth]{exp_emb_2A_topk_gpt-l2-l3-io.pdf}
+    \subfloat[Accuracy for GPT-2, Llama 2 and Llama 3.\label{fig:exp_emb_2_A2}]{%
+        \includegraphics[width=0.5\textwidth]{exp_emb_2A_topk_gpt-l2-l3-io.pdf}%
     }%
     \caption{Top-$k$ accuracy for the word analogies task considering input and output embeddings on the complete dataset.}
     \label{fig:exp_emb_2_A}
@@ -717,11 +722,11 @@ This behavior is likely due to the minimal performance difference present betwee
 
 \begin{figure}[t!]
     \centering
-    \subfloat[Accuracy for Mistral.\label{fig:exp_emb_2_B1}]{
-        \includegraphics[width=0.5\textwidth]{exp_emb_2B_topk_m-7-15-8-io.pdf}
+    \subfloat[Accuracy for Mistral.\label{fig:exp_emb_2_B1}]{%
+        \includegraphics[width=0.5\textwidth]{exp_emb_2B_topk_m-7-15-8-io.pdf}%
     }%
-    \subfloat[Accuracy for Llama 2.\label{fig:exp_emb_2_B2}]{
-        \includegraphics[width=0.5\textwidth]{exp_emb_2B_topk_l2-7-15-8-io.pdf}
+    \subfloat[Accuracy for Llama 2.\label{fig:exp_emb_2_B2}]{%
+        \includegraphics[width=0.5\textwidth]{exp_emb_2B_topk_l2-7-15-8-io.pdf}%
     }%
     \caption[Top-$k$ accuracy for the word analogies task considering input, output and interpolated embeddings on the complete dataset.]{Top-$k$ accuracy for the word analogies task considering input, output and interpolated embeddings at layers $7$, $15$ and $23$ on the complete dataset.}
     \label{fig:exp_emb_2_B}
@@ -749,16 +754,16 @@ This behavior can be intuitively explained by considering the fact that directly
 \begin{figure}[t!]
     \centering
     \subfloat[Dataset categories breakdown for the word analogies task considering input and output embeddings with classic and reverse analogy layouts.\label{fig:exp_emb_2_D1}]{%
-        \includegraphics[width=\textwidth]{exp_emb_2D_cat_m-l3-i-e3e4.pdf}
+        \includegraphics[width=\textwidth]{exp_emb_2D_cat_m-l3-i-e3e4.pdf}%
     }%
     \quad
     \begingroup
     \captionsetup{width=0.9\textwidth/2}
     \subfloat[Top-$k$ accuracy for the word analogies task considering input and output embeddings with classic and reverse analogy layouts.\label{fig:exp_emb_2_D2}]{%
-        \includegraphics[width=0.5\textwidth]{exp_emb_2D_topk_m-l3-i-e3e4.pdf}
+        \includegraphics[width=0.5\textwidth]{exp_emb_2D_topk_m-l3-i-e3e4.pdf}%
     }%
-    \subfloat[Top-$k$ accuracy for the word analogies task considering input and output embeddings with and without pre-normalization.\label{fig:exp_emb_2_D3}]{
-        \includegraphics[width=0.5\textwidth]{exp_emb_2D_topk_m-l3-io-norm.pdf}
+    \subfloat[Top-$k$ accuracy for the word analogies task considering input and output embeddings with and without pre-normalization.\label{fig:exp_emb_2_D3}]{%
+        \includegraphics[width=0.5\textwidth]{exp_emb_2D_topk_m-l3-io-norm.pdf}%
     }%
     \endgroup
     \caption{Word analogies task for Mistral and Llama 3 on the complete dataset.}
@@ -774,10 +779,10 @@ This conjecture is furtherly reinforced by the fact that the performance gain ov
 \begin{figure}[t!]
     \centering
     \subfloat[Accuracy for input embeddings.\label{fig:exp_emb_2_E1}]{%
-        \includegraphics[width=0.5\textwidth]{exp_emb_2E_topk_gpt-l2-l3-m-p3-i.pdf}
+        \includegraphics[width=0.5\textwidth]{exp_emb_2E_topk_gpt-l2-l3-m-p3-i.pdf}%
     }%
     \subfloat[Accuracy for output embeddings.\label{fig:exp_emb_2_E2}]{%
-        \includegraphics[width=0.5\textwidth]{exp_emb_2E_topk_gpt-l2-l3-m-p3-o.pdf}
+        \includegraphics[width=0.5\textwidth]{exp_emb_2E_topk_gpt-l2-l3-m-p3-o.pdf}%
     }%
     \caption[Top-$k$ accuracy for the word analogies task considering delta analogy layouts for various models on the complete dataset.]{Top-$k$ accuracy for the word analogies task considering delta analogy layouts for Llama 2, Llama 3, Mistral, Phi 3.5 and GPT-2 baseline on the complete dataset.}
     \label{fig:exp_emb_2_E}
@@ -892,36 +897,36 @@ This series of observations seems to persist for Mistral, even when considering 
 On the other hand,~\cref{fig:exp_fom_1_A5,fig:exp_fom_1_A4}, which depict Phi 3.5's performance, reveals that its general is similar to that of Llama 2 across both top-$k$ tasks.
 The only notable deviation in Phi 3.5's behavior is its exceptionally low accuracy in predicting the identity matrix, as highlighted in~\cref{fig:exp_fom_1_A5}.
 
-\begin{figure}[t!]
+\begin{figure}[tp!]
     \centering
     \begingroup
     \captionsetup{width=0.9\textwidth/2}
-    \subfloat[Accuracy between FOM and Markov model for LLama 2.\label{fig:exp_fom_1_A1}]{
-        \includegraphics[width=0.49\textwidth]{exp_fom_1A_l2-topk-markov.pdf}
+    \subfloat[Accuracy between FOM and Markov model for LLama 2.\label{fig:exp_fom_1_A1}]{%
+        \includegraphics[width=0.49\textwidth]{exp_fom_1A_l2-topk-markov.pdf}%
     }%
-    \subfloat[Accuracy between FOM and Identity matrix for LLama 2.\label{fig:exp_fom_1_A2}]{
-        \includegraphics[width=0.49\textwidth]{exp_fom_1A_l2-topk-id.pdf}
-    }%
-    \quad
-    \subfloat[Accuracy between FOM and Markov model for Mistral.\label{fig:exp_fom_1_A3}]{
-        \includegraphics[width=0.49\textwidth]{exp_fom_1A_m-topk-markov.pdf}
-    }%
-    \subfloat[Accuracy between FOM and identity matrix for Mistral.\label{fig:exp_fom_1_A4}]{
-        \includegraphics[width=0.49\textwidth]{exp_fom_1A_m-topk-id.pdf}
+    \subfloat[Accuracy between FOM and Identity matrix for LLama 2.\label{fig:exp_fom_1_A2}]{%
+        \includegraphics[width=0.49\textwidth]{exp_fom_1A_l2-topk-id.pdf}%
     }%
     \quad
-    \subfloat[Accuracy between FOM and Markov model for Phi 3.5.\label{fig:exp_fom_1_A5}]{
-        \includegraphics[width=0.49\textwidth]{exp_fom_1A_p-topk-markov.pdf}
+    \subfloat[Accuracy between FOM and Markov model for Mistral.\label{fig:exp_fom_1_A3}]{%
+        \includegraphics[width=0.49\textwidth]{exp_fom_1A_m-topk-markov.pdf}%
     }%
-    \subfloat[Accuracy between FOM and identity matrix for Phi 3.5.\label{fig:exp_fom_1_A6}]{
-        \includegraphics[width=0.49\textwidth]{exp_fom_1A_p-topk-id.pdf}
+    \subfloat[Accuracy between FOM and identity matrix for Mistral.\label{fig:exp_fom_1_A4}]{%
+        \includegraphics[width=0.49\textwidth]{exp_fom_1A_m-topk-id.pdf}%
+    }%
+    \quad
+    \subfloat[Accuracy between FOM and Markov model for Phi 3.5.\label{fig:exp_fom_1_A5}]{%
+        \includegraphics[width=0.49\textwidth]{exp_fom_1A_p-topk-markov.pdf}%
+    }%
+    \subfloat[Accuracy between FOM and identity matrix for Phi 3.5.\label{fig:exp_fom_1_A6}]{%
+        \includegraphics[width=0.49\textwidth]{exp_fom_1A_p-topk-id.pdf}%
     }%
     \endgroup
     \caption{Top-$k$ accuracy for the next-token prediction task.}
     \label{fig:exp_fom_1_A}
 \end{figure}
 
-The previous observations seem to suggest that, for certain models, embeddings may exhibit a closer relationship to their inverse rather than serving as representations for predicting the next token based on the previous one. 
+The previous observations seem to suggest that, for certain models, embeddings may exhibit a closer relationship to their inverse rather than serving as representations for predicting the next token based on the previous one.
 However, this interpretation appears to conflict the recorded matrix distances shown in~\cref{table:exp_fom_distance}.
 The matrix distance metric indicates that the FOM based on Mistral more accurately represents its corresponding Markov model than any other analyzed model, as it exhibits the lowest FOM/Markov distance and one of the highest FOM/identity distances.
 Nonetheless, direct comparative statements based on the matrix distance should be approached with caution as this metric is neither widely used nor inherently reliable.
@@ -931,7 +936,7 @@ Nonetheless, direct comparative statements based on the matrix distance should b
     \begin{tabular}{| c | c c c |}
         \rowcolorhang{bluepoli!40}
         \hline
-        \textbf{Distance} & \textbf{d(FOM, I)} & \textbf{d(FOM, Markov)} & \textbf{d(Markov, I)} \\
+        \textbf{Distance} & $\textbf{d(FOM, I)}$ & $\textbf{d(FOM, Markov)}$ & $\textbf{d(Markov, I)}$ \\
 		\hline \hline
             \textbf{Llama 2} & $178.88$ & $6.37$ & $178.99$ \\[2px]
             \textbf{Llama 2 with RMS} & $180.33$ & $23.13$ & '' \\[2px]
@@ -976,7 +981,7 @@ In addition, it is also possible to notice how FOM variants that include RMS nor
     in      & cis   & cent  & lc     & lc     & hib        & hib        & the    \\ 
     long    & temps & temps & long   & long   & ago        & ago        & @      \\ 
     smart   & phone & phone & phones & phones & phone      & phone      & phone  \\ 
-    door    & way   & way   & door   & door   & confidence & confidence & .      \\ 
+    door    & way   & way   & door   & door   & confidence & confidence & .      \\ % chktex 26
     hear    & ings  & ings  & Pyx    & Pyx    & thy        & thy        & ings   \\ 
     \hline
     \end{tabular}}
@@ -999,11 +1004,11 @@ This observation holds for other models and metrics as well, likely because, in 
     \label{fig:exp_fom_1_B1}
 \end{figure}
 \begin{figure}[t!]
-    \subfloat[Overlap coefficient considering classic FOM.\label{fig:exp_fom_1_B2}]{
-        \includegraphics[width=0.5\textwidth]{exp_fom_1B_l2-jc.pdf}
+    \subfloat[Overlap coefficient considering classic FOM.\label{fig:exp_fom_1_B2}]{%
+        \includegraphics[width=0.5\textwidth]{exp_fom_1B_l2-jc.pdf}%
     }%
-    \subfloat[Overlap coefficient considering FOM with RMS.\label{fig:exp_fom_1_B3}]{
-        \includegraphics[width=0.5\textwidth]{exp_fom_1B_l2rms-jc.pdf}
+    \subfloat[Overlap coefficient considering FOM with RMS.\label{fig:exp_fom_1_B3}]{%
+        \includegraphics[width=0.5\textwidth]{exp_fom_1B_l2rms-jc.pdf}%
     }%
     \caption[Jaccard index for Llama 2 considering FOM and FOM with RMS.]{Jaccard index between FOM, Markov model and random baseline for Llama 2.}
     \label{fig:exp_fom_1_B}
@@ -1018,14 +1023,14 @@ In addition, its growth rate is almost equal \todo{to that of the} baselines, me
 
 \begin{figure}[t!]
     \centering
-    \subfloat[Overlap coefficient for Llama 2.\label{fig:exp_fom_1_C1}]{
-        \includegraphics[width=0.33\textwidth]{exp_fom_1C_l2-op.pdf}
+    \subfloat[Overlap coefficient for Llama 2.\label{fig:exp_fom_1_C1}]{%
+        \includegraphics[width=0.33\textwidth]{exp_fom_1C_l2-op.pdf}%
     }%
-    \subfloat[Overlap coefficient for Mistral.\label{fig:exp_fom_1_C2}]{
-        \includegraphics[width=0.33\textwidth]{exp_fom_1C_m-op.pdf}
+    \subfloat[Overlap coefficient for Mistral.\label{fig:exp_fom_1_C2}]{%
+        \includegraphics[width=0.33\textwidth]{exp_fom_1C_m-op.pdf}%
     }%
-    \subfloat[Overlap coefficient for Phi 3.5.\label{fig:exp_fom_1_C3}]{
-        \includegraphics[width=0.33\textwidth]{exp_fom_1C_p3-op.pdf}
+    \subfloat[Overlap coefficient for Phi 3.5.\label{fig:exp_fom_1_C3}]{%
+        \includegraphics[width=0.33\textwidth]{exp_fom_1C_p3-op.pdf}%
     }%
     \caption{Overlap coefficient between FOM, Markov model and random baseline.}
     \label{fig:exp_fom_1_C}
@@ -1044,7 +1049,7 @@ For this experiment, we shift our perspective on transition matrices from sets o
 This approach enables a more precise evaluation by considering how models would concretely be utilized beyond these experimental scenarios.
 
 In~\cref{ssec:method_fom_prob} we define the two primary mathematical tools used in this experiment: perplexity (\cref{eq:method_fom_perplexity}) and KL divergence (\cref{eq:method_fom_kldiv}).
-These metrics allow us to determine the similarity or dissimilarity between two distributions over a vocabulary, either by directly comparing them using the KL divergence or by measuring their `surprise' over a text corpus using the perplexity metric. 
+These metrics allow us to determine the similarity or dissimilarity between two distributions over a vocabulary, either by directly comparing them using the KL divergence or by measuring their `surprise' over a text corpus using the perplexity metric.
 
 \subsubsection{Experimental Setup}
 
@@ -1058,7 +1063,7 @@ We also compute the Kullback-Leibler divergence (KL divergence) between pairs of
 The KL divergence is calculated according to~\cref{eq:method_fom_kldiv} and, as noted, is an asymmetric distance which measures how much a given distribution differs from another.
 In practice, for each token, we compute point-wise contributions for every vocabulary item and then aggregate these contributions by summing them.
 Subsequently, we average the computed KL divergences to obtain the average KL divergence over the entire vocabulary for each model.
-Similarly to the perplexity computation, we evaluate the KL divergence for all combinations and reverse combinations of FOM, Markov model and identity matrix. 
+Similarly to the perplexity computation, we evaluate the KL divergence for all combinations and reverse combinations of FOM, Markov model and identity matrix.
 
 \subsubsection{Results}
 
@@ -1114,15 +1119,15 @@ The observed consistencies imply the existence of macro-groups of sentences for 
 
 \begin{figure}[t!]
     \centering
-    \subfloat[Perplexity for Llama 2.\label{fig:exp_fom_2_A1}]{
-        \includegraphics[width=0.5\textwidth]{exp_fom_2A_l2-perp-owt.png}
+    \subfloat[Perplexity for Llama 2.\label{fig:exp_fom_2_A1}]{%
+        \includegraphics[width=0.5\textwidth]{exp_fom_2A_l2-perp-owt.png}%
     }%
-    \subfloat[Perplexity for Mistral.\label{fig:exp_fom_2_A2}]{
-        \includegraphics[width=0.5\textwidth]{exp_fom_2A_m-perp-owt.png}
+    \subfloat[Perplexity for Mistral.\label{fig:exp_fom_2_A2}]{%
+        \includegraphics[width=0.5\textwidth]{exp_fom_2A_m-perp-owt.png}%
     }%
     \quad
-    \subfloat[Perplexity for Phi 3.5.\label{fig:exp_fom_2_A3}]{
-        \includegraphics[width=0.5\textwidth]{exp_fom_2A_p3-perp-owt.png}
+    \subfloat[Perplexity for Phi 3.5.\label{fig:exp_fom_2_A3}]{%
+        \includegraphics[width=0.5\textwidth]{exp_fom_2A_p3-perp-owt.png}%
     }%
     \caption{Perplexity on OpenWebText sentences for FOM, Markov model, Uniform probability and Identity matrix.}
     \label{fig:exp_fom_2_A}
@@ -1217,10 +1222,10 @@ For instance, in~\cref{table:exp_fom_mistral-kl} we can notice a slightly higher
 Additionally, KL divergence values related to comparisons between identity matrix and FOM for the Mistral model seem to present the same behavior with respect to Llama 2 and Phi 3.5.
 
 As far as FOMs that include RMS normalization are concerned, there are some meaningful differencens brought to light by the performed experiment.
-Firstly, in~\cref{table:exp_fom_llama-kl} we can observe that the FOM based on Llama 2 performs slightly better than its alternate version including RMS.
+Firstly, in~\cref{table:exp_fom_llama-kl} we can observe that the FOM based on Llama 2 performs slightly better than its alternate version including RMS\@.
 This finding is unsurprising \todo{in it of itself}, since it follows the general performance pattern established and already mentioned in previous experiments.
 However, if we also consider~\cref{table:exp_fom_mistral-kl} it is possible to notice that the performance drop tied to the FOM with RMS based on Mistral is actually much less noticeable than \todo{its} Llama 2 counterpart.
-Mistral's \todo{impact is amplified} by the fact that the KL divergence between FOM with RMS and identity matrix is actually lower than the KL divergence considering the original FOM.
+Mistral's \todo{impact is amplified} by the fact that the KL divergence between FOM with RMS and identity matrix is actually lower than the KL divergence considering the original FOM\@.
 This underlines the apparent affinity that the FOM based on Mistral displays towards self-regression,
 Conversely,~\cref{table:exp_fom_phi-kl} shows the \todo{immense} impact on KL divergence that RMS normalization has on the FOM based \todo{specifically} on Phi 3.5, resulting in a significant decrease of performance across all comparisons that include the FOM and reflecting the results of \todo{the} previous experiment on perplexity.
 
