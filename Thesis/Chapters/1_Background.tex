@@ -126,7 +126,7 @@ Another type of deep architecture relevant for this work is the Recurrent Neural
 Recurrent connections enable RNN models to establish a distributed hidden state that acts as a memory, much like a flip-flop gate array in electronics.
 
 In practice, each RNN module is fed the inputs at the current time instant and its own outputs at the previous time instant, making it suitable to process sequences and other time-based data.
-\cref{fig:background_rnn} shows the unrolling process of a RNN, visualizing how the recurrent connection contributes to the distributed hidden state at each time instant.
+\cref{fig:background_rnn} shows the unrolling process of an RNN, visualizing how the recurrent connection contributes to the distributed hidden state at each time instant.
 
 \begin{figure}[t!]
     \centering
@@ -425,8 +425,10 @@ However, in order to get an actual probability distribution over the vocabulary 
 
 The ``Attention Is All You Need''~\cite{vaswani2017} architecture described in previous sections is generally regarded the first transformer architecture.
 Over time, numerous variations and improvements on the base architecture have emerged in the NLP field.
-We will primarily focus on the Llama 2~\cite{touvron2023} and Llama 3~\cite{dubey2024} (hereafter referred to simply as Llama) models, developed by \href{https://ai.meta.com/}{Meta AI} in 2023 and 2024 respectively.
+We will primarily focus on the Llama 2~\cite{touvron2023} and Llama 3~\cite{dubey2024} (hereafter referred to simply as Llama) models, developed by Meta AI\footnotemark in 2023 and 2024 respectively.
 Other minor models may also be taken into consideration, although without particular emphasis on their architecture.
+\footnotetext{\rlap{\url{https://ai.meta.com/}}}
+
 
 \subsubsection*{Decoder-only Models}
 

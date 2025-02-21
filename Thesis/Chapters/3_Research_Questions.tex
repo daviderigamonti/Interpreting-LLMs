@@ -2,7 +2,7 @@ In this section, we delineate the specific research questions regarding transfor
 The purpose of these research questions is to provide an overall informative analysis on the hidden representations and embedding space of recent transformer-based models.
 The novelty of this work is not necessarily \todo{inherent in the} chosen approach, but resides in the combination of multiple known techniques to provide novel perspectives and interpretability tools with the ultimate purpose of confirming and possibly expanding upon previous findings.
 
-\section{How can we visualize internal states \texorpdfstring{ \\ }{} of LLMs in an immediate and \texorpdfstring{ \\ }{} interactive way?}\label{sec:rq_intravisto}
+\section{How Can We Visualize Internal States \texorpdfstring{ \\ }{} of LLMs in an Immediate and \texorpdfstring{ \\ }{} Interactive Way?}\label{sec:rq_intravisto}
 
 The first research question is centered around the development of an interactive visualization tool for LLMs.
 The goal is to create a tool that allows users to visually explore and interpret the whole computation performed by an LLM when generating a sentence.
@@ -13,7 +13,7 @@ One of \todo{the central purposes} of the proposed tool is the visualization of 
 The creation of this transformer visualization framework is justified by an overall revisitation of the logit lens analysis from a new, \todo{multifaceted} perspective with the ultimate goal of confirming established results from a new angle and possibly observing new phenomena.
 This framework serves as a starting point for many of the inquiries that will be tackled in this work, as it provided the means of preliminary analysis needed to \todo{kickstart} other, more \todo{targeted}, experiments.
 
-\section{Do autoregressive LLMs retain linear properties in their embedding spaces?}\label{sec:rq_embeddings}
+\section{Do Autoregressive LLMs Retain Linear Properties in Their Embedding Spaces?}\label{sec:rq_embeddings}
 
 With the aid of the previously developed tool we noticed some peculiarities in the behavior of LLMs with respect to smaller and less \todo{sophisticated} language models, in particular, the embedding representations of LLMs seemed to encode less information about the actual word semantics.
 From this starting point, the second research question investigates whether autoregressive LLMs retain linear properties in their embedding spaces.
@@ -22,7 +22,7 @@ As mentioned in the previous chapters, the linearity of the embedding space is a
 A linear embedding space enables particular geometric properties such as the ability to solve word analogies (`king' - `man' + `woman' = `queen') and the possibility of modeling semantic similarity between tokens as a distance relationship.
 Given the recent developments in transformer training and architecture, we aim to examine if these properties still hold in the embedding spaces of recent causal LLMs and whether \todo{these properties} are consistent across various model architectures and sizes, while pointing out differences between the embedding and unembedding spaces in models \todo{where the two are different}.
 
-\section{Is it possible to obtain first-order \texorpdfstring{ \\ }{} \mbox{predictions} by \mbox{concatenating} \texorpdfstring{ \\ }{} embedding spaces in LLMs?}\label{sec:rq_fom}
+\section{Is it Possible to Obtain First-order \texorpdfstring{ \\ }{} \mbox{Predictions} by \mbox{Concatenating} \texorpdfstring{ \\ }{} Embedding Spaces in LLMs?}\label{sec:rq_fom}
 
 Following the investigation on different embedding weights between input and output spaces of a LM, the third research question explores the feasibility of obtaining first-order predictions by concatenating the two embedding spaces in LLMs.
 A first-order prediction can be seen as a guess of the next token based solely on the previous one, similar to a first-order Markov model's predictive process, which employs a conditioned probability on the previous token to obtain the most likely next token.

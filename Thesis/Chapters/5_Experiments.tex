@@ -19,11 +19,11 @@ Furthermore, each research question has a final discussion section, which is aim
 \section{Transformer Visualization}\label{sec:exp_intravisto}
 
 As anticipated in~\cref{sec:rq_intravisto} and explored in~\cref{sec:method_intravisto}, the experiments tied to this research question are centered around the InTraVisTo tool.
-The first points (\cref{sec:exp_intravisto_exp1,sec:exp_intravisto_exp2,sec:exp_intravisto_exp3}) within this section provide an exhaustive overview of the interface, diving into the technical aspects and explaining the role of components that are present in the application.
+The first points (\cref{ssec:exp_intravisto_exp1,ssec:exp_intravisto_exp2,ssec:exp_intravisto_exp3}) within this section provide an exhaustive overview of the interface, diving into the technical aspects and explaining the role of components that are present in the application.
 Consequently, these points do not present the experimental structure defined in the introductory section of this chapter.
-Whereas, the last point (\cref{sec:exp_intravisto_exp4}) is dedicated to the exploration of the proposed tool's actual capabilities, taking into consideration specific use cases and small investigations to provide concrete examples of possible usage scenarios.
+Whereas, the last point (\cref{ssec:exp_intravisto_exp4}) is dedicated to the exploration of the proposed tool's actual capabilities, taking into consideration specific use cases and small investigations to provide concrete examples of possible usage scenarios.
 
-\subsection{Decoding Interface}\label{sec:exp_intravisto_exp1}
+\subsection{Decoding Interface}\label{ssec:exp_intravisto_exp1}
 
 Decoding the meaning of hidden state vectors at various depths of a transformer stack is essential for providing an intuition as to how the model is working.
 InTraVisTo allows decoding and inspection of the main four vectors (defined in~\cref{ssec:method_intravisto_decoding}) that compose each layer, while offering a human-interpretable representation of each hidden state by performing a decoding operation.
@@ -51,7 +51,7 @@ Those parameters can be tweaked using a dedicated panel present in the interface
 \begin{figure}[t!]
     \centering
     \includegraphics[width=\textwidth]{exp_intravisto_1B_selectors.png}
-    \caption[Selector panel containing InTraVisTo controls.]{Selector panel containing InTraVisTo controls to set (from left to right) \emph{decoding strategy}, \emph{target embedding}, \emph{probability} to display and \emph{attribution formula} of component outputs to the resiudal stream.}
+    \caption[Selector panel containing InTraVisTo controls.]{Selector panel containing InTraVisTo controls to set (from left to right) \emph{decoding strategy}, \emph{target embedding}, \emph{probability} to display and \emph{attribution formula} of component outputs to the residual stream.}
     \label{fig:exp_intravisto_1_B}
 \end{figure}
 
@@ -85,7 +85,7 @@ Furthermore, users can affect the generation process by directly choosing a diff
     \label{fig:exp_intravisto_1_C}
 \end{figure}
 
-\subsection{Flow Interface}\label{sec:exp_intravisto_exp2}
+\subsection{Flow Interface}\label{ssec:exp_intravisto_exp2}
 
 The second visualization provided by InTraVisTo is a Sankey diagram that aims to depict the information flow through the transformer network (\cref{fig:exp_intravisto_2_A}).
 
@@ -115,10 +115,10 @@ Additionally, flows are given a further shading factor that is proportional to t
 This allows users to appreciate in an immediate way states that exhibit rapid changes in distribution, thus providing a better localization for possible zones of interest.
 
 The only component that is able to redistribute the flow through various tokens is the attention node, which does so according to the attention weights computed for all preceding tokens.
-Furthermore, for each aggregation node (intermediate and output), the flow contribution of the preceding nodes is computed following the ``Residual contribution'' user control mentioned in~\cref{sec:exp_intravisto_exp1} according to~\cref{eq:method_intravisto_norm-contrib,eq:method_intravisto_kl-contrib}.
+Furthermore, for each aggregation node (intermediate and output), the flow contribution of the preceding nodes is computed following the ``Residual contribution'' user control mentioned in~\cref{ssec:exp_intravisto_exp1} according to~\cref{eq:method_intravisto_norm-contrib,eq:method_intravisto_kl-contrib}.
 
 InTraVisTo is equipped with additional settings exclusively dedicated to the Sankey diagram visualization as illustrated in~\cref{fig:exp_intravisto_2_B}.
-\todo{First}, we provide a flag for hiding the starting token similar to the one defined in~\cref{sec:exp_intravisto_exp1}.
+\todo{First}, we provide a flag for hiding the starting token similar to the one defined in~\cref{ssec:exp_intravisto_exp1}.
 However, in the Sankey's case it comes with an additional control that allows users to reapport the hidden flow to remaining nodes, meaning that the values of hidden flows are set to $0$ and the missing \todo{percentage} is redistributed to visible tokens.
 Another important setting is the ``Attention highlight'', which controls the criteria for highlighting attention traces, affecting the number of visible flows related to each attention node.
 Users can choose between visualizing all flows, only the top-$k$ flows (considering attention weights), \todo{only} flows with a corresponding attention weight greater than a certain threshold, or no flows at all.
@@ -131,7 +131,7 @@ Other graphic-oriented options allow users to remove node labels for nodes that 
     \label{fig:exp_intravisto_2_B}
 \end{figure}
 
-\subsection{Dinamically Changing the Network}\label{sec:exp_intravisto_exp3}
+\subsection{Dynamically Changing the Network}\label{ssec:exp_intravisto_exp3}
 
 InTraVisTo is thought to be an interactive tool, so another class of features to aid in the understanding of the internal workings of transformers is the embedding injection.
 As previously formalized in~\cref{ssec:method_intravisto_injection}, injection \todo{consists in} substituting a hidden state with a custom embedding representation, forcing the model to change its behavior based on the injected information.
@@ -149,7 +149,7 @@ If the string contains multiple tokens, then all encoded representations are ave
 \begin{figure}[t!]
     \centering
     \includegraphics[width=0.25\textwidth]{exp_intravisto_3A_popup.png}
-    \caption[InTraVisTo's pop-up menu utilized for injections.]{InTraVisTo's pop-up menu utilized for injections, containing an input box for specifing the injection prompt and selectors for \emph{injection technique}, \emph{injection position}, \emph{decoding technique} and eventual \emph{normalization} options.}
+    \caption[InTraVisTo's pop-up menu utilized for injections.]{InTraVisTo's pop-up menu utilized for injections, containing an input box for specifying the injection prompt and selectors for \emph{injection technique}, \emph{injection position}, \emph{decoding technique} and eventual \emph{normalization} options.}
     \label{fig:exp_intravisto_3_A}
 \end{figure}
 
@@ -166,13 +166,13 @@ The \todo{typical} layout of injection cards can be observed in~\cref{fig:exp_in
     \label{fig:exp_intravisto_3_B}
 \end{figure}
 
-\todo{As mentioned beforehand} in~\cref{sec:exp_intravisto_exp1}, it is also possible to perform injections in the Sankey diagram by clicking on any visible node, triggering the same injection pop-up menu referenced before.
+\todo{As mentioned beforehand} in~\cref{ssec:exp_intravisto_exp1}, it is also possible to perform injections in the Sankey diagram by clicking on any visible node, triggering the same injection pop-up menu referenced before.
 If the chosen node corresponds to a feed-forward \todo{node} or an attention node, there is an additional option that allows the user to remove the node, performing an ablation.
 Ablations are handled the same way as injections are, therefore a card is created in the top section of the interface (\cref{fig:exp_intravisto_3_B}), and the generation process is repeated to include the selected changes.
 Removing a node is handled by nullifying its contribution to the residual, therefore its hidden state is still properly decoded and can be analyzed from the heatmap, but does not influence the rest of the model.
 Similarly to injections, ablations are highlighted in \emph{red} inside the heatmap visualization.
 
-\subsection{Experiment 4}\label{sec:exp_intravisto_exp4}
+\subsection{Case Study: Utilizing InTraVisTo to Inspect the Internal Behavior of Models}\label{ssec:exp_intravisto_exp4}
 
 For this experiment we submit various prompts to \todo{a number} of different models and explore specific aspects of the extracted internal representations and information flows utilizing InTraVisTo.
 
@@ -219,7 +219,11 @@ For the sake of our analysis we propose a limited number of models to be analyze
 In particular, we consider the $4$-bit quantized versions of Mistral Instruct 0.2 7B~\cite{jiang2023}, LLama 2 7B~\cite{touvron2023} and the full unquantized version of GPT-2~\cite{radford2019}.
 However, the application has been developed with generality in mind, thus it can be deployed in such a way to include most popular model architectures available on Hugging Face~\cite{wolf2020}.
 
-\todo[purple!30]{mention transformer wrapper library}
+A \todo{fundamental part} of InTraVisTo is the inspection and \todo{modification} of models' hidden states.
+Unfortunately, under normal circumstances, only a small part of these states is made readily \todo{inspectable} by the standard Hugging Face Transformers library~\cite{}, and the method of accessing internal components varies between model architectures and \todo{providers}.
+In order to obtain a full perspective \todo{of} transformer architectures, we utilize the \emph{transformers-wrappers} framework\footnotemark: an open-source Python library initially developed by Vincenzo Scotti with the goal of exposing a uniform and extensible interface for transformer models, while retaining a standardized internal structure for models provided by Hugging Face Transformers.
+Specifically, we \todo{take advantage} of the state inspection and API standardization capabilities offered by the library, and we contribute to the codebase by designing an extensible framework that supports the injection and ablation techniques utilized in InTraVisTo.
+\footnotetext{\rlap{\url{https://github.com/vincenzo-scotti/transformer_wrappers}}}
 
 \subsubsection{Results}
 
@@ -293,7 +297,7 @@ In addition, by observing the Sankey diagram shown in~\cref{fig:exp_intravisto_4
 \end{figure}
 
 To go one step further, we decide to try \todo{and} sway the model's prediction into generating a counter-factual information.
-We do so by replacing the token \texttt{\_Rome} present at position $16$ with \texttt{\_Paris} using the injection interface described in~\cref{sec:exp_intravisto_exp3}.
+We do so by replacing the token \texttt{\_Rome} present at position $16$ with \texttt{\_Paris} using the injection interface described in~\cref{ssec:exp_intravisto_exp3}.
 Interestingly, we notice a significant difference in behavior depending on the chosen layer of injection.
 If we inject our token at the first occurrence of the token \texttt{\_Rome} (layer $20$), as can be observed in~\cref{fig:exp_intravisto_4_D1}, we can see that our injection quickly vanishes through the layers in favor of the correct answer.
 On the other hand, if we perform our injection at a layer where the token \texttt{\_Rome} actually starts gaining a meaningful probability (around $90.45\%$ at layer $25$) the model is not able to recover immediately and, as we can appreciate in~\cref{fig:exp_intravisto_4_D2}, ends up inserting \emph{`Paris'} in its answer.
@@ -422,12 +426,12 @@ Thus, by ending the number with a newline character, the model is able to give t
 \subsection{Discussion}
 
 At its core, InTraVisTo is a tool that can be used to envision internal states and the information flow through transformer-based neural networks, at the core of LLMs.
-InTraVisTo offers a wide array of functionalities and visualizations to NLP practicioners, which they can utilize to understand internal reasoning steps carried out by LLMs and, possibly, track down the causes of generation errors such as hallucinations.
+InTraVisTo offers a wide array of functionalities and visualizations to NLP practitioners, which they can utilize to understand internal reasoning steps carried out by LLMs and, possibly, track down the causes of generation errors such as hallucinations.
 As an interactive tool, InTraVisTo is equipped with additional tools to modify and manipulate internal representations in a user-friendly way, in order to enable small-scale causal investigations.
-Moreover, InTraVisTo's implementation supports simultaneous \todo{usage} by different users loading multiple distinct LLMs at the same time, making it a flexible application capable of being deployed in a reproducible \todo{way} \todo{targeted} towards NLP researchers and practicioners.
+Moreover, InTraVisTo's implementation supports simultaneous \todo{usage} by different users loading multiple distinct LLMs at the same time, making it a flexible application capable of being deployed in a reproducible \todo{way} \todo{targeted} towards NLP researchers and practitioners.
 
 \todo{As extensively shown} in the proposed examples and experiments, InTraVisTo can be used methodically to extract \todo{considerations} from the generation process of language models.
-From the results obtained in~\cref{sec:exp_intravisto_exp4}, we show how specific models encode numerical tokens and how these representations affect the contents of states belonging the residual flow.
+From the results obtained in~\cref{ssec:exp_intravisto_exp4}, we show how specific models encode numerical tokens and how these representations affect the contents of states belonging the residual flow.
 We also utilize the injection mechanism to investigate how anomalies in the generation process of models affect their outputs, uncovering common patterns and speculating on the probabilistic significance of internal states \todo{in function of} the generated tokens.
 By proposing a technique for performing experiments using InTraVisTo in~\cref{sssec:exp_intravisto_exp4_expset}, we also wish to create a workflow that acts as a guideline to users, in order to streamline the process of research and \todo{generalizability of its findings}.
 
@@ -458,7 +462,7 @@ Nonetheless, small empirical tests on a restricted set of models and a fraction 
 Additionally, a marginal set of entries belonging to the chosen datasets featured \todo{entities} composed of multiple words separated by the underscore character `\_'.
 In order to improve the parsing process for the models' tokenizers, these occurrences were changed to use the whitespace character (` ') instead.
 
-\subsection{Experiment 1}\label{ssec:exp_emb_exp1}
+\subsection{Experiment: Comparing LLMs inside the Embedding Space}\label{ssec:exp_emb_exp1}
 
 As a starting point, we directly compare the performance of the input embeddings belonging to various state-of-the art and older models over the defined analogy task.
 The comparison between the embeddings of old and new models is crucial, since it allows us to make assessments over the effectiveness of newer architectural paradigms in creating meaningful embedding spaces.
@@ -648,7 +652,7 @@ Consequently, given the flat trends shown by most models, we can even speculate 
     \label{fig:exp_emb_1_E}
 \end{figure}
 
-\subsection{Experiment 2}\label{ssec:exp_emb_exp2}
+\subsection{Experiment: Analyzing Input and \texorpdfstring{ \\ }{} Output Embeddings}\label{ssec:exp_emb_exp2}
 
 For this second experiment we wish to delve deeper into the actual capabilities of the embeddings belonging to recent decoder-only LLMs.
 To this end, we will also take into consideration the unembedding layer of said models.
@@ -664,7 +668,7 @@ Embedding interpolation, defined in~\cref{ssec:method_intravisto_decoding} and f
 Logically, since we are performing a linear interpolation operation, we expect to observe a trend in the analogy resolution accuracy of the interpolated embeddings that goes from the input embedding to the output one according to the interpolation percentage.
 However, it could be possible that the actual rate of change for the interpolated performance might not be constant between the two end points, undermining the linearity assumption of linear interpolation, and opening up different approaches to interpolation-based decoding as shown in~\cref{eq:method_intravisto_quadratic-interp,eq:method_intravisto_max-p}.
 
-\subsubsection{Experimental Setup}\label{sssec:exp_emb_exp2_expset}
+\subsubsection{Experimental Setup}
 
 The experimental setup for this second experiment presents only few differences with respect to the previous one (\cref{ssec:exp_emb_exp1}).
 As a starting point, the core algorithm used to perform analogy resolution defined in~\cref{sssec:exp_emb_exp1_expset} is left \todo{invariant}, as the fundamental task is the same between the two experiments.
@@ -773,8 +777,8 @@ This behavior can be intuitively explained by considering the fact that directly
 On the topic of delta analogies, observing~\cref{fig:exp_emb_2_E1,fig:exp_emb_2_E2} unveils a significant different trend with respect to the one identified for the single-token analogies in~\cref{sssec:exp_emb_exp1_results}.
 Even if the overall curve flattening tendency seems to carry over between experiments, in the current case we also observe an overall performance drop across all values of $k$.
 Conversely, we also experience a \todo{tendency} for the input and output embeddings of some models to obtain closer results \todo{as opposed to} their standard analogy experiment, observable in~\cref{fig:exp_emb_2_E3}.
-The reason behind this \todo{collection} of incongruences between experiments is likely tied to the double average computation performed over the tokens that form analogy components: the first in order to optimally aggregate multi-token words into a single embedded representation as~\cref{eq:method_embeddings_multitok-in}, and the second as prescribed by the delta analogies experiment referenced in~\cref{eq:method_embeddings_delta-analogy-function}.
-This conjecture is furtherly reinforced by the fact that the performance gain over the baselines is less \todo{prominent} for this instance of the delta analogies experiment which considers the whole dataset, \todo{rather than} the one filtering for single-token analogies, as observable in~\cref{fig:exp_emb_2_E1,fig:exp_emb_2_E2}.
+The reason behind this \todo{collection} of \todo{incongruences} between experiments is likely tied to the double average computation performed over the tokens that form analogy components: the first in order to optimally aggregate multi-token words into a single embedded representation as~\cref{eq:method_embeddings_multitok-in}, and the second as prescribed by the delta analogies experiment referenced in~\cref{eq:method_embeddings_delta-analogy-function}.
+This conjecture is \todo{furtherly} reinforced by the fact that the performance gain over the baselines is less \todo{prominent} for this instance of the delta analogies experiment which considers the whole dataset, \todo{rather than} the one filtering for single-token analogies, as observable in~\cref{fig:exp_emb_2_E1,fig:exp_emb_2_E2}.
 
 \begin{figure}[t!]
     \centering
@@ -799,14 +803,14 @@ This conjecture is furtherly reinforced by the fact that the performance gain ov
 In the end, we can affirm that LLMs are able to retain a surprising amount of semantic relationships inside their embeddings, despite the fact that sub-word tokenization actively works against the accumulation of meaning for token representations.
 Their performance on the selected tasks is \todo{on par}, if not greater than less recent models used as baselines.
 In particular, by comparing~\cref{table:exp_emb_models} and other graphs displaying the results of experiments (\cref{fig:exp_emb_1_A,fig:exp_emb_1_B}), we can almost observe a slight correlation between vocabulary size and overall performance on tasks where models with a smaller vocabulary seem to outperform \todo{others with larger ones}.
-From this, we can observe that \todo{massive recent models} such as Llama 3 and Gemma might be \todo{moving} towards a direction of semantic empoverishment of the embedding space, whereas slightly older LLMs such as Llama 2 and Mistral, or LLMs \todo{aimed at being small and portable} such as Phi 3.5 still preserve \todo{much} of the original embedding space properties.
+From this, we can observe that \todo{massive recent models} such as Llama 3 and Gemma might be \todo{moving} towards a direction of semantic impoverishment of the embedding space, whereas slightly older LLMs such as Llama 2 and Mistral, or LLMs \todo{aimed at being small and portable} such as Phi 3.5 still preserve \todo{much} of the original embedding space properties.
 
 Interestingly, we observe that the only LLM \todo{that} clearly underperformed on the proposed tasks was the only one that had an explicit multilingual training.
 As previously stated, this finding suggests that multiple languages compete in giving different meaning to the same tokens, resulting in worse overall performance for the given tasks.
 We must acknowledge the fact that these results do not constitute the focal point of our analysis, and most definitely require further experimentation to provide meaningful answers by expanding upon the provided conjectures.
 Nonetheless, our observations still \todo{hold importance} for the defined research question as we observed that an increase in scale of the model does not directly influence the performance on the proposed tasks and, by extension, the expressiveness of the embeddings.
 
-On the topic of input and outupt embeddings, we can conclude that input embeddings are generally more \todo{indicated} to resolve analogies and, by extension, inherently contain a greater amount of semantic information with respect to output embeddings.
+On the topic of input and output embeddings, we can conclude that input embeddings are generally more \todo{indicated} to resolve analogies and, by extension, inherently contain a greater amount of semantic information with respect to output embeddings.
 However, we also notice that Llama 3 displays an inverse pattern regarding this type of relationship.
 We speculate that, since output embeddings display a minor amount of semantic \todo{affinity}, in Llama 3's case they also retain a \todo{smaller} portion of the multilingual information which we identify as the \todo{main reason} for Llama 3's underperformance.
 The model's vocabulary is still \todo{the same} between input and output embeddings, thus issues inherently tied with the tokenization process itself are still present.
@@ -828,7 +832,7 @@ Although past work has theorized and partially demonstrated this hypothesis for 
 Another perspective taken in consideration, is the possibility of the FOM transition matrix reflecting an identity matrix, thus \todo{implying} that input and output embeddings tend to \todo{stray} towards equality during training, effectively modeling a form of natural weight tying~\cite{inan2017,press2017}.
 
 Following on the normalization intuition that proved effective for InTraVisTo, as explored in~\cref{sssec:method_intravisto_decoding_norm}, we also explore an alternative of the basic FOM obtained from directly joining input and output embeddings.
-In fact, this alternative was introduced with the intention of addressing one particular issue observed in certain experimental instances, which exhibited similarities to challenges previously encdountered and resolved in relation to the research question referenced in~\cref{sec:rq_intravisto}.
+In fact, this alternative was introduced with the intention of addressing one particular issue observed in certain experimental instances, which exhibited similarities to challenges previously encountered and resolved in relation to the research question referenced in~\cref{sec:rq_intravisto}.
 The main issue can be described as an excessive flattening of the vocabulary distribution for decoded states, specifically referring to the probability distribution for the next token in the FOM transition matrix.
 To mirror the previously proposed solution, the alternative model (FOM with RMS) incorporates a single RMS normalization (\cref{eq:background_rmsnorm}) step between the standard FOM embeddings.
 As we will establish in this section, the proposed solution does not yield satisfactory results compared to its previous iteration.
@@ -854,7 +858,7 @@ Its vocabulary is derived from that of the transformer model being evaluated, en
 This is achieved by parsing the Markov model's training text and computing the frequencies using the tokenizer of the corresponding transformer model.
 The resulting token counts used for training Markov models are generally comparable across all selected reference models, amounting to approximately $140M$ for Llama 2, $135M$ for Mistral and $137M$ for Phi 3.5.
 
-\subsection{Experiment 1}\label{ssec:exp_fom_exp1}
+\subsection{Experiment: Direct Comparison of Models}\label{ssec:exp_fom_exp1}
 
 The first experiment explores the main inquiry by means of direct matrix comparison, involving the computation of immediate metrics starting from the FOM and Markov model transition matrices.
 This rather simplistic approach still provides surprising experimental results despite not being conventionally used for the comparison of probability distributions.
@@ -867,7 +871,7 @@ While this method does not account for the nuances of probability distributions,
 
 As previously introduced, the FOM transition matrix is computed by merging the input and output embeddings of the inspected models, following~\cref{eq:method_fom_fom-matrix}.
 Conversely, the Markov model equivalent is derived by computing bigram statistics of tokens over the training dataset referenced in~\cref{ssec:exp_fom_dataset}.
-To ensure comparability, we directly use the LLM's tokenizer to encode the text corpus used for trainining the Markov model, ensuring that both models share the same vocabulary.
+To ensure comparability, we directly use the LLM's tokenizer to encode the text corpus used for training the Markov model, ensuring that both models share the same vocabulary.
 As discussed in~\cref{sec:exp_fom} we also define an auxiliary class of FOMs that incorporates RMS normalization in the transition matrix formulation.
 The specific approach is formalized in~\cref{eq:method_fom_fom-matrix-rms}, where the computation is divided between input and output embeddings.
 
@@ -954,7 +958,7 @@ In fact, we can notice that all LLMs present the same trend regarding their matr
 This finding confirms a potential bias towards lower distance estimates in the FOM/Markov case, possibly resulting from a lower proportion of null values present in the Markov transition matrix compared to the identity matrix.
 However, slight differences between models emerge when considering FOM variants that incorporate RMS normalization.
 In particular,~\cref{table:exp_fom_distance} shows that the FOMs with RMS derived from Llama 2 and Mistral exhibit a subtle bias toward the results previously observed in~\cref{fig:exp_fom_1_A}.
-We speculate that this percieved trend arises because RMS normalization aligns internal representations in a way that makes probabilities appear more skewed, thus providing a better fit for their actual reference distribution.
+We speculate that this perceived trend arises because RMS normalization aligns internal representations in a way that makes probabilities appear more skewed, thus providing a better fit for their actual reference distribution.
 Nonetheless, the obtained results still contain a vast amount of noise and cannot offer a reliable basis for directly comparing FOM behavior.
 Furthermore, the FOM with RMS based on Phi 3.5 is a clear outlier, as its performance is significantly worse than its counterpart without RMS across other models and both considered comparisons.
 
@@ -1042,7 +1046,7 @@ By looking at Mistral's performance in~\cref{fig:exp_fom_1_C2}, since the overla
 From this direct comparison we can clearly observe the patterns already found in previous experiments, identifying Mistral as the model which FOM has the lowest affinity with a Markov model, while still being able to \todo{approximate it to a lower degree} of accuracy.
 Whereas, the FOMs extracted from Llama 2 and Phi 3.5 can almost be considered faithful approximations of their respective Markov models.
 
-\subsection{Experiment 2}\label{ssec:exp_fom_exp2}
+\subsection{Experiment: Probabilistic Comparison \texorpdfstring{ \\ }{}  of Models}\label{ssec:exp_fom_exp2}
 
 The second experiment expands upon the evaluation of transition matrices generated by concatenating input and output embeddings from transformer models with respect to actual unigram Markov models, but via deeper means of analysis.
 For this experiment, we shift our perspective on transition matrices from sets of elements generating binary predictions to actual probability distributions.
@@ -1134,7 +1138,7 @@ The observed consistencies imply the existence of macro-groups of sentences for 
 \end{figure}
 
 Examining the proposed perplexity graphs reveals some interesting differences between models.
-For instance, the FOM based on Llama 2 (\cref{fig:exp_fom_2_A1}) clusters most sentences around the perplexity value corresponding to the uniform baseline, while a signifcant minority of sentences exhibits a consistently lower perplexity.
+For instance, the FOM based on Llama 2 (\cref{fig:exp_fom_2_A1}) clusters most sentences around the perplexity value corresponding to the uniform baseline, while a significant minority of sentences exhibits a consistently lower perplexity.
 On the other hand, most sentences evaluated with the FOM derived from Mistral (\cref{fig:exp_fom_2_A2}) lie on a slightly lower perplexity value than the uniform baseline; however, two sizeable subsets of sentences perform considerably better and worse, respectively.
 Lastly, the FOM based on Phi 3.5 (\cref{fig:exp_fom_2_A3}) reflects the same overall pattern to that of Mistral, but with notably lower perplexity values, such that only a small fraction of sentences have perplexity close to the uniform baseline.
 
@@ -1238,7 +1242,7 @@ This collection of results provides partial empirical confirmation of what was i
 Additionally, it provides solid evidence that output embeddings do not naturally tend to drift towards modeling input embeddings.
 This implies that current transformer-based LLMs might not benefit as much from weight tying as some older language models, reducing the quantifiable improvements to a marginal reduction in the number of parameters.
 
-It is possible to \todo{further contextualize} the results obtained in the current section into the InTraVisTo framework since it is based around the concept of residual flow as previously mentioned in~\cref{sec:exp_intravisto_exp2}.
+It is possible to \todo{further contextualize} the results obtained in the current section into the InTraVisTo framework since it is based around the concept of residual flow as previously mentioned in~\cref{ssec:exp_intravisto_exp2}.
 The tendency of the FOM to act as a Markov model fits perfectly into the perspective of a residual flow that, starting from the current token, reaches a probability distribution over the vocabulary for the next token through a process of continuous refinement enacted by various modules \todo{that comprise} transformer architectures.
 If we strip the model of its modules, we are left with a direct communication channel that provides the simplest possible prediction given the available transformations.
 By extending this interpretation and capitalizing on the fact that operations on the residual stream are performed additively, we can rationalize the purpose of InTraVisTo as a tool that can be utilized to extract partial interpretations of a state that is progressively drifting towards a final prediction.
