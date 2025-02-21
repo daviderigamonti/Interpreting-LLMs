@@ -220,7 +220,7 @@ In particular, we consider the $4$-bit quantized versions of Mistral Instruct 0.
 However, the application has been developed with generality in mind, thus it can be deployed in such a way to include most popular model architectures available on Hugging Face~\cite{wolf2020}.
 
 A \todo{fundamental part} of InTraVisTo is the inspection and \todo{modification} of models' hidden states.
-Unfortunately, under normal circumstances, only a small part of these states is made readily \todo{inspectable} by the standard Hugging Face Transformers library~\cite{}, and the method of accessing internal components varies between model architectures and \todo{providers}.
+Unfortunately, under normal circumstances, only a small part of these states is made readily \todo{inspectable} by the standard Hugging Face Transformers library~\cite{wolf2020}, and the method of accessing internal components varies between model architectures and \todo{providers}.
 In order to obtain a full perspective \todo{of} transformer architectures, we utilize the \emph{transformers-wrappers} framework\footnotemark: an open-source Python library initially developed by Vincenzo Scotti with the goal of exposing a uniform and extensible interface for transformer models, while retaining a standardized internal structure for models provided by Hugging Face Transformers.
 Specifically, we \todo{take advantage} of the state inspection and API standardization capabilities offered by the library, and we contribute to the codebase by designing an extensible framework that supports the injection and ablation techniques utilized in InTraVisTo.
 \footnotetext{\rlap{\url{https://github.com/vincenzo-scotti/transformer_wrappers}}}
@@ -462,7 +462,7 @@ Nonetheless, small empirical tests on a restricted set of models and a fraction 
 Additionally, a marginal set of entries belonging to the chosen datasets featured \todo{entities} composed of multiple words separated by the underscore character `\_'.
 In order to improve the parsing process for the models' tokenizers, these occurrences were changed to use the whitespace character (` ') instead.
 
-\subsection{Experiment: Comparing LLMs inside the Embedding Space}\label{ssec:exp_emb_exp1}
+\subsection{Experiment: Comparing Language Models \texorpdfstring{\linebreak}{} Inside the Embedding Space}\label{ssec:exp_emb_exp1}
 
 As a starting point, we directly compare the performance of the input embeddings belonging to various state-of-the art and older models over the defined analogy task.
 The comparison between the embeddings of old and new models is crucial, since it allows us to make assessments over the effectiveness of newer architectural paradigms in creating meaningful embedding spaces.
@@ -652,7 +652,7 @@ Consequently, given the flat trends shown by most models, we can even speculate 
     \label{fig:exp_emb_1_E}
 \end{figure}
 
-\subsection{Experiment: Analyzing Input and \texorpdfstring{ \\ }{} Output Embeddings}\label{ssec:exp_emb_exp2}
+\subsection{Experiment: Analyzing Input and Output \texorpdfstring{\linebreak}{} Embeddings of LLMs}\label{ssec:exp_emb_exp2}
 
 For this second experiment we wish to delve deeper into the actual capabilities of the embeddings belonging to recent decoder-only LLMs.
 To this end, we will also take into consideration the unembedding layer of said models.
@@ -858,7 +858,7 @@ Its vocabulary is derived from that of the transformer model being evaluated, en
 This is achieved by parsing the Markov model's training text and computing the frequencies using the tokenizer of the corresponding transformer model.
 The resulting token counts used for training Markov models are generally comparable across all selected reference models, amounting to approximately $140M$ for Llama 2, $135M$ for Mistral and $137M$ for Phi 3.5.
 
-\subsection{Experiment: Direct Comparison of Models}\label{ssec:exp_fom_exp1}
+\subsection{Experiment: Direct Comparison of First \texorpdfstring{\linebreak}{} Order Models}\label{ssec:exp_fom_exp1}
 
 The first experiment explores the main inquiry by means of direct matrix comparison, involving the computation of immediate metrics starting from the FOM and Markov model transition matrices.
 This rather simplistic approach still provides surprising experimental results despite not being conventionally used for the comparison of probability distributions.
@@ -1046,7 +1046,7 @@ By looking at Mistral's performance in~\cref{fig:exp_fom_1_C2}, since the overla
 From this direct comparison we can clearly observe the patterns already found in previous experiments, identifying Mistral as the model which FOM has the lowest affinity with a Markov model, while still being able to \todo{approximate it to a lower degree} of accuracy.
 Whereas, the FOMs extracted from Llama 2 and Phi 3.5 can almost be considered faithful approximations of their respective Markov models.
 
-\subsection{Experiment: Probabilistic Comparison \texorpdfstring{ \\ }{}  of Models}\label{ssec:exp_fom_exp2}
+\subsection{Experiment: Probabilistic Comparison of First Order Models}\label{ssec:exp_fom_exp2}
 
 The second experiment expands upon the evaluation of transition matrices generated by concatenating input and output embeddings from transformer models with respect to actual unigram Markov models, but via deeper means of analysis.
 For this experiment, we shift our perspective on transition matrices from sets of elements generating binary predictions to actual probability distributions.
