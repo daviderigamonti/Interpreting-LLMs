@@ -380,13 +380,14 @@ Thus, for simplicity, we can assume to \todo{follow} the \todo{renowed} `$king -
 \end{equation}
 Where the ${\textit{encode}}_{\textit{enc\_strat}}$ function follows the definitions laid out in~\cref{eq:method_embeddings_multitok-in,eq:method_embeddings_multitok-out}.
 
-Another perspective over the classic word analogies task consists in the ``delta analogies'' task where the premise is similar, and the input words are the same.
-However, we perform a further subdivision of the dataset, assigning each word analogy into a bigger group based on the actual relationship that is modeled by the analogy (such as `gender', `capital of', `royalty', \todo{etc.}).
-Subsequently, we use multiple analogies from the same group to obtain the relationship term as a vector (delta term), and we observe if it is possible to shift the representation from an element of the analogy to the other utilizing the computed delta term.
+Another perspective over the classic word analogies resolution strategy consists in the \emph{offset analogies} task.
+It holds a similar premise and the set of input analogies is shared between tasks, however, we perform a further subdivision of the dataset, assigning each word analogy into a bigger group based on the actual relationship that is modeled by the analogy (such as `gender', `capital of', `royalty', \todo{etc.}).
+Subsequently, we use multiple analogies from the same group to obtain the relationship term as a vector (offset term), and we observe if it is possible to shift the representation from an element of the analogy to the other utilizing the computed offset.
+This techniques shares many similarities with the \emph{3CosAvg} approach suggested by \citet{drozd2016}, however, we offer a more specific computation for the offset term identified as $\gbm{\Delta}$.
 \begin{equation}
     \label{eq:method_embeddings_delta-analogy-function}
     \begin{aligned}
-        \tilde{w}^i &= \textit{delta\_analogy}(\gbm{\Delta}_{\textit{batch}}^{(w_3, w_4)}, w_3^i, w_4^i) \\
+        \tilde{w}^i &= \textit{offset\_analogy}(\gbm{\Delta}_{\textit{batch}}^{(w_3, w_4)}, w_3^i, w_4^i) \\
         &= {\textit{encode}}_{\textit{enc\_strat}}^{in}(w_3^i) + \gbm{\Delta}_{\textit{batch}}^{(w_3, w_4)} \\
         &\color{gray} \approx {\textit{encode}}_{\textit{enc\_strat}}^{out}(w_4^i) \\
         \gbm{\Delta}_{\textit{batch}}^{(w_a, w_b)} &= \frac{1}{B_{\textit{batch}}}\sum_{j=1}^{B_{\textit{batch}}}{\Bigl({\textit{encode}}_{\textit{enc\_strat}}^{in}(w_b^j) - {\textit{encode}}_{\textit{enc\_strat}}^{in}(w_a^j)\Bigr)} \\
@@ -395,9 +396,7 @@ Subsequently, we use multiple analogies from the same group to obtain the relati
 \end{equation}
 As it is possible to observe in~\cref{eq:method_embeddings_delta-analogy-function}, we are computing the analogy term considering only \todo{half} of the word available in the analogy; in the cited case $w_3$ and $w_4$.
 This is \todo{done} since, as explained in the first paragraphs of~\cref{ssec:method_embeddings_analogies}, word analogies are effectively composed by two pairs of words, each representing a semantic or morphological relationship.
-Thus, considering that in the delta analogies scenario we are looking to extract a vector that represents the common relationship modeled by a subgroup of analogies, we only need a single occurrence of each single pair of words.
-
-\todo[purple!30]{change all instances of ``delta analogies'' to another name}
+Thus, considering that in the offset analogies scenario we are looking to extract a vector that represents the common relationship modeled by a subgroup of analogies, we only need a single occurrence for each \todo{single} pair of words.
 
 \subsubsection{Analogy Evaluation}\label{subsubsec:method_embeddings_evaluation}
 
@@ -412,7 +411,7 @@ In our case, it can be written using the following notation:
 \end{equation}
 where ${\textit{result}\,}^i_j$ represents the $j$-th result of the $i$-th analogy, ${\textit{sol}\,}^i$ indicates the set of solution for the $i$-th analogy obtained through the use of the ${\textit{encode}}^{out}$ function as illustrated in~\cref{eq:method_embeddings_multitok-out}, and $n$ is the dimension of the considered dataset.
 
-\todo[purple!30]{Mean Reciprocal Rank / Rankscore evaluation of analogies}
+%\todo[purple!30]{Mean Reciprocal Rank / Rankscore evaluation of analogies}
 %Alternatively, we devised an additional measure which fulfills a similar purpose to the top-$k$ accuracy by evaluating a set of embeddings on an analogy task.
 %The chosen metric is a slight variation of the Mean Reciprocal Rank statistic measure, commonly referred to as $MRR = \frac{1}{n}\sum_{i=1}{n}{\frac{1}{rank_i}}$ \todo[orange]{cite?}.
 %We considered this approach in order to fully utilize the rank information given by the \todo{comparison analysis}, rather than just limiting the computation of our metric to check for the presence of matches between the results and the solutions, as it is done in the top-$k$ accuracy case.
@@ -547,15 +546,26 @@ These metrics can be utilized, either directly or indirectly, to measure the sim
 \todo{The first chosen metric} is the perplexity, which quantifies how well a certain discrete probability distribution is able to predict a sample; that is, the likelihood of the sample being drawn from the distribution itself.
 In other words, it is commonly referred to as the `surprise' of the distribution in observing a certain sample: high values mean that the sample is unlikely to align with the distribution (greater surprise), whereas low values imply that the sample is likely to be drawn from the distribution (low surprise).
 \todo{Given} the \todo{generic} formulation for perplexity for a probability distribution $p$ over a sequence of words $w_1,\dots,w_N$ defined as:
-\begin{equation*}
-    PP(p) = \exp{\Bigl(-\frac{1}{N}\sum_{i=1}^{N}{\ln{p(w_i)}}\Bigr)}
-\end{equation*}
+\begin{equation}
+    \label{eq:method_fom_perplexity-base}
+    PP(p) = \exp{\Bigl(-\frac{1}{N}\sum_{i=1}^{N}{\log{p(w_i)}}\Bigr)}
+\end{equation}
 In practice, we compute our version of perplexity considering the transition matrix $\gbm{Q}$ as:
 \begin{equation}
     \label{eq:method_fom_perplexity}
-        PP(\gbm{Q}, S) = \exp{\Bigl(-\frac{1}{T}\sum_{t=1}^{N}{\ln{\bigl((\gbm{Q})_{S(t+1),S(t)}\bigr)}}\Bigr)}
+    PP(\gbm{Q}, S) = e^{-\frac{1}{T}\sum_{t=1}^{T}{\ln{\left((\gbm{Q})_{S(t+1),S(t)}\right)}}}
 \end{equation}
 Where $S$ \todo{indicates} a sentence composed of a total of $T$ tokens identified as $S(1),\dots,S(T)$ and $(\gbm{Q})_{i,j}$ represents the indexing operation done on the transition matrix $\gbm{Q}$, thus obtaining the transition probability from state $i$ to state $j$.
+
+Interestingly, we highlight the fact that concept of perplexity is strictly related to \todo{that of} cross-entropy.
+Cross-entropy is generally computed between two probability distributions and measures the information quantity needed to represent a sample as if it was drawn from a model distribution rather than the true one.
+\todo{In fact}, by simply looking at~\cref{eq:method_fom_perplexity-base} we can clearly observe that it directly \todo{includes} the formulation for an estimation of cross-entropy $H$ over a distribution $p$, \todo{that being}:
+\begin{equation*}
+    H(p) = - \frac{1}{N}\sum_{i=1}^{N}{\log{p(w_i)}}
+\end{equation*}
+One crucial fact to \todo{keep in mind} is that the logarithm's base doesn't affect the \todo{ground truth} of the result, only its unit of measure.
+In most NLP scenarios, cross-entropy is measured in \emph{bits}, thus $2$ is used as a base for the logarithm.
+However, when computing the perplexity measure, the base choice must be consistent between logarithm and exponentiation \todo{such as in the case} of~\cref{eq:method_fom_perplexity}, where we utilize $e$ for both \todo{operations}.
 
 On the other hand, we also consider the Kullback-Leibler divergence (KL divergence) as a way to \todo{gauge at} the direct dissimilarity between the probability distributions encoded inside transition matrices.
 By definition, the KL divergence cannot be classified as a metric due to its inherent \todo{asymmetricity} since it is possible to identify a reference distribution and a model distribution.
@@ -572,5 +582,3 @@ In \todo{our case}, we compute the mean KL divergence over all tokens present in
     \end{gathered}
 \end{equation}
 Where, as mentioned before for~\cref{eq:method_fom_perplexity}, $(\gbm{Q})_{i,j}$ represents the indexing operation on the transition matrix $\gbm{Q}$.
-
-\todo[purple!30]{mention perplexity relationship with cross-entropy}
