@@ -212,7 +212,7 @@ A $3$-dimensional approximation of the embedding spatial structure can be observ
 \begin{figure}[t!]
     \centering
     \includegraphics[width=0.5\textwidth]{background_embeddings.pdf}
-    \caption[Embedding space visualization for a Word2Vec model.]{Embedding space visualization for a Word2Vec model. The dimensionality of the space is reduced to $3$ \todo{through} the t-SNE algorithm and the overall number of shown embeddings is limited. Embeddings belonging to certain semantic fields (e.g.\ animals, colors,\dots) are colored in order to highlight their proximity in the space.}
+    \caption[Embedding space visualization for a Word2Vec model.]{Embedding space visualization for a Word2Vec model. The dimensionality of the space is reduced to $3$ using the t-SNE algorithm, and the total number of displayed embeddings is limited. Embeddings associated with specific semantic fields (e.g.\ animals, colors, \dots) are colored in order to highlight their spatial proximity.}
     \label{fig:background_embeddings}
 \end{figure}
 
@@ -510,11 +510,11 @@ However, the reasons for its effectiveness may potentially be associated with it
 
 \subsection{The Large Language Model Paradigm}
 
-With the advent of Large Language Models (LLMs), a complete shift in training paradigms was observed throughout the NLP field.
-Due to their massive scale, the need for applying ad-hoc Deep Learning training techniques arose.
-In particular, we can point out two main approaches commonly using to streamline, improve and optimize the training process: \textbf{pre-training} and \textbf{fine-tuning}.
-These concepts are part of the \emph{transfer learning} paradigm, successfully applied to most deep neural architectures on a general scale.
-The \todo{central point} of transfer learning is to avoid expensively re-training models over the same concepts by transferring general knowledge and specializing them on specific task separately. 
+With the advent of Large Language Models (LLMs), a complete shift in training paradigms has been observed across the NLP field.
+Owing to their massive scale, there emerged a need to apply ad-hoc Deep Learning training techniques.
+In particular, we can point out two main approaches commonly used to streamline, improve and optimize the training process: \textbf{pre-training} and \textbf{fine-tuning}.
+These concepts are integral to the \emph{transfer learning} paradigm, which has been successfully applied to a wide range of deep neural architectures.
+The central principle of transfer learning is to avoid the costly retraining of models over the same concepts by transferring general knowledge and specializing them on distinct tasks separately. 
 
 \subsubsection*{Pre-training}
 
@@ -532,7 +532,7 @@ On the other hand, \textbf{fine-tuning} is usually faster and performed after pr
 One of the main use cases for fine-tuning is adapting the model to respond to prompts following specific patterns or giving the model some domains-specific knowledge about a restricted set of topics.
 The dataset used for fine-tuning is generally smaller than the one using for the original training of the model.
 
-Nonetheless, one of the main concerns correlated with fine-tuning is the model's possibility of forgetting what was learned during pre-training.
-This is mostly true for fine-tuning on the whole model, where all parameters are updated with the residuals obtained by training the model on the fine-tuning dataset.
-An alternative to the costly task of fine-tuning a model from top to bottom is given by the possibility of performing the actual updates only on a subset of the parameters, resulting in a faster and less disruptive training.
-This approach is commonly referred to as \emph{Parameter-Efficient Fine-Tuning (PEFT)} and includes various techniques that are used to reduce the amount of trained parameters, retaining most of the knowledge acquired during pre-training, while trying to introduce new concepts in a \todo{solid way}.
+Nonetheless, one of the primary concerns associated with fine-tuning is the risk that the model may forget the information acquired during pre-training.
+This is particularly evident when the entire model is fine-tuned, as all parameters are updated based on the residuals obtained during training on the fine-tuning dataset.
+An alternative to the costly process of fine-tuning a model from top to bottom is to restrict the updates to only a subset of the actual parameters, resulting in a faster and less disruptive training.
+This approach, commonly known as \emph{Parameter-Efficient Fine-Tuning (PEFT)}, comprises various techniques designed to reduce the amount of trainable parameters, thereby retaining most of the knowledge acquired during pre-training, while incorporating new concepts in a robust manner.
