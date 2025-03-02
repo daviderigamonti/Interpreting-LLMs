@@ -1,4 +1,4 @@
-The field of transformer interpretability has garnered significant attention over the past decade, resulting in a substantial and continually expanding body of literature.
+The field of Transformer interpretability has garnered significant attention over the past decade, resulting in a substantial and continually expanding body of literature.
 Particular attention must be given to the fact that this is a relatively novel field of research, continuously evolving due to the numerous ongoing contributions at the present time.
 Consequently, it is very possible that some results provided in this work may be obsoleted or invalidated by more recent works.
 This section reviews the key contributions and developments in this area, highlighting the foundational studies and recent advancements that are pertinent to the present research.
@@ -18,10 +18,10 @@ These objects of study serve as starting points for interpretability inquiries, 
 By leveraging MI tools to pursue interpretability questions, possibly through the use of evaluation techniques, we obtain findings: true generalizable statements about the model's inner workings.
 
 Mechanistic interpretability offers a novel perspective over the interpretability research field, its primary aim being the reverse-engineering of language models (LMs) from an in-depth perspective~\cite{olah2022}.
-Previously identified model-agnostic techniques have been proven to offer limited insight for the transformer architecture~\cite{neely2022,pruthi2022,bibal2022,krishna2024}.
+Previously identified model-agnostic techniques have been proven to offer limited insight for the Transformer architecture~\cite{neely2022,pruthi2022,bibal2022,krishna2024}.
 In contrast, MI embraces the opposite philosophy by eliminating model abstractions and analyzing LMs in terms of their specific components and interactions.
 
-Mechanistic interpretability was initially mentioned as being the main driving ideology behind the `transformer circuits thread'~\cite{elhage2023}.
+Mechanistic interpretability was initially mentioned as being the main driving ideology behind the `Transformer circuits thread'~\cite{elhage2023}.
 Nonetheless, by following~\citet{rai2024} approach, we can observe that the concept of MI is not limited to the application of circuits.
 Envisioning MI as being characterized by a general bottom-up approach for interpreting LMs, allows its scope to extend to include earlier techniques such as the logit lens~\cite{nostalgebraist2020} and other probing methods.
 
@@ -34,7 +34,7 @@ In the next sections we will follow their insightful classification to provide a
 \begin{figure}[t!]
     \centering
     \includegraphics[width=0.9\textwidth]{related_ferrando-tax.pdf}
-    \caption{Taxonomy for transformer interpretability methods proposed by~\citet{ferrando2024}.}
+    \caption{Taxonomy for Transformer interpretability methods proposed by~\citet{ferrando2024}.}
     \label{fig:related_ferrando-tax}
 \end{figure}
 
@@ -49,20 +49,20 @@ In the \textbf{input attribution} case, the model's predictions are directly tra
 The two main input attribution strategies are either based on gradients~\cite{denil2014, ding2021, sanyal2021} or on perturbations~\cite{li2016, amara2024, mohebbi2023}.
 In both cases the great majority of techniques was directly influenced by model-agnostic approaches~\cite{sundararajan2017, smilkov2017, ribeiro2016, lundberg2017} that were initially studied and applied in the context of deep learning.
 
-More recent input attribution techniques experimented with the aggregation of intermediate information, especially attention, to provide token-wise attributions exploiting context mixing properties of transformers~\cite{ferrando2022, modarressi2022, mohebbi2023}.
+More recent input attribution techniques experimented with the aggregation of intermediate information, especially attention, to provide token-wise attributions exploiting context mixing properties of Transformers~\cite{ferrando2022, modarressi2022, mohebbi2023}.
 Whereas, other approaches focused on providing counterfactual explanations based on contrastive gradient attributions~\cite{yin2022} or studying specific training examples to understand and generalize their influence on model predictions~\cite{grosse2023}.
 It is important to note that, through the years, some critiques have been moved towards input attribution methods, mainly concerning their limited reliability~\cite{sixt2019, adebayo2018, atanasova2020}.
 
 \subsection{Model Component Attribution}
 
-In \textbf{model component attribution}, the main research focus shifts towards analyzing the effects of individual or groups of transformer components, such as attention heads, feedforward layers, and neurons.
+In \textbf{model component attribution}, the main research focus shifts towards analyzing the effects of individual or groups of Transformer components, such as attention heads, feedforward layers, and neurons.
 This shift is principally motivated by the inherent sparsity of LMs, where only a subset of the model's parameters significantly contributes to its predictions~\cite{zhao2021}.
 By isolating and understanding the effects of these key components, it is possible to shed light on their contribution to the actual model's prediction.
 \citet{ferrando2024} identifies three main distinct approaches for model component attribution: \textbf{logit attribution}, \textbf{causal interventions} and \textbf{circuit analysis}.
 
 \subsubsection*{Logit Attribution}
 
-\textbf{Logit attribution} is based upon the concept of direct logit attribution (DLA), a metric specifically devised to measure the contribution of a certain component $c$ to the logit of the output token $w$ exploiting the inherent linearity of the transformer model's components.
+\textbf{Logit attribution} is based upon the concept of direct logit attribution (DLA), a metric specifically devised to measure the contribution of a certain component $c$ to the logit of the output token $w$ exploiting the inherent linearity of the Transformer model's components.
 Some variation on this idea enabled the computation of the logit attribution metric in more specialized cases.
 For example:~\citet{geva2022} managed to measure the DLA of each FFN neuron,~\citet{ferrando2023} identified an alternative to measure the DLA of each path involving a certain attention head, and~\citet{wang2023} proposed the direct logit difference attribution (DLDA) using the logit difference (LD) as a comparative mean to measure contrastive attribution.
 
@@ -87,15 +87,15 @@ ROME makes it possible to modify factual associations by inserting a new knowled
 
 \textbf{Circuit analysis} is closely related to the mechanistic interpretability (MI) subfield analyzed previously as its main goal is tied to the discovery of circuits inside LMs.
 Circuits are subsets of model components that can be seen as acting independently while carrying out a specific task, and can possibly be synthesized into an algorithm.
-Despite their successful application on LMs, circuits were not originally identified with the transformer architecture in mind; in fact, their first application was on vision models~\cite{cammarata2020}.
-Most of the initial work regarding transformer circuits was performed on publications belonging to the `transformer circuits thread'~\cite{elhage2021,olsson2022,elhage2022,bricken2023,elhage2023}, heavily inspired by the preceding vision counterpart~\cite{cammarata2020}.
+Despite their successful application on LMs, circuits were not originally identified with the Transformer architecture in mind; in fact, their first application was on vision models~\cite{cammarata2020}.
+Most of the initial work regarding Transformer circuits was performed on publications belonging to the `Transformer circuits thread'~\cite{elhage2021,olsson2022,elhage2022,bricken2023,elhage2023}, heavily inspired by the preceding vision counterpart~\cite{cammarata2020}.
 
-In particular, `A Mathematical Framework for Transformer Circuits'~\cite{elhage2021} can be considered the seminal work that popularized circuit identification in transformer models.
-In this work, \citet{elhage2021} perform a reverse-engineering analysis on simplified versions of transformer models, leading to the discovery of relevant properties.
+In particular, `A Mathematical Framework for Transformer Circuits'~\cite{elhage2021} can be considered the seminal work that popularized circuit identification in Transformer models.
+In this work, \citet{elhage2021} perform a reverse-engineering analysis on simplified versions of Transformer models, leading to the discovery of relevant properties.
 For once, they entirely deconstruct a small attention-only model by keeping the embedding and unembedding layers, while progressively incorporating attention layers.
-The results obtained from this process highlight the tendency of the zero layer transformer to model bigram statistics, while models with added attention layers can interpret more expressive patterns.
+The results obtained from this process highlight the tendency of the zero layer Transformer to model bigram statistics, while models with added attention layers can interpret more expressive patterns.
 Another important contribution of this work is the proposal of an alternate deconstruction of the multi-head attention formula, which highlights the operations carried out by single heads.
-On this topic, \citet{elhage2021} find that even the composition between attention heads holds meaningful expressiveness inside the transformer architecture and by generalizing this concept, it is possible to represent an attention-only transformer as a sum of end-to-end functions by exploiting the inherent linear structure of this simplified architecture.
+On this topic, \citet{elhage2021} find that even the composition between attention heads holds meaningful expressiveness inside the Transformer architecture and by generalizing this concept, it is possible to represent an attention-only Transformer as a sum of end-to-end functions by exploiting the inherent linear structure of this simplified architecture.
 
 By applying the circuit concept to the previously causal intervention techniques, we can extend further the idea of activation patching to edge patching and path patching: novel circuits-based techniques that take into account the interactions between model components.
 Edge patching~\cite{li2023} considers edges that directly connect pairs of model components due to the fact that each component input can be modeled as the sum of the outputs of the previous model components inside the residual stream, while path patching~\cite{wang2023} is a generalization of edge patching to multiple edges.
@@ -114,7 +114,7 @@ Probing usually implies the supervised training of ad-hoc models (often classifi
 The probing classifier is designed to evaluate how much information about a particular property is encoded within an intermediate representation.
 While the probe should seek out information about the chosen property directly from hidden representations, concerns have been raised regarding the limitations of probing classifiers~\cite{belinkov2022} due to the probes' tendency to collapse toward modeling the task itself, rather than extrapolating information.
 
-Particular attention has been put towards probing transformer models~\cite{chwang2024, macdiarmid2024, burns2023}, especially the family of encoder-only models related to BERT~\cite{devlin2019}.
+Particular attention has been put towards probing Transformer models~\cite{chwang2024, macdiarmid2024, burns2023}, especially the family of encoder-only models related to BERT~\cite{devlin2019}.
 Some exceptional results include the discovery of syntactic information inside the hidden representations of BERT models~\cite{tenney2019a, lin2019}, even to the extent of uncovering entire syntax trees~\cite{hewitt2019} and hierarchical computation structures along the residual stream, reminiscent of classical NLP pipelines~\cite{tenney2019b}.
 
 \subsection{Linear Representation Hypothesis}
@@ -128,13 +128,13 @@ These linear interventions have been proven successful in erasing specific conce
 
 Another important aspect of the linear representation hypothesis is the presence of polysemanticity and superposition in the identified features.
 The effects of dimensionality reduction algorithms causing information compression and resulting in distributed representations has widely been observed and studied in many fields, however \citet{olah2023} makes an important distinction between the separate phenomena of composition and superposition.
-Many extend these observations to actual experiments, successfully proving the existence of superposition both in simplified scenarios~\cite{elhage2022} and in the early layers of transformer-based LMs~\cite{gurnee2023}.
+Many extend these observations to actual experiments, successfully proving the existence of superposition both in simplified scenarios~\cite{elhage2022} and in the early layers of Transformer-based LMs~\cite{gurnee2023}.
 
 \citet{timkey2021} find that, when relying on cosine distance as a metric, representation spaces are often dominated by only 1 to 5 dimensions which drive anisotropy, low self-similarity, and the apparent drop in representational quality that happens later layers.
 Consequently, they advise the use of simple post-processing techniques in order to standardize the representation space and make linear relationship more evident, enhancing similarity-based techniques.
 
 Interestingly, \citet{wendler2024} apply linear properties of representation spaces to examine the phenomenon of `English pivoting', wherein an LLM translates tokens into English to conduct computations, even when prompted in a non-English language.
-While the authors find no evidence of English fulfilling the role of an internal pivot directly, by analyzing latent embeddings as high-dimensional euclidean points, they observe that the middle layers of the transformer operate in an abstract concept space which is partially orthogonal to the language-specific concept space reached in the final layers.
+While the authors find no evidence of English fulfilling the role of an internal pivot directly, by analyzing latent embeddings as high-dimensional euclidean points, they observe that the middle layers of the Transformer operate in an abstract concept space which is partially orthogonal to the language-specific concept space reached in the final layers.
 Consequently, the illusion of English pivoting can be pointed to an English bias in the abstract concept space, rather than a direct translation.
 
 \subsection{Vocabulary Space Decoding}\label{ssec:related_vocab}
@@ -162,9 +162,9 @@ Other unrelated approaches based on vocabulary space decoding involve using maxi
 Additionally, other LMs have been used as zero-shot explainers to provide insights into possible shared features between input sequences that cause substantial activations of specific neurons in the target model~\cite{bills2023}.
 Unfortunately, the maximally-activating input analysis has been criticized for generating false positives~\cite{bolukbasi2021}, while the elicitation of natural language explanations from LMs approach has faced criticism for its general lack of causal influence between the identified concept-neuron pairs~\cite{huang2023}.
 
-\emph{LM Transparency Tool} (LM-TT)~\cite{tufanov2024} is an exceptional toolkit that offers interactive tools for analyzing the internal workings of transformer models.
-LM-TT builds on top of the circuital interpretation of the transformer to visualize the information flow.
-As it is possible to observe from~\cref{fig:related_lm-tt}, LM-TT tool focuses on the visualization of the most relevant attention paths leading to the production of an embedding in the internal states of the transformer.
+\emph{LM Transparency Tool} (LM-TT)~\cite{tufanov2024} is an exceptional toolkit that offers interactive tools for analyzing the internal workings of Transformer models.
+LM-TT builds on top of the circuital interpretation of the Transformer to visualize the information flow.
+As it is possible to observe from~\cref{fig:related_lm-tt}, LM-TT tool focuses on the visualization of the most relevant attention paths leading to the production of an embedding in the internal states of the Transformer.
 Additionally, it also provides useful information that can aid the interpretation of intermediate representations at varying degrees of granularity.
 
 \begin{figure}[t!]

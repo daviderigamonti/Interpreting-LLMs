@@ -3,15 +3,15 @@ To do so, we are going to subdivide our analysis into three main sections, where
 
 \section{Transformer Visualization}\label{sec:method_intravisto}
 
-The first section is dedicated to the exploration of the main features pertaining the proposed interactive tool for the exploration of autoregressive transformer architectures, \emph{InTraVisTo} (Inside Transformer Visualization Tool).
+The first section is dedicated to the exploration of the main features pertaining the proposed interactive tool for the exploration of autoregressive Transformer architectures, \emph{InTraVisTo} (Inside Transformer Visualization Tool).
 
 \emph{InTraVisTo} is an open-source visualization tool depicting the internal computations performed within a Transformer.
 The tool provides visualizations of both the internal state of the LLM, using a heatmap of decoded embedding vectors for all layer/token positions, and the information flow between components of the LLM, using a Sankey diagram to depict paths through which information accumulates to produce next-token predictions.
 
 \subsection{Decoding Internal States}\label{ssec:method_intravisto_decoding}
 
-In this context, with the expression \emph{`decoding process'} we refer to the \emph{vocabulary decoding} process, which consists in the conversion of transformers hidden states, represented by vectors in a high-dimensional space, into human-readable content.
-InTraVisTo enables the decoding and inspection of the main four vectors produced by each layer $\ell$ of a transformer:
+In this context, with the expression \emph{`decoding process'} we refer to the \emph{vocabulary decoding} process, which consists in the conversion of Transformers hidden states, represented by vectors in a high-dimensional space, into human-readable content.
+InTraVisTo enables the decoding and inspection of the main four vectors produced by each layer $\ell$ of a Transformer:
 \begin{itemize}
     \item $\gbm{\delta}_\textit{att}^{(\ell)}$ represents the output of the attention component.
     \item ${\gbm{x}'}^{(\ell)}$ is the \emph{intermediate state}, given by the addition of $\gbm{\delta}_\textit{att}^{(\ell)}$ to the residual stream.
@@ -19,8 +19,8 @@ InTraVisTo enables the decoding and inspection of the main four vectors produced
     \item $\gbm{x}^{(\ell)}$ is the \emph{layer output}, which can be seen as the residual stream with the contributions of both $\gbm{\delta}_\textit{ff}^{(\ell)}$ and $\gbm{\delta}_\textit{att}^{(\ell)}$.
 \end{itemize}
 
-Decoding the meaning of hidden state vectors at various depths of a transformer stack is essential for providing an intuition as to how the model is working.
-We pose our focus on causal models, and assume the state-of-the-art LLM architecture, which involves a continuous \emph{decoration process} where each transformer layer adds the results of its computations to a residual embedding vector from the layer below.
+Decoding the meaning of hidden state vectors at various depths of a Transformer stack is essential for providing an intuition as to how the model is working.
+We pose our focus on causal models, and assume the state-of-the-art LLM architecture, which involves a continuous \emph{decoration process} where each Transformer layer adds the results of its computations to a residual embedding vector from the layer below.
 InTraVisTo provides a human-interpretable representation of this internal decoration pipeline by decoding each hidden state with a specific decoder and displaying the most likely token from the model's vocabulary.
 
 \subsubsection{Decoders and Normalization}\label{sssec:method_intravisto_decoding_norm}
@@ -67,7 +67,7 @@ In addition, it is important to note that the term `quadratic interpolation' can
     
 As previously illustrated, each hidden representation is decoded by first applying a normalization operation, then multiplying the result by the chosen decoding matrix, and finally applying a softmax function to the resulting logits to obtain a probability distribution over the model's vocabulary.
 At this point, we utilize the model's \emph{sampling policy} in order to extract the predicted vocabulary token ID from the computed distribution.
-We assume the policy to always be \emph{greedy decoding}, both as a simplifying factor and to reflect the default settings for causal models provided by Hugging Face's transformers library~\cite{wolf2020}.
+We assume the policy to always be \emph{greedy decoding}, both as a simplifying factor and to reflect the default settings for causal models provided by Hugging Face's Transformers library~\cite{wolf2020}.
 
 Nevertheless, our interest in decoding the model's hypothetical intermediate predictions extends beyond to the first token, as hidden representations usually retain important additional information that cannot be fully condensed into a single vocabulary token~\cite{elhage2022,henighan2023,elhage2023}.
 To extract this leftover information, we propose two main approaches that transform it into \emph{secondary tokens}.
@@ -80,7 +80,7 @@ This likely occurs because a substantial portion of the hidden representation is
 
 To alleviate this issue, we propose a novel method for extracting secondary representations from a hidden representation: \emph{iterative decoding}.
 The rationale behind this approach is that hidden representations capture an overlap of concepts within an embedding space that is loosely related to both the input and output embedding spaces.
-As a consequence, we postulate that hidden representations existing in these intermediate embedding spaces retain the linear properties that have been ascertained to exist in the input and output embedding spaces of transformer architectures~\cite{mikolov2013,park2023}.
+As a consequence, we postulate that hidden representations existing in these intermediate embedding spaces retain the linear properties that have been ascertained to exist in the input and output embedding spaces of Transformer architectures~\cite{mikolov2013,park2023}.
 Iterative decoding leverages these linear properties by performing a sequence of subtractions from the main hidden representation, removing the embedding corresponding to the representation of the most probable token during each iteration.
 
 \begin{algorithm}
@@ -109,7 +109,7 @@ As it is possible to observe in~\cref{alg:method_intravisto_iter-dec}, we perfor
 This is due to the fact that a secondary token that is found in two separate iterations is recorded only on the first one, and the presence of a stopping condition that triggers in case the norm of the resulting hidden representation is under a certain threshold ${norm}_{min}$ or is higher than the norm found at the previous iteration.
 This last condition is used to avoid situations where the embedding vector of the hidden state `flips' after the computation of the difference with the most probable representation, resulting in a vector that is not informative and can possibly reiterate the effect until ${rep}_{max}$ is reached, thus generating predictions based purely on noise.
 
-One downside of this approach, in addition to its reliance on the linearity assumption in intermediate embedding spaces, is the notable shift in representation magnitudes throughout the layers of most state-of-the-art transformer models~\cite{heimersheim2023}.
+One downside of this approach, in addition to its reliance on the linearity assumption in intermediate embedding spaces, is the notable shift in representation magnitudes throughout the layers of most state-of-the-art Transformer models~\cite{heimersheim2023}.
 This shift typically results in a steady increase in the norms of the embedding vectors, proportional to the layer number.
 While this effect has only a marginal impact on the decoding process, it can significantly disrupt the embedding vector subtraction operation within the iterative decoding approach, as the quantities involved may differ in magnitude.
 
@@ -126,7 +126,7 @@ Entropy for an embedding $\gbm{x}$ is computed in the following way:
 \end{equation*}
 Where $P_{\gbm{x}} = P(\ \cdot \mid \gbm{x}, d_\textit{dec}, n_\textit{norm})$ as computed in~\cref{eq:method_intravisto_decoding}.
 
-Other showcased metrics are the \emph{attention contribution} and \emph{feedforward contribution}, which measure respectively how much the output of the attention block, or feed forward, contributes in its summation with the residual stream of a transformer block.
+Other showcased metrics are the \emph{attention contribution} and \emph{feedforward contribution}, which measure respectively how much the output of the attention block, or feed forward, contributes in its summation with the residual stream of a Transformer block.
 The purpose of these metrics is to highlight where the main information of that block is coming from, whether from the attention or feed forward components.
 We devised two main approaches to weigh the contribution of each component to the residual stream: one uses the \emph{norms} of hidden state vectors to compare the magnitude of their contribution, while the other uses the \emph{KL divergence} to compare the probability distribution similarity of the two hidden states against the final one.
 In practice, we compute:
@@ -151,7 +151,7 @@ It is possible to note that the contributions computed through norms and KL dive
 
 \subsection{Flow}\label{ssec:method_intravisto_flow}
 
-The second visualization introduced in InTraVisTo is a \emph{Sankey diagram} designed to depict the information flow through the transformer network.
+The second visualization introduced in InTraVisTo is a \emph{Sankey diagram} designed to depict the information flow through the Transformer network.
 In this diagram, edges indicate the amount of influence that the nodes have on each other and illustrate how information accumulates from the bottom to the top of the diagram, ultimately generating the final prediction.
 The flow snakes its way through self-attention nodes, which combine information from attended tokens in the preceding level, feed-forward networks nodes, which introduce information based on patterns detected in the state vector, and aggregation nodes, where updates from the other two types of nodes are added to the residual vector.
 The proposed Sankey diagram technically qualifies as an \emph{Alluvial diagram} due to the fact that nodes are grouped into discrete steps (in this case, corresponding to layers), providing intermediate subdivisions of the flow mass and drawing attention to changes in flow composition across the model's layers.
@@ -191,7 +191,7 @@ In practice, we compute the following quantity for five different state combinat
     \end{gathered}
 \end{equation}
 Where $P_{\gbm{x}} = P(\ \cdot \mid \gbm{x}, d_\textit{dec}, n_\textit{norm})$ as computed in~\cref{eq:method_intravisto_decoding}, $D_{\text{KL}}$ is the Kullback-Liebler divergence between two distributions, and the notation of hidden states (such as $\gbm{x}^{(\ell)}$, $\gbm{\delta}_\textit{att}^{(\ell)}$, \ldots) references the distinctions made at~\cref{ssec:method_intravisto_decoding}.
-Whereas, the second approach compares the residual stream states at the input and output location for each layer in the transformer stack.
+Whereas, the second approach compares the residual stream states at the input and output location for each layer in the Transformer stack.
 It does so by calculating the difference between the two hidden states, and performing the decoding operation defined in~\cref{eq:method_intravisto_decoding} as to generate primary and secondary tokens for the resulting quantity.
 This is showcased in the following computation:
 \begin{equation}
@@ -250,7 +250,7 @@ The soundness of this approach, including potential variations based on similar 
 \section{Embedding Analysis}\label{sec:method_embeddings}
 
 This second section is geared towards understanding the extent to which text embeddings still retain some degree of semantic factuality in LLMs (Large Language Models).
-Early transformer models have been noted for their text embedding representations possessing interesting spatial properties deeply correlated with the semantic properties of the embedded words~\cite{allen2019,kalinowski2020}.
+Early Transformer models have been noted for their text embedding representations possessing interesting spatial properties deeply correlated with the semantic properties of the embedded words~\cite{allen2019,kalinowski2020}.
 However, with the emergence of newer models that are larger and more intricate than ever before, our objective is to assess whether the semantic properties inherently tied with the geometry of embeddings still hold true.
 
 \subsection{Word Encoding}
@@ -344,7 +344,7 @@ In their simplest form, word analogies consist of four words that satisfy a mutu
 \begin{center}
     \emph{``The dog barks as the cat meows''} $\Longleftrightarrow$ $\textit{`dog'}\ :\ \textit{`bark'}\ =\ \textit{`cat'}\ :\ \textit{`meow'}$
 \end{center}
-As previously mentioned, in the context of transformer models, these types of analogies are commonly used to test whether semantic relationships between words are encoded as linear transformations in the embedding space of models.
+As previously mentioned, in the context of Transformer models, these types of analogies are commonly used to test whether semantic relationships between words are encoded as linear transformations in the embedding space of models.
 There exist various types of analogies, encoding different paradigms across multiple semantic fields and morphological connections.
 For example~\citet{drozd2016} identify four main relationship types between words in their \emph{BATS (Bigger Analogy Test Set)}: 
 \begin{itemize}
@@ -434,9 +434,9 @@ In particular, we are interested in observing if there exists any particular fun
 
 \subsection{Markov Models}
 
-The hypothesis regarding output embeddings carrying out a prediction of the most likely subsequent token based on the input is inspired by architectural deconstructions of decoder-only transformer models, revealing residual links directly connecting the embedding layer to the decoder~\cite{vaswani2017}.
-On this topic, \citet{elhage2021} claim that zero layer transformers model bigram statistics and that the bigram table can be accessed directly from the weights, although their experimental results only confirm their hypotheses for a restricted set of models.
-Since the task of decoder-only models is to predict the next word given the previous context~\cite{radford2019}, by stripping from the architecture all the transformer blocks while keeping only a direct link from the input embedding layer to the output decoder layer, yields a \emph{First Order Model (FOM)} at best capable of predicting the next token given the previous one, akin to the behavior of first-order Markov models~\cite{markov2006}.
+The hypothesis regarding output embeddings carrying out a prediction of the most likely subsequent token based on the input is inspired by architectural deconstructions of decoder-only Transformer models, revealing residual links directly connecting the embedding layer to the decoder~\cite{vaswani2017}.
+On this topic, \citet{elhage2021} claim that zero layer Transformers model bigram statistics and that the bigram table can be accessed directly from the weights, although their experimental results only confirm their hypotheses for a restricted set of models.
+Since the task of decoder-only models is to predict the next word given the previous context~\cite{radford2019}, by stripping from the architecture all the Transformer blocks while keeping only a direct link from the input embedding layer to the output decoder layer, yields a \emph{First Order Model (FOM)} at best capable of predicting the next token given the previous one, akin to the behavior of first-order Markov models~\cite{markov2006}.
 Such Markov models leverage bigram probability estimates retrieved from a corpus of text in order to generate the next word, provided with the previous one.
 Given words $w_i$ and $w_j$, the bigram probability can be expressed as:
 \begin{equation}
@@ -467,7 +467,7 @@ However, not all experiments require the computation of the actual transition ma
 To avoid confusion, this distinction is applied only to practical experiments described in~\cref{sec:exp_fom}, whereas the theoretical groundwork presented in this section considers only the probability matrix $\gbm{Q}_{\textit{FOM}}$ as the FOM transition matrix.
 
 As explained in detail in~\cref{sec:exp_fom,sssec:exp_fom_exp1_expset}, we also define a FOM transition matrix with the addition of RMSNorm (hereafter simply referred to as RMS normalization).
-RMS is a normalization technique defined in~\cref{eq:background_rmsnorm} and is commonly employed in multiple locations within recent transformer architectures, as highlighted in~\cref{ssec:background_transf_current}.
+RMS is a normalization technique defined in~\cref{eq:background_rmsnorm} and is commonly employed in multiple locations within recent Transformer architectures, as highlighted in~\cref{ssec:background_transf_current}.
 In our approach, we split the RMS computation between the input and output embedding matrices by performing the actual normalization portion of the computation on the input and the applying the weight product on the output.
 \begin{equation}
     \label{eq:method_fom_fom-matrix-rms}
@@ -485,7 +485,7 @@ In particular, $\gbm{w}_i^{in}$ refers to row vectors extracted from $\gbm{W}_{i
 \begin{equation*}
     \gbm{w}_i^{in} = \left(\gbm{W}_{in}\right)_{i,\cdot},\ \ w_{ij}^{in} = \left(\gbm{W}_{in}\right)_{i,j},\ \ \gbm{w}_j^{out} = \left(\gbm{W}_{out}\right)_{\cdot,j},
 \end{equation*}
-Additionally, the multiplicative weights $\gbm{\gamma}$ associated with RMS normalization in~\cref{eq:method_fom_fom-matrix-rms} correspond to the weights of the RMSNorm layer positioned at the end of the stack of transformer layers, just before the unembedding layer in recent decoder architecture, as seen in~\cref{fig:background_llama-arch}.
+Additionally, the multiplicative weights $\gbm{\gamma}$ associated with RMS normalization in~\cref{eq:method_fom_fom-matrix-rms} correspond to the weights of the RMSNorm layer positioned at the end of the stack of Transformer layers, just before the unembedding layer in recent decoder architecture, as seen in~\cref{fig:background_llama-arch}.
 
 At this point, the newly defined matrix can be compared against other known transition matrices in order to quantify their resemblance.
 Our metric of choice for direct matrix comparison is the Frobenius norm, which offers a relatively straightforward way to estimate how two matrices differ from each other.
@@ -527,7 +527,7 @@ Generalizing, we can formalize the average top-$k$ accuracy between two models r
         \right.
     \end{aligned}
 \end{equation}
-Where, as stated before, $\operatorname{top-k}(\gbm{Q}, k, v)$ represents the set of $k$ vocabulary tokens corresponding to the $k$ indices with highest probability obtained from indexing $Q$ with $v$.
+Where, as stated before, $\operatorname{top-k}(\gbm{Q}, k, v)$ represents the set of $k$ vocabulary tokens corresponding to the $k$ indexes with highest probability obtained from indexing $Q$ with $v$.
 In addition, when comparing $\gbm{Q}_1 = \gbm{Q}_{FOM}$ with the identity matrix we have that $\gbm{Q}_2 = \gbm{I}_V$ and $k_2 = 1$.
 
 Moreover, we also extend the prediction-based comparisons by introducing two specific set metrics that offer a weighted perspective on the distributions of transition matrices.

@@ -1,5 +1,5 @@
-In this section, we delineate the specific research questions regarding transformer interpretability that will be addressed in the present work.
-The purpose of these research questions is to provide a comprehensive informative analysis on the hidden representations and embedding space of recent transformer-based models.
+In this section, we delineate the specific research questions regarding Transformer interpretability that will be addressed in the present work.
+The purpose of these research questions is to provide a comprehensive informative analysis on the hidden representations and embedding space of recent Transformer-based models.
 The novelty of this work does not necessarily lie in the chosen approach itself, but resides in the integration of several established techniques to offer fresh perspectives and interpretability tools, ultimately aimed at confirming and possibly expanding upon previous findings.
 
 \section{How Can We Visualize Internal States \texorpdfstring{ \\ }{} of LLMs in an Immediate and \texorpdfstring{ \\ }{} Interactive Way?}\label{sec:rq_intravisto}
@@ -10,7 +10,7 @@ The chosen approach is centered around the concept of vocabulary space decoding 
 Additionally, novel methods will be introduced in the context of hidden representation decoding and visualization.
 One of the primary objectives of the proposed tool is to provide an intuitive visualization of the residual stream, enabling the observation of the influence pathway composed of residuals and attention, cumulating into each token prediction.
 
-The development of this transformer visualization framework is motivated by a comprehensive revisitation of the logit lens analysis from a new, multifaceted perspective, with the ultimate goal of confirming established results from a fresh angle and potentially uncovering new phenomena.
+The development of this Transformer visualization framework is motivated by a comprehensive revisitation of the logit lens analysis from a new, multifaceted perspective, with the ultimate goal of confirming established results from a fresh angle and potentially uncovering new phenomena.
 This framework serves as a foundation for many of the inquiries tackled in this work, as it provides the means for a preliminary analysis needed to initiate other, more focused experiments.
 
 \section{Do Autoregressive LLMs Retain Linear Properties in Their Embedding Spaces?}\label{sec:rq_embeddings}
@@ -19,9 +19,9 @@ With the aid of the previously developed tool, we observed some peculiarities in
 In particular, the embedding representations of LLMs appeared to encode less information about actual word semantics.
 Building upon this observation, the second research question examines whether autoregressive LLMs retain linear properties in their embedding spaces.
 
-As discussed in previous chapters, linearity in the embedding space is a well-established property in both the original Word2Vec embedding space~\cite{mikolov2013} and in transformer-based encoder models such as BERT~\cite{devlin2019}.
+As discussed in previous chapters, linearity in the embedding space is a well-established property in both the original word2vec embedding space~\cite{mikolov2013} and in Transformer-based encoder models such as BERT~\cite{devlin2019}.
 A linear embedding space enables certain geometric properties, such as solving word analogies (`king' - `man' + `woman' = `queen') and modeling semantic similarity between tokens as a function of distance in the embedding space.
-Given recent advances in transformer training and architecture, we aim to assess whether these properties persist in the embedding spaces of contemporary causal LLMs and whether they are consistent across various model architectures and sizes, while also highlighting differences between the embedding and unembedding spaces in models where they differ.
+Given recent advances in Transformer training and architecture, we aim to assess whether these properties persist in the embedding spaces of contemporary causal LLMs and whether they are consistent across various model architectures and sizes, while also highlighting differences between the embedding and unembedding spaces in models where they differ.
 
 \section{Is it Possible to Obtain First-order \texorpdfstring{ \\ }{} \mbox{Predictions} by \mbox{Concatenating} \texorpdfstring{ \\ }{} Embedding Spaces in LLMs?}\label{sec:rq_fom}
 
