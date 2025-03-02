@@ -466,7 +466,7 @@ Nonetheless, small empirical tests on a restricted set of models and a fraction 
 Additionally, a marginal set of entries belonging to the chosen datasets featured entities composed of multiple words separated by the underscore character `\_'.
 To improve the parsing process for the models' tokenizers, these occurrences were changed to use the whitespace character (` ') instead.
 
-\subsection{Experiment: Comparing Language Models \texorpdfstring{\linebreak}{} Inside the Embedding Space}\label{ssec:exp_emb_exp1}
+\subsection[Experiment: Comparing Language Models Inside the Embedding Space]{Experiment: Comparing Language Models \texorpdfstring{\linebreak}{} Inside the Embedding Space}\label{ssec:exp_emb_exp1}
 
 As a starting point, we directly compare the performance of the input embeddings belonging to various state-of-the art and older models over the defined analogy task.
 The comparison between the embeddings of old and new models is crucial, since it allows us to make assessments over the effectiveness of newer architectural paradigms in creating meaningful embedding spaces.
@@ -666,7 +666,7 @@ Consequently, given the flat trends shown by most models, it is plausible to spe
     \label{fig:exp_emb_1_E}
 \end{figure}
 
-\subsection{Experiment: Analyzing Input and Output \texorpdfstring{\linebreak}{} Embeddings of LLMs}\label{ssec:exp_emb_exp2}
+\subsection[Experiment: Analyzing Input and Output Embeddings of LLMs]{Experiment: Analyzing Input and Output \texorpdfstring{\linebreak}{} Embeddings of LLMs}\label{ssec:exp_emb_exp2}
 
 For this second experiment we wish to delve deeper into the actual capabilities of the embeddings belonging to recent decoder-only LLMs.
 To this end, we will also take into consideration the unembedding layer of said models.
@@ -874,7 +874,7 @@ Its vocabulary is derived from that of the Transformer model being evaluated, en
 This is achieved by parsing the Markov model's training text and computing the frequencies using the tokenizer of the corresponding Transformer model.
 The resulting token counts used for training Markov models are generally comparable across all selected reference models, amounting to approximately $140M$ for Llama 2, $135M$ for Mistral and $137M$ for Phi 3.5.
 
-\subsection{Experiment: Direct Comparison of First \texorpdfstring{\linebreak}{} Order Models}\label{ssec:exp_fom_exp1}
+\subsection[Experiment: Direct Comparison of First Order Models]{Experiment: Direct Comparison of First \texorpdfstring{\linebreak}{} Order Models}\label{ssec:exp_fom_exp1}
 
 The first experiment explores the main inquiry by means of direct matrix comparison, involving the computation of immediate metrics starting from the FOM and Markov model transition matrices.
 This rather simplistic approach still provides surprising experimental results despite not being conventionally used for the comparison of probability distributions.
