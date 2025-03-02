@@ -141,8 +141,8 @@ In practice, we compute:
 \begin{equation}
     \left\{
     \begin{aligned}
-        &{\%}^{(\ell)}_{\textit{KL},\textit{att}} = \frac{D_{\text{KL}}(\gbm{x}^{(\ell-1)} \parallel {\gbm{x}'}^{(\ell)})}{D_{\text{KL}}(\gbm{\delta}_\textit{att}^{(\ell)} \parallel {\gbm{x}'}^{(\ell)}) + D_{\text{KL}}(\gbm{x}^{(\ell-1)} \parallel {\gbm{x}'}^{(\ell)})} \\
-        &{\%}^{(\ell)}_{\textit{KL},\textit{ff}} = \frac{D_{\text{KL}}({\gbm{x}'}^{(\ell)} \parallel \gbm{x}^{(\ell)})}{D_{\text{KL}}(\gbm{\delta}_\textit{ff}^{(\ell)} \parallel \gbm{x}^{(\ell)}) + D_{\text{KL}}({\gbm{x}'}^{(\ell)} \parallel \gbm{x}^{(\ell)})} \label{eq:method_intravisto_kl-contrib}
+        &{\%}^{(\ell)}_{\textit{KL},\textit{att}} = \frac{D_{\text{KL}}({\gbm{x}'}^{(\ell)} \parallel \gbm{x}^{(\ell-1)})}{D_{\text{KL}}({\gbm{x}'}^{(\ell)} \parallel \gbm{\delta}_\textit{att}^{(\ell)}) + D_{\text{KL}}({\gbm{x}'}^{(\ell)} \parallel \gbm{x}^{(\ell-1)})} \\
+        &{\%}^{(\ell)}_{\textit{KL},\textit{ff}} = \frac{D_{\text{KL}}(\gbm{x}^{(\ell)} \parallel {\gbm{x}'}^{(\ell)})}{D_{\text{KL}}(\gbm{x}^{(\ell)} \parallel \gbm{\delta}_\textit{ff}^{(\ell)}) + D_{\text{KL}}(\gbm{x}^{(\ell)} \parallel {\gbm{x}'}^{(\ell)})} \label{eq:method_intravisto_kl-contrib}
     \end{aligned}
     \right.
 \end{equation}
@@ -199,7 +199,7 @@ This is showcased in the following computation:
     {\textit{state\_diff}{\,}\strut}^{(\ell)} = P(\ \cdot \mid \gbm{x}^{(\ell)} - \gbm{x}^{(\ell - 1)}, d_\textit{dec}, n_\textit{norm})
 \end{equation}
 It is possible to notice how this last approach could suffer from the same weaknesses that have been identified in iterative decoding as shown in~\cref{alg:method_intravisto_iter-dec}, due to the presence of an operation (difference) which assumes that its operands exist in a shared embedding space with linear properties.
-Although this is true, the minimal distance between the hidden states used to compute the difference makes the presented issue have minimal impact on the actual decoding result.
+Although this is true, the minimal distance between the hidden states used to compute the difference makes the presented issue have negligible impact on the actual decoding result.
 
 \subsection{Injection}\label{ssec:method_intravisto_injection}
 

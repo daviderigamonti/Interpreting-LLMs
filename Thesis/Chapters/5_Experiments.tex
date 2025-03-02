@@ -1187,10 +1187,10 @@ Following this idea, we also experience interesting behaviors when considering t
         \rowcolorhang{bluepoli!40}
             \textbf{Llama 2} $\gbm{\overline {D_{KL}}}$ & \textbf{FOM} & \makecell{\textbf{FOM}\\\textbf{with RMS}} & \Gape[0pt][1pt]{\makecell{\textbf{Markov}\\\textbf{model}}} & \Gape[0pt][1pt]{\makecell{\textbf{Identity}\\\textbf{matrix}}} \\
 		\hhline{=::====}
-        \textbf{FOM} & $-$ & $-$ & $0.202626$ & $10.373777$ \\[2px]
-        \textbf{FOM with RMS} & $-$ & $-$ & $2.099694$ & $12.416668$ \\[2px]
-        \textbf{Markov model} & $0.054688$ & $2.262181$ & $-$ & $10.388289$ \\[2px]
-        \textbf{Identity matrix} & $17.260256$ & $19.609880$ & $17.458118$ & $-$ \\[2px]
+        \textbf{FOM} & $-$ & $-$ & $0.054688$ & $17.260256$ \\[2px]
+        \textbf{FOM with RMS} & $-$ & $-$ & $2.099694$ & $19.609880$ \\[2px]
+        \textbf{Markov model} & $0.202626$ & $2.262181$ & $-$ & $17.458118$ \\[2px]
+        \textbf{Identity matrix} & $10.373777$ & $12.416668$ & $10.388289$ & $-$ \\[2px]
         \hhline{-||----}
     \end{tabular}
     \caption[Mean KL divergence for Llama 2.]{Mean KL divergence between FOM, FOM with RMS, Markov model and Identity matrix for Llama 2.}
@@ -1204,10 +1204,10 @@ Following this idea, we also experience interesting behaviors when considering t
         \rowcolorhang{bluepoli!40}
             \textbf{Mistral} $\gbm{\overline {D_{KL}}}$ & \textbf{FOM} & \makecell{\textbf{FOM}\\\textbf{with RMS}} & \Gape[0pt][1pt]{\makecell{\textbf{Markov}\\\textbf{model}}} & \Gape[0pt][1pt]{\makecell{\textbf{Identity}\\\textbf{matrix}}} \\
 		\hhline{=::====}
-        \textbf{FOM} & $-$ & $-$ & $0.163428$ & $10.375000$ \\[2px]
-        \textbf{FOM with RMS} & $-$ & $-$ & $0.561153$ & $9.555813$ \\[2px]
-        \textbf{Markov model} & $0.075116$ & $0.450965$ & $-$ & $10.409687$ \\[2px]
-        \textbf{Identity matrix} & $17.659594$ & $17.644035$ & $17.417395$ & $-$ \\[2px]
+        \textbf{FOM} & $-$ & $-$ & $0.075116$ & $17.659594$ \\[2px]
+        \textbf{FOM with RMS} & $-$ & $-$ & $0.450965$ & $17.644035$ \\[2px]
+        \textbf{Markov model} & $0.163428$ & $0.561153$ & $-$ & $17.417395$ \\[2px]
+        \textbf{Identity matrix} & $10.375000$ & $9.555813$ & $10.409687$ & $-$ \\[2px]
         \hhline{-||----}
     \end{tabular}
     \caption[Mean KL divergence for Mistral.]{Mean KL divergence between FOM, FOM with RMS, Markov model and Identity matrix for Mistral.}
@@ -1221,10 +1221,10 @@ Following this idea, we also experience interesting behaviors when considering t
         \rowcolorhang{bluepoli!40}
             \textbf{Phi 3.5} $\gbm{\overline {D_{KL}}}$ & \textbf{FOM} & \makecell{\textbf{FOM}\\\textbf{with RMS}} & \Gape[0pt][1pt]{\makecell{\textbf{Markov}\\\textbf{model}}} & \Gape[0pt][1pt]{\makecell{\textbf{Identity}\\\textbf{matrix}}} \\
 		\hhline{=::====}
-        \textbf{FOM} & $-$ & $-$ & $0.201826$ & $10.410433$ \\[2px]
-        \textbf{FOM with RMS} & $-$ & $-$ & $9.795715$ & $21.472530$ \\[2px]
-        \textbf{Markov model} & $0.059503$ & $7.225024$ & $-$ & $10.390044$ \\[2px]
-        \textbf{Identity matrix} & $17.257671$ & $24.772488$ & $17.455151$ & $-$ \\[2px]
+        \textbf{FOM} & $-$ & $-$ & $0.059503$ & $17.257671$ \\[2px]
+        \textbf{FOM with RMS} & $-$ & $-$ & $7.225024$ & $24.772488$ \\[2px]
+        \textbf{Markov model} & $0.201826$ & $9.795715$ & $-$ & $17.455151$ \\[2px]
+        \textbf{Identity matrix} & $10.410433$ & $21.472530$ & $10.390044$ & $-$ \\[2px]
         \hhline{-||----}
     \end{tabular}
     \caption[Mean KL divergence for Phi 3.5.]{Mean KL divergence between FOM, FOM with RMS, Markov model and Identity matrix for Phi 3.5.}
@@ -1232,13 +1232,13 @@ Following this idea, we also experience interesting behaviors when considering t
 \end{table}
 
 The distribution dissimilarity between FOM and Markov model is substantially lower than that observed for any other pair of model distributions across all analyzed LLMs as shown in~\cref{table:exp_fom_llama-kl,table:exp_fom_mistral-kl,table:exp_fom_phi-kl}.
-We can also notice that ${\overline {D_{KL}}}(\gbm{Q}_{Markov} || \gbm{Q}_{FOM})$ is consistently smaller than the reverse (${\overline {D_{KL}}}(\gbm{Q}_{FOM} || \gbm{Q}_{Markov})$) for all LLMs, implying that FOMs are a better approximation of Markov models than vice versa.
+We can also notice that ${\overline {D_{KL}}}(\gbm{Q}_{FOM} || \gbm{Q}_{Markov})$ is consistently smaller than the reverse (${\overline {D_{KL}}}(\gbm{Q}_{Markov} || \gbm{Q}_{FOM})$) for all LLMs, implying that Markov models are a better approximation of FOMs than vice versa.
 This result is likely tied to the difference in probability magnitude over the majority of the vocabulary terms.
-Since the Markov model was trained by analyzing a restricted dataset with a set of terms smaller than the vocabulary, we believe that its distribution neglects tokens that were never seen during training, even despite the smoothing coefficient applied to token counts.
+Since Markov models are trained by analyzing a restricted dataset containing a set of terms smaller than the vocabulary, we believe that its distribution neglects tokens that were never seen during training, even despite the smoothing coefficient applied to token counts.
 On the other hand, the FOM possesses a much more uniform-like baseline, as demonstrated in previous experiments, and therefore serves as a more appropriate reference distribution in the KL divergence computation.
 
 Although the results are much more aligned between models with regard to previous experiments, it is still possible to partially observe the same properties tied to the FOM approximations of specific LLMs underlined in previous experiments.
-For instance, in~\cref{table:exp_fom_mistral-kl} we can notice a slightly higher ${\overline {D_{KL}}}(\gbm{Q}_{Markov} || \gbm{Q}_{FOM})$ value and a slightly lower ${\overline {D_{KL}}}(\gbm{Q}_{FOM} || \gbm{Q}_{Markov})$ value for the Mistral FOM compared against other models.
+For instance, in~\cref{table:exp_fom_mistral-kl} we can notice a slightly higher ${\overline {D_{KL}}}(\gbm{Q}_{FOM} || \gbm{Q}_{Markov})$ value and a slightly lower ${\overline {D_{KL}}}(\gbm{Q}_{Markov} || \gbm{Q}_{FOM})$ value for the Mistral FOM compared against other models.
 Additionally, KL divergence values related to comparisons between identity matrix and FOM for the Mistral model seem to present the same behavior with respect to Llama 2 and Phi 3.5.
 
 As far as FOMs that include RMS normalization are concerned, there are several meaningful differences brought to light by the performed experiment.
@@ -1246,7 +1246,7 @@ First, in~\cref{table:exp_fom_llama-kl} we can observe that the FOM based on Lla
 This finding is unsurprising, as it conforms to the overall performance pattern established and already mentioned in previous experiments.
 However, if we also consider~\cref{table:exp_fom_mistral-kl}, it is possible to notice that the performance drop tied to the FOM with RMS based on Mistral is actually much less noticeable than that of its Llama 2 counterpart.
 Mistral's performance is amplified by the fact that the KL divergence between FOM with RMS and identity matrix is actually lower than the KL divergence considering the original FOM\@.
-This underlines the apparent affinity that the FOM based on Mistral displays towards self-regression,
+This underlines the apparent affinity that the FOM based on Mistral displays towards self-regression.
 Conversely,~\cref{table:exp_fom_phi-kl} shows the substantial impact on KL divergence that RMS normalization has on the Phi 3.5 based FOM, resulting in a significant decrease in performance across all comparisons that include the FOM, in line with the findings from the previous experiment on perplexity.
 
 \subsection{Discussion}\label{ssec:exp_fom_discussion}
