@@ -465,7 +465,7 @@ Additionally, a further layer normalization operation is performed before predic
 The main benefits of this technique are tied to training efficiency and convergence speed~\cite{xiong2020} as it was shown to improve overall gradient stability, even at initialization time.
 This improvement allowed the removal of the `learning rate warm-up stage': a technique that was commonly used in post-norm Transformer architectures to avoid diverging in training~\cite{popel2018} and involved a gradual increase of the learning rate in the first training epochs.
 
-Another variation on the Transformer normalization mechanism was achieved with the introduction of \textbf{root mean square layer normalization (RMSNorm)}~\cite{zhang2019}.
+Another variation on the Transformer normalization mechanism was achieved with the introduction of \textbf{Root Mean Square layer normalization (RMSNorm)}~\cite{zhang2019}.
 The fundamental improvement introduced by RMSNorm is a substantial reduction in the amount of computation performed with respect to classical layer normalization and an overall gain in efficiency, this is especially true for deep architectures where the computational overhead of layer normalization is meaningful.
 
 Implementation wise, RMSNorm only focuses on the rescaling aspect rather than including both centering and rescaling as layer normalization does.
@@ -518,7 +518,7 @@ The central principle of transfer learning is to avoid the costly retraining of 
 
 \subsubsection*{Pre-training}
 
-\textbf{pre-training} is often performed in an unsupervised or \emph{`self-supervised'} manner, meaning that either the training dataset is used without labels or labels can be directly inferred from it.
+\textbf{Pre-training} is often performed in an unsupervised or \emph{`self-supervised'} manner, meaning that either the training dataset is used without labels or labels can be directly inferred from it.
 Pre-training fulfills the function of providing the model with general language patterns, without specific orientation or direction.
 For this reason, large unbiased corpuses of text are needed to perform a successful pre-training, often resulting in lengthy and expensive training runs.
 

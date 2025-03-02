@@ -386,7 +386,7 @@ Where the ${\textit{encode}}_{\textit{enc\_strat}}$ function follows the definit
 Another perspective over the classic word analogies resolution strategy consists in the \emph{offset analogies} task.
 It holds a similar premise and the set of input analogies is shared between tasks, however, we perform a further subdivision of the dataset, assigning each word analogy into a bigger group based on the actual relationship that is modeled by the analogy (such as `gender', `capital of', `royalty', etc.).
 Subsequently, we use multiple analogies from the same group to obtain the relationship term as a vector (offset term), and we observe if it is possible to shift the representation from an element of the analogy to the other utilizing the computed offset.
-This techniques shares many similarities with the \emph{3CosAvg} approach suggested by \citet{drozd2016}, however, we offer a more specific computation for the offset term identified as $\gbm{\Delta}$.
+This technique shares many similarities with the \emph{3CosAvg} approach suggested by \citet{drozd2016}, however, we offer a more specific computation for the offset term identified as $\gbm{\Delta}$.
 \begin{equation}
     \label{eq:method_embeddings_delta-analogy-function}
     \begin{aligned}
