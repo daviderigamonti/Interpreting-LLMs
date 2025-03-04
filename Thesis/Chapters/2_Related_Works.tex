@@ -21,7 +21,7 @@ Mechanistic interpretability offers a novel perspective over the interpretabilit
 Previously identified model-agnostic techniques have been proven to offer limited insight for the Transformer architecture~\cite{neely2022,pruthi2022,bibal2022,krishna2024}.
 In contrast, MI embraces the opposite philosophy by eliminating model abstractions and analyzing LMs in terms of their specific components and interactions.
 
-Mechanistic interpretability was initially mentioned as being the main driving ideology behind the `Transformer circuits thread'~\cite{elhage2023}.
+Mechanistic interpretability was initially mentioned as being the main driving ideology behind the ``Transformer circuits thread''~\cite{elhage2023}.
 Nonetheless, by following~\citet{rai2024} approach, we can observe that the concept of MI is not limited to the application of circuits.
 Envisioning MI as being characterized by a general bottom-up approach for interpreting LMs, allows its scope to extend to include earlier techniques such as the logit lens~\cite{nostalgebraist2020} and other probing methods.
 
@@ -75,7 +75,7 @@ Two key choices which influence the result of causal intervention, besides the c
 Different authors have suggested a variety of possible patched activation functions that accomplish different goals and have different uses.
 There have been cases of null vectors being used as patched activations (zero intervention)~\cite{olsson2022, mohebbi2023}, noise being added to the input of the component (noise intervention)~\cite{meng2022} and counterfactual data being fed to the component either by sampling (resample intervention)~\cite{hanna2023, conmy2023} or averaging (mean intervention)~\cite{wang2023}.
 \citet{zhang2024} provide an insightful overview for common practices of activation patching in language models, identifying KL divergence, probability and logit difference as common evaluation metrics.
-Additionally, it is possible to identify an alternate `denoising' setup, which subverts the classic activation patching operation by applying a patched activation from a clean run to a corrupted one~\cite{lieberum2023, meng2022}.
+Additionally, it is possible to identify an alternate \emph{denoising} setup, which subverts the classic activation patching operation by applying a patched activation from a clean run to a corrupted one~\cite{lieberum2023, meng2022}.
 
 In particular, \citet{meng2022} were able to trace causal effects of hidden state activations within GPT architectures using causal mediation analysis to identify modules that perform the recall of a fact about a certain subject.
 Causal mediation analysis quantifies the contribution of intermediate variables in causal graphs, in this scenario the grid of hidden states affected by attention and FFNNs forms a causal graph.
@@ -88,9 +88,9 @@ ROME makes it possible to modify factual associations by inserting a new knowled
 \textbf{Circuit analysis} is closely related to the mechanistic interpretability (MI) subfield analyzed previously as its main goal is tied to the discovery of circuits inside LMs.
 Circuits are subsets of model components that can be seen as acting independently while carrying out a specific task, and can possibly be synthesized into an algorithm.
 Despite their successful application on LMs, circuits were not originally identified with the Transformer architecture in mind; in fact, their first application was on vision models~\cite{cammarata2020}.
-Most of the initial work regarding Transformer circuits was performed on publications belonging to the `Transformer circuits thread'~\cite{elhage2021,olsson2022,elhage2022,bricken2023,elhage2023}, heavily inspired by the preceding vision counterpart~\cite{cammarata2020}.
+Most of the initial work regarding Transformer circuits was performed on publications belonging to the ``Transformer circuits thread''~\cite{elhage2021,olsson2022,elhage2022,bricken2023,elhage2023}, heavily inspired by the preceding vision counterpart~\cite{cammarata2020}.
 
-In particular, `A Mathematical Framework for Transformer Circuits'~\cite{elhage2021} can be considered the seminal work that popularized circuit identification in Transformer models.
+In particular, ``A Mathematical Framework for Transformer Circuits''~\cite{elhage2021} can be considered the seminal work that popularized circuit identification in Transformer models.
 In this work, \citet{elhage2021} perform a reverse-engineering analysis on simplified versions of Transformer models, leading to the discovery of relevant properties.
 For once, they entirely deconstruct a small attention-only model by keeping the embedding and unembedding layers, while progressively incorporating attention layers.
 The results obtained from this process highlight the tendency of the zero layer Transformer to model bigram statistics, while models with added attention layers can interpret more expressive patterns.
@@ -133,7 +133,7 @@ Many extend these observations to actual experiments, successfully proving the e
 \citet{timkey2021} find that, when relying on cosine distance as a metric, representation spaces are often dominated by only 1 to 5 dimensions which drive anisotropy, low self-similarity, and the apparent drop in representational quality that happens later layers.
 Consequently, they advise the use of simple post-processing techniques in order to standardize the representation space and make linear relationship more evident, enhancing similarity-based techniques.
 
-Interestingly, \citet{wendler2024} apply linear properties of representation spaces to examine the phenomenon of `English pivoting', wherein an LLM translates tokens into English to conduct computations, even when prompted in a non-English language.
+Interestingly, \citet{wendler2024} apply linear properties of representation spaces to examine the phenomenon of ``English pivoting'', wherein an LLM translates tokens into English to conduct computations, even when prompted in a non-English language.
 While the authors find no evidence of English fulfilling the role of an internal pivot directly, by analyzing latent embeddings as high-dimensional euclidean points, they observe that the middle layers of the Transformer operate in an abstract concept space which is partially orthogonal to the language-specific concept space reached in the final layers.
 Consequently, the illusion of English pivoting can be pointed to an English bias in the abstract concept space, rather than a direct translation.
 

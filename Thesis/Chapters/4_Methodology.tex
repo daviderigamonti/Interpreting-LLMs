@@ -10,7 +10,7 @@ The tool provides visualizations of both the internal state of the LLM, using a 
 
 \subsection{Decoding Internal States}\label{ssec:method_intravisto_decoding}
 
-In this context, with the expression \emph{`decoding process'} we refer to the \emph{vocabulary decoding} process, which consists in the conversion of Transformers hidden states, represented by vectors in a high-dimensional space, into human-readable content.
+In this context, with the expression \emph{decoding process} we refer to the \emph{vocabulary decoding} process, which consists in the conversion of Transformers hidden states, represented by vectors in a high-dimensional space, into human-readable content.
 InTraVisTo enables the decoding and inspection of the main four vectors produced by each layer $\ell$ of a Transformer:
 \begin{itemize}
     \item $\gbm{\delta}_\textit{att}^{(\ell)}$ represents the output of the attention component, which operates through~\cref{eq:background_masked-attention,eq:background_multihead-attention}.
@@ -44,7 +44,7 @@ Where $\gbm{W}_{d_\textit{dec}}$ represents the matrix of decoder weights accord
 \end{equation}
 Considering $\mathcal{N}{(\gbm{x})}$ the normalization component of the model's final normalization layer, being reliant on $\mu$ and $\sigma$ for LayerNorm implementations as defined in~\cref{eq:background_layernorm,eq:background_layernorm_extra}, and $RMS(\gbm{x})$ for RMSNorm implementations as defined in~\cref{eq:background_rmsnorm}
 
-Two natural choices for decoders are the transpose of the \emph{input embedding matrix} $\gbm{W}_\textit{in}^\T$ which the model uses to convert tokens into vectors at the input stage, and the \emph{output decoder} $\gbm{W}_\textit{out}$, which is used within the language modeling head to generate token outputs from internal vectors.
+Two natural choices for decoders are the transpose of the \emph{input embedding matrix} $\gbm{W}_\textit{in}^\T$ which the model uses to convert tokens into vectors at the input stage, and the \emph{output unembeddig matrix} $\gbm{W}_\textit{out}$, which is used within the language modeling head to generate token outputs from internal vectors.
 Some models, like GPT-2~\cite{radford2019} and Gemma~\cite{mesnard2024,rivi2024}, tie these two parameter matrices together during training, while other popular models such as Mistral~\cite{jiang2023} and Llama~\cite{touvron2023,dubey2024} allow them to differ.
 This structural weight difference is analyzed to a greater extent in later sections; however, within the scope of this work, having distinct weight matrices for embedding and unembedding ($\gbm{W}_\textit{in}^\T \neq \gbm{W}_\textit{out}$) implies that earlier layers tend to be considerably more interpretable when decoded with the input embedding ($\gbm{W}_\textit{in}^\T$), while latter layers are more meaningful if the output decoder ($\gbm{W}_\textit{out}$) is used.
 
@@ -61,7 +61,7 @@ We define several alternatives for decoder interpolation, mainly focusing on \em
 
 Any of the matrices $\gbm{W}_\textit{in}^\T$, $\gbm{W}_\textit{out}$, $\gbm{W}_\textit{linear}$, $\gbm{W}_\textit{quadratic}$ and $\gbm{W}_\textit{max\_p}$ can serve as the decoder matrix $\gbm{W}_{d_\textit{dec}}$ to decode an embedding $\gbm{x}$ into a probability distribution over $\mathcal{V}$, as described in~\cref{eq:method_intravisto_decoding}.
 As mentioned earlier, this selection behavior is controlled by specifying $d_\textit{dec}$.
-In addition, it is important to note that the term `quadratic interpolation' can be misleading, as the interpolation between decoding matrices remains linear according to the weights; rather, it is the layer index ratio $\frac{\ell}{L}$ that scales quadratically through the models' layers.
+In addition, it is important to note that the term ``quadratic interpolation'' can be misleading, as the interpolation between decoding matrices remains linear according to the weights; rather, it is the layer index ratio $\frac{\ell}{L}$ that scales quadratically through the models' layers.
 
 \subsubsection{Secondary Tokens}\label{sssec:method_intravisto_decoding_tokens}
     
@@ -107,7 +107,7 @@ Iterative decoding leverages these linear properties by performing a sequence of
 
 As it is possible to observe in~\cref{alg:method_intravisto_iter-dec}, we perform at most ${rep}_{max}$ iterations obtaining one primary token and between $0$ to ${rep}_{max} - 1$ secondary tokens.
 This is due to the fact that a secondary token that is found in two separate iterations is recorded only on the first one, and the presence of a stopping condition that triggers in case the norm of the resulting hidden representation is under a certain threshold ${norm}_{min}$ or is higher than the norm found at the previous iteration.
-This last condition is used to avoid situations where the embedding vector of the hidden state `flips' after the computation of the difference with the most probable representation, resulting in a vector that is not informative and can possibly reiterate the effect until ${rep}_{max}$ is reached, thus generating predictions based purely on noise.
+This last condition is used to avoid situations where the embedding vector of the hidden state ``flips'' after the computation of the difference with the most probable representation, resulting in a vector that is not informative and can possibly reiterate the effect until ${rep}_{max}$ is reached, thus generating predictions based purely on noise.
 
 One downside of this approach, in addition to its reliance on the linearity assumption in intermediate embedding spaces, is the notable shift in representation magnitudes throughout the layers of most state-of-the-art Transformer models~\cite{heimersheim2023}.
 This shift typically results in a steady increase in the norms of the embedding vectors, proportional to the layer number.
@@ -216,7 +216,7 @@ Assuming that we would like to inject an embedding $\gbm{\hat x}$ into the hidde
 \end{equation}
 As previously noted for similar approaches, it is important to specify that there might be issues with the nature of $\gbm{\hat x}$, as it is a representation generated from an encoded, user-defined textual input ${id}_{\textit{inject}}$.
 This input undergoes an embedding and normalization process using $\gbm{W}_{d_{dec}}$ and $N_{n_\textit{norm}}$ as described in~\cref{eq:method_intravisto_linear-interp,eq:method_intravisto_quadratic-interp,eq:method_intravisto_normalization}.
-This results in the injection of a `clean' embedding that is unexpected by the model and may destabilize the generation process.
+This results in the injection of a \emph{clean} embedding that is unexpected by the model and may destabilize the generation process.
 In most causal intervention scenarios, this issue does not arise when performing activation patching using counterfactual examples, due to the fact that patches are generated utilizing resampling or averaging approaches~\cite{hanna2023,conmy2023,wang2023}.
 We choose to avoid these techniques since our main focus is directed towards providing the user with complete control over the injected information, which is achieved by directly inserting the desired embedding vector into the hidden state without allowing the model to refine it into a plausible representation.
 We refer to this approach as \emph{complete replacement injection}.
@@ -260,7 +260,7 @@ In the following section we will illustrate the theoretical basis of the prelimi
 
 \subsubsection{Distance Metrics}
 
-In order to compare and find `close' embeddings, we need to formalize a similarity measure between two embeddings. 
+In order to compare and find \emph{close} embeddings, we need to formalize a similarity measure between two embeddings. 
 To this end, we define two main distance metrics that will be used to compare embedding vectors in their space:
 \begin{equation}
     d_{\textit{dist}}(\gbm{x}, \gbm{y}) = 
@@ -278,10 +278,10 @@ Unfortunately, in order to make the euclidean distance an effective metric we ne
 
 \subsubsection{Normalization}
 
-On the topic of normalization, we also include the possibility of \emph{`pre-normalizing'} the embedding space before performing the experiments.
+On the topic of normalization, we also include the possibility of \emph{pre-normalizing} the embedding space before performing the experiments.
 This practice should help improve the comparability of embedding vectors, enhancing the results of linear operations in the embedding space.
 Although it is also possible for it to have detrimental effects in some specific scenarios, mainly due to the intrinsic nonlinearity of the normalization operation.
-In practice, the `pre-normalization' step includes the normalization of all embedding vectors using the euclidean norm as follows:
+In practice, the ``pre-normalization'' step includes the normalization of all embedding vectors using the euclidean norm as follows:
 \begin{equation}
     \label{eq:method_embeddings_normalization}
     \gbm{W}_{\textit{emb}} = (\bar w_{ij})_{V \times D}
@@ -357,7 +357,7 @@ By combining two pairs of words from the same category we obtain word analogies 
 
 \subsubsection{Analogy Computation}
 
-As far as the actual word analogy computation is concerned, given 4 words $\{w_1, w_2, w_3, w_4\}$ set up as an analogy of the type `$w_1 : w_2 = w_3 : w_4$', we can formalize it as follows:
+As far as the actual word analogy computation is concerned, given 4 words $\{w_1, w_2, w_3, w_4\}$ set up as an analogy of the type ``$w_1 : w_2 = w_3 : w_4$'', we can formalize it as follows:
 \begin{equation}
     \label{eq:method_embeddings_analogy}
     \begin{gathered}
@@ -372,7 +372,7 @@ Furthermore, the $\textit{analogy}$ function expresses the combination of words 
 To facilitate a more robust evaluation support for comparing models, there also exists the possibility of gathering the top-$k$ closest embeddings to the obtained result rather than only representing the first one.
 Moreover, since it is possible to define multiple analogy test cases from a single combination of words, the implementation details of the actual \emph{analogy function} fall slightly out of the scope of this section.
 These details are discussed in depth within the experimental setup section of the corresponding experiment (\cref{sssec:exp_emb_exp1_expset}).
-Thus, for simplicity, we can assume to follow the well-known `$king - man + woman \approx queen$' example from~\citet{mikolov2013}, obtaining:
+Thus, for simplicity, we can assume to follow the well-known ``$king - man + woman \approx queen$'' example from~\citet{mikolov2013}, obtaining:
 \begin{equation}
     \label{eq:method_embeddings_analogy-function}
     \begin{aligned}
@@ -384,7 +384,7 @@ Thus, for simplicity, we can assume to follow the well-known `$king - man + woma
 Where the ${\textit{encode}}_{\textit{enc\_strat}}$ function follows the definitions laid out in~\cref{eq:method_embeddings_multitok-in,eq:method_embeddings_multitok-out}.
 
 Another perspective over the classic word analogies resolution strategy consists in the \emph{offset analogies} task.
-It holds a similar premise and the set of input analogies is shared between tasks, however, we perform a further subdivision of the dataset, assigning each word analogy into a bigger group based on the actual relationship that is modeled by the analogy (such as `gender', `capital of', `royalty', etc.).
+It holds a similar premise and the set of input analogies is shared between tasks, however, we perform a further subdivision of the dataset, assigning each word analogy into a bigger group based on the actual relationship that is modeled by the analogy (such as ``gender'', ``capital of'', ``royalty'', etc.).
 Subsequently, we use multiple analogies from the same group to obtain the relationship term as a vector (offset term), and we observe if it is possible to shift the representation from an element of the analogy to the other utilizing the computed offset.
 This technique shares many similarities with the \emph{3CosAvg} approach suggested by \citet{drozd2016}, however, we offer a more specific computation for the offset term identified as $\gbm{\Delta}$.
 \begin{equation}
@@ -453,7 +453,7 @@ Where $P_{ij}$ follows the definition specified in~\cref{eq:method_fom_markov-pr
 \subsection{Matrix Comparison}\label{ssec:method_fom_matrix}
 
 As a preliminary way to explore various relationships between the input and output embeddings, we decide to perform an analysis of their matrices.
-To do so, we compute the `transition matrix' for our First Order Model (FOM) by combining and transposing the input and output weight matrices as follows:
+To do so, we compute the \emph{transition matrix} for our First Order Model (FOM) by combining and transposing the input and output weight matrices as follows:
 \begin{equation}
     \label{eq:method_fom_fom-matrix}
     \gbm{Q}_{\textit{FOM}} = \operatorname{softmax}(\gbm{Q}_{\textit{FOM}}^{log}) = \operatorname{softmax}(\gbm{W}_{in} \cdot \gbm{W}_{out}^\T)
@@ -509,7 +509,7 @@ Following the same intuition, it is also possible to compare the FOM transition 
 
 Additionally, we wanted to approach the previous ideas from a more practical point of view.
 To this end we recorded the top-$k$ answers elicited using the FOM matrix $\gbm{Q}_{\textit{FOM}}$ across all tokens inside the model's vocabulary, using each token as the known word and obtaining the FOM's most probable next tokens.
-Once we have the set of generated next tokens for each token inside the vocabulary we can compare them to our actual hypothesized reference tokens, obtained applying the identity function in the `inversion' hypothesis case, and in the `Markov' hypothesis case by querying the Markov model in the same way that we did with the FOM\@.
+Once we have the set of generated next tokens for each token inside the vocabulary we can compare them to our actual hypothesized reference tokens, obtained applying the identity function in the \emph{inversion} hypothesis case, and in the \emph{Markov} hypothesis case by querying the Markov model in the same way that we did with the FOM\@.
 As already done before in~\cref{subsubsec:method_embeddings_evaluation} using~\cref{eq:method_embeddings_topk-accuracy}, we employ the top-$k$ accuracy metric to establish the similarity between the predictions of the FOM against the two baselines defined by the identity function and the Markov model.
 The top-$k$ accuracy is computed by taking the $k$ tokens corresponding to the $k$ highest values between logits, and observing if the input token is present among them.
 
@@ -546,7 +546,7 @@ In order to obtain a broader perspective on the probability distributions repres
 These metrics can be applied either directly or indirectly to measure the similarity or dissimilarity between two probability distributions.
 
 Our first selected is perplexity, which quantifies how well a certain discrete probability distribution is able to predict a sample; that is, it measures the likelihood of the sample being drawn from the distribution itself.
-In other words, perplexity is often interpreted as the `surprise' of the distribution when observing a particular sample: high perplexity values indicate that the sample is unlikely to align with the distribution (greater surprise), whereas low values suggest that the sample is likely to be drawn from the distribution (less surprise).
+In other words, perplexity is often interpreted as the \emph{surprise} of the distribution when observing a particular sample: high perplexity values indicate that the sample is unlikely to align with the distribution (greater surprise), whereas low values suggest that the sample is likely to be drawn from the distribution (less surprise).
 
 The standard formulation for perplexity for a probability distribution $p$ over a sequence of words $w_1,\dots,w_N$ is defined as:
 \begin{equation}

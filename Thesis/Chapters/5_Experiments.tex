@@ -70,14 +70,14 @@ These novel decoding techniques are designed in order to provide users with sema
 Finally, the \emph{probability selector} directly affects the quantity used to weight the color grading in the heatmap.
 The four main options consist of P(argmax term), entropy, attention contribution and feedforward contribution. % chktex 36
 In particular, the entropy of a state is computed using the probability distribution obtained from the decoding operation, and is formalized in~\cref{eq:method_intravisto_entropy}.
-Additionally, a secondary control labeled as ``Residual Contribution'' affects the attention and feedforward contribution options for the probability selector.
+Additionally, a secondary control labeled as ``Residual contribution'' affects the attention and feedforward contribution options for the probability selector.
 This control determines the metric used to evaluate the concept of contribution between Transformer components and the residual stream according to~\cref{eq:method_intravisto_norm-contrib,eq:method_intravisto_kl-contrib}.
 The mathematical background for these selectors is discussed in detail in~\cref{sssec:method_intravisto_decoding_metrics}.
 
 Additionally, users are provided with several secondary controls to further explore the models' generation process, as illustrated in~\cref{fig:exp_intravisto_1_C}.
-For example, the `Embedding normalization' control allows users to select the type of normalization to apply to hidden states before decoding, as defined in~\cref{eq:method_intravisto_normalization}.
-Another selector is dedicated to handling the strategy for decoding secondary tokens (see~\cref{sssec:method_intravisto_decoding_tokens}), offering either a `top-$5$' approach or by using the iterative decoding algorithm, as illustrated in~\cref{alg:method_intravisto_iter-dec}.
-Moreover, users are given the option to exclude the column corresponding to the \emph{<start>} token from the visualization, as decoding it often does not yield meaningful results.
+For example, the ``Embedding normalization'' control allows users to select the type of normalization to apply to hidden states before decoding, as defined in~\cref{eq:method_intravisto_normalization}.
+Another selector is dedicated to handling the strategy for decoding secondary tokens (see~\cref{sssec:method_intravisto_decoding_tokens}), offering either a ``top-$5$'' approach or by using the iterative decoding algorithm, as illustrated in~\cref{alg:method_intravisto_iter-dec}.
+Moreover, users are given the option to exclude the column corresponding to the \texttt{<start>} token from the visualization, as decoding it often does not yield meaningful results.
 Furthermore, users can influence the generation process by choosing a different model from a customizable selection pool or by adjusting the number of generated tokens using the appropriate selectors.
 
 \begin{figure}[t!]
@@ -158,7 +158,7 @@ If the string contains multiple tokens, then all encoded representations are ave
 Once a valid injection is compiled and added, a small card summarizing the injection is created and displayed in a dedicated section at the top of the interface.
 This operation triggers an immediate reload of the current generated result by the model to incorporate the newly defined injection.
 When the heatmap visualization presents the result of a generation process that included an injection, the corresponding cell location is highlighted in \emph{green}.
-Injections can be removed at any time from the generation process by pressing the appropriate `X' button on their card.
+Injections can be removed at any time from the generation process by pressing the appropriate ``X'' button on their card.
 The standard layout of injection cards is shown in~\cref{fig:exp_intravisto_3_B}.
 
 \begin{figure}[t!]
@@ -206,13 +206,13 @@ The following constitutes a comprehensive list containing all main prompts used 
 
 \begin{multicols}{2}
     \begin{itemize}
-        \item \emph{`What is the capital of Italy?'}
-        \item \emph{`Write numbers in reverse order. Number: 13843234 Reverse:'}
-        \item \emph{`10000000 + 1 ='}
-        \item \emph{`1357 + 2291 ='}
-        \item \emph{`15984 - 1 ='}
-        \item \emph{`124101 - 4 ='}
-        \item \emph{`124101 * 3 ='}
+        \item \emph{``What is the capital of Italy?''}
+        \item \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''}
+        \item \emph{``10000000 + 1 =''}
+        \item \emph{``1357 + 2291 =''}
+        \item \emph{``15984 - 1 =''}
+        \item \emph{``124101 - 4 =''}
+        \item \emph{``124101 * 3 =''}
     \end{itemize}
 \end{multicols}
 
@@ -232,7 +232,7 @@ Specifically, we leverage the state inspection and API standardization capabilit
 
 One of the earliest discoveries made via InTraVisTo is the fact that models which employ dedicated tokens for each digit, when asked to perform arithmetic operations, happen to represent decimal positional information along with digits of the result.
 For example, the number $1\,492$ could be represented by having $1$ + ``thousand'', $4$ + ``hundred'', $9$ + ``ninety'' and $2$.
-This was initially discovered through the unique usage of the iterative decoding technique specified in~\cref{alg:method_intravisto_iter-dec} to inspect secondary decodings of internal states, although it can also be observed in certain primary decodings where the `decimal term' interpretation takes precedence over the digit one.
+This was initially discovered through the unique usage of the iterative decoding technique specified in~\cref{alg:method_intravisto_iter-dec} to inspect secondary decodings of internal states, although it can also be observed in certain primary decodings where the \emph{decimal term} interpretation takes precedence over the digit one.
 We speculate that models intentionally use this technique to keep track of the current decimal position of the result while performing arithmetic operations.
 This pattern can also be occasionally spotted in the reverse order as seen in~\cref{fig:exp_intravisto_4_A}, meaning that the model starts assigning decimal markers to the most significant digit, in what can be thought to be an attempt to circumvent the constraints entailed by carry operations.
 Some relevant examples of decimal markers include:
@@ -281,10 +281,10 @@ For example:
     \label{fig:exp_intravisto_4_B}
 \end{figure}
 
-Alternatively, we can also perform a complete analysis over a specific query, for example \emph{``What is the capital of Italy?''}, to which the model should answer \emph{`Rome'}.
-By observing the heatmap in~\cref{fig:exp_intravisto_4_C1} we can see that the model reaches the correct answer at the first generated token by gradually encoding \emph{`city'}, \emph{`capital'} and finally \emph{`Rome'} into the embeddings.
-However, in the final layer, the output shifts to the determiner \emph{`The'} to produce a more formal response incorporating the original question's formulation into the answer.
-In addition, by observing the Sankey diagram shown in~\cref{fig:exp_intravisto_4_C2}, it is possible to notice that during the generation process of the actual occurrence of \emph{`Rome'} at position $16$, the model collects a significant amount of attention directly from the first generated token mentioned beforehand.
+Alternatively, we can also perform a complete analysis over a specific query, for example \emph{``What is the capital of Italy?''}, to which the model should answer \emph{``Rome''}.
+By observing the heatmap in~\cref{fig:exp_intravisto_4_C1} we can see that the model reaches the correct answer at the first generated token by gradually encoding \texttt{\_city}, \texttt{\_capital} and finally \texttt{\_Rome} into the embeddings.
+However, in the final layer, the output shifts into the determiner \emph{``The''} to produce a more formal response incorporating the original question's formulation into the answer.
+In addition, by observing the Sankey diagram shown in~\cref{fig:exp_intravisto_4_C2}, it is possible to notice that during the generation process of the actual occurrence of \texttt{\_Rome} at position $16$, the model collects a significant amount of attention directly from the first generated token mentioned beforehand.
 
 \begin{figure}[tp!]
     \centering
@@ -303,7 +303,7 @@ To go one step further, we attempt to sway the model's prediction toward generat
 We do so by replacing the token \texttt{\_Rome} present at position $16$ with \texttt{\_Paris} using the injection interface described in~\cref{ssec:exp_intravisto_exp3}.
 Interestingly, we notice a significant difference in behavior depending on the chosen layer of injection.
 If we inject our token at the first occurrence of the token \texttt{\_Rome} (layer $20$), as can be observed in~\cref{fig:exp_intravisto_4_D1}, we can see that our injection quickly vanishes through the layers in favor of the correct answer.
-On the other hand, if we perform our injection at a layer where the token \texttt{\_Rome} actually starts gaining a meaningful probability (around $90.45\%$ at layer $25$) the model is not able to recover immediately and, as we can appreciate in~\cref{fig:exp_intravisto_4_D2}, ends up inserting \emph{`Paris'} in its answer.
+On the other hand, if we perform our injection at a layer where the token \texttt{\_Rome} actually starts gaining a meaningful probability (around $90.45\%$ at layer $25$) the model is not able to recover immediately and, as we can appreciate in~\cref{fig:exp_intravisto_4_D2}, ends up inserting \emph{``Paris''} in its answer.
 Notably, observing the rest of the generated sentence in~\cref{fig:exp_intravisto_4_D3} reveals that the model is still able to recognize the introduced error and give an overall correct answer by recontextualizing its erroneous output.
 
 \begin{figure}[tp!]
@@ -315,14 +315,14 @@ Notably, observing the rest of the generated sentence in~\cref{fig:exp_intravist
     \subfloat[Injection at layer $25$.\label{fig:exp_intravisto_4_D2}]{%
         \includegraphics[width=0.7\textwidth]{exp_intravisto_4D_heatmap-prob.png}%
     }%
-    \caption{InTraVisTo heatmap visualizations given the prompt \emph{``What is the capital of Italy?''} to Mistral with \emph{`Paris'} injected at different layers for the $16$th token.}
+    \caption{InTraVisTo heatmap visualizations given the prompt \emph{``What is the capital of Italy?''} to Mistral with \emph{``Paris''} injected at different layers for the $16$th token.}
     \label{fig:exp_intravisto_4_D}
 \end{figure}
 
 \begin{figure}[tp!]
     \centering
     \includegraphics[width=0.9\textwidth]{exp_intravisto_4D_output.png}
-    \caption{InTraVisTo input and output text given the prompt \emph{``What is the capital of Italy?''} to Mistral with \emph{`Paris'} injected at layer $25$ for the $16$th token.}
+    \caption{InTraVisTo input and output text given the prompt \emph{``What is the capital of Italy?''} to Mistral with \emph{``Paris''} injected at layer $25$ for the $16$th token.}
     \label{fig:exp_intravisto_4_D3}
 \end{figure}
 
@@ -330,7 +330,7 @@ This self-correcting behavior is mildly surprising, but it is still interesting 
 By directly observing the progression of tokens representing internal state of the model for the generation instance right after our injection (position $18$) in~\cref{fig:exp_intravisto_4_E1}, we can notice that the state loses confidence in the \texttt{\_Paris} token in a relatively slow way.
 After starting the state morphing process from input to output, inside the middle layers, the model immediately enters a state space dominated by tokens such as \texttt{nah}, \texttt{wait}, \texttt{\_mistaken}, \texttt{\_joke}, \texttt{...} and \texttt{?!}, to finally settle on \texttt{?} with an exceptionally low confidence and surprisingly late ($47.75\%$ at layer $31$). % chktex 11
 This behavior reflects the uncertainty of the model and its difficulty in integrating discordant information.
-Furthermore, in~\cref{fig:exp_intravisto_4_E2} it is possible to notice a discrete amount of flow being gathered by the token referring to \emph{`Italy'} in the question through the attention component during the early stages of the model's recovery from the injection, suggesting that some form of comparison or self-check may be occurring in the earlier layers.
+Furthermore, in~\cref{fig:exp_intravisto_4_E2} it is possible to notice a discrete amount of flow being gathered by the token referring to \emph{``Italy''} in the question through the attention component during the early stages of the model's recovery from the injection, suggesting that some form of comparison or self-check may be occurring in the earlier layers.
 
 \begin{figure}[t!]
     \centering
@@ -345,7 +345,7 @@ Furthermore, in~\cref{fig:exp_intravisto_4_E2} it is possible to notice a discre
         \includegraphics[width=0.7\textwidth]{exp_intravisto_4E_sankey.png}%
     }%
     \endgroup%
-    \caption[InTraVisTo visualizations given the prompt \emph{``What is the capital of Italy?''} to Mistral with injections.]{InTraVisTo visualizations given the prompt \emph{``What is the capital of Italy?''} to Mistral with \emph{`Paris'} injected at layer $25$ for the $16$th token.}
+    \caption[InTraVisTo visualizations given the prompt \emph{``What is the capital of Italy?''} to Mistral with injections.]{InTraVisTo visualizations given the prompt \emph{``What is the capital of Italy?''} to Mistral with \emph{``Paris''} injected at layer $25$ for the $16$th token.}
     \label{fig:exp_intravisto_4_E}
 \end{figure}
 
@@ -417,13 +417,13 @@ Consequently, by ending the number with a newline character, the model is able t
 \begin{figure}[t!]
     \centering
     \includegraphics[width=0.8\textwidth]{exp_intravisto_4H_sankey.png}
-    \caption[InTraVisTo Sankey diagram visualization given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral with injection.]{InTraVisTo Sankey diagram visualization given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral with \emph{`8'} injected at layer $29$ for the $25$th token.}
+    \caption[InTraVisTo Sankey diagram visualization given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral with injection.]{InTraVisTo Sankey diagram visualization given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral with the number $8$ injected at layer $29$ for the $25$th token.}
     \label{fig:exp_intravisto_4_H1}
 \end{figure}
 \begin{figure}[t!]
     \centering
     \includegraphics[width=0.8\textwidth]{exp_intravisto_4H_sankey-abl.png}
-    \caption[InTraVisTo Sankey diagram visualization given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral with injection and ablation.]{InTraVisTo Sankey diagram visualization given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral with \emph{`8'} injected at layer $29$ for the $25$th token and feedforward contribution removed at layer $32$ for the $28$th token.}
+    \caption[InTraVisTo Sankey diagram visualization given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral with injection and ablation.]{InTraVisTo Sankey diagram visualization given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral with the number $8$ injected at layer $29$ for the $25$th token and feedforward contribution removed at layer $32$ for the $28$th token.}
     \label{fig:exp_intravisto_4_H2}
 \end{figure}
 
@@ -464,8 +464,8 @@ These multiple correct answers include synonyms, alternative spellings or terms 
 Given the computational constraints of the experiments, only the first correct answer for any given analogy was taken into consideration.
 Nonetheless, small empirical tests on a restricted set of models and a fraction of the dataset were conducted using multiple answers in order to assess the impact of the decision.
 
-Additionally, a marginal set of entries belonging to the chosen datasets featured entities composed of multiple words separated by the underscore character `\_'.
-To improve the parsing process for the models' tokenizers, these occurrences were changed to use the whitespace character (` ') instead.
+Additionally, a marginal set of entries belonging to the chosen datasets featured entities composed of multiple words separated by the underscore character \texttt{``\_''}.
+To improve the parsing process for the models' tokenizers, these occurrences were changed to use the whitespace character (\texttt{`` ''} or \texttt{``\textvisiblespace{}''}) instead.
 
 \subsection[Experiment: Comparing Language Models Inside the Embedding Space]{Experiment: Comparing Language Models \texorpdfstring{\linebreak}{} Inside the Embedding Space}\label{ssec:exp_emb_exp1}
 
@@ -1066,7 +1066,7 @@ For this experiment, we shift our perspective on transition matrices from sets o
 This approach enables a more precise evaluation by considering how models would concretely be utilized beyond these experimental scenarios.
 
 In~\cref{ssec:method_fom_prob} we define the two primary mathematical tools used in this experiment: perplexity (\cref{eq:method_fom_perplexity}) and KL divergence (\cref{eq:method_fom_kldiv}).
-These metrics allow us to determine the similarity or dissimilarity between two distributions over a vocabulary, either by directly comparing them using the KL divergence or by measuring their `surprise' over a text corpus using the perplexity metric.
+These metrics allow us to determine the similarity or dissimilarity between two distributions over a vocabulary, either by directly comparing them using the KL divergence or by measuring their \emph{surprise} over a text corpus using the perplexity metric.
 
 \subsubsection{Experimental Setup}
 
