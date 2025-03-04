@@ -223,7 +223,7 @@ However, the application has been developed with generality in mind, thus it can
 
 A key aspect of InTraVisTo is the inspection and modification of models' hidden states.
 Unfortunately, under normal circumstances, only a small fraction of these states is made readily accessible by the standard Hugging Face Transformers library~\cite{wolf2020}, and the method for accessing internal components varies between model architectures and providers.
-In order to obtain a comprehensive perspective of Transformer architectures, we utilize the \emph{Transformers-wrappers} framework\footnotemark: an open-source Python library initially developed by Vincenzo Scotti with the goal of exposing a uniform and extensible interface for Transformer models, while retaining a standardized internal structure for models provided by Hugging Face Transformers.
+In order to obtain a comprehensive perspective of Transformer architectures, we utilize the \emph{Transformers wrappers} framework\footnotemark: an open-source Python library initially developed by Vincenzo Scotti with the goal of exposing a uniform and extensible interface for Transformer models, while retaining a standardized internal structure for models provided by Hugging Face Transformers.
 Specifically, we leverage the state inspection and API standardization capabilities offered by the library, and we contribute to the codebase by designing an extensible framework that supports the injection and ablation techniques utilized in InTraVisTo.
 \footnotetext{\rlap{\url{https://github.com/vincenzo-scotti/transformer_wrappers}}}
 
@@ -1132,24 +1132,25 @@ Unsurprisingly, we observe the perplexity results of the identity matrix predict
 However, we still value this outcome since it provides a baseline for comparison for the FOM derived from each LLM, thereby confirming the findings from the previous experiment (\cref{ssec:exp_fom_exp1}) that FOMs are generally closer to being approximations of the actual Markov model rather than the identity matrix.
 Nonetheless, we can speculate that the pattern unveiled in~\cref{sssec:exp_fom_exp1_results} appears to persist in~\cref{table:exp_fom_wikitext,table:exp_fom_openwebtext}, as the perplexity tied to the FOM based on Mistral is slightly higher than that for its Llama 2 and Phi 3.5 counterparts, possibly suggesting that it incorporates similarities to the uniform and identity matrix distributions.
 
-One notable trend observable in~\cref{fig:exp_fom_2_A} is that when plotting perplexity over multiple sentences in the test dataset, a clear pattern of several horizontal lines emerges for the FOM version of most LLMs.
-These lines vary in density and are located in the loose proximity of the perplexity level of the uniform model.
-The number and position of the lines appears to be dependent on both the underlying LLM and the test dataset, although they generally tend to align with the uniform prediction.
+One notable trend observable in~\cref{fig:exp_fom_2_A} is that when plotting perplexity over multiple sentences in the test dataset, a clear pattern consisting of several density clusters emerges for the FOM version of most LLMs.
+These clusters vary in density and are located in the loose proximity of the perplexity level of the uniform model.
+The number and position of the clusters appears to be dependent on both the underlying LLM and the test dataset, although they generally tend to align with the uniform prediction.
 The observed consistencies imply the existence of macro-groups of sentences for which a model consistently scores perplexity values that are marginally inferior or superior to random guessing.
 
 \begin{figure}[t!]
     \centering
     \subfloat[Perplexity for Llama 2.\label{fig:exp_fom_2_A1}]{%
-        \includegraphics[width=0.5\textwidth]{exp_fom_2A_l2-perp-owt.png}%
+        \includegraphics[width=\textwidth]{exp_fom_2A_l2-perpdens-owt.pdf}%
     }%
+    \quad
     \subfloat[Perplexity for Mistral.\label{fig:exp_fom_2_A2}]{%
-        \includegraphics[width=0.5\textwidth]{exp_fom_2A_m-perp-owt.png}%
+        \includegraphics[width=\textwidth]{exp_fom_2A_m-perpdens-owt.pdf}%
     }%
     \quad
     \subfloat[Perplexity for Phi 3.5.\label{fig:exp_fom_2_A3}]{%
-        \includegraphics[width=0.5\textwidth]{exp_fom_2A_p3-perp-owt.png}%
+        \includegraphics[width=\textwidth]{exp_fom_2A_p3-perpdens-owt.pdf}%
     }%
-    \caption{Perplexity on OpenWebText sentences for FOM, Markov model, Uniform probability and Identity matrix.}
+    \caption{Perplexity density distribution on OpenWebText sentences for FOM, Markov model, Uniform probability and Identity matrix.}
     \label{fig:exp_fom_2_A}
 \end{figure}
 
@@ -1160,8 +1161,6 @@ Lastly, the FOM based on Phi 3.5 (\cref{fig:exp_fom_2_A3}) reflects the same ove
 
 In summary, we can affirm that the difference between FOM and uniform performance is more pronounced in the plotted results than numerical averages, as the plots more clearly reveal the outliers present in the datasets.
 
-\todo[purple!30]{Explore some outlier sentences in depth}
-
 Regarding the alternative FOM formulation that incorporates RMS normalization, we can clearly see a drastic and widespread drop in performance.
 Even when comparing the gathered results from the previous experiment described in~\cref{ssec:exp_fom_exp1}, FOMs with RMS normalization exhibit severe underperformance, with their average perplexity appearing to be several orders of magnitude higher than both their standard FOM counterparts and the uniform baseline, as noted in~\cref{table:exp_fom_llama-kl,table:exp_fom_mistral-kl}.
 One notable exception is the FOM with RMS tied to Mistral, which shows only a moderate drop in performance compared to FOMs obtained from other models.
@@ -1171,12 +1170,12 @@ However, we consider this hypothesis unlikely, as the effect varies across model
 
 \begin{figure}[t!]
     \centering
-    \includegraphics[width=0.5\textwidth]{exp_fom_2B_m-rms-perp-owt.png}
-    \caption{Perplexity on OpenWebText sentences for FOM with RMS, Markov model, Uniform probability and Identity matrix of Mistral.}
+    \includegraphics[width=\textwidth]{exp_fom_2B_m-rms-perpdens-owt.pdf}
+    \caption{Perplexity density distribution on OpenWebText sentences for FOM with RMS, Markov model, Uniform probability and Identity matrix of Mistral.}
     \label{fig:exp_fom_2_B}
 \end{figure}
 
-In contrast to the perplexity results, outcomes obtained by computing KL divergence over the vocabulary can be considered more straightforward to interpret, as they reveal a clearer difference between the performance of models.
+As opposed to the perplexity results, outcomes obtained by computing KL divergence over the vocabulary can be considered more straightforward to interpret, as they reveal a clearer difference between the performance of models.
 Interestingly, we notice that this series of outcomes does not necessarily align with previous observations; however, we can ascribe discrepancies in the results to the inherent similarity between FOM probabilities and the uniform distribution.
 Following this idea, we also experience interesting behaviors when considering the FOM variant which includes RMS normalization due to its direct influence on the uniformity of FOM probabilities.
 
