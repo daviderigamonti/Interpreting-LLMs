@@ -69,6 +69,7 @@ These novel decoding techniques are designed in order to provide users with sema
 
 Finally, the \emph{probability selector} directly affects the quantity used to weight the color grading in the heatmap.
 The four main options consist of P(argmax term), entropy, attention contribution and feedforward contribution. % chktex 36
+In particular, the entropy of a state is computed using the probability distribution obtained from the decoding operation, and is formalized in~\cref{eq:method_intravisto_entropy}.
 Additionally, a secondary control labeled as ``Residual Contribution'' affects the attention and feedforward contribution options for the probability selector.
 This control determines the metric used to evaluate the concept of contribution between Transformer components and the residual stream according to~\cref{eq:method_intravisto_norm-contrib,eq:method_intravisto_kl-contrib}.
 The mathematical background for these selectors is discussed in detail in~\cref{sssec:method_intravisto_decoding_metrics}.
@@ -99,7 +100,7 @@ The second visualization provided by InTraVisTo is a Sankey diagram that aims to
 
 Nodes in the diagram depict all the hidden states contained in each layer, visualizing each one of the four vectors referenced in~\cref{ssec:method_intravisto_decoding} at the same time.
 Similarly to the heatmap visualization, nodes display the main decoding result as their label and, when hovered upon, provide additional information in the form of a pop-up tooltip containing secondary tokens.
-One additional piece of information, exclusively found in the tooltip of output nodes, is the decoded difference from the previous layer.
+One additional piece of information, exclusively found in the tooltip of output nodes and formalized in~\cref{eq:method_intravisto_state-diff}, is the decoded difference from the previous layer.
 This detail shows the primary and secondary tokens obtained from decoding the difference between the output state of the current layer with the output state of the previous layer as if it were a separate state.
 The goal of this representation is trying to visualize in a human interpretable way, the information added by the current layer with respect to the previous one.
 
@@ -112,8 +113,8 @@ When considering a new generation run, the totality of the flow is evenly split 
 However, if the user decides to inspect a specific cell in the heatmap by clicking on it, the Sankey diagram also adapts by recalculating the flow considering the corresponding node as the sole topmost node, consequently accounting for $100\%$ of the flow.
 We subdivide nodes into three categories, color-coded for visualization convenience: intermediate and output nodes in blue, attention nodes in green and feedforward nodes in pink.
 Moreover, flows exiting from each node inherit the color of their originating node, leading to a clear display of the main information paths and their direction.
-Additionally, flows are given a further shading factor that is proportional to the KL divergence between the decoded hidden state distributions of the nodes that they connect.
-This allows users to appreciate in an immediate way states that exhibit rapid changes in distribution, thus providing a better localization for possible zones of interest.
+Additionally, flows are given a further shading factor that is proportional to the KL divergence between the decoded hidden state distributions of the nodes that they connect, computed following~\cref{eq:method_intravisto_kl-diff}.
+This visualization allows users to appreciate in an immediate way states that exhibit rapid changes in distribution, thus providing a better localization for possible zones of interest.
 
 The only component that is able to redistribute the flow through various tokens is the attention node, which does so according to the attention weights computed for all preceding tokens.
 Furthermore, for each aggregation node (intermediate and output), the flow contribution of the preceding nodes is computed following the ``Residual contribution'' user control mentioned in~\cref{ssec:exp_intravisto_exp1} according to~\cref{eq:method_intravisto_norm-contrib,eq:method_intravisto_kl-contrib}.
@@ -487,14 +488,11 @@ At its core, this class of experiments evaluates the resolution of analogies bet
 Once the dataset and model are loaded, each batch of word analogies is processed, treating every single analogy as an independent computation.
 All words that compose the input section of the analogy are appropriately encoded following~\cref{eq:method_embeddings_multitok-in}.
 The selection of input words for each batch of analogies is determined by a hyperparameter containing the analogy layout (e.g.\ obtaining $w_1 - w_2 + w_4 = w_3$ from $w_1 : w_2 = w_3 : w_4$).
-The provided layout also defines the arithmetic operations to be performed on the encoded words in order to obtain the encoded output term.
+The provided layout also defines the arithmetic operations to be performed on the encoded words in order to obtain the encoded output term, exemplified in~\cref{eq:method_embeddings_analogy-function}.
 
 Afterwards, by following~\cref{eq:method_embeddings_analogy}, we perform a search on the model's embedding space using a hyperparameter-defined distance metric as shown in~\cref{eq:method_embeddings_distance}, obtaining the $k$ closest elements to the result of our embedding arithmetic.
 Finally, in order to extrapolate a concrete result, we compare the set of computed tokens with the set of tokens obtained through the application of~\cref{eq:method_embeddings_multitok-out} to the output word defined by the layout.
 The comparison is performed through the use of the appropriate metrics formalized in~\cref{eq:method_embeddings_topk-accuracy}.
-
-% TODO
-%~\cref{eq:method_embeddings_topk-accuracy,eq:method_embeddings_rankscore}
 
 The complete set of hyperparameters and their possible values is as follows:
 \begin{itemize}
@@ -603,7 +601,6 @@ We suggest that this is a direct consequence of the explicit multilingual traini
 This property negatively impacts the embedding space expressiveness in two main ways.
 First, tokens representing concepts in other languages are present in the vocabulary, resulting in a noisier embedding space and possibly fragmenting longer English words that contain them as sub-tokens.
 Then, tokens that are shared between languages but have different senses or are part of words with different definitions determine the presence of embeddings that are in direct competition to give additional separate meanings to the same tokens.
-% TODO: mention gemma
 
 Another important fact that must be taken into consideration is the support of the resulting dataset for each model.
 As anticipated in~\cref{sssec:exp_emb_exp1_expset}, models have been evaluated on different subsets of the overall dataset in order to extract analogies that could be expressed solely using single-token words.
@@ -874,7 +871,7 @@ Its vocabulary is derived from that of the Transformer model being evaluated, en
 This is achieved by parsing the Markov model's training text and computing the frequencies using the tokenizer of the corresponding Transformer model.
 The resulting token counts used for training Markov models are generally comparable across all selected reference models, amounting to approximately $140M$ for Llama 2, $135M$ for Mistral and $137M$ for Phi 3.5.
 
-\subsection[Experiment: Direct Comparison of First Order Models]{Experiment: Direct Comparison of First \texorpdfstring{\linebreak}{} Order Models}\label{ssec:exp_fom_exp1}
+\subsection[Experiment: Direct Comparison of First Order Models]{Experiment: Direct Comparison of First \mbox{Order} Models}\label{ssec:exp_fom_exp1}
 
 The first experiment explores the main inquiry by means of direct matrix comparison, involving the computation of immediate metrics starting from the FOM and Markov model transition matrices.
 This rather simplistic approach still provides surprising experimental results despite not being conventionally used for the comparison of probability distributions.
@@ -1157,7 +1154,7 @@ The observed consistencies imply the existence of macro-groups of sentences for 
 Examining the proposed perplexity graphs reveals some interesting differences between models.
 For instance, the FOM based on Llama 2 (\cref{fig:exp_fom_2_A1}) clusters most sentences around the perplexity value corresponding to the uniform baseline, while a significant minority of sentences exhibits a consistently lower perplexity.
 On the other hand, most sentences evaluated with the FOM derived from Mistral (\cref{fig:exp_fom_2_A2}) lie on a slightly lower perplexity value than the uniform baseline; however, two sizeable subsets of sentences perform considerably better and worse, respectively.
-Lastly, the FOM based on Phi 3.5 (\cref{fig:exp_fom_2_A3}) reflects the same overall pattern to that of Mistral, but with notably lower perplexity values, such that only a small fraction of sentences have a perplexity value that is close to the uniform baseline.
+Lastly, the FOM based on Phi 3.5 (\cref{fig:exp_fom_2_A3}) reflects the same overall pattern to that of Mistral, but with notably lower perplexity values, such that only a small fraction of sentences has a perplexity value that is close to the uniform baseline.
 
 In summary, we can affirm that the difference between FOM and uniform performance is more pronounced in the plotted results than numerical averages, as the plots more clearly reveal the outliers present in the datasets.
 

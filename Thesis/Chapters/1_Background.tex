@@ -328,7 +328,6 @@ The most important aspect of attention is its scoring function, which allows the
 There exist different attention function implementations such as \emph{simple dot product}, \emph{Luong}~\cite{luong2015} (multiplicative) and \emph{Bahdanau}~\cite{bahdanau2015} (additive).
 The original Transformer architecture mentioned in ``Attention Is All You Need''~\cite{vaswani2017} uses \emph{scaled dot product attention}, which is implemented with the following formula:
 \begin{equation}
-    \label{eq:background_attention}
     Attention(\gbm{Q},\gbm{K},\gbm{V}) = softmax\left(\frac{\gbm{Q}\gbm{K}^\T}{\sqrt{d_{\gbm{K}}}}\right)\gbm{V}
 \end{equation}
 Where $\gbm{Q}$, $\gbm{K}$ and $\gbm{V}$ represent the \emph{query}, \emph{key} and \emph{value} components of attention which are obtained by multiplying the hidden state vectors to their respective projection matrices $\gbm{W_Q}$, $\gbm{W_K}$ and $\gbm{W_V}$, which are composed of learnable model parameters.
@@ -500,7 +499,7 @@ On the other hand, GLUs determine an entire revision of the feed-forward archite
 In the case of Llama models~\cite{touvron2023,dubey2024}, the gating mechanism happens through an element-wise multiplication where $\gbm{W}_{in}^{GLU} \in \mathbb{R}^{D \times d_{GLU}}$ represents the input transformation matrix with its respective bias $\gbm{b}_{in}$, $\gbm{V} \in \mathbb{R}^{D \times d_{GLU}}$ is the gate transformation matrix with its respective bias $\gbm{b_{V}}$, $\gbm{W}_{out}^{GLU} \in \mathbb{R}^{d_{GLU} \times D}$ performs the out-projection to the model's hidden representation dimensionality with its respective bias $\gbm{b}_{out}$ and $f$ represents the activation/gating function (in the SwiGLU case $f(\gbm{x}) = Swish(\gbm{x})$):
 \begin{equation}
     \label{eq:background_ffnn}
-    FFN(\gbm{x}) = GLU(\gbm{x}) \cdot \gbm{W}_{out}^{GLU} + \gbm{b}_{out} 
+    FFNN(\gbm{x}) = GLU(\gbm{x}) \cdot \gbm{W}_{out}^{GLU} + \gbm{b}_{out} 
     = \Bigl( f(\gbm{x}\gbm{V} + \gbm{b_V}) \odot \gbm{x}\gbm{W}_{in}^{GLU} + \gbm{b}_{in} \Bigr) \cdot \gbm{W}_{out}^{GLU} + \gbm{b}_{out}
 \end{equation}
 For Llama models~\cite{touvron2023,dubey2024}, all biases of the transformation matrices referring to the SwiGLU implementation are set to zero ($\gbm{b}_{in} = \gbm{b_V} = \gbm{b}_{out} = \vec {\gbm{0}}$).

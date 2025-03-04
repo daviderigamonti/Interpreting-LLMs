@@ -13,9 +13,9 @@ The tool provides visualizations of both the internal state of the LLM, using a 
 In this context, with the expression \emph{`decoding process'} we refer to the \emph{vocabulary decoding} process, which consists in the conversion of Transformers hidden states, represented by vectors in a high-dimensional space, into human-readable content.
 InTraVisTo enables the decoding and inspection of the main four vectors produced by each layer $\ell$ of a Transformer:
 \begin{itemize}
-    \item $\gbm{\delta}_\textit{att}^{(\ell)}$ represents the output of the attention component.
+    \item $\gbm{\delta}_\textit{att}^{(\ell)}$ represents the output of the attention component, which operates through~\cref{eq:background_masked-attention,eq:background_multihead-attention}.
     \item ${\gbm{x}'}^{(\ell)}$ is the \emph{intermediate state}, given by the addition of $\gbm{\delta}_\textit{att}^{(\ell)}$ to the residual stream.
-    \item $\gbm{\delta}_\textit{ff}^{(\ell)}$ represents the output of the feedforward network component.
+    \item $\gbm{\delta}_\textit{ff}^{(\ell)}$ represents the output of the feedforward network component, obtained by computing~\cref{eq:background_ffnn}.
     \item $\gbm{x}^{(\ell)}$ is the \emph{layer output}, which can be seen as the residual stream with the contributions of both $\gbm{\delta}_\textit{ff}^{(\ell)}$ and $\gbm{\delta}_\textit{att}^{(\ell)}$.
 \end{itemize}
 
@@ -120,10 +120,10 @@ The first option is \emph{``P(argmax term)''}, which directly translates into th
 It gives an immediate idea of how much the model is sure about the token that has been greedily sampled.
 On the other hand, a complementary measure is the \emph{entropy} of the probability distribution over the vocabulary space, which the higher it is, the more unsure the model is of the next token.
 Entropy for an embedding $\gbm{x}$ is computed in the following way:
-\begin{equation*}
+\begin{equation}
     \label{eq:method_intravisto_entropy}
     H_{\gbm{x}} = -\sum{P_{\gbm{x}} \cdot \log{P_{\gbm{x}}}}
-\end{equation*}
+\end{equation}
 Where $P_{\gbm{x}} = P(\ \cdot \mid \gbm{x}, d_\textit{dec}, n_\textit{norm})$ as computed in~\cref{eq:method_intravisto_decoding}.
 
 Other showcased metrics are the \emph{attention contribution} and \emph{feedforward contribution}, which measure respectively how much the output of the attention block, or feed forward, contributes in its summation with the residual stream of a Transformer block.
@@ -416,16 +416,15 @@ In our case, it can be written using the following notation:
 where ${\textit{result}\,}^i_j$ represents the $j$-th result of the $i$-th analogy, ${\textit{sol}\,}^i$ indicates the set of solution for the $i$-th analogy obtained through the use of the ${\textit{encode}}^{out}$ function as illustrated in~\cref{eq:method_embeddings_multitok-out}, and $n$ is the dimension of the considered dataset.
 
 %\todo[purple!30]{Mean Reciprocal Rank / Rankscore evaluation of analogies}
+%\todo[cyan]{Understand if rankscore makes sense, eventually adapt it to MRR or remove MRR as a reference}
 %Alternatively, we devised an additional measure which fulfills a similar purpose to the top-$k$ accuracy by evaluating a set of embeddings on an analogy task.
-%The chosen metric is a slight variation of the Mean Reciprocal Rank statistic measure, commonly referred to as $MRR = \frac{1}{n}\sum_{i=1}{n}{\frac{1}{rank_i}}$ \todo[orange]{cite?}.
-%We considered this approach in order to fully utilize the rank information given by the \todo{comparison analysis}, rather than just limiting the computation of our metric to check for the presence of matches between the results and the solutions, as it is done in the top-$k$ accuracy case.
+%The chosen metric is a slight variation of the Mean Reciprocal Rank statistic measure, commonly referred to as $MRR = \frac{1}{n}\sum_{i=1}{n}{\frac{1}{rank_i}}$.
+%We considered this approach in order to fully utilize the rank information given by the comparison analysis, rather than just limiting the computation of our metric to check for the presence of matches between the results and the solutions, as it is done in the top-$k$ accuracy case.
 %Rankscore:
 %\begin{equation}
 %    \label{eq:method_embeddings_rankscore}
 %    \textit{rankscore}_k = 1 - \frac{\sum_{i=1}^{n}{rank_i}}{n \cdot k}
 %\end{equation}
-%\todo[cyan]{Understand if rankscore makes sense, eventually adapt it to MRR or remove MRR as a reference}
-
 
 \section{First Order Prediction}\label{sec:method_fom}
 
