@@ -146,7 +146,7 @@ In practice, we compute:
     \end{aligned}
     \right.
 \end{equation}
-Where $D_{\text{KL}}$ is the Kullback-Liebler divergence between two distributions, and the notation of hidden states (such as $\gbm{x}^{(\ell)}$, $\gbm{\delta}_\textit{att}^{(\ell)}$, \ldots) references the distinctions made at~\cref{ssec:method_intravisto_decoding}.
+Where $D_{\text{KL}}$ is the Kullback-Leibler divergence between two distributions, and the notation of hidden states (such as $\gbm{x}^{(\ell)}$, $\gbm{\delta}_\textit{att}^{(\ell)}$, \ldots) references the distinctions made at~\cref{ssec:method_intravisto_decoding}.
 It is possible to note that the contributions computed through norms and KL divergence feature opposite terms at the fractional numerator, this is due to their inverse relationship as the KL divergence measures the \emph{dissimilarity} between probability distributions, while the norm can be directly translated into the positive contribution of a hidden state. 
 
 \subsection{Flow}\label{ssec:method_intravisto_flow}
@@ -190,7 +190,7 @@ In practice, we compute the following quantity for five different state combinat
         \Bigr\}
     \end{gathered}
 \end{equation}
-Where $P_{\gbm{x}} = P(\ \cdot \mid \gbm{x}, d_\textit{dec}, n_\textit{norm})$ as computed in~\cref{eq:method_intravisto_decoding}, $D_{\text{KL}}$ is the Kullback-Liebler divergence between two distributions, and the notation of hidden states (such as $\gbm{x}^{(\ell)}$, $\gbm{\delta}_\textit{att}^{(\ell)}$, \ldots) references the distinctions made at~\cref{ssec:method_intravisto_decoding}.
+Where $P_{\gbm{x}} = P(\ \cdot \mid \gbm{x}, d_\textit{dec}, n_\textit{norm})$ as computed in~\cref{eq:method_intravisto_decoding}, $D_{\text{KL}}$ is the Kullback-Leibler divergence between two distributions, and the notation of hidden states (such as $\gbm{x}^{(\ell)}$, $\gbm{\delta}_\textit{att}^{(\ell)}$, \ldots) references the distinctions made at~\cref{ssec:method_intravisto_decoding}.
 Whereas, the second approach compares the residual stream states at the input and output location for each layer in the Transformer stack.
 It does so by calculating the difference between the two hidden states, and performing the decoding operation defined in~\cref{eq:method_intravisto_decoding} as to generate primary and secondary tokens for the resulting quantity.
 This is showcased in the following computation:

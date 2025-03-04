@@ -136,7 +136,7 @@ Other graphic-oriented options allow users to remove node labels for nodes that 
 
 InTraVisTo is designed as an interactive tool, and embedding injection is another feature intended to enhance understanding of the internal workings of Transformers.
 As formalized in~\cref{ssec:method_intravisto_injection}, injection involves substituting a hidden state with a custom embedding representation, forcing the model to adjust its behavior based on the injected information.
-Injections can be performed by clicking on a cell in the grid-layout heatmap; this actions opens a pop-up menu (\cref{fig:exp_intravisto_3_A}) associated with the cell, which then prompts the user for the following information:
+Injections can be performed by clicking on a cell in the grid-layout heatmap; this action opens a pop-up menu (\cref{fig:exp_intravisto_3_A}) associated with the cell, which then prompts the user for the following information:
 \begin{itemize}
     \item A string of text with the purpose of being encoded into an embedding representation and injected inside the selected hidden state.
 The application automatically converts the string into an embedding using the inverse transformation of the chosen decoder.
@@ -430,7 +430,7 @@ Consequently, by ending the number with a newline character, the model is able t
 
 InTraVisTo is fundamentally a tool designed to visualize internal states and the information flow within Transformer-based neural networks underlying modern LLMs.
 It offers a wide array of functionalities and visualizations to NLP practitioners, which they can utilize to understand internal reasoning steps carried out by LLMs and, possibly, track down the causes of generation errors such as hallucinations.
-As an interactive tool, InTraVisTo is equipped with additional tools to modify and manipulate internal representations in a user-friendly way, in order to enable small-scale causal investigations.
+As an interactive framework, InTraVisTo is equipped with additional tools to modify and manipulate internal representations in a user-friendly way, in order to enable small-scale causal investigations.
 Moreover, InTraVisTo's implementation supports concurrent use by multiple users with the simultaneous loading of distinct LLMs at the same time, making it a flexible application capable of being deployed in a reproducible way for NLP researchers and practitioners.
 
 As extensively demonstrated in the proposed examples and experiments, InTraVisTo can be methodically used  to extract insights from the generation process of language models.
@@ -818,7 +818,7 @@ This conjecture is further reinforced by the fact that the performance gain over
 In summary, we can affirm that LLMs are able to retain a surprising amount of semantic relationships inside their embeddings, despite the fact that sub-word tokenization actively works against the accumulation of meaning for token representations.
 Their performance on the selected tasks is comparable, if not greater than less recent models used as baselines.
 In particular, by comparing~\cref{table:exp_emb_models} and other experimental results presented in~\cref{fig:exp_emb_1_A,fig:exp_emb_1_B}, we can almost observe a slight correlation between vocabulary size and overall performance on tasks where models featuring smaller vocabularies seem to outperform those with larger ones.
-From this, we can observe that very large, recent models such as Llama 3 and Gemma may be trending towards a direction of semantic impoverishment of the embedding space, whereas slightly older LLMs like Llama 2 and Mistral, as well as models designed for  compactness and portability, such as Phi 3.5, still preserve many of the original embedding space properties.
+From this, we can observe that very large, recent models such as Llama 3 and Gemma may be trending towards a direction of semantic impoverishment of the embedding space, whereas slightly older LLMs like Llama 2 and Mistral, as well as models designed for compactness and portability, such as Phi 3.5, still preserve many of the original embedding space properties.
 
 Interestingly, we observe that the only LLM that clearly underperformed on the proposed tasks was the only one that had undergone explicit multilingual training.
 As previously stated, this finding suggests that multiple languages compete in giving different meaning to the same tokens, resulting in worse overall performance for the given tasks.
@@ -826,7 +826,7 @@ We must acknowledge the fact that these results do not constitute the focal poin
 Nonetheless, our observations remain significant for the defined research question, as they indicate that an increase in scale does not directly enhance the performance on the proposed tasks, nor does it necessarily improve the expressiveness of the embeddings.
 
 Regarding input and output embeddings, we can conclude that input embeddings are generally better suited for resolving analogies and, by extension, inherently contain a greater amount of semantic information with respect to output embeddings.
-However, we also notice that Llama 3 displays an inverse pattern regarding this regard.
+However, we also notice that Llama 3 displays an inverse pattern in this regard.
 We speculate that because output embeddings display a minor amount of semantic content, in Llama 3's case they also retain a smaller portion of the multilingual information, which we identify as the primary reason for Llama 3's underperformance.
 Moreover, the model's vocabulary remains identical for both  input and output embeddings, so issues inherently associated with the tokenization process itself persist.
 
@@ -835,19 +835,19 @@ In fact, these outcomes are fundamental in the development of the embedding inte
 
 Another important finding from the current experiments, which also finds application in InTraVisTo, concerns the interpolation of embedding spaces.
 In fact, from the experimental results emerges the soundness of our proposed approach from a semantic perspective, indicating that the resulting interpolated embedding spaces retain at least the same amount of information as the original embeddings.
-Additionally, the observed nonlinearities between the interpolation layer and performance offset relative to the original embedding spaces in related experiments have strongly motivated the creation of alternative interpolation methods, such as~\cref{eq:method_intravisto_quadratic-interp,eq:method_intravisto_max-p}
+Additionally, the observed nonlinearities between the interpolation layer and performance offset relative to the original embedding spaces in related experiments have strongly motivated the creation of alternative interpolation methods, such as~\cref{eq:method_intravisto_quadratic-interp,eq:method_intravisto_max-p}.
 
 \section{First Order Prediction}\label{sec:exp_fom}
 
 Building on the foundation established in~\cref{sec:rq_fom}, the experiments in this section are focused on exploring the implications of constructing a First Order Model (FOM).
 A FOM is derived by removing all intermediate architectural components from an LLM, retaining only the input and output embedding layers along with the residual connections joining them.
-As described in~\cref{sec:method_fom}, this transformation can be seen as the creation of a Markov whose transition matrix is given by the product of the input and output embedding matrices.
+As described in~\cref{sec:method_fom}, this transformation can be seen as the creation of a Markov model whose transition matrix is given by the product of the input and output embedding matrices.
 
 Most of the experiments in this section are geared towards understanding whether the FOM accurately represents a bigram Markov model over the original model's vocabulary.
 Although past work has theorized and partially demonstrated this hypothesis for a restricted set of models~\cite{elhage2021}, we suspect that FOMs derived from different LLMs may exhibit varying degrees of Markovian behavior, and we aim to investigate this variation in this section.
 Another perspective taken in consideration, is the possibility of the FOM transition matrix approximating an identity matrix, thus suggesting that input and output embeddings tend to converge towards equality during training, effectively modeling a form of natural weight tying~\cite{inan2017,press2017}.
 
-Following on the normalization intuition that proved effective for InTraVisTo, as explored in~\cref{sssec:method_intravisto_decoding_norm}, we also explore an alternative of the basic FOM obtained from directly joining input and output embeddings.
+Following on the normalization intuition that proved effective for InTraVisTo, as mentioned in~\cref{sssec:method_intravisto_decoding_norm}, we also explore an alternative based on normalization for the classic FOM.
 In fact, this alternative was introduced with the intention of addressing one particular issue observed in certain experimental instances, which exhibited similarities to challenges previously encountered and resolved in relation to the research question referenced in~\cref{sec:rq_intravisto}.
 The main issue can be described as an excessive flattening of the vocabulary distribution for decoded states, specifically referring to the probability distribution for the next token in the FOM transition matrix.
 To mirror the previously proposed solution, the alternative model (FOM with RMS) incorporates a single RMS normalization (\cref{eq:background_rmsnorm}) step between the standard FOM embeddings.
