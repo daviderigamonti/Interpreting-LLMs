@@ -14,6 +14,7 @@
 
 # Thesis .pdf files
 Thesis/*.pdf
+Summary/*.pdf
 Thesis/Backup/*.pdf
 Thesis/Images/TikZ/**/*.png
 Thesis/Images/TikZ/**/*.pdf
