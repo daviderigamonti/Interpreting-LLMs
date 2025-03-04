@@ -27,7 +27,7 @@
 \graphicspath{{./Images/}{./Images/Template/}} % Path for images' folder
 \usepackage{eso-pic} % For the background picture on the title page
 \usepackage{subfig} % Numbered and caption subfigures using \subfloat
-\usepackage{caption} % Coloured captions
+%\usepackage{caption} % Coloured captions
 \usepackage{transparent}
 
 % STANDARD MATH PACKAGES
@@ -47,7 +47,7 @@
 
 % PACKAGES FOR REFERENCES & BIBLIOGRAPHY
 \usepackage[colorlinks=true,linkcolor=black,anchorcolor=black,citecolor=black,filecolor=black,menucolor=black,runcolor=black,urlcolor=black]{hyperref} % Adds clickable links at references
-\usepackage[capitalize]{cleveref}
+%\usepackage{cleveref}
 \usepackage[square, numbers, sort&compress]{natbib} % Square brackets, citing references with numbers, citations sorted by appearance in the text and compressed
 \bibliographystyle{abbrvnat} % You may use a different style adapted to your field
 
@@ -82,8 +82,9 @@
 
 \usepackage[threshold=1, thresholdtype=words]{csquotes}
 \usepackage{booktabs}
-\usepackage{cleveref}
+\usepackage[capitalize]{cleveref}
 \usepackage{dsfont}
+\usepackage[skip=5pt]{caption}
 \usepackage[export]{adjustbox}
 \usepackage{makecell}
 \usepackage{multirow}
@@ -151,18 +152,18 @@
 %-----------------------------------------------------------------------------
 \section{Introduction}\label{sec:introduction}
 
-With the growing popularity and pervasiveness of machine learning solutions applied to the realm of natural languages, interpretabilty remains an increasingly relevant topic, still subject of extensive studies by experts in this field.
+With the growing popularity and pervasiveness of machine learning solutions applied to the realm of natural languages, \emph{interpretabilty} remains an increasingly relevant topic, still subject of extensive studies by experts in this field.
 Interpretabilty in itself is far from being a novel concept, as from the early advent of machine learning there has always been the necessity of understanding the process by which an opaque model performs its inner computations.
 
-Considering the introduction of the deep learning paradigm, reducing human control over feature spaces, the need for interpretabilty spiked as models became more complex.
-In particular, we are interested in a specific class of machine learning models that are currently considered state-of-the art in the Natural Language Processing (NLP): Large Language Models (or LLMs).
+Considering the introduction of the \emph{deep learning paradigm}, reducing human control over feature spaces, the need for interpretabilty spiked as models became more complex.
+In particular, we are interested in a specific class of machine learning models that are currently considered state-of-the art in the Natural Language Processing (NLP): \emph{Large Language Models (or LLMs)}.
 
 This work offers novel perspectives over the internal structure of LLMs through exploratory analyses, creation of tools, and experiments confirming and possibly improving existing hypotheses and observations in the interpretability field.
 The overall approach is structured along three main research questions: 
 \begin{itemize}[leftmargin=12pt]
-    \item \textbf{`How can we visualize internal states of LLMs in an immediate and interactive Way?'} Focuses on developing an interactive visualization tool for LLMs, \emph{InTraVisTo (Inside Transformer Visualization Tool)}, designed to support machine learning researchers in hypothesis formulation by offering a unique perspective on the internal representations of LLMs.
-    \item \textbf{`Do autoregressive LLMs retain linear properties in their embedding spaces?'} Assesses whether linearity properties persist in the embedding spaces of contemporary causal LLMs and whether they are consistent across various model architectures and sizes, highlighting differences between embedding and unembedding spaces.
-    \item \textbf{`Is it Possible to Obtain First-order Predictions by Concatenating Embedding Spaces in LLMs?'} Explores whether the First Order Model (FOM), obtained by multiplying the embedding matrices of an LLM, can accurately represent a bigram Markov model over the original model's vocabulary.
+    \item \textbf{``How can we visualize internal states of LLMs in an immediate and interactive Way?''} Focuses on developing an interactive visualization tool for LLMs, \emph{InTraVisTo (Inside Transformer Visualization Tool)}, designed to support machine learning researchers in hypothesis formulation by offering a unique perspective on the internal representations of LLMs.
+    \item \textbf{``Do autoregressive LLMs retain linear properties in their embedding spaces?''} Assesses whether linearity properties persist in the embedding spaces of contemporary causal LLMs and whether they are consistent across various model architectures and sizes, highlighting differences between embedding and unembedding spaces.
+    \item \textbf{``Is it Possible to Obtain First-order Predictions by Concatenating Embedding Spaces in LLMs?''} Explores whether the First Order Model (FOM), obtained by multiplying the embedding matrices of an LLM, can accurately represent a bigram Markov model over the original model's vocabulary.
 \end{itemize}
 
 %-----------------------------------------------------------------------------
@@ -176,16 +177,16 @@ In addition, we discuss elements of \textbf{vocabulary space decoding} and curre
 
 \subsection{Mechanistic Interpretability}
 
-Mechanistic interpretability offers a novel perspective over the interpretability research field, its primary aim being the reverse-engineering of language models (LMs) from an in-depth perspective~\cite{olah2022}.
-Mechanistic interpretability was initially mentioned as being the main driving ideology behind the `Transformer circuits thread'~\cite{elhage2023}.
+\textbf{Mechanistic interpretability} offers a novel perspective over the NLP interpretability research field, its primary aim being the \emph{reverse-engineering} of language models (LMs) from an in-depth perspective~\cite{olah2022}.
+Mechanistic interpretability was initially mentioned as being the main driving ideology behind the ``Transformer circuits thread''~\cite{elhage2023}.
 Nonetheless, the concept of MI is not limited to the application of circuits; envisioning MI as being characterized by a general bottom-up approach for interpreting LMs, allows its scope to extend to include earlier techniques such as the logit lens~\cite{nostalgebraist2020} and other probing methods.
 
 \subsection{Linear Representation \texorpdfstring{ \\ }{} Hypothesis}
 
-The \textbf{linear representation hypothesis}~\cite{park2023} posits that high-level concepts are represented linearly within the representation space of a model.
+The \textbf{linear representation hypothesis}~\cite{park2023} posits that high-level concepts are represented linearly within the representation space of a language model.
 The central idea for this hypothesis builds upon early findings of linearity inside the embedding space by~\citet{mikolov2013}, leading to the resolution of analogies and the presence of geometric properties as the direct consequences of a linear embedding space.
 
-Another important aspect of the linear representation hypothesis is the presence of polysemanticity and superposition in the identified features spaces obtained via dimensionality reduction algorithms, resulting in distributed representations via information compression.
+Another important aspect of the linear representation hypothesis is the presence of \emph{polysemanticity} and \emph{superposition} in the identified features spaces obtained via dimensionality reduction algorithms, resulting in distributed representations via information compression.
 Many extend these observations to actual experiments, successfully proving the existence of superposition in simplified scenarios~\cite{elhage2022}.
 
 \subsection{Vocabulary Space Decoding}
@@ -193,10 +194,10 @@ Many extend these observations to actual experiments, successfully proving the e
 One of the most direct methods to comprehend a model's hidden representations is by employing its own vocabulary to derive plausible interpretations.
 \textbf{Vocabulary space decoding} techniques are founded on this principle, by utilizing the model's existing vocabulary they can generate outputs that are immediately understandable and may unveil hidden patterns inside the model's generation process.
 
-The first real implementation of vocabulary space decoding is logit lens~\cite{nostalgebraist2020}, which proposed the decoding of interlayer hidden representation using the model's own unembedding matrix.
+The first real implementation of vocabulary space decoding is \emph{logit lens}~\cite{nostalgebraist2020}, which proposed the decoding of interlayer hidden representation using the model's own unembedding matrix.
 The contribution of logit lens was groundbreaking and, despite some acknowledged shortcomings by the author, inspired numerous similar techniques aimed at improving its design or offering alternative functionalities.
 
-A more recent iteration of the vocabulary space decoding approach is the \emph{LM Transparency Tool} (LM-TT)~\cite{tufanov2024}, which is an exceptional toolkit offering interactive tools for analyzing the internal workings of Transformer models.
+A more recent iteration of the vocabulary space decoding approach is the \emph{LM Transparency Tool (LM-TT)}~\cite{tufanov2024}, which is an exceptional toolkit offering interactive tools for analyzing the internal workings of Transformer models.
 LM-TT builds on top of the circuital interpretation of the Transformer to visualize the information flow.
 The LM-TT tool focuses on the visualization of the most relevant attention paths leading to the production of an embedding in the internal states of the Transformer.
 Additionally, it also provides useful decoding information that can aid the interpretation of intermediate representations at varying degrees of granularity.
@@ -206,7 +207,7 @@ Additionally, it also provides useful decoding information that can aid the inte
 %-----------------------------------------------------------------------------
 \section{InTraVisTo}\label{sec:intravisto}
 
-We develop InTraVisTo\footnote{\rlap{\url{https://github.com/daviderigamonti/InTraVisTo}}} as a tool designed to visualize internal states and the information flow within Transformer-based neural networks underlying modern LLMs.
+We develop \emph{InTraVisTo}\footnote{\rlap{\url{https://github.com/daviderigamonti/InTraVisTo}}} as a tool designed to visualize internal states and the information flow within Transformer-based neural networks underlying modern LLMs.
 It offers a wide array of functionalities and visualizations to NLP practitioners, which they can utilize to understand internal reasoning steps carried out by LLMs and, possibly, track down the causes of generation errors such as hallucinations.
 As an interactive framework, InTraVisTo is able to modify and manipulate internal representations in order to enable small-scale causal investigations.
 Moreover, InTraVisTo's implementation supports concurrent use by multiple users with the simultaneous loading of distinct LLMs at the same time, making it a flexible application capable of being deployed in a reproducible way for NLP researchers and practitioners.
@@ -217,7 +218,7 @@ It is possible to identify three main components: the \textbf{decoding interface
 \subsection{Decoding Interface}\label{ssec:intravisto_1}
 
 Decoding the meaning of hidden state vectors at various depths of a Transformer stack is essential for providing an intuition as to how the model is working.
-InTraVisTo allows decoding and inspection of the main four vectors that compose each layer, while offering a human-interpretable representation of each hidden state by performing a decoding operation.
+InTraVisTo allows decoding and inspection of the \emph{main four vectors} that compose each layer, while offering a human-interpretable representation of each hidden state by performing a decoding operation.
 The four vectors correspond respectively to the output of the attention component, the intermediate state given by the addition of the attention component to the residual stream, the output of the feedforward network component, and the layer output.
 On the other hand, the decoding operation is carried out using a specialized decoder which, given a hidden state as input, finds related tokens from the model's vocabulary with the goal of returning an interpretable output as formalized in~\cref{eq:method_intravisto_decoding}.
 
@@ -238,62 +239,57 @@ P(\,\cdot\,\mid \gbm{x}, d_\textit{\scalebox{.8}{dec}}, n_\textit{\scalebox{.8}{
 }
 Where $\gbm{W}_{d_\textit{dec}}$ represents the matrix of decoder weights according to the user decoder choice $d_\textit{dec}$, and $N_{n_\textit{norm}}$ is used to identify the normalization operation selected by the user through $n_\textit{norm}$.
 
-Two natural choices for decoders are the transpose of the \emph{input embedding matrix} $\gbm{W}_\textit{in}^\T$ which the model uses to convert tokens into vectors at the input stage, and the \emph{output decoder} $\gbm{W}_\textit{out}$, which is used within the language modeling head to generate token outputs from internal vectors.
+Two natural choices for decoders are the transpose of the \emph{input embedding matrix} $\gbm{W}_\textit{in}^\T$ which the model uses to convert tokens into vectors at the input stage, and the \emph{output unembedding matrix} $\gbm{W}_\textit{out}$, which is used within the language modeling head to generate token outputs from internal vectors.
 InTraVisTo also offers the possibility of decoding hidden states by \emph{interpolating} the input and output decoders based on the depth $\ell\in\{0,\ldots,L\}$ of the model layer to be decoded, we obtain a ``hybrid'' decoding weight matrix that acts as an equilibrium point calibrated on the current depth of the model.
 
-\begin{figure}[h!]
+\begin{figure}[tbh!]
     \centering
     \includegraphics[width=0.47\textwidth]{exp_intravisto_1A_heatmap.png}
     \caption{InTraVisTo's heatmap visualization given the prompt \emph{``What is the capital of Italy?''} to Mistral, utilizing linear interpolation for decoding.}
     \label{fig:exp_intravisto_1_A}
 \end{figure}
 
-In~\cref{fig:exp_intravisto_1_A} we show InTraVisTo first visual output, obtained from a layer-by-layer model interpretation.Layers are stacked vertically, from the embedding layer at the bottom to the normalized outputs at the top, forming a grid where the x-axis represents token positions in the sequence and the y-axis represents layer numbers, resulting in a heatmap where each cell represents a token-layer combination containing the main decoded hidden state.
-By hovering on a cell, a pop-up with other possible decodings (secondary representation) along with additional information appears.
+In~\cref{fig:exp_intravisto_1_A} we show InTraVisTo first visual output, obtained from a layer-by-layer model interpretation.Layers are stacked vertically, from the embedding layer at the bottom to the normalized outputs at the top, forming a grid where the x-axis represents token positions in the sequence and the y-axis represents layer numbers, resulting in a heatmap where each cell represents a token-layer combination containing the main decoded hidden state in token form.
+By hovering on a cell, a pop-up with other possible decoded tokens (secondary representation) along with additional information appears.
 
 The generation of the heatmap requires the user to choose a \emph{target embedding}, a \emph{decoding strategy} and a \emph{probability} to display.
-The \emph{embedding} refers to the position of the hidden state vector to be decoded within the layer.
-Conversely, the \emph{decoding strategy} choice refers to the decoding matrix employed during the decoding process of each visualized hidden state.
-Finally, the \emph{probability selector} directly affects the quantity used to weight the color grading in the heatmap, and is normally tied to the probability of the obtained decoding for each cell as formalized in~\cref{eq:method_intravisto_decoding}.
+The embedding refers to the position of the hidden state vector to be decoded within the layer.
+Conversely, the decoding strategy choice refers to the decoding matrix employed during the decoding process of each visualized hidden state.
+Finally, the probability selector directly affects the quantity used to weight the color grading in the heatmap, and is normally tied to the probability of the obtained decoding for each cell as formalized in~\cref{eq:method_intravisto_decoding}.
 
 \subsection{Flow Interface}
 
-The second visualization provided by InTraVisTo is a Sankey diagram that aims to depict the information flow through the Transformer network (\cref{fig:exp_intravisto_2_A}).
+The second visualization provided by InTraVisTo is a \emph{Sankey diagram} that aims to depict the information flow through the Transformer network (\cref{fig:exp_intravisto_2_A}).
 
-\begin{figure}[h!]
+\begin{figure}[tbh!]
     \centering
     \includegraphics[width=0.45\textwidth]{exp_intravisto_2A_sankey.png}
     \caption{InTraVisTo's Sankey diagram visualization of the last 7 layers given the prompt \emph{``What is the capital of Italy?''} to Mistral.}
     \label{fig:exp_intravisto_2_A}
+    \vspace{-10pt}
 \end{figure}
-
-\vspace{-10pt}
 
 Nodes in the diagram depict all hidden states contained in each layer, visualizing the four vectors referenced in~\cref{ssec:intravisto_1} at the same time.
 Like in the heatmap, nodes display the main decoding result as their label and, when hovered upon, show additional information in the form of a pop-up tooltip containing secondary representations.
-Output nodes' tooltips also include the decoded difference from the previous layer, obtained between the current and previous output states with the goal of trying to visualize in a human interpretable way the information added by the current layer relative to the previous one.
+Output nodes' tooltips also include the \emph{decoded difference from the previous layer}, obtained between the current and previous output states with the goal of trying to visualize in a human interpretable way the information added by the current layer relative to the previous one.
 
 On the other hand, edges represent the amount of relevance carried by the residual stream, showing how components accumulate or disperse this flow as they process information scattered across the model.
 The flow originates from the topmost layer of nodes, equally split between them, and is recursively computed considering the contributions of each encountered node in a way that no amount of flow is ever lost between layers.
 If the user inspects a specific cell in the heatmap by clicking on it, the Sankey diagram adapts by recalculating the flow considering the clicked node as the sole topmost node, consequently accounting for $100\%$ of the flow.
-Nodes are subdivided into three color-coded categories for convenience: intermediate and output nodes in blue, attention nodes in green and feedforward nodes in pink.
-Moreover, flows exiting from each node inherit the color of their originating node and are given a further shading factor that is proportional to the KL divergence between the decoded hidden state distributions of the nodes that they connect.
+Nodes are subdivided into three color-coded categories for convenience: \emph{intermediate and output nodes} in blue, \emph{attention nodes} in green and \emph{feedforward nodes} in pink.
+Moreover, flows exiting from each node inherit the color of their originating node and are given a further shading factor that is proportional to the \emph{Kullback-Leibler divergence} between the decoded hidden state distributions of the nodes that they connect.
 This allows users to appreciate in an immediate way states that exhibit rapid changes in distribution, thus providing a better localization for possible zones of interest.
 
 \subsection{Injection Interface}
 
-InTraVisTo is designed as an interactive tool, and embedding injection is another feature to enhance understanding of the of Transformers internals.
+InTraVisTo is designed as an interactive tool, and \emph{embedding injection} is another feature to enhance understanding of the of Transformers internals.
 Injections substitute hidden states with custom embedding representations, forcing the model to adjust its behavior based on the injected information.
 They are performed by clicking on a cell in the heatmap; this action opens a pop-up menu prompting the user for a string of text with the purpose of being encoded into an embedding representation and injected inside the selected hidden state, the injection technique specifying how the new embedding is integrated into the preexisting state, the position of the injection inside the selected layer, the decoding technique used to interpret the aforementioned string of text, and for the option to normalize the injected embedding.
-
 Once a valid injection is compiled and added, a small card summarizing the injection appears at the top of the interface.
-When the heatmap presents the result of a generation process that included an injection, the corresponding cell location is highlighted in \emph{green}.
-Injections can be removed at any time from the generation process by pressing the appropriate `X' button on their card.
 
 Injections can also be performed in the Sankey diagram by clicking on any visible node, triggering the same pop-up menu described above.
-If the chosen node corresponds to a feed-forward or an attention node, there is an additional option that allows the user to remove the node, performing an ablation.
+If the chosen node corresponds to a feed-forward or an attention node, there is an additional option that allows the user to remove the node, performing an \emph{ablation}.
 Ablations are processed similarly to injections and remove the selected node by nullifying its contribution to the residual, so its hidden state is still decoded and visible from the heatmap but does not influence the rest of the model.
-As for injections, ablations are highlighted in \emph{red} within the heatmap.
 
 %-----------------------------------------------------------------------------
 % EXPERIMENTS
@@ -316,7 +312,8 @@ Additionally, inspired by the decoding approach introduced for InTraVisTo, we al
 We run these experiments utilizing GPT-2, Mistral 7B v0.3, Llama 2 7B, Llama 3 8B, Phi 3.5 mini instruct, Gemma 2 2B, GloVe, word2vec and BERT large uncased.
 The dataset includes both the original Google analogy dataset~\cite{mikolov2013} and the Bigger Analogy Test Set (BATS)~\cite{drozd2016}, used either in complete form or by filtering out analogies that cannot be encoded using single tokens from the models' vocabularies.
 
-\begin{figure}[h!]
+\begin{figure}[tbh!]
+    \vspace{-10pt}
     \centering
     \subfloat[\label{fig:exp_emb_1_A1}]{%
         \includegraphics[width=0.22\textwidth]{exp_emb_1A_topk_l2-m-l3.pdf}%
@@ -324,7 +321,7 @@ The dataset includes both the original Google analogy dataset~\cite{mikolov2013}
     \subfloat[\label{fig:exp_emb_1_A2}]{%
         \includegraphics[width=0.22\textwidth]{exp_emb_1A_topk_g2-p3-b.pdf}%
     }%
-    \quad
+    \quad%
     \subfloat[\label{fig:exp_emb_1_A3}]{%
         \includegraphics[width=0.22\textwidth]{exp_emb_1A_topk_w2v-gv.pdf}%
     }%
@@ -333,9 +330,10 @@ The dataset includes both the original Google analogy dataset~\cite{mikolov2013}
     }%
     \caption{Top-$k$ accuracy on the word analogies task for various models.}
     \label{fig:exp_emb_1_A}
+    \vspace{-10pt}
 \end{figure}
 
-From the obtained results we can affirm that LLMs are able to retain a surprising amount of semantic relationships inside their embeddings, despite the fact that sub-word tokenization actively works against the accumulation of meaning for token representations.
+From the obtained results we can affirm that LLMs are able to retain a surprising amount of semantic relationships inside their embeddings, despite the fact that \emph{sub-word tokenization} actively works against the accumulation of meaning for token representations.
 Their performance on the selected tasks is comparable, if not greater than less recent models used as baselines, as shown in~\cref{fig:exp_emb_1_A1,fig:exp_emb_1_A2,fig:exp_emb_1_A3}.
 However, from~\cref{fig:exp_emb_1_A1,fig:exp_emb_1_A2}, we can observe that very large, recent models such as Llama 3 and Gemma may be trending towards a direction of semantic impoverishment of the embedding space, whereas slightly older LLMs like Llama 2 and Mistral, as well as models designed for compactness and portability, such as Phi 3.5, still preserve many of the original embedding space properties.
 
@@ -343,27 +341,45 @@ From~\cref{fig:exp_emb_1_A4}, we can conclude that input embeddings are generall
 
 \subsection{First Order Prediction}
 
-A First Order Model (FOM) is derived by removing all intermediate architectural components from an LLM, retaining only the input and output embedding layers along with the residual connections joining them.
-This transformation can be seen as the creation of a Markov model whose transition matrix is given by the product of the input and output embedding matrices.
-Although past work has theorized that FOMs should represent Markov models~\cite{elhage2021}, in this experiment, we investigate if FOMs derived from different LLM exhibit varying degrees of Markovian behavior, while also considering the possibility of FOM transition matrices approximating identity matrices, effectively modeling weight tying.
+A \emph{First Order Model (FOM)} is derived by removing all intermediate architectural components from an LLM, retaining only the input and output embedding layers along with the residual connections joining them.
+This transformation can be seen as the creation of a \emph{Markov model} whose transition matrix is given by the product of the input and output embedding matrices.
+Although past work has theorized that FOMs represent Markov models on a small scale~\cite{elhage2021}, in this experiment, we investigate if FOMs derived from actual LLMs exhibit varying degrees of Markovian behavior, while also considering the possibility of FOM transition matrices approximating identity matrices, effectively modeling \emph{weight tying}.
 
-We introduce various approaches to explore the main inquiry: we start by performing a naïve direct comparison between transition matrices, followed by the use of set similarity metrics (such as top-$k$ accuracy, Jaccard similarity and overlap coefficient) to obtain more reliable estimates, and ending with the computation of probabilistic metrics such as perplexity and the Kullback-Leibler divergence (KL divergence).
-Following on the normalization intuition that proved effective for InTraVisTo, we also explore an alternative (FOM with RMS) that incorporates a single RMS normalization step between the standard FOM embeddings.
+We introduce various approaches to explore the main inquiry: we start by performing a \emph{naïve direct comparison} between transition matrices, followed by the use of \emph{set similarity metrics} (such as top-$k$ accuracy, Jaccard similarity and overlap coefficient) to obtain more reliable estimates, and ending with the computation of \emph{probabilistic metrics} such as perplexity and the Kullback-Leibler divergence (KL divergence).
+Following on the normalization intuition that proved effective for InTraVisTo, we also explore an alternative (FOM with RMS) that incorporates a single \emph{RMS normalization} step between the standard FOM embeddings.
 
 We run these experiments utilizing Mistral 7B v0.3, Llama 2 7B, and Phi 3.5 mini instruct.
 We use WikiText 103 as both the training dataset for Markov models and the test set for perplexity experiments, while also employing OpenWebText as an additional test set for perplexity.
 
-\begin{figure}[h!]
+\begin{figure}[tbh!]
     \centering
     \includegraphics[width=0.25\textwidth]{exp_fom_1B_l2-opmetrics.pdf}
     \caption[Overlap coefficient and Jaccard index for Llama 2.]{Overlap coefficient and Jaccard index between FOM, Markov model and random baseline for Llama 2.}
     \label{fig:exp_fom_1_B1}
+    \vspace{-10pt}
+\end{figure}
+
+\begin{figure}[tbh!]
+    \vspace{-10pt}
+    \centering
+    \subfloat[\label{fig:summary_self}]{%
+        \includegraphics[width=0.24\textwidth]{Summary_topk_self.pdf}%
+    }%
+    \subfloat[\label{fig:summary_markov}]{%
+        \includegraphics[width=0.24\textwidth]{Summary_topk_markov.pdf}%
+    }%
+    \caption{Top-$k$ accuracy of FOM against identity matrix and Markov predictions for various models.}
+    \label{fig:summary_topk}
 \end{figure}
 
 From the experimental results, the feasibility of using a FOM as a Markov model approximation appears promising, although it may vary depending on the specific choice of LLM, as some models seem to be more inclined than others.
-As we can observe from~\cref{fig:exp_fom_1_B1}, the set similarity metrics for the Llama 2 FOM suggest a certain affinity to the corresponding Markov model.
+As we can observe from~\cref{fig:exp_fom_1_B1,table:exp_fom_llama-kl,fig:summary_markov}, the set similarity metrics for the Llama 2 FOM suggest a significant affinity to the corresponding Markov model.
 
-\begin{table}[h!]
+\Cref{table:exp_fom_llama-kl,table:exp_fom_mistral-kl} highlight how every analyzed FOM seems to exhibit a slight bias towards trying to approximate an actual bigram Markov model rather than the identity matrix as shown in.
+This is true even for FOMs based on models like Mistral, which, as seen in~\cref{fig:summary_self}, might show a slight preference towards modeling the identity matrix.
+From~\Cref{table:exp_fom_llama-kl,table:exp_fom_mistral-kl} we can also see the unsuccessful application of RMS normalization, showing that the performance of FOM models with RMS falls below to that of their standard counterparts across the majority of tasks.
+
+\begin{table}[tbh!]
     \centering
     \resizebox{0.8\columnwidth}{!}{%
     \begin{tabular}{| >{\columncolor{bluepoli!40}}c || c c c c |}
@@ -380,9 +396,10 @@ As we can observe from~\cref{fig:exp_fom_1_B1}, the set similarity metrics for t
     }
     \caption{Mean KL divergence for Llama 2.}
     \label{table:exp_fom_llama-kl}
+    \vspace{-10pt}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[tbh!]
     \centering
     \resizebox{0.8\columnwidth}{!}{%
     \begin{tabular}{| >{\columncolor{bluepoli!40}}c || c c c c |}
@@ -399,22 +416,19 @@ As we can observe from~\cref{fig:exp_fom_1_B1}, the set similarity metrics for t
     }
     \caption{Mean KL divergence for Mistral.}
     \label{table:exp_fom_mistral-kl}
+    \vspace{-5pt}
 \end{table}
-
-Nevertheless, every analyzed FOM seems to exhibit a slight bias towards trying to approximate an actual bigram Markov model rather than the identity matrix.
-This appears to be true even for FOMs based on models such as Mistral, which despite showing a slight tendency to as it is possible to observe by comparing \cref{table:exp_fom_llama-kl} and~\cref{table:exp_fom_mistral-kl}.
-Another aspect that can be deducted from \cref{table:exp_fom_llama-kl,table:exp_fom_mistral-kl} is the unsuccessful application of the RMS normalization, as it exemplifies how the performance of FOM models with RMS falls below to that of their standard counterparts across the majority of tasks.
 
 %-----------------------------------------------------------------------------
 % CONCLUSION
 %-----------------------------------------------------------------------------
 \section{Conclusions}\label{sec:conclusions}
 
-We explored aspects of Transformer interpretability, focusing on the creation of a specialized tool to visualize internal states of Transformer-based language models: \textbf{InTraVisTo}.
+We explored aspects of Transformer interpretability, focusing on the creation of a specialized tool to visualize internal states of Transformer-based language models: \emph{InTraVisTo}.
 Its development raised a series of additional research questions that required separate investigation in order to address issues and validate methodologies for the final application.
 
-We examined the behavior of embeddings in autoregressive LLMs to understand whether these recent model retain linear properties in their embedding spaces, revealing that, while these properties are still present in LLMs to some extent, their prominence varies across different architectures and model sizes, influenced by the tokenization process and overall training objectives.
-We also addressed the possibility of obtaining first-order predictions by concatenating input and output embedding spaces of LLMs, discovering that the First Order Models (FOMs) from most LLMs are generally faithful approximations of the corresponding Markov models and exhibit a solid bias toward next-token prediction, although similarity to the Markov model varies greatly across model architectures and weights.
+We examined the behavior of \emph{embeddings} in autoregressive LLMs to understand whether these recent model retain linear properties in their embedding spaces, revealing that, while these properties are still present in LLMs to some extent, their prominence varies across different architectures and model sizes, influenced by the tokenization process and overall training objectives.
+We also addressed the possibility of obtaining \emph{first-order predictions} by concatenating input and output embedding spaces of LLMs, discovering that the First Order Models (FOMs) from most LLMs are generally faithful approximations of the corresponding Markov models and exhibit a solid bias toward next-token prediction, although similarity to the Markov model varies greatly across model architectures and weights.
 
 Future work could extend InTraVisTo by adding support for new decoding techniques, model architectures, and injection approaches, possibly expanding upon the concept of embedding interpolation.
 We also acknowledge the possibility of using a Markov model to initialize the embedding and unembedding weights pair for model training.
