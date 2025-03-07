@@ -219,7 +219,7 @@ It is possible to identify three main components: the \textbf{decoding interface
 
 Decoding the meaning of hidden state vectors at various depths of a Transformer stack is essential for providing an intuition as to how the model is working.
 InTraVisTo allows decoding and inspection of the \emph{main four vectors} that compose each layer, while offering a human-interpretable representation of each hidden state by performing a decoding operation.
-The four vectors correspond respectively to the output of the attention component, the intermediate state given by the addition of the attention component to the residual stream, the output of the feedforward network component, and the layer output.
+The four vectors correspond respectively to the output of the attention component, the intermediate state given by the addition of the attention component to the residual stream, the output of the feed-forward network component, and the layer output.
 On the other hand, the decoding operation is carried out using a specialized decoder which, given a hidden state as input, finds related tokens from the model's vocabulary with the goal of returning an interpretable output as formalized in~\cref{eq:method_intravisto_decoding}.
 
 \vspace{-12pt}
@@ -276,7 +276,7 @@ Output nodes' tooltips also include the \emph{decoded difference from the previo
 On the other hand, edges represent the amount of relevance carried by the residual stream, showing how components accumulate or disperse this flow as they process information scattered across the model.
 The flow originates from the topmost layer of nodes, equally split between them, and is recursively computed considering the contributions of each encountered node in a way that no amount of flow is ever lost between layers.
 If the user inspects a specific cell in the heatmap by clicking on it, the Sankey diagram adapts by recalculating the flow considering the clicked node as the sole topmost node, consequently accounting for $100\%$ of the flow.
-Nodes are subdivided into three color-coded categories for convenience: \emph{intermediate and output nodes} in blue, \emph{attention nodes} in green and \emph{feedforward nodes} in pink.
+Nodes are subdivided into three color-coded categories for convenience: \emph{intermediate and output nodes} in blue, \emph{attention nodes} in green and \emph{feed-forward nodes} in pink.
 Moreover, flows exiting from each node inherit the color of their originating node and are given a further shading factor that is proportional to the \emph{Kullback-Leibler divergence} between the decoded hidden state distributions of the nodes that they connect.
 This allows users to appreciate in an immediate way states that exhibit rapid changes in distribution, thus providing a better localization for possible zones of interest.
 

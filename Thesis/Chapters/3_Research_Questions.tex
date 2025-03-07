@@ -1,4 +1,4 @@
-In this section, we delineate the specific research questions regarding Transformer interpretability that will be addressed in the present work.
+In this section, we delineate the specific research questions regarding Transformer interpretability that the present work addresses.
 The purpose of these research questions is to provide a comprehensive informative analysis on the hidden representations and embedding space of recent Transformer-based models.
 The novelty of this work does not necessarily lie in the chosen approach itself, but resides in the integration of several established techniques to offer fresh perspectives and interpretability tools, ultimately aimed at confirming and possibly expanding upon previous findings.
 
@@ -27,6 +27,6 @@ Given recent advances in Transformer training and architecture, we aim to assess
 
 Following the investigation on the differences between input and output embedding weights in language models, the third research question explores the feasibility of obtaining first-order predictions by concatenating the two embedding spaces in LLMs.
 A first-order prediction can be understood as an estimate of the next token based solely on the previous one, similar to the predictive process of a first-order Markov model, which employs a probability conditioned on the previous token to determine the most likely next token.
-As observed by~\citet{elhage2021}, indeed concatenating the input and output embeddings of a language model should theoretically yield the equivalent of a first-order Markov model; however, is that always the case?
-We test this hypothesis on new state-of-the-art models and provide novel insights into the role of different embedding spaces in recent LLMs.
+As observed by~\citet{elhage2021}, indeed concatenating input and output embeddings of a language model should theoretically yield the equivalent of a first-order Markov model; however, is that always the case?
+We test this hypothesis on new state-of-the-art models and offer novel insights into the role of different embedding spaces in recent LLMs.
 Moreover, this series of experiments should hopefully offer further insights into the practice of \emph{weight tying}~\cite{inan2017,press2017} applied to the embedding layers of language models.

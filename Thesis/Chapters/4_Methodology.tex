@@ -1,21 +1,21 @@
-In this section we will explore the theoretical fundaments of our experiments.
-To do so, we are going to subdivide our analysis into three main sections, where each one is paired with one of the previously identified research questions.
+In this section we explore the theoretical fundaments of the experiments presented in this work.
+To do so, we are going to subdivide our analysis into three main sections, where each one is paired with one of the previously identified research questions (\cref{ch:research_questions}).
 
 \section{Transformer Visualization}\label{sec:method_intravisto}
 
-The first section is dedicated to the exploration of the main features pertaining the proposed interactive tool for the exploration of autoregressive Transformer architectures, \emph{InTraVisTo} (Inside Transformer Visualization Tool).
+The first section is dedicated to the exploration of the main features pertaining the proposed interactive tool for the exploration of autoregressive Transformer architectures, \emph{InTraVisTo (Inside Transformer Visualization Tool)}.
 
 \emph{InTraVisTo} is an open-source visualization tool depicting the internal computations performed within a Transformer.
 The tool provides visualizations of both the internal state of the LLM, using a heatmap of decoded embedding vectors for all layer/token positions, and the information flow between components of the LLM, using a Sankey diagram to depict paths through which information accumulates to produce next-token predictions.
 
 \subsection{Decoding Internal States}\label{ssec:method_intravisto_decoding}
 
-In this context, with the expression \emph{decoding process} we refer to the \emph{vocabulary decoding} process, which consists in the conversion of Transformers hidden states, represented by vectors in a high-dimensional space, into human-readable content.
+In this context, with the expression \emph{decoding process} we refer to the \emph{vocabulary decoding process}, which constitutes the conversion of Transformers hidden states, represented by vectors in a high-dimensional space, into human-readable content.
 InTraVisTo enables the decoding and inspection of the main four vectors produced by each layer $\ell$ of a Transformer:
 \begin{itemize}
     \item $\gbm{\delta}_\textit{att}^{(\ell)}$ represents the output of the attention component, which operates through~\cref{eq:background_masked-attention,eq:background_multihead-attention}.
     \item ${\gbm{x}'}^{(\ell)}$ is the \emph{intermediate state}, given by the addition of $\gbm{\delta}_\textit{att}^{(\ell)}$ to the residual stream.
-    \item $\gbm{\delta}_\textit{ff}^{(\ell)}$ represents the output of the feedforward network component, obtained by computing~\cref{eq:background_ffnn}.
+    \item $\gbm{\delta}_\textit{ff}^{(\ell)}$ represents the output of the feed-forward network component, obtained by computing~\cref{eq:background_ffnn}.
     \item $\gbm{x}^{(\ell)}$ is the \emph{layer output}, which can be seen as the residual stream with the contributions of both $\gbm{\delta}_\textit{ff}^{(\ell)}$ and $\gbm{\delta}_\textit{att}^{(\ell)}$.
 \end{itemize}
 
@@ -42,7 +42,7 @@ Where $\gbm{W}_{d_\textit{dec}}$ represents the matrix of decoder weights accord
     \end{array}
     \right.
 \end{equation}
-Considering $\mathcal{N}{(\gbm{x})}$ the normalization component of the model's final normalization layer, being reliant on $\mu$ and $\sigma$ for LayerNorm implementations as defined in~\cref{eq:background_layernorm,eq:background_layernorm_extra}, and $RMS(\gbm{x})$ for RMSNorm implementations as defined in~\cref{eq:background_rmsnorm}
+Considering $\mathcal{N}{(\gbm{x})}$ the normalization component of the model's final normalization layer, being reliant on $\mu$ and $\sigma$ for \emph{LayerNorm} implementations as defined in~\cref{eq:background_layernorm,eq:background_layernorm_extra}, and $RMS(\gbm{x})$ for \emph{RMSNorm} implementations as defined in~\cref{eq:background_rmsnorm}
 
 Two natural choices for decoders are the transpose of the \emph{input embedding matrix} $\gbm{W}_\textit{in}^\T$ which the model uses to convert tokens into vectors at the input stage, and the \emph{output unembeddig matrix} $\gbm{W}_\textit{out}$, which is used within the language modeling head to generate token outputs from internal vectors.
 Some models, like GPT-2~\cite{radford2019} and Gemma~\cite{mesnard2024,rivi2024}, tie these two parameter matrices together during training, while other popular models such as Mistral~\cite{jiang2023} and Llama~\cite{touvron2023,dubey2024} allow them to differ.
@@ -67,7 +67,7 @@ In addition, it is important to note that the term ``quadratic interpolation'' c
     
 As previously illustrated, each hidden representation is decoded by first applying a normalization operation, then multiplying the result by the chosen decoding matrix, and finally applying a softmax function to the resulting logits to obtain a probability distribution over the model's vocabulary.
 At this point, we utilize the model's \emph{sampling policy} in order to extract the predicted vocabulary token ID from the computed distribution.
-We assume the policy to always be \emph{greedy decoding}, both as a simplifying factor and to reflect the default settings for causal models provided by Hugging Face's Transformers library~\cite{wolf2020}.
+We assume the policy to always be \emph{greedy decoding}, both as a simplifying factor and to reflect the default settings for causal models provided by the Hugging Face Transformers library~\cite{wolf2020}.
 
 Nevertheless, our interest in decoding the model's hypothetical intermediate predictions extends beyond to the first token, as hidden representations usually retain important additional information that cannot be fully condensed into a single vocabulary token~\cite{elhage2022,henighan2023,elhage2023}.
 To extract this leftover information, we propose two main approaches that transform it into \emph{secondary tokens}.
@@ -79,7 +79,7 @@ The principal downside of this approach comes from the fact that the secondary t
 This likely occurs because a substantial portion of the hidden representation is allocated to represent the primary token, often biasing the embedding vector in favor of tokens that are semantically similar~\cite{elhage2022}.
 
 To alleviate this issue, we propose a novel method for extracting secondary representations from a hidden representation: \emph{iterative decoding}.
-The rationale behind this approach is that hidden representations capture an overlap of concepts within an embedding space that is loosely related to both the input and output embedding spaces.
+The rationale behind this approach is that hidden representations capture an \emph{overlap} of concepts within an embedding space that is loosely related to both the input and output embedding spaces.
 As a consequence, we postulate that hidden representations existing in these intermediate embedding spaces retain the linear properties that have been ascertained to exist in the input and output embedding spaces of Transformer architectures~\cite{mikolov2013,park2023}.
 Iterative decoding leverages these linear properties by performing a sequence of subtractions from the main hidden representation, removing the embedding corresponding to the representation of the most probable token during each iteration.
 
@@ -126,9 +126,9 @@ Entropy for an embedding $\gbm{x}$ is computed in the following way:
 \end{equation}
 Where $P_{\gbm{x}} = P(\ \cdot \mid \gbm{x}, d_\textit{dec}, n_\textit{norm})$ as computed in~\cref{eq:method_intravisto_decoding}.
 
-Other showcased metrics are the \emph{attention contribution} and \emph{feedforward contribution}, which measure respectively how much the output of the attention block, or feed forward, contributes in its summation with the residual stream of a Transformer block.
+Other showcased metrics are the \emph{attention contribution} and \emph{feed-forward contribution}, which measure respectively how much the output of the attention block, or feed forward, contributes in its summation with the residual stream of a Transformer block.
 The purpose of these metrics is to highlight where the main information of that block is coming from, whether from the attention or feed forward components.
-We devised two main approaches to weigh the contribution of each component to the residual stream: one uses the \emph{norms} of hidden state vectors to compare the magnitude of their contribution, while the other uses the \emph{KL divergence} to compare the probability distribution similarity of the two hidden states against the final one.
+We devised two main approaches to weigh the contribution of each component to the residual stream: one uses the \emph{norms} of hidden state vectors to compare the magnitude of their contribution, while the other uses the \emph{Kullback-Leibler (KL) divergence} to compare the probability distribution similarity of the two hidden states against the final one.
 In practice, we compute:
 \begin{equation}
     \left\{
@@ -146,17 +146,18 @@ In practice, we compute:
     \end{aligned}
     \right.
 \end{equation}
-Where $D_{\text{KL}}$ is the Kullback-Leibler divergence between two distributions, and the notation of hidden states (such as $\gbm{x}^{(\ell)}$, $\gbm{\delta}_\textit{att}^{(\ell)}$, \ldots) references the distinctions made at~\cref{ssec:method_intravisto_decoding}.
-It is possible to note that the contributions computed through norms and KL divergence feature opposite terms at the fractional numerator, this is due to their inverse relationship as the KL divergence measures the \emph{dissimilarity} between probability distributions, while the norm can be directly translated into the positive contribution of a hidden state. 
+Where $D_{\text{KL}}$ is the KL divergence between two distributions, and the notation of hidden states (such as $\gbm{x}^{(\ell)}$, $\gbm{\delta}_\textit{att}^{(\ell)}$, \ldots) references the distinctions made at~\cref{ssec:method_intravisto_decoding}.
+It is possible to note that the contributions computed through norms and KL divergence feature opposite terms at the fractional numerator.
+This is due to their inverse relationship, as the KL divergence measures the \emph{dissimilarity} between probability distributions, while the norm can be directly translated into the positive contribution of a hidden state. 
 
 \subsection{Flow}\label{ssec:method_intravisto_flow}
 
 The second visualization introduced in InTraVisTo is a \emph{Sankey diagram} designed to depict the information flow through the Transformer network.
 In this diagram, edges indicate the amount of influence that the nodes have on each other and illustrate how information accumulates from the bottom to the top of the diagram, ultimately generating the final prediction.
-The flow snakes its way through self-attention nodes, which combine information from attended tokens in the preceding level, feed-forward networks nodes, which introduce information based on patterns detected in the state vector, and aggregation nodes, where updates from the other two types of nodes are added to the residual vector.
+The flow snakes its way through \emph{self-attention nodes}, which combine information from attended tokens in the preceding level, \emph{feed-forward networks nodes}, which introduce information based on patterns detected in the state vector, and \emph{aggregation nodes}, where updates from the other two types of nodes are added to the residual vector.
 The proposed Sankey diagram technically qualifies as an \emph{Alluvial diagram} due to the fact that nodes are grouped into discrete steps (in this case, corresponding to layers), providing intermediate subdivisions of the flow mass and drawing attention to changes in flow composition across the model's layers.
 
-In order to calculate the information flow, an attribution algorithm works backwards from the top layers of the network, recursively apportioning the incident flow from the components below based on their relative contributions to the internal state vector above using~\cref{eq:method_intravisto_norm-contrib,eq:method_intravisto_kl-contrib}.
+In order to calculate the information flow, we designed an attribution algorithm working backwards from the top layers of the network, recursively apportioning the incident flow from the components below based on their relative contributions to the internal state vector above using~\cref{eq:method_intravisto_norm-contrib,eq:method_intravisto_kl-contrib}.
 The flow's constantly updating state can be defined in a way that reflects the recursive computations performed by InTraVisTo:
 \begin{equation}
     \label{eq:method_intravisto_flows}
@@ -174,8 +175,8 @@ Where $\overline{\textit{attend}{\,}}^{(\ell,i)}$ denotes the average attention 
 This quantity is used to compute all outgoing contributions of a token $j$ to subsequent self-attention nodes, thus it is computed considering tokens between $j$ and $k$ as the attention sources, where $k$ denotes the index of the last token in the generated sentence.
 
 Another type of information depicted in the Sankey diagram involves the computation of differences between residual representations, with the aim of visualizing the evolution of the flow throughout the model's layers.
-To achieve this objective, we devised and implemented two primary approaches to explore this visualization aspect.
-The first approach consists of computing the KL divergence between the probability distributions of hidden states for each combination of component outputs and the residual stream state.
+To explore this visualization aspect, we devised and implemented two approaches.
+The first approach consists of computing the KL divergence between probability distributions of hidden states, for each combination of component outputs and the residual stream state.
 In practice, we compute the following quantity for five different state combinations:
 \begin{equation}
     \label{eq:method_intravisto_kl-diff}
@@ -198,13 +199,13 @@ This is showcased in the following computation:
     \label{eq:method_intravisto_state-diff}
     {\textit{state\_diff}{\,}\strut}^{(\ell)} = P(\ \cdot \mid \gbm{x}^{(\ell)} - \gbm{x}^{(\ell - 1)}, d_\textit{dec}, n_\textit{norm})
 \end{equation}
-It is possible to notice how this last approach could suffer from the same weaknesses that have been identified in iterative decoding as shown in~\cref{alg:method_intravisto_iter-dec}, due to the presence of an operation (difference) which assumes that its operands exist in a shared embedding space with linear properties.
+It is possible to notice how this last approach could suffer from the same weaknesses that have been identified in iterative decoding, as shown in~\cref{alg:method_intravisto_iter-dec}, due to the presence of an operation (difference) which assumes that its operands exist in a shared embedding space with linear properties.
 Although this is true, the minimal distance between the hidden states used to compute the difference makes the presented issue have negligible impact on the actual decoding result.
 
 \subsection{Injection}\label{ssec:method_intravisto_injection}
 
 Lastly, we also include the possibility to perform \emph{injections} in InTraVisTo.
-\emph{Injections} are an instance of \emph{activation patching}~\cite{olsson2022,meng2022,hanna2023,conmy2023,wang2023,mohebbi2023,zhang2024} utilized in a context that is not strictly tied to a formal \emph{causal intervention} framework~\cite{geiger2021,mcgrath2023}.
+\emph{Injections} can be considered an instance of \emph{activation patching}~\cite{olsson2022,meng2022,hanna2023,conmy2023,wang2023,mohebbi2023,zhang2024} utilized in a context that is not strictly tied to a formal \emph{causal intervention} framework~\cite{geiger2021,mcgrath2023}.
 In fact, the main purpose of injections is to give the user the possibility to explore the model predictions in an interactive way, making it possible to change outputs of components and parts of the residual stream in order to unveil interesting patterns and properties.
 
 Being a type of intervention, it is possible to express an injection utilizing the \emph{do-operator} as defined by~\citet{pearl2009}.
@@ -236,7 +237,7 @@ We refer to this approach as \emph{main component replacement injection}, and we
 \end{equation}
 In this case, referencing~\cref{eq:method_intravisto_inj_complete}, $\gbm{h}$ corresponds to the target hidden state $f_c^{(\ell)}(\gbm{x}_i)$, which is modified into $\gbm{h'}$ by $\gbm{\hat x}$.
 
-Another noteworthy step in the injection process is the actual encoding of the injected embedding, since the formula used to compute $\gbm{\hat x}$ that has been broadly mentioned in~\cref{eq:method_intravisto_inj_complete,eq:method_intravisto_inj_main} is used considering an injection input that is composed by a single token.
+Another noteworthy step in the injection process is the actual encoding of the injected embedding, since the formula used to compute $\gbm{\hat x}$ that has been broadly mentioned in~\cref{eq:method_intravisto_inj_complete,eq:method_intravisto_inj_main} is used considering an injection input that is composed of a single token.
 However, InTraVisTo's interface offers the possibility of injecting an embedding representation that contains more than one token, thus we would like to generalize the aforementioned formula to actually handle multiple tokens at once.
 This behavior is modeled by averaging the embedding representations of all tokens that compose the sentence, always under the assumption of a linear embedding space~\cite{mikolov2013,park2023}.
 Considering a total of $id_1,\ldots,id_t$ tokens to be encoded, this averaging operation can be represented in the following way:
@@ -256,11 +257,11 @@ However, with the emergence of newer models that are larger and more intricate t
 \subsection{Word Encoding}
 
 The first step for performing experiments on embedding representations, is defining a set of operations that make the encoding and comparison of embedding vectors possible.
-In the following section we will illustrate the theoretical basis of the preliminary steps that were used to set up the actual experiments.
+In the following section we illustrate the theoretical basis of the preliminary steps that were used to set up the actual experiments.
 
 \subsubsection{Distance Metrics}
 
-In order to compare and find \emph{close} embeddings, we need to formalize a similarity measure between two embeddings. 
+In order to perform comparisons and find embeddings that are close to one another, we need to formalize a \emph{similarity measure} between two embeddings. 
 To this end, we define two main distance metrics that will be used to compare embedding vectors in their space:
 \begin{equation}
     d_{\textit{dist}}(\gbm{x}, \gbm{y}) = 
@@ -291,13 +292,13 @@ In practice, the ``pre-normalization'' step includes the normalization of all em
 \subsubsection{Multi-token Words}
 
 Handling multi-token words is a vital aspect of our analysis, as we may encounter words that are split into multiple sub-word tokens by the model's tokenization process.
-As we will see later in~\cref{ssec:method_embeddings_analogies}, our main experiments for this section will concern the evaluation of analogies and similarities between word groups.
+As we later see in~\cref{ssec:method_embeddings_analogies}, our main experiments for this section concern the evaluation of analogies and similarities between word groups.
 As anticipated in~\cref{ssec:method_intravisto_injection}, the main choice of computing multi-token falls towards the usage of linear operations from the supposed preservation of linear features in the embedding space~\cite{mikolov2013,park2023}.
 Therefore, we devised three main strategies to address multi-token words when they are fed into the embedding as inputs of analogies, along with two additional strategies to handle them as valid outputs of analogies.
 
-Strategies applicable to both cases involve considering only the first token of a multi-token word (this causes results to be slightly worse on average, but the impact seems to be negligible in most cases).
-For multi-token words as inputs, other approaches include calculating the average as already done in~\cref{eq:method_intravisto_emb-avg} or the sum over all the embedded tokens that form the multi-token word.
-Conversely, for output multi-token words, we subdivide them into their token components, to then consider all tokens as targets for assessing the top-$k$ accuracy of an analogy result in the embedding space.
+Strategies applicable to both cases involve considering only the \emph{first token} of a multi-token word (this causes results to be slightly worse on average, but the impact seems to be negligible in most cases).
+For multi-token words as inputs, other approaches include calculating the \emph{average} as already done in~\cref{eq:method_intravisto_emb-avg} or the \emph{sum} over all the embedded tokens that form the multi-token word.
+Conversely, for output multi-token words, we subdivide them into their token components, to then consider \emph{all tokens} as targets for assessing the top-$k$ accuracy of an analogy result in the embedding space.
 Formalizing the previously identified alternatives we obtain two $\textit{encode}$ functions controlled by $\textit{enc\_strat}$ for a series of $t$ tokens obtained from a word $w$:
 \begin{equation}
     \label{eq:method_embeddings_multitok-in}
@@ -443,7 +444,7 @@ Given words $w_i$ and $w_j$, the bigram probability can be expressed as:
     P(w_j|w_i) = P_{ij} = \frac{P(w_i, w_j)}{P(w_i)}
 \end{equation}
 
-The state-based stochastic transitions of a Markov model can be entirely described with a transition matrix $\gbm{Q} \in \mathbb {R}_{+}^{|S| \times |S|}$ given the state space $S$.
+The state-based stochastic transitions of a Markov model can be entirely described with a \emph{transition matrix} $\gbm{Q} \in \mathbb {R}_{+}^{|S| \times |S|}$ given the state space $S$.
 The transition matrix is defined as:
 \begin{equation*}
     \gbm{Q} = \left(P_{ij}\right)_{i,j} \;\; \forall i,j \in 1,\dots,|S|
@@ -465,7 +466,7 @@ This operation is necessary because the direct product between embedding matrice
 However, not all experiments require the computation of the actual transition matrix $\gbm{Q}_{\textit{FOM}}$; experiments involving top-$k$ aggregations and other greedy approximations of next-token predictions can also be performed using $\gbm{Q}_{\textit{FOM}}^{log}$, as the ordering of elements is not altered by the softmax operator.
 To avoid confusion, this distinction is applied only to practical experiments described in~\cref{sec:exp_fom}, whereas the theoretical groundwork presented in this section considers only the probability matrix $\gbm{Q}_{\textit{FOM}}$ as the FOM transition matrix.
 
-As explained in detail in~\cref{sec:exp_fom,sssec:exp_fom_exp1_expset}, we also define a FOM transition matrix with the addition of RMSNorm (hereafter simply referred to as RMS normalization).
+As explained in detail in~\cref{sec:exp_fom,sssec:exp_fom_exp1_expset}, we also define a FOM transition matrix with the addition of \emph{RMSNorm} (hereafter simply referred to as RMS normalization).
 RMS is a normalization technique defined in~\cref{eq:background_rmsnorm} and is commonly employed in multiple locations within recent Transformer architectures, as highlighted in~\cref{ssec:background_transf_current}.
 In our approach, we split the RMS computation between the input and output embedding matrices by performing the actual normalization portion of the computation on the input and the applying the weight product on the output.
 \begin{equation}
@@ -487,7 +488,7 @@ In particular, $\gbm{w}_i^{in}$ refers to row vectors extracted from $\gbm{W}_{i
 Additionally, the multiplicative weights $\gbm{\gamma}$ associated with RMS normalization in~\cref{eq:method_fom_fom-matrix-rms} correspond to the weights of the RMSNorm layer positioned at the end of the stack of Transformer layers, just before the unembedding layer in recent decoder architecture, as seen in~\cref{fig:background_llama-arch}.
 
 At this point, the newly defined matrix can be compared against other known transition matrices in order to quantify their resemblance.
-Our metric of choice for direct matrix comparison is the Frobenius norm, which offers a relatively straightforward way to estimate how two matrices differ from each other.
+Our metric of choice for direct matrix comparison is the \emph{Frobenius norm}, which offers a relatively straightforward way to estimate how two matrices differ from each other.
 Due to its inherent simplicity, the Frobenius norm may be regarded as a naïve option for evaluating matrix distance when considering transition matrices.
 Indeed, the results presented in~\cref{sssec:exp_fom_exp1_results} indicate that the Frobenius norm is an unreliable comparison metric relative to other measures, although it is still capable of providing some amount of valuable insight into the experiments formalized in~\cref{ssec:exp_fom_exp1,ssec:exp_fom_exp2}. 
 
@@ -509,7 +510,7 @@ Following the same intuition, it is also possible to compare the FOM transition 
 
 Additionally, we wanted to approach the previous ideas from a more practical point of view.
 To this end we recorded the top-$k$ answers elicited using the FOM matrix $\gbm{Q}_{\textit{FOM}}$ across all tokens inside the model's vocabulary, using each token as the known word and obtaining the FOM's most probable next tokens.
-Once we have the set of generated next tokens for each token inside the vocabulary we can compare them to our actual hypothesized reference tokens, obtained applying the identity function in the \emph{inversion} hypothesis case, and in the \emph{Markov} hypothesis case by querying the Markov model in the same way that we did with the FOM\@.
+Once we have the set of generated next tokens for each token inside the vocabulary we can compare them to our actual hypothesized reference tokens, obtained applying the identity function in the \emph{inversion hypothesis} case, and in the \emph{Markov hypothesis} case by querying the Markov model in the same way that we did with the FOM\@.
 As already done before in~\cref{subsubsec:method_embeddings_evaluation} using~\cref{eq:method_embeddings_topk-accuracy}, we employ the top-$k$ accuracy metric to establish the similarity between the predictions of the FOM against the two baselines defined by the identity function and the Markov model.
 The top-$k$ accuracy is computed by taking the $k$ tokens corresponding to the $k$ highest values between logits, and observing if the input token is present among them.
 
@@ -529,8 +530,8 @@ Generalizing, we can formalize the average top-$k$ accuracy between two models r
 Where, as stated before, $\operatorname{top-k}(\gbm{Q}, k, v)$ represents the set of $k$ vocabulary tokens corresponding to the $k$ indexes with highest probability obtained from indexing $Q$ with $v$.
 In addition, when comparing $\gbm{Q}_1 = \gbm{Q}_{FOM}$ with the identity matrix we have that $\gbm{Q}_2 = \gbm{I}_V$ and $k_2 = 1$.
 
-Moreover, we also extend the prediction-based comparisons by introducing two specific set metrics that offer a weighted perspective on the distributions of transition matrices.
-In particular, we employ the overlap coefficient (which is equal to the Dice-S\o{}rensen index when considering sets with equal cardinality) and the Jaccard index to assess the predictions obtained from pairs of models averaged over the target vocabulary.
+Moreover, we also extend the prediction-based comparisons by introducing two specific \emph{set metrics} that offer a weighted perspective on the distributions of transition matrices.
+In particular, we employ the \emph{overlap coefficient} (which is equal to the Dice-S\o{}rensen index when considering sets with equal cardinality) and the \emph{Jaccard index} to assess the predictions obtained from pairs of models averaged over the target vocabulary.
 We refer to these as overlap metrics and formalize them in the following way:
 \begin{equation}
     \label{eq:method_fom_overlap}
@@ -543,9 +544,9 @@ We refer to these as overlap metrics and formalize them in the following way:
 \subsection{Probabilistic Comparison}\label{ssec:method_fom_prob}
 
 In order to obtain a broader perspective on the probability distributions represented in the transition matrices, we evaluate our models using metrics that take into account the entirety of the information contained within these probability distributions.
-These metrics can be applied either directly or indirectly to measure the similarity or dissimilarity between two probability distributions.
+These metrics can be applied either directly or indirectly, to measure the similarity or dissimilarity between two probability distributions.
 
-Our first selected is perplexity, which quantifies how well a certain discrete probability distribution is able to predict a sample; that is, it measures the likelihood of the sample being drawn from the distribution itself.
+Our first selected metric is \emph{perplexity}, which quantifies how well a certain discrete probability distribution is able to predict a sample; that is, it measures the likelihood of the sample being drawn from the distribution itself.
 In other words, perplexity is often interpreted as the \emph{surprise} of the distribution when observing a particular sample: high perplexity values indicate that the sample is unlikely to align with the distribution (greater surprise), whereas low values suggest that the sample is likely to be drawn from the distribution (less surprise).
 
 The standard formulation for perplexity for a probability distribution $p$ over a sequence of words $w_1,\dots,w_N$ is defined as:
@@ -560,7 +561,7 @@ In practice, we compute our version of perplexity considering the transition mat
 \end{equation}
 Where $S$ denotes a sentence composed of a total of $T$ tokens identified as $S(1),\dots,S(T)$, and $(\gbm{Q})_{i,j}$ represents the indexing operation performed on the transition matrix $\gbm{Q}$ corresponding the transition probability from state $i$ to state $j$.
 
-Notably, we highlight the fact that concept of perplexity is strictly related to cross-entropy.
+Notably, we highlight the fact that concept of perplexity is strictly related to \emph{cross-entropy}.
 Cross-entropy is typically computed between two probability distributions and quantifies the information needed to represent a sample as if it were drawn from a model distribution rather than the true distribution.
 In fact, a close inspection of~\cref{eq:method_fom_perplexity-base} reveals that it directly incorporates the formulation for estimating the cross-entropy $H$ over a distribution $p$, namely:
 \begin{equation*}
@@ -570,7 +571,7 @@ It is important to note that the choice of logarithm base does not affect the un
 In most NLP scenarios, cross-entropy is measured in \emph{bits}, so a base of $2$ is commonly used for the logarithm.
 However, when computing perplexity, the base must be consistent between logarithm and exponentiation, as in~\cref{eq:method_fom_perplexity}, where we employ $e$ for both operations.
 
-On the other hand, we also consider the Kullback-Leibler divergence (KL divergence) as a way to measure the direct dissimilarity between the probability distributions encoded in the transition matrices.
+On the other hand, we also consider the \emph{Kullback-Leibler divergence (KL divergence)} as a way to measure the direct dissimilarity between the probability distributions encoded in the transition matrices.
 By definition, the KL divergence cannot be classified as a metric due to its inherent asymmetry, as it is possible to identify a reference distribution and a model distribution.
 The KL divergence effectively measures the divergence of the model distribution $Q$ from the reference distribution $P$ over a common domain $X$, and it is typically expressed as:
 \begin{equation*}

@@ -7,18 +7,18 @@ In such a fast-paced and prolific field, it is nearly impossible to consider eve
 To address this, we propose a cutoff date that standardizes a fixed knowledge base for our research.
 However, this cutoff may be disregarded in cases of recent, exceptional contributions that have the potential to significantly impact or reshape the current research landscape, as such works merit acknowledgment.
 Additionally, if a work was initially published before the cutoff date but subsequently re-published in a different journal, it will also be exempted from the cutoff.
-The chosen cutoff date is July 2024, reflecting the start of the writing period.
+The chosen cutoff date is July 2024, reflecting the start of the writing period for this thesis.
 
 \subsubsection*{Mechanistic Interpretability}
 
-\citet{rai2024} propose a taxonomy for interpretability techniques centered around the concept of Mechanistic interpretability (MI).
-It is possible to identify two main fundamental objects of study in this context: \textbf{features} and \textbf{circuits}.
+\Citet{rai2024} propose a taxonomy for interpretability techniques centered around the concept of \emph{Mechanistic interpretability (MI)}.
+It is possible to identify two main fundamental objects of study in this context: \emph{features} and \emph{circuits}.
 Features can be considered to be properties that are represented by the model and are mainly characterized by being human-interpretable, whereas circuits can be thought as the connections between features or, more generally, model components.
 These objects of study serve as starting points for interpretability inquiries, while specific techniques act as tools to explore and verify those inquiries.
 By leveraging MI tools to pursue interpretability questions, possibly through the use of evaluation techniques, we obtain findings: true generalizable statements about the model's inner workings.
 
 Mechanistic interpretability offers a novel perspective over the interpretability research field, its primary aim being the reverse-engineering of language models (LMs) from an in-depth perspective~\cite{olah2022}.
-Previously identified model-agnostic techniques have been proven to offer limited insight for the Transformer architecture~\cite{neely2022,pruthi2022,bibal2022,krishna2024}.
+Previously identified model-agnostic techniques have been proven to offer limited insight for the Transformer architecture~\cite{neely2022,krishna2024}.
 In contrast, MI embraces the opposite philosophy by eliminating model abstractions and analyzing LMs in terms of their specific components and interactions.
 
 Mechanistic interpretability was initially mentioned as being the main driving ideology behind the ``Transformer circuits thread''~\cite{elhage2023}.
@@ -40,14 +40,14 @@ In the next sections we will follow their insightful classification to provide a
 
 \section{Behavior Localization}
 
-Behavior localization techniques consist in the localization elements inside language models that are responsible for specific predictions or certain prediction patterns.
+\textbf{Behavior localization} techniques consist in the localization of elements inside language models that are responsible for specific predictions or certain predictive patterns.
 It is a generally broad task, but an important distinction can be made between the localization of behaviors towards input features (\textbf{input attribution}) and towards model components (\textbf{model component attribution})~\cite{ferrando2024}.
 
 \subsection{Input Attribution}
 
 In the \textbf{input attribution} case, the model's predictions are directly traced back to the inputs via some kind of attribution mechanism.
-The two main input attribution strategies are either based on gradients~\cite{denil2014, ding2021, sanyal2021} or on perturbations~\cite{li2016, amara2024, mohebbi2023}.
-In both cases the great majority of techniques was directly influenced by model-agnostic approaches~\cite{sundararajan2017, smilkov2017, ribeiro2016, lundberg2017} that were initially studied and applied in the context of deep learning.
+The two main input attribution strategies are either based on \emph{gradients}~\cite{denil2014, ding2021, sanyal2021} or on \emph{perturbations}~\cite{li2016, mohebbi2023}.
+In both cases the great majority of techniques was directly influenced by \emph{model-agnostic} approaches~\cite{sundararajan2017, ribeiro2016, lundberg2017} that were initially studied and applied in the context of deep learning.
 
 More recent input attribution techniques experimented with the aggregation of intermediate information, especially attention, to provide token-wise attributions exploiting context mixing properties of Transformers~\cite{ferrando2022, modarressi2022, mohebbi2023}.
 Whereas, other approaches focused on providing counterfactual explanations based on contrastive gradient attributions~\cite{yin2022} or studying specific training examples to understand and generalize their influence on model predictions~\cite{grosse2023}.
@@ -55,32 +55,32 @@ It is important to note that, through the years, some critiques have been moved 
 
 \subsection{Model Component Attribution}
 
-In \textbf{model component attribution}, the main research focus shifts towards analyzing the effects of individual or groups of Transformer components, such as attention heads, feedforward layers, and neurons.
+In \textbf{model component attribution}, the main research focus shifts towards analyzing the effects of individual or groups of Transformer components, such as attention heads, feed-forward layers, and neurons.
 This shift is principally motivated by the inherent sparsity of LMs, where only a subset of the model's parameters significantly contributes to its predictions~\cite{zhao2021}.
 By isolating and understanding the effects of these key components, it is possible to shed light on their contribution to the actual model's prediction.
-\citet{ferrando2024} identifies three main distinct approaches for model component attribution: \textbf{logit attribution}, \textbf{causal interventions} and \textbf{circuit analysis}.
+\Citet{ferrando2024} identifies three main distinct approaches for model component attribution: \textbf{logit attribution}, \textbf{causal interventions} and \textbf{circuit analysis}.
 
 \subsubsection*{Logit Attribution}
 
-\textbf{Logit attribution} is based upon the concept of direct logit attribution (DLA), a metric specifically devised to measure the contribution of a certain component $c$ to the logit of the output token $w$ exploiting the inherent linearity of the Transformer model's components.
+\textbf{Logit attribution} is based upon the concept of \emph{Direct Logit Attribution (DLA)}, a metric specifically devised to measure the contribution of a certain component $c$ to the logit of the output token $w$ exploiting the inherent linearity of the Transformer model's components.
 Some variation on this idea enabled the computation of the logit attribution metric in more specialized cases.
-For example:~\citet{geva2022} managed to measure the DLA of each FFNN neuron,~\citet{ferrando2023} identified an alternative to measure the DLA of each path involving a certain attention head, and~\citet{wang2023} proposed the direct logit difference attribution (DLDA) using the logit difference (LD) as a comparative mean to measure contrastive attribution.
+For example:~\citet{geva2022} managed to measure the DLA of each FFNN neuron,~\citet{ferrando2023} identified an alternative to measure the DLA of each path involving a certain attention head, and~\citet{wang2023} proposed the \emph{Direct Logit Difference Attribution (DLDA)} using the logit difference as a comparative mean to measure contrastive attribution.
 
 \subsubsection*{Causal Interventions}
 
-\textbf{Causal interventions} approaches are centered around the interpretation of the LM as a causal model~\cite{geiger2021,mcgrath2023}, which takes the form of a directed acyclic graph (DAG) having model computations as nodes and activations as edges.
-The primary purpose of this representation is to enable specific interventions (known as activation patching or causal tracing) directly on the model's components, allowing for comparisons of different computational outcomes.
+\textbf{Causal interventions} approaches are centered around the interpretation of the LM as a causal model~\cite{geiger2021,mcgrath2023}, which takes the form of a \emph{Directed Acyclic Graph (DAG)} having model computations as nodes and activations as edges.
+The primary purpose of this representation is to enable specific interventions (known as \emph{activation patching} or \emph{causal tracing}) directly on the model's components, allowing for comparisons of different computational outcomes.
 
 Two key choices which influence the result of causal intervention, besides the choice of which component to patch, are the choice of patching function and evaluation metric.
 Different authors have suggested a variety of possible patched activation functions that accomplish different goals and have different uses.
 There have been cases of null vectors being used as patched activations (zero intervention)~\cite{olsson2022, mohebbi2023}, noise being added to the input of the component (noise intervention)~\cite{meng2022} and counterfactual data being fed to the component either by sampling (resample intervention)~\cite{hanna2023, conmy2023} or averaging (mean intervention)~\cite{wang2023}.
-\citet{zhang2024} provide an insightful overview for common practices of activation patching in language models, identifying KL divergence, probability and logit difference as common evaluation metrics.
+\Citet{zhang2024} provide an insightful overview for common practices of activation patching in language models, identifying KL divergence, probability and logit difference as common evaluation metrics.
 Additionally, it is possible to identify an alternate \emph{denoising} setup, which subverts the classic activation patching operation by applying a patched activation from a clean run to a corrupted one~\cite{lieberum2023, meng2022}.
 
-In particular, \citet{meng2022} were able to trace causal effects of hidden state activations within GPT architectures using causal mediation analysis to identify modules that perform the recall of a fact about a certain subject.
+In particular, \citet{meng2022} were able to trace causal effects of hidden state activations within GPT architectures using \emph{causal mediation analysis} to identify modules that perform the recall of a fact about a certain subject.
 Causal mediation analysis quantifies the contribution of intermediate variables in causal graphs, in this scenario the grid of hidden states affected by attention and FFNNs forms a causal graph.
 The main findings of \citet{meng2022} include the localization of factual associations inside the parameters of FFNN modules at an early site of last subject token and at a late site for the last sequence token.
-Additionally, by exploiting the previous findings, they also introduce Rank-One Model Editing (ROME) with the purpose of altering the parameters that determine a feedforward layer's behavior at the decisive token.
+Additionally, based on their previous findings, they also introduce \emph{Rank-One Model Editing (ROME)} with the purpose of altering the parameters that determine a feed-forward layer's behavior at the decisive token.
 ROME makes it possible to modify factual associations by inserting a new knowledge tuple in place of a current tuple with both generalization and specificity.
 
 \subsubsection{Circuit Analysis}
@@ -88,16 +88,16 @@ ROME makes it possible to modify factual associations by inserting a new knowled
 \textbf{Circuit analysis} is closely related to the mechanistic interpretability (MI) subfield analyzed previously as its main goal is tied to the discovery of circuits inside LMs.
 Circuits are subsets of model components that can be seen as acting independently while carrying out a specific task, and can possibly be synthesized into an algorithm.
 Despite their successful application on LMs, circuits were not originally identified with the Transformer architecture in mind; in fact, their first application was on vision models~\cite{cammarata2020}.
-Most of the initial work regarding Transformer circuits was performed on publications belonging to the ``Transformer circuits thread''~\cite{elhage2021,olsson2022,elhage2022,bricken2023,elhage2023}, heavily inspired by the preceding vision counterpart~\cite{cammarata2020}.
+Most of the initial work regarding Transformer circuits was performed on publications belonging to the \emph{``Transformer circuits thread''}~\cite{elhage2021,olsson2022,elhage2022,bricken2023,elhage2023}, heavily inspired by the preceding vision counterpart~\cite{cammarata2020}.
 
-In particular, ``A Mathematical Framework for Transformer Circuits''~\cite{elhage2021} can be considered the seminal work that popularized circuit identification in Transformer models.
+In particular, \emph{``A Mathematical Framework for Transformer Circuits''}~\cite{elhage2021} can be considered the seminal work that popularized circuit identification in Transformer models.
 In this work, \citet{elhage2021} perform a reverse-engineering analysis on simplified versions of Transformer models, leading to the discovery of relevant properties.
 For once, they entirely deconstruct a small attention-only model by keeping the embedding and unembedding layers, while progressively incorporating attention layers.
-The results obtained from this process highlight the tendency of the zero layer Transformer to model bigram statistics, while models with added attention layers can interpret more expressive patterns.
+The results obtained from this process highlight the tendency of the \emph{zero layer Transformer} to model bigram statistics, while models with added attention layers can interpret more expressive patterns.
 Another important contribution of this work is the proposal of an alternate deconstruction of the multi-head attention formula, which highlights the operations carried out by single heads.
 On this topic, \citet{elhage2021} find that even the composition between attention heads holds meaningful expressiveness inside the Transformer architecture and by generalizing this concept, it is possible to represent an attention-only Transformer as a sum of end-to-end functions by exploiting the inherent linear structure of this simplified architecture.
 
-By applying the circuit concept to the previously causal intervention techniques, we can extend further the idea of activation patching to edge patching and path patching: novel circuits-based techniques that take into account the interactions between model components.
+By applying the circuit concept to the previously causal intervention techniques, we can extend further the idea of activation patching to \emph{edge patching} and \emph{path patching}: novel circuits-based techniques that take into account the interactions between model components.
 Edge patching~\cite{li2023} considers edges that directly connect pairs of model components due to the fact that each component input can be modeled as the sum of the outputs of the previous model components inside the residual stream, while path patching~\cite{wang2023} is a generalization of edge patching to multiple edges.
 
 \section{Information Decoding}
@@ -126,14 +126,14 @@ Recent studies have uncovered numerous instances of FFNN neurons that consistent
 Moreover, numerous attempts aimed at modifying the internal representations of models have been made by leveraging their linear properties.
 These linear interventions have been proven successful in erasing specific concepts and features from intermediate model representations~\cite{ravfogel2020, ravfogel2022, belrose2023b}, as well as in meaningfully altering the model's behavior~\cite{nanda2023, belrose2023b}, opening up new avenues for model steering and alignment.
 
-Another important aspect of the linear representation hypothesis is the presence of polysemanticity and superposition in the identified features.
+Another important aspect of the linear representation hypothesis is the presence of \emph{polysemanticity} and \emph{superposition} in the identified features.
 The effects of dimensionality reduction algorithms causing information compression and resulting in distributed representations has widely been observed and studied in many fields, however \citet{olah2023} makes an important distinction between the separate phenomena of composition and superposition.
 Many extend these observations to actual experiments, successfully proving the existence of superposition both in simplified scenarios~\cite{elhage2022} and in the early layers of Transformer-based LMs~\cite{gurnee2023}.
 
-\citet{timkey2021} find that, when relying on cosine distance as a metric, representation spaces are often dominated by only 1 to 5 dimensions which drive anisotropy, low self-similarity, and the apparent drop in representational quality that happens later layers.
+\Citet{timkey2021} find that, when relying on cosine distance as a metric, representation spaces are often dominated by only $1$ to $5$ dimensions which drive anisotropy, low self-similarity, and the apparent drop in representational quality that happens later layers.
 Consequently, they advise the use of simple post-processing techniques in order to standardize the representation space and make linear relationship more evident, enhancing similarity-based techniques.
 
-Interestingly, \citet{wendler2024} apply linear properties of representation spaces to examine the phenomenon of ``English pivoting'', wherein an LLM translates tokens into English to conduct computations, even when prompted in a non-English language.
+Interestingly, \citet{wendler2024} apply linear properties of representation spaces to examine the phenomenon of \emph{``English pivoting''}, wherein an LLM translates tokens into English to conduct computations, even when prompted in a non-English language.
 While the authors find no evidence of English fulfilling the role of an internal pivot directly, by analyzing latent embeddings as high-dimensional euclidean points, they observe that the middle layers of the Transformer operate in an abstract concept space which is partially orthogonal to the language-specific concept space reached in the final layers.
 Consequently, the illusion of English pivoting can be pointed to an English bias in the abstract concept space, rather than a direct translation.
 
@@ -142,9 +142,9 @@ Consequently, the illusion of English pivoting can be pointed to an English bias
 One of the most direct methods to comprehend a model's hidden representations is by employing its own vocabulary to derive plausible interpretations.
 \textbf{Vocabulary space decoding} techniques are founded on this principle, by utilizing the model's existing vocabulary they can generate outputs that are immediately understandable and may unveil hidden patterns inside the model's generation process.
 
-The first real implementation of vocabulary space decoding is logit lens~\cite{nostalgebraist2020}, which proposed the decoding of interlayer hidden representation using the model's own unembedding matrix following the intuition of an iterative refining of the model's prediction throughout the forward pass~\cite{jastrzebski2018}.
+The first real implementation of vocabulary space decoding is \emph{logit lens}~\cite{nostalgebraist2020}, which proposed the decoding of interlayer hidden representation using the model's own unembedding matrix following the intuition of an iterative refining of the model's prediction throughout the forward pass~\cite{jastrzebski2018}.
 The contribution of logit lens was groundbreaking and, despite some acknowledged shortcomings by the author, inspired numerous similar techniques aimed at improving its design or offering alternative functionalities.
-Some significant advancements include the introduction of translators, which act as probing classifiers to enhance logit lens' predictions by applying either linear mappings~\cite{din2024} or affine transformations~\cite{belrose2023a}.
+Some significant advancements include the introduction of \emph{translators}, which act as probing classifiers to enhance logit lens' predictions by applying either linear mappings~\cite{din2024} or affine transformations~\cite{belrose2023a}.
 Additionally, attention lens~\cite{sakarvadia2023} applies the concepts of logit lens and translators to the outputs of attention heads, while future lens~\cite{pal2023} extends logit lens predictions to also include the next most probable tokens by exploiting causal intervention methods.
 
 \cref{fig:related_patchscopes} shows another crucial contribution: the \emph{Patchscopes} framework~\cite{ghandeharioun2024} which, inspired by future lens, aims to generalize all prior interpretability methods based on vocabulary space decoding and causal interventions.
@@ -177,6 +177,6 @@ Additionally, it also provides useful information that can aid the interpretatio
 Surprisingly, LM-TT bares a lot of similarities with our proposed tool, InTraVisTo (\cref{sec:rq_intravisto}), as their main interpretative goal can be considered the same.
 However, there are also some fundamental differences in how these tools carry out their intended purpose, and the approaches they take to visualize information.
 For example, InTraVisTo includes a unique visualization of the residual flow using a Sankey diagram, which comes with the advantage of providing the user with a complete overview of the influence of all tokens in a single screen.
-Additionally, the evolution of intermediate representations is quantified using the KL divergence measure between intermediate steps, and by applying vocabulary decoding techniques on their difference.
+Additionally, the evolution of intermediate representations is quantified using the Kullback-Leibler divergence measure between intermediate steps, and by applying vocabulary decoding techniques on their difference.
 Lastly, InTraVisTo offers an injection and ablation framework to enable interactive interventions in real time, allowing users to directly affect and observe the model computation.
-These distinctive features offered by InTraVisTo will be examined more in greater detail in~\cref{sec:rq_intravisto,sec:method_intravisto,sec:exp_intravisto}.
+\Cref{sec:rq_intravisto,sec:method_intravisto,sec:exp_intravisto} contain a more thorough analysis of these distinctive features offered by the InTraVisTo framework.

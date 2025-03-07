@@ -68,9 +68,9 @@ In addition to immediate choices such as input embeddings or output embeddings, 
 These novel decoding techniques are designed in order to provide users with semantically meaningful representations for every layer of the model simultaneously.
 
 Finally, the \emph{probability selector} directly affects the quantity used to weight the color grading in the heatmap.
-The four main options consist of P(argmax term), entropy, attention contribution and feedforward contribution. % chktex 36
+The four main options consist of P(argmax term), entropy, attention contribution and feed-forward contribution. % chktex 36
 In particular, the entropy of a state is computed using the probability distribution obtained from the decoding operation, and is formalized in~\cref{eq:method_intravisto_entropy}.
-Additionally, a secondary control labeled as ``Residual contribution'' affects the attention and feedforward contribution options for the probability selector.
+Additionally, a secondary control labeled as ``Residual contribution'' affects the attention and feed-forward contribution options for the probability selector.
 This control determines the metric used to evaluate the concept of contribution between Transformer components and the residual stream according to~\cref{eq:method_intravisto_norm-contrib,eq:method_intravisto_kl-contrib}.
 The mathematical background for these selectors is discussed in detail in~\cref{sssec:method_intravisto_decoding_metrics}.
 
@@ -111,7 +111,7 @@ More specifically, flow computation is discussed in detail in~\cref{ssec:method_
 
 When considering a new generation run, the totality of the flow is evenly split between the output nodes at the end of the Transformer stack.
 However, if the user decides to inspect a specific cell in the heatmap by clicking on it, the Sankey diagram also adapts by recalculating the flow considering the corresponding node as the sole topmost node, consequently accounting for $100\%$ of the flow.
-We subdivide nodes into three categories, color-coded for visualization convenience: intermediate and output nodes in blue, attention nodes in green and feedforward nodes in pink.
+We subdivide nodes into three categories, color-coded for visualization convenience: intermediate and output nodes in blue, attention nodes in green and feed-forward nodes in pink.
 Moreover, flows exiting from each node inherit the color of their originating node, leading to a clear display of the main information paths and their direction.
 Additionally, flows are given a further shading factor that is proportional to the KL divergence between the decoded hidden state distributions of the nodes that they connect, computed following~\cref{eq:method_intravisto_kl-diff}.
 This visualization allows users to appreciate in an immediate way states that exhibit rapid changes in distribution, thus providing a better localization for possible zones of interest.
@@ -424,7 +424,7 @@ Consequently, by ending the number with a newline character, the model is able t
 \begin{figure}[t!]
     \centering
     \includegraphics[width=0.8\textwidth]{exp_intravisto_4H_sankey-abl.png}
-    \caption[InTraVisTo Sankey diagram visualization given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral with injection and ablation.]{InTraVisTo Sankey diagram visualization given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral with the number $8$ injected at layer $29$ for the $25$th token and feedforward contribution removed at layer $32$ for the $28$th token.}
+    \caption[InTraVisTo Sankey diagram visualization given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral with injection and ablation.]{InTraVisTo Sankey diagram visualization given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral with the number $8$ injected at layer $29$ for the $25$th token and feed-forward contribution removed at layer $32$ for the $28$th token.}
     \label{fig:exp_intravisto_4_H2}
 \end{figure}
 
