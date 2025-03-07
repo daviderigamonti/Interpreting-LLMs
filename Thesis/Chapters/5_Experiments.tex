@@ -408,18 +408,19 @@ The output following this procedure is \emph{``432348313''}.
 At first, it appears that the problem concerning the two swapped digits is solved; however, the model generates an extra $3$ right at the end of the reversed number, instead of a newline character as it did before the injection.
 We can confirm that $3$ is the only additional digit appended to the result by increasing the maximum count of generated tokens and observing that the next token would be, in fact, the newline character \emph{``\textbackslash{}n''}.
 
-By analyzing the Sankey diagram in~\cref{fig:exp_intravisto_4_H1}, we can almost exactly trace back the introduction of the extra $3$ to the self-attention contribution of layer $31$, since until that point the decoded residual reads \emph{``\textbackslash{}n''}.
-However, after the contribution of the implicated self-attention block we can see the residual shifting towards an embedding that represents the number $3$.
-Moreover, if we inspect the attention traces that hold the most importance for the self-attention contribution of interest, we can observe that indeed they point to the question token containing a $3$, and the self-attention state itself can be decoded as the token $3$.
-Once again, by utilizing a functionality of InTraVisTo and removing the contribution of that specific self-attention block, the model is able to avoid erroneously changing the main content of its residual stream.
-Consequently, by ending the number with a newline character, the model is able to give the correct answer to the original query, as demonstrated in~\cref{fig:exp_intravisto_4_H2}.
-
 \begin{figure}[t!]
     \centering
     \includegraphics[width=0.8\textwidth]{exp_intravisto_4H_sankey.png}
     \caption[InTraVisTo Sankey diagram visualization given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral with injection.]{InTraVisTo Sankey diagram visualization given the prompt \emph{``Write numbers in reverse order. Number: 13843234 Reverse:''} to Mistral with the number $8$ injected at layer $29$ for the $25$th token.}
     \label{fig:exp_intravisto_4_H1}
 \end{figure}
+
+By analyzing the Sankey diagram in~\cref{fig:exp_intravisto_4_H1}, we can almost exactly trace back the introduction of the extra $3$ to the self-attention contribution of layer $31$, since until that point the decoded residual reads \emph{``\textbackslash{}n''}.
+However, after the contribution of the implicated self-attention block we can see the residual shifting towards an embedding that represents the number $3$.
+Moreover, if we inspect the attention traces that hold the most importance for the self-attention contribution of interest, we can observe that indeed they point to the question token containing a $3$, and the self-attention state itself can be decoded as the token $3$.
+Once again, by utilizing a functionality of InTraVisTo and removing the contribution of that specific self-attention block, the model is able to avoid erroneously changing the main content of its residual stream.
+Consequently, by ending the number with a newline character, the model is able to give the correct answer to the original query, as demonstrated in~\cref{fig:exp_intravisto_4_H2}.
+
 \begin{figure}[t!]
     \centering
     \includegraphics[width=0.8\textwidth]{exp_intravisto_4H_sankey-abl.png}
