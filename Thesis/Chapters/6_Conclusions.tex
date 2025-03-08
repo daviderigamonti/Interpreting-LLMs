@@ -1,4 +1,4 @@
-In this work, we have explored various aspects of Transformer interpretability, focusing on the creation of a specialized tool that enables the visualization of internal states of Transformer-based language models: \textbf{InTraVisTo}.
+In this work, we have explored various aspects of Transformer interpretability, focusing on the creation of a specialized tool that enables the visualization of internal states of Transformer-based language models: \emph{InTraVisTo}.
 InTraVisTo was developed with research in mind; its main purpose is to assist researchers and practitioners in the NLP field in observing the internal reasoning steps carried out by LLMs following an immediate and interactive approach.
 Moreover, its easily configurable, highly optimized and multi-user oriented implementation allows for an overall user-friendly experience centered around the discovery of LLM architectures through the lens of their own embeddings.
 InTraVisTo answers the first identified research question in~\cref{sec:rq_intravisto} by providing an expanded and general view on the topic of vocabulary space decoding for LLMs.
@@ -14,7 +14,7 @@ In particular, both the concept of interpolation and the idea of performing inte
 
 The third research question (\cref{sec:exp_fom}) addressed the possibility of obtaining first-order predictions by concatenating the input and output embedding spaces of LLMs.
 Building upon previous findings, we investigated whether such concatenation effectively replicates the behavior of a Markov model following the theoretical groundwork laid by~\citet{elhage2021}.
-Our results indicate that the First Order Models (FOMs) extracted from most LLMs are generally faithful approximations of the corresponding Markov models and exhibit a solid bias towards the next-token prediction task, although the degree of similarity to the Markov model varies greatly across model architectures and weights.
+Our results indicate that the \emph{First Order Models (FOMs)} extracted from most LLMs are generally faithful approximations of the corresponding Markov models and exhibit a solid bias towards the next-token prediction task, although the degree of similarity to the Markov model varies greatly across model architectures and weights.
 Furthermore, our analysis investigates the compatibility of our results with the practice of weight tying, concluding that the benefit from setting the unembedding weights identical to the embedding ones is limited to a reduction in the number of overall model parameters.
 The resulting findings tie back into InTraVisTo's view of the model by identifying the residual flow as the main communication channel between embeddings, with each component progressively adding information as the prediction progresses through the layers.
 

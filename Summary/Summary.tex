@@ -178,7 +178,7 @@ In addition, we discuss elements of \textbf{vocabulary space decoding} and curre
 \subsection{Mechanistic Interpretability}
 
 \textbf{Mechanistic interpretability} offers a novel perspective over the NLP interpretability research field, its primary aim being the \emph{reverse-engineering} of language models (LMs) from an in-depth perspective~\cite{olah2022}.
-Mechanistic interpretability was initially mentioned as being the main driving ideology behind the ``Transformer circuits thread''~\cite{elhage2023}.
+Mechanistic interpretability was initially mentioned as being the main driving ideology behind the ``Transformer circuits thread''.
 Nonetheless, the concept of MI is not limited to the application of circuits; envisioning MI as being characterized by a general bottom-up approach for interpreting LMs, allows its scope to extend to include earlier techniques such as the logit lens~\cite{nostalgebraist2020} and other probing methods.
 
 \subsection{Linear Representation \texorpdfstring{ \\ }{} Hypothesis}
@@ -236,8 +236,8 @@ P(\,\cdot\,\mid \gbm{x}, d_\textit{\scalebox{.8}{dec}}, n_\textit{\scalebox{.8}{
 &=\,\operatorname{softmax}\Bigl(N_{n_\textit{\scalebox{.8}{norm}}}(\gbm{x}) \cdot \gbm{W}_{d_\textit{\scalebox{.8}{dec}}}\Bigr)
 \end{aligned}
 \end{equation}
-}
-Where $\gbm{W}_{d_\textit{dec}}$ represents the matrix of decoder weights according to the user decoder choice $d_\textit{dec}$, and $N_{n_\textit{norm}}$ is used to identify the normalization operation selected by the user through $n_\textit{norm}$.
+}%
+\noindent Where $\gbm{W}_{d_\textit{dec}}$ represents the matrix of decoder weights according to the user decoder choice $d_\textit{dec}$, and $N_{n_\textit{norm}}$ is used to identify the normalization operation selected by the user through $n_\textit{norm}$.
 
 Two natural choices for decoders are the transpose of the \emph{input embedding matrix} $\gbm{W}_\textit{in}^\T$ which the model uses to convert tokens into vectors at the input stage, and the \emph{output unembedding matrix} $\gbm{W}_\textit{out}$, which is used within the language modeling head to generate token outputs from internal vectors.
 InTraVisTo also offers the possibility of decoding hidden states by \emph{interpolating} the input and output decoders based on the depth $\ell\in\{0,\ldots,L\}$ of the model layer to be decoded, we obtain a ``hybrid'' decoding weight matrix that acts as an equilibrium point calibrated on the current depth of the model.
@@ -330,7 +330,7 @@ The dataset includes both the original Google analogy dataset~\cite{mikolov2013}
     }%
     \caption{Top-$k$ accuracy on the word analogies task for various models.}
     \label{fig:exp_emb_1_A}
-    \vspace{-10pt}
+    \vspace{-5pt}
 \end{figure}
 
 From the obtained results we can affirm that LLMs are able to retain a surprising amount of semantic relationships inside their embeddings, despite the fact that \emph{sub-word tokenization} actively works against the accumulation of meaning for token representations.
@@ -353,7 +353,7 @@ We use WikiText 103 as both the training dataset for Markov models and the test 
 
 \begin{figure}[tbh!]
     \centering
-    \includegraphics[width=0.25\textwidth]{exp_fom_1B_l2-opmetrics.pdf}
+    \includegraphics[width=0.3\textwidth]{exp_fom_1B_l2-opmetrics.pdf}
     \caption[Overlap coefficient and Jaccard index for Llama 2.]{Overlap coefficient and Jaccard index between FOM, Markov model and random baseline for Llama 2.}
     \label{fig:exp_fom_1_B1}
     \vspace{-10pt}
@@ -381,11 +381,11 @@ From~\Cref{table:exp_fom_llama-kl,table:exp_fom_mistral-kl} we can also see the 
 
 \begin{table}[tbh!]
     \centering
-    \resizebox{0.8\columnwidth}{!}{%
+    \resizebox{0.9\columnwidth}{!}{%
     \begin{tabular}{| >{\columncolor{bluepoli!40}}c || c c c c |}
         \hhline{-||----}
         \rowcolorhang{bluepoli!40}
-            \textbf{Llama 2} $\gbm{\overline {D_{KL}}}$ & \textbf{FOM} & \makecell{\textbf{FOM}\\\textbf{with RMS}} & \Gape[0pt][1pt]{\makecell{\textbf{Markov}\\\textbf{model}}} & \Gape[0pt][1pt]{\makecell{\textbf{Identity}\\\textbf{matrix}}} \\
+            \textbf{Llama 2} $\gbm{{{\bar D}_{KL}}}$ & \textbf{FOM} & \makecell{\textbf{FOM}\\\textbf{with RMS}} & \Gape[0pt][1pt]{\makecell{\textbf{Markov}\\\textbf{model}}} & \Gape[0pt][1pt]{\makecell{\textbf{Identity}\\\textbf{matrix}}} \\
 		\hhline{=::====}
         \textbf{FOM} & $-$ & $-$ & $0.054688$ & $17.260256$ \\[2px]
         \textbf{FOM with RMS} & $-$ & $-$ & $2.099694$ & $19.609880$ \\[2px]
@@ -401,11 +401,11 @@ From~\Cref{table:exp_fom_llama-kl,table:exp_fom_mistral-kl} we can also see the 
 
 \begin{table}[tbh!]
     \centering
-    \resizebox{0.8\columnwidth}{!}{%
+    \resizebox{0.9\columnwidth}{!}{%
     \begin{tabular}{| >{\columncolor{bluepoli!40}}c || c c c c |}
         \hhline{-||----}
         \rowcolorhang{bluepoli!40}
-            \textbf{Mistral} $\gbm{\overline {D_{KL}}}$ & \textbf{FOM} & \makecell{\textbf{FOM}\\\textbf{with RMS}} & \Gape[0pt][1pt]{\makecell{\textbf{Markov}\\\textbf{model}}} & \Gape[0pt][1pt]{\makecell{\textbf{Identity}\\\textbf{matrix}}} \\
+            \textbf{Mistral} $\gbm{{{\bar D}_{KL}}}$ & \textbf{FOM} & \makecell{\textbf{FOM}\\\textbf{with RMS}} & \Gape[0pt][1pt]{\makecell{\textbf{Markov}\\\textbf{model}}} & \Gape[0pt][1pt]{\makecell{\textbf{Identity}\\\textbf{matrix}}} \\
 		\hhline{=::====}
         \textbf{FOM} & $-$ & $-$ & $0.075116$ & $17.659594$ \\[2px]
         \textbf{FOM with RMS} & $-$ & $-$ & $0.450965$ & $17.644035$ \\[2px]

@@ -581,7 +581,7 @@ In our scenario, we compute the mean KL divergence over all tokens present in th
 \begin{equation}
     \label{eq:method_fom_kldiv}
     \begin{gathered}
-    {\overline {D_{KL}}}(\gbm{Q}_{ref} || \gbm{Q}_{model}) = \frac{1}{V}\sum_{v \in \mathcal{V}}{D_{KL}^v(\gbm{Q}_{ref} || \gbm{Q}_{model})} \\
+    {{\bar D}_{KL}}(\gbm{Q}_{ref} || \gbm{Q}_{model}) = \frac{1}{V}\sum_{v \in \mathcal{V}}{D_{KL}^v(\gbm{Q}_{ref} || \gbm{Q}_{model})} \\
     \text{where}\ D_{KL}^v(\gbm{Q}_{ref} || \gbm{Q}_{model}) = \sum_{w \in \mathcal{V}}{\bigl((\gbm{Q}_{ref})_{v,w}\bigr)\ln{\frac{(\gbm{Q}_{ref})_{v,w}}{(\gbm{Q}_{model})_{v,\cdot}}}}
     \end{gathered}
 \end{equation}
