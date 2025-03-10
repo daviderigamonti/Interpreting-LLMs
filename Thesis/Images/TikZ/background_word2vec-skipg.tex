@@ -20,13 +20,13 @@
         text = black!50!green,
         minimum width = 1.5em,
         minimum height = 0.1em
-    )(1:1:4.5em)
+    )(1:1:4.5em:{})
     \vboxvec(latent_in)({0,0,0,0}:{0,0,1,0}:{0,0,0})(
         draw = black!30!green,
         fill = green!30,
         minimum width = 1.5em,
         minimum height = 0.1em
-    )(1:1:3em)
+    )(1:1:3em:{})
     \node[](latent_ine) at (vboxvec_last) {};
     \node[above right = 0.5em and 0.25em of latent_in] () {\Large $1 \times V$};
 
@@ -48,7 +48,7 @@
         fill = violet!30,
         minimum width = 2.5em,
         minimum height = 2.25em
-    )(1:0:3em)
+    )(1:0:3em:{})
     \node[](latent_hide) at (vboxvec_last) {};
     \node[above right = 1em and 0.75em of latent_hid] () {\Large $1 \times D$};
 
@@ -72,13 +72,13 @@
         text = black!30!cyan,
         minimum width = 1.5em,
         minimum height = 0.1em
-    )(1:1:4.5em)
+    )(1:1:4.5em:{})
     \vboxvec(latent_out)({0,0,0,0}:{0,0,1,0}:{0,0,0})(
         draw = black!30!cyan,
         fill = cyan!30,
         minimum width = 1.5em,
         minimum height = 0.1em
-    )(1:1:3em)
+    )(1:1:3em:{})
     \node[above right = 0.5em and 0.25em of latent_out] () {\Large $1 \times V$};
 
     \node[above = 4.5em of latent_in, figb, text=black!35!green, align=center] () {\Huge Input};
