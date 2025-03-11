@@ -7,6 +7,7 @@ The first section is dedicated to the exploration of the main features pertainin
 
 \emph{InTraVisTo} is an open-source visualization tool depicting the internal computations performed within a Transformer.
 The tool provides visualizations of both the internal state of the LLM, using a heatmap of decoded embedding vectors for all layer/token positions, and the information flow between components of the LLM, using a Sankey diagram to depict paths through which information accumulates to produce next-token predictions.
+InTraVisTo is implemented entirely in \emph{Python}\footnote{\rlap{\url{https://www.python.org/}}}, utilizing the \emph{Plotly Dash}\footnote{\rlap{\url{https://dash.plotly.com/}}} framework as its core library to create an interactive, web-based graphical environment.
 
 \subsection{Decoding Internal States}\label{ssec:method_intravisto_decoding}
 
