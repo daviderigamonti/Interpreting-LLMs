@@ -39,11 +39,12 @@ Where $\gbm{W}_{d_\textit{dec}}$ represents the matrix of decoder weights accord
     \begin{array}{cl}
         \gbm{x} &\ \text{if}\ n_\textit{norm} = \text{`no normalization'} \\
         \mathcal{N}{(\gbm{x})} &\ \text{if}\ n_\textit{norm} = \text{`normalize only'} \\
-        \gbm{\gamma}_\ell \cdot \mathcal{N}{(\gbm{x})} + \gbm{\beta}_\ell &\ \text{if}\ n_\textit{norm} = \text{`normalize and scale'}
+        \gbm{\gamma} \odot \mathcal{N}{(\gbm{x})} + \gbm{\beta} &\ \text{if}\ n_\textit{norm} = \text{`normalize and scale'}
     \end{array}
     \right.
 \end{equation}
 Considering $\mathcal{N}{(\gbm{x})}$ the normalization component of the model's final normalization layer, being reliant on $\mu$ and $\sigma$ for \emph{LayerNorm} implementations as defined in~\cref{eq:background_layernorm,eq:background_layernorm_extra}, and $RMS(\gbm{x})$ for \emph{RMSNorm} implementations as defined in~\cref{eq:background_rmsnorm}
+Whereas $\gbm{\gamma}$ and $\gbm{\beta}$ are the respective shift and rescale weights, corresponding to the last normalization layer present in the LM head of the model.
 
 Two natural choices for decoders are the transpose of the \emph{input embedding matrix} $\gbm{W}_\textit{in}^\T$ which the model uses to convert tokens into vectors at the input stage, and the \emph{output unembeddig matrix} $\gbm{W}_\textit{out}$, which is used within the language modeling head to generate token outputs from internal vectors.
 Some models, like GPT-2~\cite{radford2019} and Gemma~\cite{mesnard2024,rivi2024}, tie these two parameter matrices together during training, while other popular models such as Mistral~\cite{jiang2023} and Llama~\cite{touvron2023,dubey2024} allow them to differ.
