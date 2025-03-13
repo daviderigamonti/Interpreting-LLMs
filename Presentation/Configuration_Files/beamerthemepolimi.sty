@@ -18,6 +18,10 @@
 
 \RequirePackage{etoolbox} % \patchcmd
 
+\RequirePackage[absolute,overlay]{textpos}
+
+\RequirePackage{ragged2e}
+
 \usepackage{Configuration_Files/beamerinnerthemepolimi}
 \usepackage{Configuration_Files/beamerouterthemepolimi}
 \usepackage{Configuration_Files/beamercolorthemepolimi}
@@ -38,3 +42,9 @@
         \oldtoc[#1]
     \end{minipage}
 }
+
+% Additional title entries
+\newcommand*{\@advisor}{}
+\newcommand*{\advisor}[1]{\def\@advisor{#1}}
+\newcommand*{\@coadvisors}{}
+\newcommand*{\coadvisors}[1]{\def\@coadvisors{#1}}

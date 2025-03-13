@@ -8,13 +8,13 @@
             \if@bgphoto
                 \node at (current page.north) [anchor=north, inner sep=0pt] {\includegraphics[width=\paperwidth]{bgphoto_cut.jpg}};
             \fi
-            \node (foot) at (current page.south) [anchor=south, minimum width=\paperwidth, minimum height=0.4415\paperheight, fill=bluePolimi] {};
+            \node (foot) at (current page.south) [anchor=south, minimum width=\paperwidth, minimum height=0.55\paperheight, fill=bluePolimi] {};
             \if@nologo\else
                 \node at (foot.north) [anchor=south, inner sep=0.5cm] {
                     \if@bgphoto
-                        \includegraphics[width=0.3\paperwidth]{logo_centrato_COL_negativo.png}
+                        \includegraphics[width=0.25\paperwidth]{logo_centrato_COL_negativo.png}
                     \else
-                        \includegraphics[width=0.3\paperwidth]{logo_centrato_COL_positivo.png}
+                        \includegraphics[width=0.25\paperwidth]{logo_centrato_COL_positivo.png}
                     \fi
                 };
             \fi
@@ -29,6 +29,14 @@
     \fi
 }
 
+\defbeamertemplate{background}{plain}{
+    \begin{tikzpicture}[overlay, remember picture]
+        \node (head) at (current page.north) [anchor=north, minimum width=\paperwidth, minimum height=0.1\paperheight, fill=bluePolimi] {};
+        \node at ([shift={(0, 0.1)}] head.south) {\includegraphics[width=\paperwidth]{decoration.pdf}};
+        \node (foot) at (current page.south) [anchor=south, minimum width=\paperwidth, minimum height=0.105\paperheight, fill=bluePolimi] {};
+    \end{tikzpicture}
+}
+
 % Only footer background.
 \defbeamertemplate*{background}{footer}{
     \begin{tikzpicture}[overlay, remember picture]
@@ -40,28 +48,38 @@
 \defbeamertemplate*{title page}{polimi}[1][]
 {
     \color{white}
-    \vspace{4cm}
+    \vspace{2.8cm}
     
-    \begin{minipage}[t][3\baselineskip]{\paperwidth}
+    \begin{minipage}[t][3\baselineskip]{\textwidth}
         {
+            \justifying
             \linespread{1.0}
             \Large\bf \inserttitle \par
         }
     \end{minipage}
     \\[\baselineskip]
-    %%\begin{minipage}[t][2\baselineskip]{\paperwidth}
-    %%    {\large \insertsubtitle}
-    %%\end{minipage}
     
+    \vspace{0.5cm}
+    
+    \begin{minipage}[t][\baselineskip]{\textwidth}
+        {\bf \insertauthor}
+    \end{minipage}
+
     \vspace{0.25cm}
-    
-    \begin{minipage}[t][\baselineskip]{\paperwidth}
-        {\large\bf \insertauthor}
+
+    \begin{minipage}[t][\baselineskip]{\textwidth}
+        {Advisor: \@advisor}
     \end{minipage}
-    
-    \begin{minipage}[t][\baselineskip]{\paperwidth}
-        \insertdate
+
+    \begin{minipage}[t][\baselineskip]{\textwidth}
+        {Co-advisors: \@coadvisors}
     \end{minipage}
+
+    \vspace{0cm}
+    
+    \begin{textblock*}{1cm}(13.55cm,8.45cm)
+        \textcolor{white} \insertdate
+    \end{textblock*}
     
     \vfill
     
@@ -78,7 +96,7 @@
         \node (foot) at (current page.south) [anchor=south, minimum width=\paperwidth, minimum height=0.4415\paperheight, fill=bluePolimi] {};
         \node at ([shift={(0, -0.1)}] foot.north) {\includegraphics[width=\paperwidth]{decoration.pdf}};
         \path let \p1 = ([shift={(0, 0.105\paperheight+0.25)}] current page.south west), \p2 = (current page.east) in (\x1, \y1) edge [white, line width=0.5] (\x2, \y1);
-        \node at ([shift={(\xshift, 3.5)}] current page.south west) [anchor=north west, inner sep=0pt, text width=\textwidth]
+        \node at ([shift={(\xshift, 3)}] current page.south west) [anchor=north west, inner sep=0pt, text width=\textwidth]
         {
             {\color{white}\Large\bf \insertsection}
         };
