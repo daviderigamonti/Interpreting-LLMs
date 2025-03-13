@@ -16,13 +16,16 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{bm}
-\usepackage[overload]{empheq}  % For braced-style systems of equations
+%\usepackage[overload]{empheq}  % For braced-style systems of equations
 
 % REFERENCES PACKAGES
 \usepackage[capitalize]{cleveref}
 
 % COLOR
 \usepackage{xcolor}
+
+% IMAGES
+\usepackage{wrapfig}
 
 \newcommand{\gbm}[1]{\bm{\mathbf{#1}}} % General Bold Math for both greek and latin letters
 \newcommand{\rowcolorhang}[1]{\rowcolor{#1}[\dimexpr\tabcolsep+0.1pt\relax]} % Add overang to table row coloring, to avoid vertical white lines
@@ -90,7 +93,8 @@
     \end{frame}
 
     \begin{frame}{}
-        \textcolor{red}{TODO}
+        \center
+        \includegraphics[width=0.6\textwidth]{thesis-flow.png}
     \end{frame}
 
     \section{State of the Art}
@@ -136,7 +140,7 @@
                 \begin{array}{cl}
                     \gbm{x} &\ \text{if}\ n_{\textit{norm}} = \text{`no normalization'} \\
                     \mathcal{N}{(\gbm{x})} &\ \text{if}\ n_{\textit{norm}} = \text{`normalize only'} \\
-                    \gbm{\gamma}_\ell \cdot \mathcal{N}{(\gbm{x})} + \gbm{\beta}_\ell &\ \text{if}\ n_{\textit{norm}} = \text{`normalize and scale'}
+                    \gbm{\gamma} \odot \mathcal{N}{(\gbm{x})} + \gbm{\beta} &\ \text{if}\ n_{\textit{norm}} = \text{`normalize and scale'}
                 \end{array}
                 \right.
             }\\[15pt]
@@ -163,53 +167,72 @@
     \end{frame}
 
     \begin{frame}{}
-        \textcolor{red}{TODO}
-        Layer-by-layer model interpretation.Layers are stacked vertically, from the embedding layer at the bottom to the normalized outputs at the top, forming a grid where the x-axis represents token positions in the sequence and the y-axis represents layer numbers, resulting in a heatmap where each cell represents a token-layer combination containing the main decoded hidden state in token form.
-        By hovering on a cell, a pop-up with other possible decoded tokens (secondary representation) along with additional information appears.
-
-        The generation of the heatmap requires the user to choose a \emph{target embedding}, a \emph{decoding strategy} and a \emph{probability} to display.
-        The embedding refers to the position of the hidden state vector to be decoded within the layer.
-        Conversely, the decoding strategy choice refers to the decoding matrix employed during the decoding process of each visualized hidden state.
-        Finally, the probability selector directly affects the quantity used to weight the color grading in the heatmap, and is normally tied to the probability of the obtained decoding for each cell.
+        \begin{minipage}{0.45\textwidth}
+            \begin{itemize}
+                \item Each cell represents a token-layer combination contained the main decoded hidden state in token form.
+                \item By hovering on a cell, a pop-up with other possible decoded tokens (secondary representation) along with additional information appears.
+                \item The generation of the heatmap requires the user to choose a \emph{target embedding}, a \emph{decoding strategy} and a \emph{probability} to display.
+            \end{itemize}
+        \end{minipage}%
+        \begin{minipage}{0.55\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{exp_intravisto_1A_heatmap.png}
+        \end{minipage}
     \end{frame}
 
     \subsubsection{Flow Interface}
     \begin{frame}{}
-        \textcolor{red}{TODO}
-        The second visualization provided by InTraVisTo is a \emph{Sankey diagram} that aims to depict the information flow through the Transformer network.
+        \begin{minipage}{0.59\textwidth}
+            \begin{itemize}
+                \item The second visualization provided by InTraVisTo is a \emph{Sankey diagram} that aims to depict the information flow through the Transformer network.
+                \item Nodes in the diagram depict all hidden states contained in each layer, visualizing the four vectors at the same time.
+                \item Edges represent the amount of relevance carried by the residual stream, showing how components accumulate or disperse this flow.
+            \end{itemize}
+        \end{minipage}%
+        \begin{minipage}{0.41\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{exp_intravisto_2A_sankey.png}
+        \end{minipage}
+    \end{frame}
+
+    \begin{frame}{}
+        The flow originates from the topmost layer of nodes, equally split between them, and is recursively computed considering the contributions of each encountered node.
+
+        \begin{equation*}
+            \left\{
+            \begin{alignedat}{2}
+                &\textit{flow}_{\textit{ffnn}}^{(\ell,j)} &&= {\%}_{\textit{ffnn}}^{(\ell,j)} \cdot \textit{flow}_{x}^{(\ell,j)} \\
+                &\textit{flow}_{x'}^{(\ell,j)} &&= \textit{flow}_{\textit{ffnn}}^{(\ell,j)} + (1 - {\%}_{\textit{ffnn}}^{(\ell,j)}) \cdot \textit{flow}_{\textit{x}}^{(\ell,j)} = \textit{flow}_{\textit{x}}^{(\ell,j)} \\
+                &\textit{flow}_{\textit{att}}^{(\ell,j)} &&= {\%}_{\textit{att}}^{(\ell,j)} \cdot \textit{flow}_{x'}^{(\ell,j)} = {\%}_{\textit{att}}^{(\ell,j)} \cdot \textit{flow}_{x}^{(\ell,j)} \\
+                &\textit{flow}_{x}^{(\ell-1,j)} &&= \sum_{i\in\{j,\ldots,k\}}{\overline{\textit{attend}{\,}}^{(\ell,i)}\bigl[j\bigr]}\cdot\textit{flow}_{\textit{att}}^{(\ell,i)} + ( 1 - {\%}_{\textit{att}}^{(\ell,j)})\cdot \textit{flow}_{\textit{x'}}^{(\ell,j)} \\
+                    &\quad &&= \biggl(\Bigl(\sum_{i\in\{j,\ldots,k\}}\overline{\textit{attend}{\,}}^{(\ell,i)}\bigl[j\bigr] - 1\Bigr)\cdot{\%}_{\textit{att}}^{(\ell,j)} + 1\biggr) \cdot \textit{flow}_{\textit{x}}^{(\ell,j)}
+            \end{alignedat}
+            \right.
+        \end{equation*}
     \end{frame}
 
     \begin{frame}{}
         \textcolor{red}{TODO}
-        Nodes in the diagram depict all hidden states contained in each layer, visualizing the four vectors at the same time.
-        Like in the heatmap, nodes display the main decoding result as their label and, when hovered upon, show additional information in the form of a pop-up tooltip containing secondary representations.
-        Output nodes' tooltips also include the \emph{decoded difference from the previous layer}, obtained between the current and previous output states with the goal of trying to visualize in a human interpretable way the information added by the current layer relative to the previous one.
-    \end{frame}
-
-    \begin{frame}{}
-        \textcolor{red}{TODO}
-        On the other hand, edges represent the amount of relevance carried by the residual stream, showing how components accumulate or disperse this flow as they process information scattered across the model.
-        The flow originates from the topmost layer of nodes, equally split between them, and is recursively computed considering the contributions of each encountered node in a way that no amount of flow is ever lost between layers.
-        If the user inspects a specific cell in the heatmap by clicking on it, the Sankey diagram adapts by recalculating the flow considering the clicked node as the sole topmost node, consequently accounting for $100\%$ of the flow.
-        Nodes are subdivided into three color-coded categories for convenience: \emph{intermediate and output nodes} in blue, \emph{attention nodes} in green and \emph{feed-forward nodes} in pink.
-        Moreover, flows exiting from each node inherit the color of their originating node and are given a further shading factor that is proportional to the \emph{Kullback-Leibler divergence} between the decoded hidden state distributions of the nodes that they connect.
-        This allows users to appreciate in an immediate way states that exhibit rapid changes in distribution, thus providing a better localization for possible zones of interest.
+        \begin{itemize}
+            \item Nodes display the main decoding result as their label and, when hovered upon, show additional information in the form of a pop-up tooltip containing secondary representations.
+            \item Output nodes' tooltips also include the \emph{decoded difference from the previous layer}, obtained between the current and previous output states with the goal of trying to visualize in a human interpretable way the information added by the current layer relative to the previous one.
+            \item If the user inspects a specific cell in the heatmap by clicking on it, the Sankey diagram adapts by recalculating the flow considering the clicked node as the sole topmost node, consequently accounting for $100\%$ of the flow.
+        \end{itemize}
     \end{frame}
 
     \subsubsection{Dinamically Changing the Network}
     \begin{frame}{}
-        \textcolor{red}{TODO}
-        InTraVisTo is designed as an interactive tool, and \emph{embedding injection} is another feature to enhance understanding of the of Transformers internals.
-        Injections substitute hidden states with custom embedding representations, forcing the model to adjust its behavior based on the injected information.
-        They are performed by clicking on a cell in the heatmap; this action opens a pop-up menu prompting the user for a string of text with the purpose of being encoded into an embedding representation and injected inside the selected hidden state, the injection technique specifying how the new embedding is integrated into the preexisting state, the position of the injection inside the selected layer, the decoding technique used to interpret the aforementioned string of text, and for the option to normalize the injected embedding.
-        Once a valid injection is compiled and added, a small card summarizing the injection appears at the top of the interface.
-    \end{frame}
-
-    \begin{frame}{}
-        \textcolor{red}{TODO}
-        Injections can also be performed in the Sankey diagram by clicking on any visible node, triggering the same pop-up menu described above.
-        If the chosen node corresponds to a feed-forward or an attention node, there is an additional option that allows the user to remove the node, performing an \emph{ablation}.
-        Ablations are processed similarly to injections and remove the selected node by nullifying its contribution to the residual, so its hidden state is still decoded and visible from the heatmap but does not influence the rest of the model.
+        \begin{minipage}{0.82\textwidth}
+        \begin{itemize}
+            \item Injections are performed by clicking on a cell in the heatmap or Sankey diagram and substitute hidden states with custom embedding representations, forcing the model to adjust its behavior based on the injected information.
+            \item Once a valid injection is compiled and added, a small card summarizing the injection appears at the top of the interface.
+            \item If the chosen node corresponds to a feed-forward or an attention node, there is an additional option that allows the user to remove the node, performing an \emph{ablation}.
+        \end{itemize}
+        \end{minipage}%
+        \begin{minipage}{0.18\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{exp_intravisto_3A_popup.png}
+        \end{minipage}
     \end{frame}
 
     \subsection{Results}
@@ -221,16 +244,41 @@
 
     \subsection{Methodology}
     \begin{frame}{}
-        \textcolor{red}{TODO}
-        In this experiment we establish whether geometric relationships can still be modeled inside the input or output embedding space of recent LLM architectures by direct experimentation on \emph{word analogy tasks}, as originally illustrated in.
         Solving word analogies showcases an embedding space's ability to model word semantics in a relatively consistent way, implying the existence of embedding dimensions with associated meanings (even if overlapping or under superposition).
+        \begin{equation*}
+            \begin{gathered}
+                closest = \operatornamewithlimits{argmin}_{v \in \mathcal{V}} d_{\textit{dist}}\bigl(\tilde w, \textit{encode}^{\textit{emb}}(v)\bigr) \\[15pt]
+                \textit{acc}_k = \frac{1}{n} \sum_{i=1}^{n} \mathbb{I}\Bigl( {\left\{ {\textit{result}\,}^i_j \ |\ \forall j = 1,\ldots,k \right\}} \cap {\textit{sol}\,}^i \neq \emptyset \Bigr)
+            \end{gathered}
+        \end{equation*}
     \end{frame}
 
     \begin{frame}{}
-        \textcolor{red}{TODO}
-        As a starting point, we directly compare the performance of the input embeddings belonging to various state-of-the art and older models over the defined analogy task.
-        We also take into consideration the unembedding layer of models, which shares a common structure with the actual embedding matrix and should provide meaningful experimental results.
-        Additionally, inspired by the decoding approach introduced for InTraVisTo, we also perform analogy experiments on interpolated embeddings.
+        \begin{equation*}
+            \begin{gathered}
+                \begin{aligned}
+                    \tilde w &= \textit{analogy}(w_1, w_2, w_3, w_4) \color{gray} \approx {\textit{encode}}_{\textit{enc\_strat}}^{out}(w_3) \\[5pt]
+                    &= {\textit{encode}}_{\textit{enc\_strat}}^{in}(w_1) - {\textit{encode}}_{\textit{enc\_strat}}^{in}(w_2) + {\textit{encode}}_{\textit{enc\_strat}}^{in}(w_4)
+                \end{aligned} \\[15pt]
+                \begin{aligned}
+                    {\textit{encode}}_{\textit{enc\_strat}}^{in}(w) &= 
+                    \left\{
+                    \begin{array}{cl}
+                        \gbm{e}_1^w &\ \text{if}\ \textit{enc\_strat} = \text{`first\_only'} \\
+                        \frac{1}{t}\sum_{i=1}^{t}{\gbm{e}_i^w} &\ \text{if}\ \textit{enc\_strat} = \text{`average'} \\
+                        \sum_{i=1}^{t}{\gbm{e}_i^w} &\ \text{if}\ \textit{enc\_strat} = \text{`sum'}
+                    \end{array}
+                    \right. \\[10pt]
+                    {\textit{encode}}_{\textit{enc\_strat}}^{out}(w) &= 
+                    \left\{
+                    \begin{array}{cl}
+                        \{ tok_1^w \} &\ \text{if}\ \textit{enc\_strat} = \text{`first\_only'} \\
+                        \{ tok_1^w, \ldots, tok_t^w \} &\ \text{if}\ \textit{enc\_strat} = \text{`subdivide'}
+                    \end{array}
+                    \right.
+                \end{aligned}
+            \end{gathered}
+        \end{equation*}
     \end{frame}
 
     \subsection{Results}
@@ -242,16 +290,81 @@
 
     \subsection{Methodology}
     \begin{frame}{}
-        \textcolor{red}{TODO}
         A \emph{First Order Model (FOM)} is derived by removing all intermediate architectural components from an LLM, retaining only the input and output embedding layers along with the residual connections joining them.
-        This transformation can be seen as the creation of a \emph{Markov model} whose transition matrix is given by the product of the input and output embedding matrices.
-        Although past work has theorized that FOMs represent Markov models on a small scale, in this experiment, we investigate if FOMs derived from actual LLMs exhibit varying degrees of Markovian behavior, while also considering the possibility of FOM transition matrices approximating identity matrices, effectively modeling \emph{weight tying}.
+        \begin{equation*}
+            \gbm{Q}_{\textit{FOM}} = \operatorname{softmax}(\gbm{Q}_{\textit{FOM}}^{log}) = \operatorname{softmax}(\gbm{W}_{in} \cdot \gbm{W}_{out}^\T)
+        \end{equation*}
+        We also explore an alternative (FOM with RMS) that incorporates a single \emph{RMS normalization} step between the standard FOM embeddings.
+        \begin{equation*}
+            \text{where}\ \left\{
+                \begin{array}{cl}
+                    \gbm{W}_{in,RMS} &= \left(\frac{\gbm{w}_i^{in}}{RMS(\gbm{w}_i^{in})}\right)_{i,\cdot} = \left(\frac{\gbm{w}_i^{in}}{\sqrt{\frac{1}{D}\sum_{j=1}^{D}{(w_{ij}^{in})^2}}}\right)_{i,\cdot} \\
+                    \gbm{W}_{out,RMS} &= \left(\gbm{\gamma}^\T \odot \gbm{w}_j^{out}\right)_{\cdot,j}
+                \end{array}
+            \right.
+        \end{equation*}
     \end{frame}
+
+    %\begin{gathered}
+    %    \gbm{Q}_{\textit{FOM}}^{RMS} = \operatorname{softmax}(\gbm{W}_{in,RMS} \cdot \gbm{W}_{out,RMS}^\T) \\
+    %    \text{where}\ \left\{
+    %        \begin{array}{cl}
+    %            \gbm{W}_{in,RMS} &= \left(\frac{\gbm{w}_i^{in}}{RMS(\gbm{w}_i^{in})}\right)_{i,\cdot} = \left(\frac{\gbm{w}_i^{in}}{\sqrt{\frac{1}{D}\sum_{j=1}^{D}{(w_{ij}^{in})^2}}}\right)_{i,\cdot} \\
+    %            \gbm{W}_{out,RMS} &= \left(\gbm{\gamma}^\T \odot \gbm{w}_j^{out}\right)_{\cdot,j}
+    %        \end{array}
+    %    \right.
+    %\end{gathered}
+
+    \begin{frame}[plain]{}
+        \vspace{0.3cm}
+        We start by performing a \emph{naïve direct comparison} between transition matrices:
+        \begin{equation*}
+            \left\{
+                \begin{array}{cl}
+                    d_{\textit{FOM},I} &= \| \gbm{Q}_{\textit{FOM}} - \gbm{I}_V \|_F \\
+                    d_{\textit{FOM},\textit{markov}} &= \| \gbm{Q}_{\textit{FOM}} - \gbm{Q}_{\textit{markov}} \|_F
+                \end{array}
+            \right.
+        \end{equation*}
+        Followed by the use of \emph{set similarity metrics} (such as top-$k$ accuracy, Jaccard similarity and overlap coefficient) to obtain more reliable estimates:
+        \begin{equation*}
+            \begin{gathered}
+                \textit{accuracy}_{k_1,k_2}(\gbm{Q}_1, \gbm{Q}_2) = \frac{1}{V} \sum_{v \in \mathcal{V}}{\textit{tok\_overlap}_{k_1,k_2}(\gbm{Q}_1, \gbm{Q}_2, v)} \\
+                \begin{aligned}
+                    \operatorname{overlap}_k(\gbm{Q}_1, \gbm{Q}_2) &= \frac{1}{V}\sum_{v \in \mathcal{V}}{\frac{|\operatorname{top-k}(\gbm{Q}_1, k, v) \cap \operatorname{top-k}(\gbm{Q}_2, k, v)|}{\operatornamewithlimits{min}\bigl\{|\operatorname{top-k}(\gbm{Q}_1, k, v)|, |\operatorname{top-k}(\gbm{Q}_2, k, v)|\bigr\}}} \\
+                    \operatorname{J}_k(\gbm{Q}_1, \gbm{Q}_2) &= \frac{1}{V}\sum_{v \in \mathcal{V}}{\frac{|\operatorname{top-k}(\gbm{Q}_1, k, v) \cap \operatorname{top-k}(\gbm{Q}_2, k, v)|}{|\operatorname{top-k}(\gbm{Q}_1, k, v) \cup \operatorname{top-k}(\gbm{Q}_2, k, v)|}} \\
+                \end{aligned}
+            \end{gathered}
+        \end{equation*}
+    \end{frame}
+
+    %\begin{equation*}
+    %    \begin{gathered}
+    %        \textit{accuracy}_{k_1,k_2}(\gbm{Q}_1, \gbm{Q}_2) = \frac{1}{V} \sum_{v \in \mathcal{V}}{\textit{tok\_overlap}_{k_1,k_2}(\gbm{Q}_1, \gbm{Q}_2, v)} \\
+    %        \textit{tok\_overlap}_{k_1,k_2}(\gbm{Q}_1, \gbm{Q}_2, v) = \left\{
+    %            \begin{array}{cl}
+    %                1 &\ \text{if}\ \operatorname{top-k}(\gbm{Q}_1, k_1, v) \cap \operatorname{top-k}(\gbm{Q}_2, k_2, v) \neq \emptyset \\
+    %                0 &\ \text{otherwise}
+    %            \end{array}
+    %            \right.
+    %        \begin{aligned}
+    %            \operatorname{overlap}_k(\gbm{Q}_1, \gbm{Q}_2) &= \frac{1}{V}\sum_{v \in \mathcal{V}}{\frac{|\operatorname{top-k}(\gbm{Q}_1, k, v) \cap \operatorname{top-k}(\gbm{Q}_2, k, v)|}{\operatornamewithlimits{min}\bigl\{|\operatorname{top-k}(\gbm{Q}_1, k, v)|, |\operatorname{top-k}(\gbm{Q}_2, k, v)|\bigr\}}} \\
+    %            \operatorname{J}_k(\gbm{Q}_1, \gbm{Q}_2) &= \frac{1}{V}\sum_{v \in \mathcal{V}}{\frac{|\operatorname{top-k}(\gbm{Q}_1, k, v) \cap \operatorname{top-k}(\gbm{Q}_2, k, v)|}{|\operatorname{top-k}(\gbm{Q}_1, k, v) \cup \operatorname{top-k}(\gbm{Q}_2, k, v)|}} \\
+    %        \end{aligned}
+    %    \end{gathered}
+    %\end{equation*}
 
     \begin{frame}[plain]{}
         \textcolor{red}{TODO}
-        We introduce various approaches to explore the main inquiry: we start by performing a \emph{naïve direct comparison} between transition matrices, followed by the use of \emph{set similarity metrics} (such as top-$k$ accuracy, Jaccard similarity and overlap coefficient) to obtain more reliable estimates, and ending with the computation of \emph{probabilistic metrics} such as perplexity and the Kullback-Leibler divergence (KL divergence).
-        Following on the normalization intuition that proved effective for InTraVisTo, we also explore an alternative (FOM with RMS) that incorporates a single \emph{RMS normalization} step between the standard FOM embeddings.
+        We end with the computation of \emph{probabilistic metrics} such as perplexity and Kullback-Leibler divergence.
+
+        \begin{equation*}
+            \begin{gathered}
+            PP(\gbm{Q}, S) = e^{-\frac{1}{T}\sum_{t=1}^{T}{\ln{\left((\gbm{Q})_{S(t+1),S(t)}\right)}}} \\[15pt]
+            {{\bar D}_{KL}}(\gbm{Q}_{ref} || \gbm{Q}_{model}) = \frac{1}{V}\sum_{v \in \mathcal{V}}{D_{KL}^v(\gbm{Q}_{ref} || \gbm{Q}_{model})} \\[8pt]
+            \text{where}\ D_{KL}^v(\gbm{Q}_{ref} || \gbm{Q}_{model}) = \sum_{w \in \mathcal{V}}{\bigl((\gbm{Q}_{ref})_{v,w}\bigr)\ln{\frac{(\gbm{Q}_{ref})_{v,w}}{(\gbm{Q}_{model})_{v,\cdot}}}}
+            \end{gathered}
+        \end{equation*}
     \end{frame}
 
     \subsection{Results}
