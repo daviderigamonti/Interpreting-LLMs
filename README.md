@@ -30,7 +30,7 @@ In sintesi, la presente tesi riconferma risultati storici su nuove architetture 
 - **Section 4.3.2 Paragraph 1:** As a preliminary [...] by combining ~~and transposing~~ the input and output [...]. &rarr; As a preliminary [...] by combining the input and output [...].
 - **Section 4.3.4 Paragraph 3:** Where $S$ denotes a sentence composed of a total of $\cancel{T}$ tokens identified as $\cancel{S(1),\dots,S(T)}$, [...]. &rarr; Where $S$ denotes a sentence composed of a total of $T+1$ tokens identified as $S(0),\dots,S(T)$, [...].
 - **Section 6 Paragraph 4:** Additional developments addressing [...] on the embedding ~~space LLMs~~, as well as [...]. &rarr; Additional developments addressing [...] on the embedding space of LLMs, as well as [...].
-- **Appendix A:** [...] repository containing the $\LaTeX\!$ ~~source~~ code [...]. &rarr; [...] repository containing the $\LaTeX$ source code [...].
+- **Appendix A:** [...] repository containing the $\LaTeX$~~source~~ code [...]. &rarr; [...] repository containing the $\LaTeX$ source code [...].
 
 #### Formulas
 
