@@ -1,0 +1,582 @@
+---------------------------------------------------------------------------------------------------
+
+EXP 1
+
+---------------------------------------------------------------------------------------------------
+A
+---------------------------------------------------------------------------------------------------
+
+numbermodel = ["meta-llama/Llama-2-7b-hf", "meta-llama/Meta-Llama-3-8B", "mistralai/Mistral-7B-v0.3",]
+inoutmodel = {
+    "meta-llama/Llama-2-7b-hf": ["input"],
+    "meta-llama/Meta-Llama-3-8B": ["input"],
+    "mistralai/Mistral-7B-v0.3": ["input"],
+}
+parameters = {
+    "meta-llama/Llama-2-7b-hf": [PARAMETERS["cos_first_sub_e4"]],
+    "meta-llama/Meta-Llama-3-8B": [PARAMETERS["cos_first_sub_e4"]],
+    "mistralai/Mistral-7B-v0.3": [PARAMETERS["cos_first_sub_e4"]]
+}
+parameters_colors = {
+    "meta-llama/Llama-2-7b-hf": [0],
+    "meta-llama/Meta-Llama-3-8B": [0],
+    "mistralai/Mistral-7B-v0.3": [0]
+}
+interpolation = []
+filter_tokens = True
+
+addtitle = False
+addioref = False
+addparam = []
+
+---------------------------------------------------------------------------------------------------
+
+numbermodel = ["google/gemma-2-2b", "microsoft/Phi-3.5-mini-instruct", "google-bert/bert-large-uncased",]
+inoutmodel = {
+    "google/gemma-2-2b": ["-"],
+    "microsoft/Phi-3.5-mini-instruct": ["input"],
+    "google-bert/bert-large-uncased": ["-"],
+}
+parameters = {
+    "google/gemma-2-2b": [PARAMETERS["cos_first_sub_e4"]],
+    "microsoft/Phi-3.5-mini-instruct": [PARAMETERS["cos_first_sub_e4"]],
+    "google-bert/bert-large-uncased": [PARAMETERS["cos_first_sub_e4"]]
+}
+parameters_colors = {
+    "google/gemma-2-2b": [0],
+    "microsoft/Phi-3.5-mini-instruct": [0],
+    "google-bert/bert-large-uncased": [0]
+}
+interpolation = []
+filter_tokens = True
+
+addtitle = False
+addioref = False
+addparam = []
+
+---------------------------------------------------------------------------------------------------
+
+numbermodel = ["word2vec", "glove"]
+inoutmodel = {
+    "word2vec": ["-"],
+    "glove": ["-"],
+}
+parameters = {
+    "word2vec": [PARAMETERS["cos_first_sub_e4"]],
+    "glove": [PARAMETERS["cos_first_sub_e4"]],
+}
+parameters_colors = {
+    "word2vec": [0],
+    "glove": [0]
+}
+interpolation = []
+filter_tokens = True
+
+addtitle = False
+addioref = False
+addparam = []
+
+---------------------------------------------------------------------------------------------------
+B
+---------------------------------------------------------------------------------------------------
+
+numbermodel = ["google/gemma-2-2b", "meta-llama/Meta-Llama-3-8B", "google-bert/bert-large-uncased"]
+inoutmodel = {
+    "google/gemma-2-2b": ["-"],
+    "meta-llama/Meta-Llama-3-8B": ["input"],
+    "google-bert/bert-large-uncased": ["-"],
+}
+parameters = {
+    "google/gemma-2-2b": [PARAMETERS["cos_first_sub_e4"]],
+    "meta-llama/Meta-Llama-3-8B": [PARAMETERS["cos_first_sub_e4"]],
+    "google-bert/bert-large-uncased": [PARAMETERS["cos_first_sub_e4"]]
+}
+parameters_colors = {
+    "google/gemma-2-2b": [0],
+    "meta-llama/Meta-Llama-3-8B": [0],
+    "google-bert/bert-large-uncased": [0]
+}
+interpolation = []
+filter_tokens = True
+
+addtitle = False
+addioref = False
+addparam = []
+
+---------------------------------------------------------------------------------------------------
+C
+---------------------------------------------------------------------------------------------------
+
+numbermodel = ["word2vec", "glove", "meta-llama/Llama-2-7b-hf", "meta-llama/Meta-Llama-3-8B"]
+inoutmodel = {
+    "word2vec": ["-"],
+    "glove": ["-"],
+    "meta-llama/Llama-2-7b-hf": ["input"],
+    "meta-llama/Meta-Llama-3-8B": ["input"],
+}
+parameters = {
+    "word2vec": [PARAMETERS["cos_first_sub_e4"]],
+    "glove": [PARAMETERS["cos_first_sub_e4"]],
+    "meta-llama/Llama-2-7b-hf": [PARAMETERS["cos_first_sub_e4"]],
+    "meta-llama/Meta-Llama-3-8B": [PARAMETERS["cos_first_sub_e4"]],
+}
+parameters_colors = {
+    "word2vec": [0],
+    "glove": [0],
+    "meta-llama/Llama-2-7b-hf": [0],
+    "meta-llama/Meta-Llama-3-8B": [0],
+}
+interpolation = []
+filter_tokens = True
+
+addtitle = False
+addioref = False
+addparam = []
+
+---------------------------------------------------------------------------------------------------
+D
+---------------------------------------------------------------------------------------------------
+
+numbermodel = ["meta-llama/Llama-2-7b-hf", "meta-llama/Meta-Llama-3-8B"]
+inoutmodel = {
+    "meta-llama/Llama-2-7b-hf": ["input"],
+    "meta-llama/Meta-Llama-3-8B": ["input"],
+}
+parameters = {
+    "meta-llama/Llama-2-7b-hf": [PARAMETERS["cos_first_sub_e4"], PARAMETERS["cos_first_sub_e3"]],
+    "meta-llama/Meta-Llama-3-8B": [PARAMETERS["cos_first_sub_e4"], PARAMETERS["cos_first_sub_e3"]],
+}
+parameters_colors = {
+    "meta-llama/Llama-2-7b-hf": [0, 0.2],
+    "meta-llama/Meta-Llama-3-8B": [0, 0.2],
+}
+interpolation = []
+filter_tokens = True
+
+addtitle = False
+addioref = False
+addparam = ["layout"]
+
+---------------------------------------------------------------------------------------------------
+E
+---------------------------------------------------------------------------------------------------
+
+-- DELTA
+
+numbermodel = [
+    "google-bert/bert-large-uncased",
+    "word2vec",
+    "mistralai/Mistral-7B-v0.3",
+]
+inoutmodel = {
+    "google-bert/bert-large-uncased": ["-"],
+    "word2vec": ["-"],
+    "mistralai/Mistral-7B-v0.3": ["input"],
+}
+parameters = {
+    "google-bert/bert-large-uncased": [PARAMETERS["cos_first_sub_e4"], PARAMETERS["cos_first_sub_d"]],
+    "word2vec": [PARAMETERS["cos_first_sub_e4"], PARAMETERS["cos_first_sub_d"]],
+    "mistralai/Mistral-7B-v0.3": [PARAMETERS["cos_first_sub_e4"], PARAMETERS["cos_first_sub_d"]],
+}
+parameters_colors = {
+    "google-bert/bert-large-uncased": [0, 0.4],
+    "word2vec": [0, 0.4],
+    "mistralai/Mistral-7B-v0.3": [0, 0.4],
+}
+interpolation = []
+filter_tokens = True
+
+addtitle = False
+addioref = False
+addparam = ["layout"]
+
+---------------------------------------------------------------------------------------------------
+
+-- DELTA
+
+numbermodel = [
+    "meta-llama/Llama-2-7b-hf",
+    "meta-llama/Meta-Llama-3-8B",
+]
+inoutmodel = {
+    "meta-llama/Llama-2-7b-hf": ["input"],
+    "meta-llama/Meta-Llama-3-8B": ["input"],
+}
+parameters = {
+    "meta-llama/Llama-2-7b-hf": [PARAMETERS["cos_first_sub_e4"], PARAMETERS["cos_first_sub_d"]],
+    "meta-llama/Meta-Llama-3-8B": [PARAMETERS["cos_first_sub_e4"], PARAMETERS["cos_first_sub_d"]],
+}
+parameters_colors = {
+    "meta-llama/Llama-2-7b-hf": [0, 0.4],
+    "meta-llama/Meta-Llama-3-8B": [0, 0.4],
+}
+interpolation = []
+filter_tokens = True
+
+addtitle = False
+addioref = False
+addparam = ["layout"]
+
+---------------------------------------------------------------------------------------------------
+
+EXP 2
+
+---------------------------------------------------------------------------------------------------
+A
+---------------------------------------------------------------------------------------------------
+
+numbermodel = ["gpt2", "mistralai/Mistral-7B-v0.3", "microsoft/Phi-3.5-mini-instruct"]
+inoutmodel = {
+    "gpt2": ["-"],
+    "mistralai/Mistral-7B-v0.3": ["input", "output"],
+    "microsoft/Phi-3.5-mini-instruct": ["input", "output"],
+}
+parameters = {
+    "gpt2": [PARAMETERS["cos_avg_sub_e4"]],
+    "mistralai/Mistral-7B-v0.3": [PARAMETERS["cos_avg_sub_e4"]],
+    "microsoft/Phi-3.5-mini-instruct": [PARAMETERS["cos_avg_sub_e4"]],
+}
+parameters_colors = {
+    "gpt2": [0],
+    "mistralai/Mistral-7B-v0.3": [0],
+    "microsoft/Phi-3.5-mini-instruct": [0],
+}
+interpolation = []
+filter_tokens = False
+
+addtitle = False
+addioref = True
+addparam = []
+
+---------------------------------------------------------------------------------------------------
+
+numbermodel = ["gpt2", "meta-llama/Llama-2-7b-hf", "meta-llama/Meta-Llama-3-8B"]
+inoutmodel = {
+    "gpt2": ["-"],
+    "meta-llama/Llama-2-7b-hf": ["input", "output"],
+    "meta-llama/Meta-Llama-3-8B": ["input", "output"],
+}
+parameters = {
+    "gpt2": [PARAMETERS["cos_avg_sub_e4"]],
+    "meta-llama/Llama-2-7b-hf": [PARAMETERS["cos_avg_sub_e4"]],
+    "meta-llama/Meta-Llama-3-8B": [PARAMETERS["cos_avg_sub_e4"]],
+}
+parameters_colors = {
+    "gpt2": [0],
+    "meta-llama/Llama-2-7b-hf": [0],
+    "meta-llama/Meta-Llama-3-8B": [0],
+}
+interpolation = []
+filter_tokens = False
+
+addtitle = False
+addioref = True
+addparam = []
+
+---------------------------------------------------------------------------------------------------
+B
+---------------------------------------------------------------------------------------------------
+
+COLOR_HUE = {
+    "-": 0, "input": -0.4, "output": 0.4, "interpolated7": -0.2, "interpolated15": 0, "interpolated23": 0.2,  
+}
+
+
+numbermodel = ["mistralai/Mistral-7B-v0.3"]
+inoutmodel = {
+    "mistralai/Mistral-7B-v0.3": ["input", "interpolated7", "interpolated15", "interpolated23", "output"],
+}
+parameters = {
+    "mistralai/Mistral-7B-v0.3": [PARAMETERS["cos_avg_sub_e4"]],
+}
+parameters_colors = {
+    "mistralai/Mistral-7B-v0.3": [0],
+}
+interpolation = [7,15,23]
+filter_tokens = False
+
+addtitle = False
+addioref = True
+addparam = ["type"]
+
+---------------------------------------------------------------------------------------------------
+
+COLOR_HUE = {
+    "-": 0, "input": -0.4, "output": 0.4, "interpolated7": -0.2, "interpolated15": 0, "interpolated23": 0.2,  
+}
+
+
+numbermodel = ["meta-llama/Llama-2-7b-hf"]
+inoutmodel = {
+    "meta-llama/Llama-2-7b-hf": ["input", "interpolated7", "interpolated15", "interpolated23", "output"],
+}
+parameters = {
+    "meta-llama/Llama-2-7b-hf": [PARAMETERS["cos_avg_sub_e4"]],
+}
+parameters_colors = {
+    "meta-llama/Llama-2-7b-hf": [0],
+}
+interpolation = [7,15,23]
+filter_tokens = False
+
+addtitle = False
+addioref = True
+addparam = ["type"]
+
+---------------------------------------------------------------------------------------------------
+C
+---------------------------------------------------------------------------------------------------
+
+numbermodel = ["meta-llama/Llama-2-7b-hf", "microsoft/Phi-3.5-mini-instruct"]
+inoutmodel = {
+    "meta-llama/Llama-2-7b-hf": ["input"],
+    "microsoft/Phi-3.5-mini-instruct": ["input"],
+}
+parameters = {
+    "meta-llama/Llama-2-7b-hf": [PARAMETERS["cos_avg_sub_e4"], PARAMETERS["cos_first_sub_e4"], PARAMETERS["cos_sum_sub_e4"]],
+    "microsoft/Phi-3.5-mini-instruct": [PARAMETERS["cos_avg_sub_e4"], PARAMETERS["cos_first_sub_e4"], PARAMETERS["cos_sum_sub_e4"]],
+}
+parameters_colors = {
+    "meta-llama/Llama-2-7b-hf": [0, -0.2, 0.2],
+    "microsoft/Phi-3.5-mini-instruct": [0, -0.2, 0.2],
+}
+interpolation = []
+filter_tokens = False
+
+addtitle = False
+addioref = False
+addparam = ["embedding_strategy"]
+
+---------------------------------------------------------------------------------------------------
+D
+---------------------------------------------------------------------------------------------------
+
+COLOR_HUE = {
+    "-": 0, "input": 0, "output": 0.4,
+}
+
+numbermodel = ["mistralai/Mistral-7B-v0.3", "meta-llama/Meta-Llama-3-8B"]
+inoutmodel = {
+    "mistralai/Mistral-7B-v0.3": ["input"],
+    "meta-llama/Meta-Llama-3-8B": ["input"],
+}
+parameters = {
+    "mistralai/Mistral-7B-v0.3": [PARAMETERS["cos_avg_sub_e4"], PARAMETERS["cos_first_sub_e3"]],
+    "meta-llama/Meta-Llama-3-8B": [PARAMETERS["cos_avg_sub_e4"], PARAMETERS["cos_first_sub_e3"]],
+}
+parameters_colors = {
+    "mistralai/Mistral-7B-v0.3": [0, 0.2],
+    "meta-llama/Meta-Llama-3-8B": [0, 0.2],
+}
+interpolation = []
+filter_tokens = False
+
+addtitle = False
+addioref = True
+addparam = ["layout"]
+
+---------------------------------------------------------------------------------------------------
+
+COLOR_HUE = {
+    "-": 0, "input": 0, "output": 0.4,
+}
+
+numbermodel = ["mistralai/Mistral-7B-v0.3", "meta-llama/Meta-Llama-3-8B"]
+inoutmodel = {
+    "mistralai/Mistral-7B-v0.3": ["input", "output"],
+    "meta-llama/Meta-Llama-3-8B": ["input", "output"],
+}
+parameters = {
+    "mistralai/Mistral-7B-v0.3": [PARAMETERS["cos_avg_sub_e4"], PARAMETERS["cos_avg_sub_e4_nonorm"]],
+    "meta-llama/Meta-Llama-3-8B": [PARAMETERS["cos_avg_sub_e4"], PARAMETERS["cos_avg_sub_e4_nonorm"]],
+}
+parameters_colors = {
+    "mistralai/Mistral-7B-v0.3": [0, 0.2],
+    "meta-llama/Meta-Llama-3-8B": [0, 0.2],
+}
+interpolation = []
+filter_tokens = False
+
+addtitle = False
+addioref = True
+addparam = ["pre_normalize"]
+
+---------------------------------------------------------------------------------------------------
+E
+---------------------------------------------------------------------------------------------------
+
+-- DELTA
+
+numbermodel = [
+    "gpt2",
+    "meta-llama/Llama-2-7b-hf",
+    "meta-llama/Meta-Llama-3-8B",
+    "mistralai/Mistral-7B-v0.3",
+    "microsoft/Phi-3.5-mini-instruct"
+]
+inoutmodel = {
+    "gpt2": ["-"],
+    "meta-llama/Llama-2-7b-hf": ["input"],
+    "meta-llama/Meta-Llama-3-8B": ["input"],
+    "mistralai/Mistral-7B-v0.3": ["input"],
+    "microsoft/Phi-3.5-mini-instruct": ["input"]
+}
+parameters = {
+    "gpt2": [PARAMETERS["cos_avg_sub_d"]],
+    "meta-llama/Llama-2-7b-hf": [PARAMETERS["cos_avg_sub_d"]],
+    "meta-llama/Meta-Llama-3-8B": [PARAMETERS["cos_avg_sub_d"]],
+    "mistralai/Mistral-7B-v0.3": [PARAMETERS["cos_avg_sub_d"]],
+    "microsoft/Phi-3.5-mini-instruct": [PARAMETERS["cos_avg_sub_d"]]
+}
+parameters_colors = {
+    "gpt2": [0],
+    "meta-llama/Llama-2-7b-hf": [0],
+    "meta-llama/Meta-Llama-3-8B": [0],
+    "mistralai/Mistral-7B-v0.3": [0],
+    "microsoft/Phi-3.5-mini-instruct": [0]
+}
+filter_tokens = False
+
+addtitle = False
+addioref = True
+addparam = []
+
+---------------------------------------------------------------------------------------------------
+
+-- DELTA
+
+numbermodel = [
+    "gpt2",
+    "meta-llama/Llama-2-7b-hf",
+    "meta-llama/Meta-Llama-3-8B",
+    "mistralai/Mistral-7B-v0.3",
+    "microsoft/Phi-3.5-mini-instruct"
+]
+inoutmodel = {
+    "gpt2": ["-"],
+    "meta-llama/Llama-2-7b-hf": ["output"],
+    "meta-llama/Meta-Llama-3-8B": ["output"],
+    "mistralai/Mistral-7B-v0.3": ["output"],
+    "microsoft/Phi-3.5-mini-instruct": ["output"]
+}
+parameters = {
+    "gpt2": [PARAMETERS["cos_avg_sub_d"]],
+    "meta-llama/Llama-2-7b-hf": [PARAMETERS["cos_avg_sub_d"]],
+    "meta-llama/Meta-Llama-3-8B": [PARAMETERS["cos_avg_sub_d"]],
+    "mistralai/Mistral-7B-v0.3": [PARAMETERS["cos_avg_sub_d"]],
+    "microsoft/Phi-3.5-mini-instruct": [PARAMETERS["cos_avg_sub_d"]]
+}
+parameters_colors = {
+    "gpt2": [0],
+    "meta-llama/Llama-2-7b-hf": [0],
+    "meta-llama/Meta-Llama-3-8B": [0],
+    "mistralai/Mistral-7B-v0.3": [0],
+    "microsoft/Phi-3.5-mini-instruct": [0]
+}
+filter_tokens = False
+
+addtitle = False
+addioref = True
+addparam = []
+
+---------------------------------------------------------------------------------------------------
+
+-- DELTA
+
+COLOR_HUE = {
+    "-": 0, "input": 0, "output": 0.4,
+}
+
+numbermodel = ["microsoft/Phi-3.5-mini-instruct"]
+inoutmodel = {
+    "microsoft/Phi-3.5-mini-instruct": ["input", "output"]
+}
+parameters = {
+    "microsoft/Phi-3.5-mini-instruct": [PARAMETERS["cos_avg_sub_d"], PARAMETERS["cos_avg_sub_e4"]]
+}
+parameters_colors = {
+    "microsoft/Phi-3.5-mini-instruct": [0, 0.2]
+}
+filter_tokens = False
+
+addtitle = False
+addioref = True
+addparam = ["layout"]
+
+
+
+---------------------------------------------------------------------------------------------------
+
+PRES
+
+---------------------------------------------------------------------------------------------------
+S1-1
+---------------------------------------------------------------------------------------------------
+numbermodel = ["meta-llama/Llama-2-7b-hf", "meta-llama/Meta-Llama-3-8B", "mistralai/Mistral-7B-v0.3","word2vec","glove"]
+inoutmodel = {
+    "meta-llama/Llama-2-7b-hf": ["input"],
+    "meta-llama/Meta-Llama-3-8B": ["input"],
+    "mistralai/Mistral-7B-v0.3": ["input"],
+    "word2vec": ["-"],
+    "glove": ["-"],
+}
+parameters = {
+    "meta-llama/Llama-2-7b-hf": [PARAMETERS["cos_first_sub_e4"]],
+    "meta-llama/Meta-Llama-3-8B": [PARAMETERS["cos_first_sub_e4"]],
+    "mistralai/Mistral-7B-v0.3": [PARAMETERS["cos_first_sub_e4"]],
+    "word2vec": [PARAMETERS["cos_first_sub_e4"]],
+    "glove": [PARAMETERS["cos_first_sub_e4"]],
+}
+parameters_colors = {
+    "meta-llama/Llama-2-7b-hf": [0],
+    "meta-llama/Meta-Llama-3-8B": [0],
+    "mistralai/Mistral-7B-v0.3": [0],
+    "word2vec": [0],
+    "glove": [0],
+}
+
+interpolation = []
+filter_tokens = True
+
+addtitle = False
+addioref = False
+addparam = []
+---------------------------------------------------------------------------------------------------
+numbermodel = ["google/gemma-2-2b", "microsoft/Phi-3.5-mini-instruct", "google-bert/bert-large-uncased", "gpt2"]
+inoutmodel = {
+    "google/gemma-2-2b": ["-"],
+    "microsoft/Phi-3.5-mini-instruct": ["input"],
+    "google-bert/bert-large-uncased": ["-"],
+    "gpt2": ["-"]
+}
+parameters = {
+    "google/gemma-2-2b": [PARAMETERS["cos_first_sub_e4"]],
+    "microsoft/Phi-3.5-mini-instruct": [PARAMETERS["cos_first_sub_e4"]],
+    "google-bert/bert-large-uncased": [PARAMETERS["cos_first_sub_e4"]],
+    "gpt2": [PARAMETERS["cos_first_sub_e4"]]
+}
+parameters_colors = {
+    "google/gemma-2-2b": [0],
+    "microsoft/Phi-3.5-mini-instruct": [0],
+    "google-bert/bert-large-uncased": [0],
+    "gpt2": [0]
+}
+interpolation = []
+filter_tokens = True
+
+addtitle = False
+addioref = False
+addparam = []
+---------------------------------------------------------------------------------------------------
+S1-2
+---------------------------------------------------------------------------------------------------
+- EXP2 A (1)
+---------------------------------------------------------------------------------------------------
+- EXP2 A (2)
+---------------------------------------------------------------------------------------------------
+S1-3
+---------------------------------------------------------------------------------------------------
+- EXP2 B (1)
+---------------------------------------------------------------------------------------------------
+- EXP2 B (2)
+---------------------------------------------------------------------------------------------------
