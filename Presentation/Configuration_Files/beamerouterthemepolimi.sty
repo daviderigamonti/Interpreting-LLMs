@@ -7,14 +7,20 @@
 \defbeamertemplate{frametitle}{polimi}{
     \begin{tikzpicture}[overlay, remember picture]
         \fill[bluePolimi] (current page.north west) +(-\xshift,-0.01) rectangle (current page.north east); % Workaround for reader inconsistencies
-        \node at ([shift={(\xshift, -0.6)}] current page.north west) [anchor=south west, inner sep=0pt]
+        \node at ([shift={(-\xshift, -1.4)}] current page.north east) [anchor=south east, inner sep=0pt, align=right]
         {
-            {\small \insertsectionhead \ifx\insertsubsection\empty\else\ - \insertsubsectionhead\fi\leavevmode}
+            {\strut\footnotesize \ifx\insertsubsection\empty\else\insertsubsectionhead\fi\ifx\insertsubsubsection\empty\else\ - \insertsubsubsectionhead\fi\leavevmode}
         };
-        \node at ([shift={(\xshift, -1)}] current page.north west) [anchor=south west, inner sep=0pt]
+        \node at ([shift={(\xshift, -1.4)}] current page.north west) [anchor=south west, inner sep=0pt]
         {
-            \insertframetitle
+            \strut \insertframetitle
         };
+        \ifnum\c@framenumber>1
+        \node at ([shift={(0, -0.5)}] current page.north west) [anchor=south west, inner sep=0pt]
+        {
+            \insertnavigation{\paperwidth}%
+        };
+        \fi
     \end{tikzpicture}
     \vspace{1.1cm}
 }
@@ -28,10 +34,12 @@
 
 % Header.
 \defbeamertemplate{frametitle}{empty}{}
+\defbeamertemplate{footline}{empty}{}
 
 % Use frametitle template even if \frametitle is empty.
 \patchcmd{\endbeamer@frameslide}{\ifx\beamer@frametitle\@empty}{\iffalse}{}{\errmessage{Failed to patch frametitle.}}
 
+% Footer
 \defbeamertemplate{footline}{poliminumber}{
     \begin{minipage}[b][1cm][c]{\paperwidth}
         \begin{tikzpicture}[overlay, remember picture]
@@ -39,15 +47,15 @@
         \end{tikzpicture}
         \ifnum\c@framenumber>0
             \begin{tikzpicture}[overlay, remember picture]
-                \node at ([shift={(0.6\xshift, 0.5)}] current page.south west) [anchor=center, inner sep=0pt, align=center]
+                \node at ([shift={(0.6\xshift, 0.44)}] current page.south west) [anchor=center, inner sep=0pt, align=center]
                 {
                     {\color{white} \insertframenumber}
                 };
-                \node at ([shift={(\xshift, 0.5)}] current page.south west) [anchor=west, inner sep=0pt]
+                \node at ([shift={(\xshift, 0.44)}] current page.south west) [anchor=west, inner sep=0pt]
                 {
                     {\small\color{white} \insertauthor}
                 };
-                \node at ([shift={(-0.5\xshift, 0.5)}] current page.south east) [anchor=east, inner sep=0pt]
+                \node at ([shift={(-0.5\xshift, 0.46)}] current page.south east) [anchor=east, inner sep=0pt]
                 {
                     \includegraphics[height=\baselineskip]{logo_bandiera.png}
                 };
@@ -64,11 +72,11 @@
         \end{tikzpicture}
         \ifnum\c@framenumber>0
             \begin{tikzpicture}[overlay, remember picture]
-                \node at ([shift={(\xshift+1, 0.5)}] current page.south west) [anchor=west, inner sep=0pt]
+                \node at ([shift={(\xshift+1, 0.44)}] current page.south west) [anchor=west, inner sep=0pt]
                 {
                     {\small\color{white} \insertauthor}
                 };
-                \node at ([shift={(-0.5\xshift, 0.5)}] current page.south east) [anchor=east, inner sep=0pt]
+                \node at ([shift={(-0.5\xshift, 0.44)}] current page.south east) [anchor=east, inner sep=0pt]
                 {
                     \includegraphics[height=\baselineskip]{logo_bandiera.png}
                 };
@@ -110,10 +118,10 @@
 \makeatletter
 \define@key{beamerframe}{empty}[true]{
     \ifnum\c@framenumber>0
-        \setbeamertemplate{background}[footer]
+        \setbeamertemplate{background}{}
         \setbeamertemplate{frametitle}[empty]
         \setbeamertemplate{headline}{}
-        \setbeamertemplate{footline}[poliminumber]
+        \setbeamertemplate{footline}[empty]
     \fi
 }
 \makeatother
