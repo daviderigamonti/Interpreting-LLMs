@@ -456,10 +456,10 @@ Where $P_{ij}$ follows the definition specified in~\cref{eq:method_fom_markov-pr
 \subsection{Matrix Comparison}\label{ssec:method_fom_matrix}
 
 As a preliminary way to explore various relationships between the input and output embeddings, we decide to perform an analysis of their matrices.
-To do so, we compute the \emph{transition matrix} for our First Order Model (FOM) by combining and transposing the input and output weight matrices as follows:
+To do so, we compute the \emph{transition matrix} for our First Order Model (FOM) by combining the input and output weight matrices as follows:
 \begin{equation}
     \label{eq:method_fom_fom-matrix}
-    \gbm{Q}_{\textit{FOM}} = \operatorname{softmax}(\gbm{Q}_{\textit{FOM}}^{log}) = \operatorname{softmax}(\gbm{W}_{in} \cdot \gbm{W}_{out}^\T)
+    \gbm{Q}_{\textit{FOM}} = \operatorname{softmax}(\gbm{Q}_{\textit{FOM}}^{log}) = \operatorname{softmax}(\gbm{W}_{in} \cdot \gbm{W}_{out})
 \end{equation}
 Where $\gbm{W}_{in}$ and $\gbm{W}_{out}$ are, respectively, the input and output embedding weight matrices.
 
@@ -474,7 +474,7 @@ In our approach, we split the RMS computation between the input and output embed
 \begin{equation}
     \label{eq:method_fom_fom-matrix-rms}
     \begin{gathered}
-        \gbm{Q}_{\textit{FOM}}^{RMS} = \operatorname{softmax}(\gbm{W}_{in,RMS} \cdot \gbm{W}_{out,RMS}^\T) \\
+        \gbm{Q}_{\textit{FOM}}^{RMS} = \operatorname{softmax}(\gbm{W}_{in,RMS} \cdot \gbm{W}_{out,RMS}) \\
         \text{where}\ \left\{
             \begin{array}{cl}
                 \gbm{W}_{in,RMS} &= \left(\frac{\gbm{w}_i^{in}}{RMS(\gbm{w}_i^{in})}\right)_{i,\cdot} = \left(\frac{\gbm{w}_i^{in}}{\sqrt{\frac{1}{D}\sum_{j=1}^{D}{(w_{ij}^{in})^2}}}\right)_{i,\cdot} \\
@@ -559,9 +559,9 @@ The standard formulation for perplexity for a probability distribution $p$ over 
 In practice, we compute our version of perplexity considering the transition matrix $\gbm{Q}$ as:
 \begin{equation}
     \label{eq:method_fom_perplexity}
-    PP(\gbm{Q}, S) = e^{-\frac{1}{T}\sum_{t=1}^{T}{\ln{\left((\gbm{Q})_{S(t+1),S(t)}\right)}}}
+    PP(\gbm{Q}, S) = e^{-\frac{1}{T}\sum_{t=1}^{T}{\ln{\left((\gbm{Q})_{S(t-1),S(t)}\right)}}}
 \end{equation}
-Where $S$ denotes a sentence composed of a total of $T$ tokens identified as $S(1),\dots,S(T)$, and $(\gbm{Q})_{i,j}$ represents the indexing operation performed on the transition matrix $\gbm{Q}$ corresponding the transition probability from state $i$ to state $j$.
+Where $S$ denotes a sentence composed of a total of $T+1$ tokens identified as $S(0),\dots,S(T)$, and $(\gbm{Q})_{i,j}$ represents the indexing operation performed on the transition matrix $\gbm{Q}$ corresponding the transition probability from state $i$ to state $j$.
 
 Notably, we highlight the fact that concept of perplexity is strictly related to \emph{cross-entropy}.
 Cross-entropy is typically computed between two probability distributions and quantifies the information needed to represent a sample as if it were drawn from a model distribution rather than the true distribution.
@@ -584,7 +584,7 @@ In our scenario, we compute the mean KL divergence over all tokens present in th
     \label{eq:method_fom_kldiv}
     \begin{gathered}
     {{\bar D}_{KL}}(\gbm{Q}_{ref} || \gbm{Q}_{model}) = \frac{1}{V}\sum_{v \in \mathcal{V}}{D_{KL}^v(\gbm{Q}_{ref} || \gbm{Q}_{model})} \\
-    \text{where}\ D_{KL}^v(\gbm{Q}_{ref} || \gbm{Q}_{model}) = \sum_{w \in \mathcal{V}}{\bigl((\gbm{Q}_{ref})_{v,w}\bigr)\ln{\frac{(\gbm{Q}_{ref})_{v,w}}{(\gbm{Q}_{model})_{v,\cdot}}}}
+    \text{where}\ D_{KL}^v(\gbm{Q}_{ref} || \gbm{Q}_{model}) = \sum_{w \in \mathcal{V}}{\bigl((\gbm{Q}_{ref})_{v,w}\bigr)\ln{\frac{(\gbm{Q}_{ref})_{v,w}}{(\gbm{Q}_{model})_{v,w}}}}
     \end{gathered}
 \end{equation}
 Where, as mentioned before for~\cref{eq:method_fom_perplexity}, $(\gbm{Q})_{i,j}$ represents the indexing operation on the transition matrix $\gbm{Q}$.
