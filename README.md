@@ -34,10 +34,10 @@ In sintesi, la presente tesi riconferma risultati storici su nuove architetture 
 
 #### Formulas
 
-- **Formula 4.22:** $\bm{Q}_{\textit{FOM}} = \operatorname{softmax}(\bm{Q}_{\textit{FOM}}^{log}) = \operatorname{softmax}(\bm{W}_{in} \cdot \bm{W}_{out}^\mathrm{T})$ &rarr; $\bm{Q}_{\textit{FOM}} = \operatorname{softmax}(\bm{Q}_{\textit{FOM}}^{log}) = \operatorname{softmax}(\bm{W}_{in} \cdot \bm{W}_{out})$
-- **Formula 4.23 (1):** $\bm{Q}_{\textit{FOM}}^{RMS} = \operatorname{softmax}(\bm{W}_{in,RMS} \cdot \bm{W}_{out,RMS}^\mathrm{T})$ &rarr; $\bm{Q}_{\textit{FOM}}^{RMS} = \operatorname{softmax}(\bm{W}_{in,RMS} \cdot \bm{W}_{out,RMS})$
-- **Formula 4.29:** $PP(\bm{Q}, S) = e^{-\frac{1}{T}\sum_{t=1}^{T}{\ln{\left((\bm{Q})_{S(t+1),S(t)}\right)}}}$ &rarr; $PP(\bm{Q}, S) = e^{-\frac{1}{T}\sum_{t=1}^{T}{\ln{\left((\bm{Q})_{S(t-1),S(t)}\right)}}}$
-- **Formula 4.30 (2):** $D_{KL}^v(\bm{Q}_{ref} || \bm{Q}_{model}) = \sum_{w \in \mathcal{V}}{\bigl((\bm{Q}_{ref})_{v,w}\bigr)\ln{\frac{(\bm{Q}_{ref})_{v,w}}{(\bm{Q}_{model})_{v,\cdot}}}}$ &rarr; $D_{KL}^v(\bm{Q}_{ref} || \bm{Q}_{model}) = \sum_{w \in \mathcal{V}}{\bigl((\bm{Q}_{ref})_{v,w}\bigr)\ln{\frac{(\bm{Q}_{ref})_{v,w}}{(\bm{Q}_{model})_{v,w}}}}$
+- **Formula 4.22:** $`\mathbf{Q}_{\textit{FOM}} = \text{softmax}(\mathbf{Q}_{\textit{FOM}}^{log}) = \text{softmax}(\mathbf{W}_{in} \cdot \mathbf{W}_{out}^\mathrm{T})`$ &rarr; $`\mathbf{Q}_{\textit{FOM}} = \text{softmax}(\mathbf{Q}_{\textit{FOM}}^{log}) = \text{softmax}(\mathbf{W}_{in} \cdot \mathbf{W}_{out})`$
+- **Formula 4.23 (1):** $`\mathbf{Q}_{\textit{FOM}}^{RMS} = \text{softmax}(\mathbf{W}_{in,RMS} \cdot \mathbf{W}_{out,RMS}^\mathrm{T})`$ &rarr; $`\mathbf{Q}_{\textit{FOM}}^{RMS} = \text{softmax}(\mathbf{W}_{in,RMS} \cdot \mathbf{W}_{out,RMS})`$
+- **Formula 4.29:** $`PP(\mathbf{Q}, S) = e^{-\frac{1}{T}\sum_{t=1}^{T}{\ln{\left((\mathbf{Q})_{S(t+1),S(t)}\right)}}}`$ &rarr; $`PP(\mathbf{Q}, S) = e^{-\frac{1}{T}\sum_{t=1}^{T}{\ln{\left((\mathbf{Q})_{S(t-1),S(t)}\right)}}}`$
+- **Formula 4.30 (2):** $`D_{KL}^v(\mathbf{Q}_{ref} || \mathbf{Q}_{model}) = \sum_{w \in \mathcal{V}}{\bigl((\mathbf{Q}_{ref})_{v,w}\bigr)\ln{\frac{(\mathbf{Q}_{ref})_{v,w}}{(\mathbf{Q}_{model})_{v,\cdot}}}}`$ &rarr; $`D_{KL}^v(\mathbf{Q}_{ref} || \mathbf{Q}_{model}) = \sum_{w \in \mathcal{V}}{\bigl((\mathbf{Q}_{ref})_{v,w}\bigr)\ln{\frac{(\mathbf{Q}_{ref})_{v,w}}{(\mathbf{Q}_{model})_{v,w}}}}`$
 
 ## Info
 
